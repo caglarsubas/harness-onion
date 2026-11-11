@@ -253,7 +253,7 @@ EXPECTED_ERRATA = {
     README: (184, 189),
     "docs/repositories/00-harness-engineering.md": (1618, 1618),
     "docs/MASTER_DEVELOPMENT_PLAN.md": (3331, 3331),
-    SECTOR_TEST: (837, 912),
+    SECTOR_TEST: (748, 912),  # rev 10: LITERAL_READERS 748-769 and NAMING_RECORDS 837-912 (MON-287-C3E-RULINGS)
 }
 HUNK_RECORD = "architecture/chain-checkpoint/hunk-classes/287.json"
 REGISTRY = "architecture/review-record/briefs.json"
@@ -1977,7 +1977,7 @@ def test_e2_refuses_an_authority_naming_a_base_file():
 
 def test_e3_errata_lines_name_the_four_authored_edits():
     """Sections 6 E3, 7 and 17: ERRATA_LINES names the README paragraph (184-189), item 160 (1618), line 3331
-    and NAMING_RECORDS (837-912), by their base lines."""
+    and the sector test's LITERAL_READERS and NAMING_RECORDS (748-912; rev 10), by their base lines."""
     lines = {str(path): tuple(span) for path, span in _head().ERRATA_LINES.items()}
     assert lines == EXPECTED_ERRATA
 
@@ -2198,7 +2198,7 @@ def _v6_extra_member(record):
 
 
 def _v6_count_pairs(record):
-    record["countPairs"] = [[313, 315]]
+    record["countPairs"] = [[313, 399]]  # a pair no context holds (MON-287-C3E-RULINGS)
 
 
 def _v6_outcome_statement(record):

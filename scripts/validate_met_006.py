@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/service-edges-authority.json"
-AUTHORITY_SHA256 = "3ef8ef9695762150fd7e2975aeb195a240e3cc3338d853a0ba44f712195c4dfb"
+AUTHORITY_SHA256 = "3c3e07afe50f9e0d2eb5ff9695ac45a4c479d633ce9ad730fb1d71ca1b02b86d"
 VALIDATOR_PATH = "scripts/validate_met_006.py"
 BASE_COMMIT = "d69848cf015e7328127c1369a4c999cb50b8a861"
 NEW_PACKET = "MET-006"
@@ -346,10 +346,11 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # MON-287-AB-PROCEED, MON-287-CR4-RULINGS and MON-287-C1R-RULINGS) adds, in a K = 0 step, the service-edge record
 # beside the catalog: architecture/service-edges.yaml with its schema, its checker scripts/validate_service_edges.py
 # (SE-1 to SE-14) and its tests; the catalog, the graph and both catalog schemas stay byte-equal (Option B); and
-# CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS registration ride as authored edits at
-# their named lines (048-D1 (b); MON-287-C2-RULINGS). Repository bytes are read
+# CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations ride
+# as authored edits at their named lines (048-D1 (b); MON-287-C2-RULINGS, MON-287-C3E-RULINGS). Repository bytes
+# are read
 # only through reviewed_bytes; an era file is refused unless bound by digest on every read, a changed file by the
-# authority's afterSha256. Each refusal is a pure check over the values read. Checked here (CONTRACT_287 rev 8
+# authority's afterSha256. Each refusal is a pure check over the values read. Checked here (CONTRACT_287 rev 10
 # section 6): V1 the packet's files; E1 the record passes its checker on this era's bytes (its counts included);
 # E2 the catalog, the graph and both schemas equal their base bytes; E3 class-other hunks only on the four authored-edit
 # files, at their named lines; V4 the registry rider; V6 the hunk-class record under v2.4. Last, this layer's own
@@ -383,7 +384,7 @@ ERRATA_LINES = MappingProxyType({
     "architecture/chain-checkpoint/README.md": (184, 189),
     "docs/repositories/00-harness-engineering.md": (1618, 1618),
     "docs/MASTER_DEVELOPMENT_PLAN.md": (3331, 3331),
-    "tests/test_sector_catalog.py": (837, 912),
+    "tests/test_sector_catalog.py": (748, 912),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"
@@ -523,7 +524,7 @@ def check_hunk_record(raw: Any, changed: Any, afters: Any, classify: Any, contex
            "MET-006 V6 the hunk-class record's vocabulary and rule digest are v2.4's")
     _bound(lambda: type(record["hunkClassContext"]) is dict and set(record["hunkClassContext"]) == set(HUNK_CONTEXT)
            and record["hunkClassContext"] == {"newPacket": NEW_PACKET, "prevValidator": HUNK_CONTEXT["prevValidator"],
-                                              "prevTest": HUNK_CONTEXT["prevTest"], "steps": [1, 1], "countPairs": [[313, 314]]},
+                                              "prevTest": HUNK_CONTEXT["prevTest"], "steps": [1, 1], "countPairs": [[313, 315]]},
            "MET-006 V6 the hunk-class record's context is this step's names")
     classes = record.get("classes") if type(record) is dict else None
     _bound(lambda: type(changed) is dict and type(classes) is dict and set(classes) == set(changed)
@@ -565,7 +566,7 @@ HUNK_VOCABULARY = ("bridge", "cascade", "other", "record", "register")     # cha
 NORMALISED = ("bridge", "cascade", "record", "register")                   # the mechanics forms v2.4 normalises
 HUNK_RULE_SHA256 = "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"
 HUNK_CONTEXT = MappingProxyType({"newPacket": NEW_PACKET, "prevValidator": "scripts/validate_met_perf_049.py",
-                                 "prevTest": "tests/test_met_perf_049.py", "steps": (1, 1), "countPairs": ((313, 314),)})
+                                 "prevTest": "tests/test_met_perf_049.py", "steps": (1, 1), "countPairs": ((313, 315),)})
 
 
 def check_edges(refusals: Any) -> None:

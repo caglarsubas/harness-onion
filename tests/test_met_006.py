@@ -1,4 +1,4 @@
-"""Exact source lineage for MET-006; SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0): the record, its schema, its checker and its tests, with CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS registration carried; the head keeps the full fan-in (8 own and 98 predecessor routes, every catalog walk and round trip, the full payload loop), and the semantic check (V1, E1, E2, E3, V4, V6) has a failing case for every refusal, each on plain data."""
+"""Exact source lineage for MET-006; SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0): the record, its schema, its checker and its tests, with CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations carried; the head keeps the full fan-in (8 own and 98 predecessor routes, every catalog walk and round trip, the full payload loop), and the semantic check (V1, E1, E2, E3, V4, V6) has a failing case for every refusal, each on plain data."""
 import ast
 import json
 from copy import deepcopy
