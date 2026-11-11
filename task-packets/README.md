@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-049
+## Current source preparation — MET-006
+
+MET-006 (slot 287): SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0, 298 packets at slot 287):
+architecture/service-edges.yaml with one entry per catalog dependency, its schema, checker and tests, and the errata
+10-12 corrections carried from slot 286; gate material (the registry rider and the D5a oracle). Alpha2 OPEN; 297
+accepted (the catalog at slot 286) plus MET-006 only.
+
+## Historical ledger rewrite source preparation — MET-PERF-049
 
 MET-PERF-049 (slot 286): CHAIN-COMPACTION-002's ledger rewrite step (K = 0, 297 packets at slot 286): the chain
 checkpoint's reader gains the class cache, class rule v2.4 and the demoted (authored) classification, MET-PERF-048's
@@ -1784,3 +1791,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 295 | `LAB-REPO-001` | `mas-harness-research-lab` | R13's bootstrap PR over its initial commit cc92594d (product, published by MET-REGISTRY-001): the shared offline transport, the standard-library acceptance tools, the bridge's research records added or modified since the base and the regenerated manifest |
 | 296 | `MET-ADOPT-008` | `Harness-Engineering` | AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with no state change; VB-11 and the refused-step invariant |
 | 297 | `MET-PERF-049` | `Harness-Engineering` | CHAIN-COMPACTION-002's ledger rewrite step (K = 0, 297 packets at slot 286): the reader's class cache, class rule v2.4, the demoted (authored) classification and twelve parallel-suite workers; the second checkpoint written at slot 286 |
+| 298 | `MET-006` | `Harness-Engineering` | SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0, 298 packets at slot 287): one entry per catalog dependency with its schema, checker and tests; CONTRACT_286's errata 10-12 carried |

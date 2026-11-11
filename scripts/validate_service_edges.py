@@ -77,19 +77,27 @@ def shape_only(entry):
     return not all(is_number(v) for v in terms)
 
 
-def load(root=ROOT):
-    root = Path(root)
-    return (safe_load((root / RECORD_PATH).read_text(encoding="utf-8")),
-            safe_load((root / CATALOG_PATH).read_text(encoding="utf-8")),
-            safe_load((root / GRAPH_PATH).read_text(encoding="utf-8")),
-            json.loads((root / SCHEMA_PATH).read_text(encoding="utf-8")))
+def file_reader(root=ROOT):
+    """The default read: a regular file under the root, never a link; None when absent."""
+    root = Path(root).resolve()
+
+    def read(path):
+        p = root / path
+        return p.read_bytes() if p.is_file() and not p.is_symlink() else None
+    return read
+
+
+def load(root=ROOT, read=None):
+    read = read or file_reader(root)
+    return (safe_load(read(RECORD_PATH).decode("utf-8")), safe_load(read(CATALOG_PATH).decode("utf-8")),
+            safe_load(read(GRAPH_PATH).decode("utf-8")), json.loads(read(SCHEMA_PATH).decode("utf-8")))
 
 
 class Lines:
-    """Cited lines at the head, by repository-relative path; never outside the root, never a link."""
+    """Cited lines at the head, by repository-relative path, through the read callable; never outside the root."""
 
-    def __init__(self, root):
-        self.root, self.cache = Path(root).resolve(), {}
+    def __init__(self, read):
+        self.read, self.cache = read, {}
 
     def get(self, ref):
         m = REF.match(ref or "")
@@ -97,8 +105,8 @@ class Lines:
             return None
         path, n = m.group(1), int(m.group(2))
         if path not in self.cache:
-            p = self.root / path
-            self.cache[path] = p.read_bytes().split(b"\n") if p.is_file() and not p.is_symlink() else None
+            raw = self.read(path)
+            self.cache[path] = raw.split(b"\n") if type(raw) is bytes else None
         rows = self.cache[path]
         return rows[n - 1] if rows is not None and n <= len(rows) else None
 
@@ -122,17 +130,19 @@ def maximal_paths(rg, branch):
     return sorted(found)
 
 
-def check_record(record, catalog, graph, schema, root=ROOT):
-    """Return the refusals as (rule, message) pairs; an empty list passes."""
+def check_record(record, catalog, graph, schema, root=ROOT, read=None):
+    """Return the refusals as (rule, message) pairs; an empty list passes. `read` (path -> bytes) defaults to the files
+    under root."""
     bad = []
     fail = lambda rule, msg: bad.append((rule, msg))
-    lines = Lines(root)
+    read = read or file_reader(root)
+    lines = Lines(read)
     services = {s["id"]: s for s in catalog["services"]}
     externals = catalog["externalDependencies"]
     cat_deps = {(s["id"], d["id"]): d for s in catalog["services"] for d in s.get("dependencies", [])}
     deps_of = {s["id"]: {d["id"] for d in s.get("dependencies", [])} for s in catalog["services"]}
     rg = graph["runtimeRequestGraph"]
-    cat_lines = (Path(root) / CATALOG_PATH).read_text(encoding="utf-8").split("\n")
+    cat_lines = read(CATALOG_PATH).decode("utf-8").split("\n")
     own_line = {}
     for i, line in enumerate(cat_lines):
         m = re.match(r"^\s+(external\.[a-z0-9-]+):\s(.*)$", line)
@@ -479,8 +489,8 @@ def check_record(record, catalog, graph, schema, root=ROOT):
     return bad
 
 
-def check(root=ROOT):
-    return check_record(*load(root), root=root)
+def check(root=ROOT, read=None):
+    return check_record(*load(root, read), root=root, read=read)
 
 
 def main(argv=None):

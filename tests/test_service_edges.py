@@ -37,6 +37,9 @@ def refusals(record):
 
 def test_live_record_passes():
     assert SE.check(ROOT) == []
+    reads = []
+    assert SE.check(ROOT, read=lambda path: reads.append(path) or (ROOT / path).read_bytes()) == []
+    assert {"architecture/service-edges.yaml", "architecture/services.yaml"} <= set(reads)
     assert len(RECORD["edges"]) == 129 and RECORD["counts"]["edges"] == 129
 
 
