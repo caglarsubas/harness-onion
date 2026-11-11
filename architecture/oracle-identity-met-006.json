@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_006_oracle.py",
-  "sha256": "5bbe9ccf0eae1528becbb162c8f9917aa9e827332b4d7ca851cc9d7d8b16fabc"
+  "sha256": "fed76d3f426b1aa6ee970ee68893155dfa83adee30b715c5cfb644d73e04a443"
  },
  "oracle": {
   "agentId": "ac45bb3395a46460a",
@@ -25,7 +25,7 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-287-C3E-RULINGS",
+  "ref": "MON-287-C3F-RULINGS",
   "date": "2026-11-11"
  },
  "disclosures": [
@@ -35,6 +35,7 @@
   "classified by the non-author lane monitor (MON-287-C3-CLASS): failures 1-5 are candidate defects D1-D4 (SE-2 closed enums, SE-5 request-path ceilings, SE-8 the job digest, closed handoff rows), fixed in the candidate at c2b e33624e1 with a failing case each; failures 6-8 are oracle slips, corrected by the monitor 6baff68d -> 80188247 without loosening any placement or refusal expectation",
   "blind run 2, the corrected file on c2b e33624e1 with the test runner in-process: rc 0, tests 239, failures 0, errors 0, skipped 0 (junit 57f93cd3, log 03ad6758); VERDICT PASS",
   "placed at c3 with this identity ruled KEEP by the lane monitor (MON-287-ORACLE-KEEP); the author's work folder holds a bytecode cache from py_compile",
-  "monitor updated the oracle for contract rev 10 (E3 sector-test span 748-912; a V6 mutation pair value), MON-287-C3E-RULINGS"
+  "monitor updated the oracle for contract rev 10 (E3 sector-test span 748-912; a V6 mutation pair value), MON-287-C3E-RULINGS",
+  "monitor updated the oracle for contract rev 11 (six authored-edit files; F1 ruling corrected), MON-287-C3F-RULINGS"
  ]
 }

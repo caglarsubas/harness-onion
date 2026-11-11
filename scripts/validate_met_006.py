@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/service-edges-authority.json"
-AUTHORITY_SHA256 = "3c3e07afe50f9e0d2eb5ff9695ac45a4c479d633ce9ad730fb1d71ca1b02b86d"
+AUTHORITY_SHA256 = "dd235db42e4a024f485a87d0b071ce7566f6be01ad840d87cf5c8e53e1b99938"
 VALIDATOR_PATH = "scripts/validate_met_006.py"
 BASE_COMMIT = "d69848cf015e7328127c1369a4c999cb50b8a861"
 NEW_PACKET = "MET-006"
@@ -346,13 +346,13 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # MON-287-AB-PROCEED, MON-287-CR4-RULINGS and MON-287-C1R-RULINGS) adds, in a K = 0 step, the service-edge record
 # beside the catalog: architecture/service-edges.yaml with its schema, its checker scripts/validate_service_edges.py
 # (SE-1 to SE-14) and its tests; the catalog, the graph and both catalog schemas stay byte-equal (Option B); and
-# CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations ride
-# as authored edits at their named lines (048-D1 (b); MON-287-C2-RULINGS, MON-287-C3E-RULINGS). Repository bytes
-# are read
+# CONTRACT_286's errata 10-12, the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the
+# corpus count in two tests ride as authored edits at their named lines (048-D1 (b); MON-287-C2-RULINGS,
+# MON-287-C3E-RULINGS, MON-287-C3F-RULINGS). Repository bytes are read
 # only through reviewed_bytes; an era file is refused unless bound by digest on every read, a changed file by the
-# authority's afterSha256. Each refusal is a pure check over the values read. Checked here (CONTRACT_287 rev 10
+# authority's afterSha256. Each refusal is a pure check over the values read. Checked here (CONTRACT_287 rev 11
 # section 6): V1 the packet's files; E1 the record passes its checker on this era's bytes (its counts included);
-# E2 the catalog, the graph and both schemas equal their base bytes; E3 class-other hunks only on the four authored-edit
+# E2 the catalog, the graph and both schemas equal their base bytes; E3 class-other hunks only on the six authored-edit
 # files, at their named lines; V4 the registry rider; V6 the hunk-class record under v2.4. Last, this layer's own
 # inverse hunks are the canonical ones.
 PACKET_FILES = ('architecture/service-edges.yaml', 'architecture/service-edges/schema.json', 'scripts/validate_service_edges.py', 'tests/test_service_edges.py')
@@ -384,6 +384,8 @@ ERRATA_LINES = MappingProxyType({
     "architecture/chain-checkpoint/README.md": (184, 189),
     "docs/repositories/00-harness-engineering.md": (1618, 1618),
     "docs/MASTER_DEVELOPMENT_PLAN.md": (3331, 3331),
+    "tests/test_ci_performance.py": (169, 169),
+    "tests/test_credential_lifecycle.py": (362, 362),
     "tests/test_sector_catalog.py": (748, 912),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
@@ -524,7 +526,7 @@ def check_hunk_record(raw: Any, changed: Any, afters: Any, classify: Any, contex
            "MET-006 V6 the hunk-class record's vocabulary and rule digest are v2.4's")
     _bound(lambda: type(record["hunkClassContext"]) is dict and set(record["hunkClassContext"]) == set(HUNK_CONTEXT)
            and record["hunkClassContext"] == {"newPacket": NEW_PACKET, "prevValidator": HUNK_CONTEXT["prevValidator"],
-                                              "prevTest": HUNK_CONTEXT["prevTest"], "steps": [1, 1], "countPairs": [[313, 315]]},
+                                              "prevTest": HUNK_CONTEXT["prevTest"], "steps": [1, 1], "countPairs": []},
            "MET-006 V6 the hunk-class record's context is this step's names")
     classes = record.get("classes") if type(record) is dict else None
     _bound(lambda: type(changed) is dict and type(classes) is dict and set(classes) == set(changed)
@@ -566,7 +568,7 @@ HUNK_VOCABULARY = ("bridge", "cascade", "other", "record", "register")     # cha
 NORMALISED = ("bridge", "cascade", "record", "register")                   # the mechanics forms v2.4 normalises
 HUNK_RULE_SHA256 = "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"
 HUNK_CONTEXT = MappingProxyType({"newPacket": NEW_PACKET, "prevValidator": "scripts/validate_met_perf_049.py",
-                                 "prevTest": "tests/test_met_perf_049.py", "steps": (1, 1), "countPairs": ((313, 315),)})
+                                 "prevTest": "tests/test_met_perf_049.py", "steps": (1, 1), "countPairs": ()})
 
 
 def check_edges(refusals: Any) -> None:
@@ -598,13 +600,13 @@ def validate_base_files() -> None:
 
 
 def check_errata(classes: Any, changed: Any, befores: Any) -> None:
-    """E3: class-other (authored) hunks fall only on the four authored-edit files; each carries one, and each such
+    """E3: class-other (authored) hunks fall only on the six authored-edit files; each carries one, and each such
     hunk lies inside its named base lines: placed in the before bytes by its offset plus the earlier hunks' shift, its
     before-text is there, and the base lines it spans are within the named range; every other hunk is a mechanics form
     v2.4 normalises."""
     _bound(lambda: type(classes) is dict and type(changed) is dict
            and all(cls in NORMALISED or (cls == "other" and path in ERRATA_LINES) for path in classes for cls in classes[path]),
-           "MET-006 E3 class-other hunks fall only on the four authored-edit files")
+           "MET-006 E3 class-other hunks fall only on the six authored-edit files")
     for path, (first, last) in ERRATA_LINES.items():
         _bound(lambda: "other" in classes[path] and type(befores[path]) is bytes,
                "MET-006 E3 the errata file carries its authored hunk: " + path)

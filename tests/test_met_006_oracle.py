@@ -13,7 +13,7 @@ Where every expected value comes from:
   the request handoff, rule B's controller handoffs and catalogGaps), 3.5 (the counts and their units), 3.6
   (request paths, maximal request paths and repeatedCalls), 3.7 (the externalProviders table and the phrase
   map), 3.8 (the externalEndpointKinds table), section 4 (the checker's rules SE-1 to SE-14), section 6 (the
-  head layer's checks V1, E1, E2, E3, V4, V6) and sections 7 and 17 (the four authored edits and their lines).
+  head layer's checks V1, E1, E2, E3, V4, V6) and sections 7 and 17 (the six authored edits and their lines; rev 11).
 - The record, the catalog and the graph as exported at c2 (architecture/service-edges.yaml,
   architecture/services.yaml, architecture/dependency-graph.yaml): only the edge keys and members each mutation
   starts from. Every expected count, mapping and repeated-call list is recomputed here from the loaded files by
@@ -254,6 +254,8 @@ EXPECTED_ERRATA = {
     "docs/repositories/00-harness-engineering.md": (1618, 1618),
     "docs/MASTER_DEVELOPMENT_PLAN.md": (3331, 3331),
     SECTOR_TEST: (748, 912),  # rev 10: LITERAL_READERS 748-769 and NAMING_RECORDS 837-912 (MON-287-C3E-RULINGS)
+    "tests/test_ci_performance.py": (169, 169),  # rev 11: the YAML corpus count, an authored edit (MON-287-C3F-RULINGS)
+    "tests/test_credential_lifecycle.py": (362, 362),  # rev 11: the corpus-count target, an authored edit (MON-287-C3F-RULINGS)
 }
 HUNK_RECORD = "architecture/chain-checkpoint/hunk-classes/287.json"
 REGISTRY = "architecture/review-record/briefs.json"
@@ -1975,7 +1977,7 @@ def test_e2_refuses_an_authority_naming_a_base_file():
     _raises_met006(_head().check_base_files, _base_files(), authority["changedFiles"], new)
 
 
-def test_e3_errata_lines_name_the_four_authored_edits():
+def test_e3_errata_lines_name_the_six_authored_edits():
     """Sections 6 E3, 7 and 17: ERRATA_LINES names the README paragraph (184-189), item 160 (1618), line 3331
     and the sector test's LITERAL_READERS and NAMING_RECORDS (748-912; rev 10), by their base lines."""
     lines = {str(path): tuple(span) for path, span in _head().ERRATA_LINES.items()}
@@ -1983,7 +1985,7 @@ def test_e3_errata_lines_name_the_four_authored_edits():
 
 
 def test_e3_class_other_falls_only_on_the_authored_edits():
-    """Sections 6 E3, 7 and 17: in 287's hunk-class record, class other appears only on the four authored-edit
+    """Sections 6 E3, 7 and 17: in 287's hunk-class record, class other appears only on the six authored-edit
     files, at least one on each (the contract fixes their named lines, not a hunk count; MON-287-C3-CLASS)."""
     holders = {path: hunks.count("other") for path, hunks in _hunk_classes().items() if "other" in hunks}
     assert set(holders) == set(EXPECTED_ERRATA)
@@ -2013,7 +2015,7 @@ def test_errata_named_lines_hold_the_authored_text():
 
 
 def test_e3_passes_on_the_live_inputs():
-    """Section 6 E3: class-other hunks fall only on the four files, at their named lines."""
+    """Section 6 E3: class-other hunks fall only on the six files, at their named lines."""
     assert _head().check_errata(_hunk_classes(), _authority()["changedFiles"], _befores()) is None
 
 
@@ -2045,7 +2047,7 @@ def _e3_before_shifted(classes, befores, errata):
 
 
 E3_CASES = [
-    pytest.param(_e3_other_outside, id="other-on-a-file-outside-the-four"),
+    pytest.param(_e3_other_outside, id="other-on-a-file-outside-the-six"),
     pytest.param(_e3_other_missing, id="an-authored-file-without-its-other-hunk"),
     pytest.param(_e3_other_moved, id="other-hunk-outside-its-named-lines"),
     pytest.param(_e3_before_shifted, id="named-lines-no-longer-hold-the-hunk"),

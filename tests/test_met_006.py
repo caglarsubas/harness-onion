@@ -1,4 +1,4 @@
-"""Exact source lineage for MET-006; SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0): the record, its schema, its checker and its tests, with CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations carried; the head keeps the full fan-in (8 own and 98 predecessor routes, every catalog walk and round trip, the full payload loop), and the semantic check (V1, E1, E2, E3, V4, V6) has a failing case for every refusal, each on plain data."""
+"""Exact source lineage for MET-006; SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0): the record, its schema, its checker and its tests, with CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the corpus count in two tests carried; the head keeps the full fan-in (8 own and 98 predecessor routes, every catalog walk and round trip, the full payload loop), and the semantic check (V1, E1, E2, E3, V4, V6) has a failing case for every refusal, each on plain data."""
 import ast
 import json
 from copy import deepcopy
@@ -1074,7 +1074,7 @@ V1_FILE = "MET-006 V1 a packet file's bytes equal its pinned digest: "
 E1 = "MET-006 E1 the service-edge record passes its checker (SE-1 to SE-14)"
 E2_BYTES = "MET-006 E2 the catalog, the graph and both schemas equal their base bytes"
 E2_NAMED = "MET-006 E2 this step changes none of the catalog, the graph or their schemas"
-E3_ONLY = "MET-006 E3 class-other hunks fall only on the four authored-edit files"
+E3_ONLY = "MET-006 E3 class-other hunks fall only on the six authored-edit files"
 E3_CARRY = "MET-006 E3 the errata file carries its authored hunk: "
 E3_LINES = "MET-006 E3 an authored hunk lies at its named lines: "
 V4_MESSAGE = "the registry differs from the base by exactly the MET-006 packet rider"
