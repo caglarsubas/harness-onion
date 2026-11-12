@@ -2,7 +2,7 @@
   "schemaVersion": "harness.planeon.ai/data-correctness/v1",
   "schema": {
     "path": "architecture/data-correctness/schema.json",
-    "sha256": "c120bb9b2440a3402460ac1eb228fe3ba10ca1b2ded76a987f77eef5cfba404d"
+    "sha256": "f51253de041a28bb90b5524e90feab187755bbb8063dbc2005a605c6954bef03"
   },
   "basis": {
     "catalog": {
@@ -65,7 +65,7 @@
       "id": "RF-4",
       "name": "OPERATION_IDS",
       "property": "an operation ID is minted once, carried unchanged on every effect edge and deduplicated at the effect's own store, so retries and outbox replays apply once (operationIds)",
-      "appliesWhen": "the deployable's catalog entry names an outbox",
+      "appliesWhen": "the deployable's catalog entry names an outbox, or it is the tool broker on operationIds.propagation's path (its idempotency and receipt store)",
       "staticChecks": [
         "DC_OPIDS"
       ],
@@ -82,7 +82,7 @@
       "id": "RF-5",
       "name": "COMPATIBILITY",
       "property": "every persisted record kind carries a schema version, and readers accept the previous and the current version in both directions during a rollout. Public input may reject unknown fields and versions. Stored envelopes keep opaque extension data without meaning or authority. Migrations name reader-writer pairs, including rollback",
-      "appliesWhen": "the deployable persists a record kind",
+      "appliesWhen": "the deployable persists a record kind (one entry per written store, cited by the store's purpose line)",
       "staticChecks": [
         "DC_VERSIONS"
       ],
@@ -107,7 +107,7 @@
       "id": "RF-7",
       "name": "REPLAY_STATE",
       "property": "the durable state a replay consults is an input beside the log, so a log-only replay vector is expected to diverge",
-      "appliesWhen": "the deployable's catalog entry names an outbox (its replays read the outbox and the state beside it)",
+      "appliesWhen": "the deployable's catalog entry names an outbox or a replay (its replays read the log and the state beside it)",
       "staticChecks": [
         "DC_VECTORS"
       ],
@@ -499,7 +499,8 @@
       "obligations": [
         "RF-1",
         "RF-3",
-        "RF-5"
+        "RF-5",
+        "RF-7"
       ]
     },
     {
@@ -1040,11 +1041,11 @@
         }
       ],
       "lease": {
-        "resource": "expired leases",
+        "resource": "leases",
         "source": {
           "basis": "catalog",
           "line": 930,
-          "phrase": "expired leases"
+          "phrase": "leases"
         },
         "fencing": {
           "value": "UNSPECIFIED",
@@ -1098,8 +1099,12 @@
       "derivedStores": [],
       "outbox": null,
       "transactionBoundary": {
-        "value": "UNSPECIFIED",
-        "source": null
+        "value": "Worker pauses when batch/provenance/checkpoint cannot commit atomically",
+        "source": {
+          "basis": "catalog",
+          "line": 963,
+          "phrase": "Worker pauses when batch/provenance/checkpoint cannot commit atomically"
+        }
       },
       "obligations": [
         "RF-1",
@@ -1183,6 +1188,22 @@
         }
       ],
       "derivedStores": [
+        {
+          "store": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1001,
+            "phrase": "Chunks, citations, source/index versions"
+          },
+          "feed": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
         {
           "store": "external.pgvector",
           "source": {
@@ -1542,6 +1563,26 @@
       ],
       "derivedStores": [
         {
+          "store": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1226,
+            "phrase": "chunks, vectors, citations"
+          },
+          "feed": {
+            "value": "REBUILD",
+            "source": {
+              "basis": "catalog",
+              "line": 1222,
+              "phrase": "create-then-swap index jobs"
+            }
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
           "store": "external.pgvector",
           "source": {
             "basis": "catalog",
@@ -1843,6 +1884,7 @@
       "obligations": [
         "RF-1",
         "RF-3",
+        "RF-4",
         "RF-5"
       ]
     },
@@ -2073,18 +2115,18 @@
     "withLease": 6,
     "withOutbox": 9,
     "withDerivedStores": 5,
-    "withTransactionBoundary": 4,
+    "withTransactionBoundary": 5,
     "guards": {
       "UNSPECIFIED": 31
     },
     "unspecifiedByMember": {
       "clockUse": 24,
-      "deletion": 5,
-      "feed": 4,
+      "deletion": 7,
+      "feed": 5,
       "fencing": 6,
       "guard": 31,
       "skewMarginMs": 24,
-      "transactionBoundary": 20,
+      "transactionBoundary": 19,
       "version": 31,
       "window": 31
     },
@@ -2092,10 +2134,10 @@
       "RF-1": 24,
       "RF-2": 6,
       "RF-3": 24,
-      "RF-4": 9,
+      "RF-4": 10,
       "RF-5": 24,
       "RF-6": 5,
-      "RF-7": 9
+      "RF-7": 10
     },
     "vectorsByFamily": {
       "RF-1": 1,

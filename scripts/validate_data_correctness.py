@@ -3,7 +3,8 @@
 
 check(read, packets) validates the record through an injected byte reader (exact paths only, no listing) and the set of
 published packet ids, and returns its refusals as (code, message) pairs, in the order the codes run:
-- DC_SHAPE: every object closed to its exact members with exact JSON types; closed vocabularies; a valued member is
+- DC_SHAPE: every object closed to its exact members with exact JSON types (a list is a list, a count an integer and never
+  a boolean); closed vocabularies; a valued member is
   {value, source} with source null exactly when value is UNSPECIFIED; no string contains a catalog path or equals a
   catalog basename (the record names no catalog, Q-288-A1).
 - DC_BASIS: the schema's, the effective catalog's, the service-edge record's and the authority map's digests; the
@@ -11,7 +12,8 @@ published packet ids, and returns its refusals as (code, message) pairs, in the 
   the raw catalog (equal service names and dependency entries, in order).
 - DC_ROWS: the durable writers derived from the effective catalog (STATEFUL, or STATELESS with durableState true; 24 at
   the base), in its order, each stores equal to the catalog's {name, ownership} projection (the model's durable_writers).
-- DC_SOURCES: each phrase stands on its cited line (the c1 content review judges whether it states the member's value).
+- DC_SOURCES: each phrase stands on its cited line, and a catalog line lies inside its own row's catalog entry (the c1
+  content review judges whether it states the member's value).
 - DC_FENCING: a lease implies RF-2 in the obligations, and RF-2 a lease.
 - DC_VERSIONS: every record kind has its version member; a valued window implies a valued version.
 - DC_DERIVED_STORES: every derived store has its feed and deletion members; RF-6 is in the obligations exactly when a
@@ -30,6 +32,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -70,6 +73,8 @@ TOP = ("schemaVersion", "schema", "basis", "ruleFamilies", "operationIds", "depl
 ROW = ("id", "stateMode", "stores", "writePaths", "lease", "clock", "recordKinds", "derivedStores", "outbox",
        "transactionBoundary", "obligations")
 OPERATION_IDS = ("origin", "shape", "propagation", "receiptKey", "native", "none", "outcomes", "toolEffectClasses", "edges")
+RF4_PATH = ("tool-broker",)   # catalog line 1450: its idempotency and receipt store, on operationIds.propagation's path
+REPLAYS = ("usage-ledger",)    # catalog line 551: it replays idempotent usage observations beside its reservations
 COUNTS = ("deployables", "byStateMode", "withLease", "withOutbox", "withDerivedStores", "withTransactionBoundary", "guards",
           "unspecifiedByMember", "obligationsByFamily", "vectorsByFamily")
 
@@ -104,6 +109,20 @@ def closed(value, members, where):
 
 def text(value, where):
     need(type(value) is str and value != "", "%s is a non-empty string" % where)
+
+
+def integer(value, where):
+    need(type(value) is int and value >= 0, where + " is a non-negative integer (never a boolean)")
+
+
+def int_map(value, where, keys=None):
+    need(type(value) is dict and (keys is None or set(value) == set(keys)), where + " is a closed count map")
+    for k, v in value.items():
+        integer(v, "%s.%s" % (where, k))
+
+
+def text_list(value, where):
+    need(type(value) is list and value and all(type(v) is str and v for v in value), where + " is a list of non-empty strings")
 
 
 def source(value, where):
@@ -149,12 +168,15 @@ def check_shape(record):
     closed(record["basis"]["catalog"], ("view", "sha256", "services", "dependencyEntries", "parity"), "basis.catalog")
     need(record["basis"]["catalog"]["view"] == "EFFECTIVE" and record["basis"]["catalog"]["parity"] == "RAW_EQUALS_EFFECTIVE",
          "basis.catalog's view and parity")
+    integer(record["basis"]["catalog"]["services"], "basis.catalog.services")
+    integer(record["basis"]["catalog"]["dependencyEntries"], "basis.catalog.dependencyEntries")
     closed(record["basis"]["serviceEdges"], ("path", "sha256"), "basis.serviceEdges")
     closed(record["basis"]["authorityMap"], ("path", "sha256", "budgetRow"), "basis.authorityMap")
     need(record["basis"]["serviceEdges"]["path"] == EDGES_PATH and record["basis"]["authorityMap"]["path"] == AUTHORITY_MAP_PATH,
          "basis paths")
     families = record["ruleFamilies"]
-    need(type(families) is list and [f.get("id") for f in families if type(f) is dict] == list(FAMILIES), "seven rule families in order")
+    need(type(families) is list and len(families) == 7 and all(type(f) is dict for f in families)
+         and [f.get("id") for f in families] == list(FAMILIES), "seven rule families in order")
     for f, name in zip(families, NAMES):
         closed(f, ("id", "name", "property", "appliesWhen", "staticChecks", "vectors"), "rule family " + f["id"])
         need(f["name"] == name, f["id"] + "'s name")
@@ -173,11 +195,26 @@ def check_shape(record):
         need(type(ops[k]["binds"]) is list and set(ops[k]["binds"]) <= set(TOOL_CLASSES), "operationIds.%s.binds" % k)
         text(ops[k]["rule"], "operationIds.%s.rule" % k)
     closed(ops["outcomes"], ("terms", "citedFrom", "owner", "unknown", "separations"), "operationIds.outcomes")
+    text_list(ops["outcomes"]["terms"], "outcomes.terms")
+    text_list(ops["outcomes"]["separations"], "outcomes.separations")
+    for k in ("citedFrom", "owner", "unknown"):
+        text(ops["outcomes"][k], "outcomes." + k)
     need(type(ops["toolEffectClasses"]) is list and [c.get("class") for c in ops["toolEffectClasses"]] == list(TOOL_CLASSES),
          "the four tool effect classes in order")
     for c in ops["toolEffectClasses"]:
         closed(c, ("class", "retry", "approval"), "a tool effect class")
+        text(c["retry"], c["class"] + ".retry")
+        text(c["approval"], c["class"] + ".approval")
     closed(ops["edges"], ("edges", "operationClasses", "byIdempotency", "perEdge", "splitEdges"), "operationIds.edges")
+    integer(ops["edges"]["edges"], "edges.edges")
+    integer(ops["edges"]["operationClasses"], "edges.operationClasses")
+    int_map(ops["edges"]["byIdempotency"], "edges.byIdempotency", ("NATIVE", "NONE", "RECEIPT_KEY"))
+    int_map(ops["edges"]["perEdge"], "edges.perEdge", ("NATIVE", "NONE", "SPLIT"))
+    need(type(ops["edges"]["splitEdges"]) is list, "edges.splitEdges is a list")
+    for x in ops["edges"]["splitEdges"]:
+        closed(x, ("consumer", "dependency"), "a split edge")
+        text(x["consumer"], "a split edge's consumer")
+        text(x["dependency"], "a split edge's dependency")
     rows = record["deployables"]
     need(type(rows) is list and rows, "deployables is a non-empty list")
     for r in rows:
@@ -185,7 +222,8 @@ def check_shape(record):
         where = "deployable " + str(r.get("id"))
         text(r["id"], where + ".id")
         need(r["stateMode"] in ("STATEFUL", "STATELESS_DURABLE"), where + ".stateMode")
-        need(type(r["stores"]) is list, where + ".stores")
+        for m in ("stores", "writePaths", "recordKinds", "derivedStores"):
+            need(type(r[m]) is list, "%s.%s is a list" % (where, m))
         for s in r["stores"]:
             closed(s, ("name", "ownership"), where + " store")
         for w in r["writePaths"]:
@@ -216,25 +254,51 @@ def check_shape(record):
         need(type(r["obligations"]) is list and len(set(r["obligations"])) == len(r["obligations"])
              and [f for f in FAMILIES if f in r["obligations"]] == r["obligations"], where + ".obligations in family order")
     closed(record["counts"], COUNTS, "counts")
+    for k in ("deployables", "withLease", "withOutbox", "withDerivedStores", "withTransactionBoundary"):
+        integer(record["counts"][k], "counts." + k)
+    int_map(record["counts"]["byStateMode"], "counts.byStateMode")
+    int_map(record["counts"]["guards"], "counts.guards")
+    int_map(record["counts"]["unspecifiedByMember"], "counts.unspecifiedByMember")
+    int_map(record["counts"]["obligationsByFamily"], "counts.obligationsByFamily", FAMILIES)
+    int_map(record["counts"]["vectorsByFamily"], "counts.vectorsByFamily", FAMILIES)
     for s in strings(record):
         need(not any(p in s for p in CATALOG_PATHS) and s not in CATALOG_BASENAMES, "the record names a catalog")
 
 
+def entry_spans(lines):
+    """Each top-level service entry's (first, last) 1-based lines in the catalog text."""
+    start = lines.index("services:")
+    starts, indent, end = [], None, len(lines)
+    for i in range(start + 1, len(lines)):
+        if lines[i] and not lines[i].startswith((" ", "-")):
+            end = i
+            break
+        m = re.match(r"^(\s*)- id: (\S+)\s*$", lines[i])
+        if m and (indent is None or len(m.group(1)) == indent):
+            indent = len(m.group(1))
+            starts.append((m.group(2), i + 1))
+    return {sid: (first, (starts[k + 1][1] - 1) if k + 1 < len(starts) else end) for k, (sid, first) in enumerate(starts)}
+
+
 def all_sources(record):
     for r in record["deployables"]:
-        if r["lease"]:
-            yield r["lease"]["source"]
-            yield r["lease"]["fencing"]["source"]
-        yield from (w["guard"]["source"] for w in r["writePaths"])
-        yield r["clock"]["use"]["source"]
-        yield r["clock"]["skewMarginMs"]["source"]
-        for k in r["recordKinds"]:
-            yield from (k["source"], k["version"]["source"], k["window"]["source"])
-        for d in r["derivedStores"]:
-            yield from (d["source"], d["feed"]["source"], d["deletion"]["source"])
-        if r["outbox"]:
-            yield r["outbox"]["source"]
-        yield r["transactionBoundary"]["source"]
+        yield from ((r["id"], s) for s in row_sources(r))
+
+
+def row_sources(r):
+    if r["lease"]:
+        yield r["lease"]["source"]
+        yield r["lease"]["fencing"]["source"]
+    yield from (w["guard"]["source"] for w in r["writePaths"])
+    yield r["clock"]["use"]["source"]
+    yield r["clock"]["skewMarginMs"]["source"]
+    for k in r["recordKinds"]:
+        yield from (k["source"], k["version"]["source"], k["window"]["source"])
+    for d in r["derivedStores"]:
+        yield from (d["source"], d["feed"]["source"], d["deletion"]["source"])
+    if r["outbox"]:
+        yield r["outbox"]["source"]
+    yield r["transactionBoundary"]["source"]
 
 
 def deps(services):
@@ -248,8 +312,9 @@ def operation_classes(edges):
 
 def obligations(row):
     applies = {"RF-1": bool(row["writePaths"]), "RF-2": row["lease"] is not None,
-               "RF-3": row["lease"] is not None or row["clock"]["use"]["value"] != "NONE", "RF-4": row["outbox"] is not None,
-               "RF-5": bool(row["recordKinds"]), "RF-6": bool(row["derivedStores"]), "RF-7": row["outbox"] is not None}
+               "RF-3": row["lease"] is not None or row["clock"]["use"]["value"] != "NONE",
+               "RF-4": row["outbox"] is not None or row["id"] in RF4_PATH, "RF-5": bool(row["recordKinds"]),
+               "RF-6": bool(row["derivedStores"]), "RF-7": row["outbox"] is not None or row["id"] in REPLAYS}
     return [f for f in FAMILIES if applies[f]]
 
 
@@ -310,11 +375,14 @@ def check(read, packets):
 
     def sources():
         lines = state.get("eff_lines") or effective_bytes_from(read, packets, SERVICES_CATALOG).decode("utf-8").split("\n")
-        for s in all_sources(record):
+        spans = entry_spans(lines)
+        for row_id, s in all_sources(record):
             if s is None:
                 continue
             if s["basis"] == "catalog":
                 body = lines
+                need(row_id in spans and spans[row_id][0] <= s["line"] <= spans[row_id][1],
+                     "%s: catalog line %d lies outside its own entry" % (row_id, s["line"]))
             else:
                 need(s["basis"] not in CATALOG_PATHS, "a source names a catalog path")
                 body = read(s["basis"]).decode("utf-8").split("\n")

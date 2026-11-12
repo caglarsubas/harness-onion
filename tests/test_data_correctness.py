@@ -101,7 +101,20 @@ def _mutate_valued(r):
 
 
 def _mutate_catalog_name(r):
-    r["operationIds"]["origin"] = "minted where architecture/services.yaml says"
+    r["operationIds"]["origin"] = "minted where %s says" % DC.CATALOG_PATHS[1]
+
+
+def _mutate_write_paths_object(r):
+    r["deployables"][0]["writePaths"] = {}
+
+
+def _mutate_count_boolean(r):
+    r["counts"]["vectorsByFamily"]["RF-1"] = True
+
+
+def _mutate_source_outside_entry(r):
+    first, second = _first_lease_row(r), next(x for x in r["deployables"] if x["lease"] and x is not _first_lease_row(r))
+    first["lease"]["source"] = copy.deepcopy(second["lease"]["source"])
 
 
 def _mutate_basis(r):
@@ -143,6 +156,7 @@ def _mutate_counts(r):
 
 @pytest.mark.parametrize("mutate,code", [
     (_mutate_shape, "DC_SHAPE"), (_mutate_valued, "DC_SHAPE"), (_mutate_catalog_name, "DC_SHAPE"),
+    (_mutate_write_paths_object, "DC_SHAPE"), (_mutate_count_boolean, "DC_SHAPE"), (_mutate_source_outside_entry, "DC_SOURCES"),
     (_mutate_basis, "DC_BASIS"), (_mutate_rows, "DC_ROWS"), (_mutate_sources, "DC_SOURCES"), (_mutate_fencing, "DC_FENCING"),
     (_mutate_versions, "DC_VERSIONS"), (_mutate_derived, "DC_DERIVED_STORES"), (_mutate_opids, "DC_OPIDS"),
     (_mutate_budget, "DC_BUDGET"), (_mutate_counts, "DC_COUNTS")])
@@ -163,3 +177,13 @@ def test_a_vector_listed_without_its_family_or_twice_is_refused():
     record = copy.deepcopy(RECORD)
     record["ruleFamilies"][1]["vectors"].append(record["ruleFamilies"][0]["vectors"][0])
     assert "DC_VECTORS" in _codes(record)
+
+
+def test_a_write_from_an_expired_holder_is_refused():
+    vector = {"id": "x", "family": "RF-2", "setup": {"fencing": "STORE_CHECKED_TOKEN"},
+              "steps": [{"op": "acquire", "holder": "a", "token": 1}, {"op": "expire", "holder": "a"},
+                        {"op": "write", "holder": "a", "token": 1, "accepted": True}], "expect": {"refuse": "DC_FENCE"}}
+    assert MODEL.replay(vector) == {"refuse": "DC_FENCE"}
+    vector["steps"].insert(2, {"op": "acquire", "holder": "a", "token": 2})
+    vector["steps"][-1]["token"] = 2
+    assert MODEL.replay(vector) == "ACCEPT"

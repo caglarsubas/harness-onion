@@ -8,7 +8,8 @@ with its family:
 - DC_WRITE_SKEW (RF-1): reservations committed beyond the units, because no covering guard (SERIALIZABLE, ROW_LOCK,
   ADVISORY_LOCK or SINGLE_WRITER) aborted a transaction whose read set changed; or a serialization-failure retry that
   reissues an external effect.
-- DC_FENCE (RF-2): a fencing token that does not increase, or a write accepted with a token older than the newest issued.
+- DC_FENCE (RF-2): a fencing token that does not increase, a write accepted with a token older than the newest issued, or
+  a write accepted from a holder whose lease expired.
 - DC_CLOCK (RF-3): a lease still held after its monotonic duration, a wall-clock comparison without a skew margin, or an
   ordering by wall-clock time.
 - DC_OPID (RF-4): a NONE effect retried, a receipt key that changes between attempts of one operation on one edge, an
@@ -61,7 +62,7 @@ def _int(value, message):
 
 
 def _check_shape(vector):
-    _need(type(vector) is dict and tuple(vector) == VECTOR_MEMBERS, "a vector is exactly {id, family, setup, steps, expect}")
+    _need(type(vector) is dict and set(vector) == set(VECTOR_MEMBERS), "a vector is exactly {id, family, setup, steps, expect}")
     _need(type(vector["id"]) is str and vector["id"], "a vector id is a non-empty string")
     _need(vector["family"] in FAMILIES, "a vector's family is RF-1 to RF-7")
     _need(type(vector["setup"]) is dict and type(vector["steps"]) is list and vector["steps"], "setup is an object, steps a list")
@@ -111,16 +112,20 @@ def _write_skew(setup, steps):
 
 
 def _fence(setup, steps):
-    newest, violated = None, False
+    newest, expired, violated = None, set(), False
     for s in steps:
+        holder = s.get("holder")
         if s["op"] == "acquire":
             token = _int(s.get("token"), "a lease grant names its token")
             if newest is not None and token <= newest:
                 return True
             newest = token
-        elif s["op"] == "write":
+            expired.discard(holder)
+        elif s["op"] == "expire":
+            expired.add(holder)
+        elif s["op"] == "write" and s.get("accepted") is True:
             token = _int(s.get("token"), "a write names its token")
-            if s.get("accepted") is True and newest is not None and token < newest:
+            if holder in expired or (newest is not None and token < newest):
                 violated = True
     return violated
 

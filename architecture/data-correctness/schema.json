@@ -1095,6 +1095,12 @@
           "additionalProperties": {
             "type": "integer",
             "minimum": 0
+          },
+          "propertyNames": {
+            "enum": [
+              "STATEFUL",
+              "STATELESS_DURABLE"
+            ]
           }
         },
         "withLease": {
@@ -1118,6 +1124,16 @@
           "additionalProperties": {
             "type": "integer",
             "minimum": 0
+          },
+          "propertyNames": {
+            "enum": [
+              "SERIALIZABLE",
+              "ROW_LOCK",
+              "ADVISORY_LOCK",
+              "SINGLE_WRITER",
+              "APPEND_ONLY",
+              "UNSPECIFIED"
+            ]
           }
         },
         "unspecifiedByMember": {
@@ -1125,6 +1141,19 @@
           "additionalProperties": {
             "type": "integer",
             "minimum": 0
+          },
+          "propertyNames": {
+            "enum": [
+              "clockUse",
+              "deletion",
+              "feed",
+              "fencing",
+              "guard",
+              "skewMarginMs",
+              "transactionBoundary",
+              "version",
+              "window"
+            ]
           }
         },
         "obligationsByFamily": {
