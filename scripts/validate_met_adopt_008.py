@@ -645,12 +645,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "authority map fix validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 297
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET},
-            "closed 297-packet catalog retaining the 296-packet checkpoint")
+    require(len(paths) == 298
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET},
+            "closed 298-packet catalog retaining the 296-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem == successor.NEW_PACKET:
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -689,4 +689,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Authority map fix valid: 297 current specifications at slot 285; 296-packet checkpoint and exact 295-packet predecessor; contract reviewed.")
+    print("Authority map fix valid: 298 current specifications at slot 285; 296-packet checkpoint and exact 295-packet predecessor; contract reviewed.")

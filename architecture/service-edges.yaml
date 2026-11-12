@@ -1,0 +1,3806 @@
+# The service-edge record beside the catalog (MET-006, SERVICE-EDGES-001; CONTRACT_287 rev 6).
+schemaVersion: harness.planeon.ai/service-edges/v1alpha1
+source: {catalog: architecture/services.yaml, catalogVersion: 1.1.0, graph: architecture/dependency-graph.yaml}
+externalProviders:
+  external.kubernetes-api:
+    value: OPERATOR
+    source: {ref: architecture/services.yaml#L250, phrase: Operator-supplied}
+  external.local-oci-source:
+    value: OPERATOR
+    source: {ref: architecture/services.yaml#L251, phrase: operator-supplied local OCI registry}
+  external.release-trust-store:
+    value: OPERATOR
+    source: {ref: docs/MICROSERVICE_CATALOG.md#L74, phrase: operator-supplied … public trust material}
+  external.oidc-provider:
+    value: TENANT_OR_OPERATOR
+    source: {ref: architecture/services.yaml#L253, phrase: Tenant/operator-supplied}
+  external.postgresql:
+    value: TENANT_OR_OPERATOR
+    source: {ref: architecture/services.yaml#L254, phrase: Tenant/operator-supplied}
+  external.pgvector:
+    value: TENANT
+    source: {ref: architecture/services.yaml#L255, phrase: the tenant PostgreSQL service}
+  external.opa-engine:
+    value: OPERATOR
+    source: {ref: docs/MICROSERVICE_CATALOG.md#L74, phrase: operator-supplied … OPA}
+  external.otel-backend:
+    value: TENANT
+    source: {ref: docs/harnesses/trust.observability-finops.md#L90, phrase: Tenant-supplied telemetry backends}
+  external.tenant-source-endpoints:
+    value: TENANT
+    source: {ref: architecture/services.yaml#L258, phrase: tenant data endpoints}
+  external.tenant-object-store:
+    value: TENANT
+    source: {ref: architecture/services.yaml#L259, phrase: tenant-supplied}
+  external.tenant-model-volume:
+    value: OPERATOR
+    source: {ref: docs/MICROSERVICE_CATALOG.md#L74, phrase: operator-supplied … model volumes}
+  external.local-model-backend:
+    value: OPERATOR
+    source: {ref: docs/MICROSERVICE_CATALOG.md#L74, phrase: operator-supplied … model volumes/backends}
+  external.signed-catalog:
+    value: PLATFORM_RELEASE
+    source: {ref: architecture/services.yaml#L262, phrase: Digest-pinned contract/module catalog artifact}
+  external.signed-industry-packs:
+    value: PLATFORM_RELEASE
+    source: {ref: architecture/services.yaml#L263, phrase: Digest-pinned industry-pack artifact}
+externalEndpointKinds:
+  external.kubernetes-api:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L250, phrase: 'Kubernetes, K3s, or OpenShift API'}
+  external.local-oci-source:
+    kinds: [ARTIFACT_PATH, EXTERNAL]
+    source: {ref: architecture/services.yaml#L251, phrase: Mounted OCI layout or operator-supplied local OCI registry}
+  external.release-trust-store:
+    kinds: [ARTIFACT_PATH]
+    source: {ref: architecture/services.yaml#L252, phrase: Mounted public keys and revocation manifest}
+  external.oidc-provider:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L253, phrase: OIDC issuer}
+  external.postgresql:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L254, phrase: PostgreSQL with service-scoped roles and RLS}
+  external.pgvector:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L255, phrase: pgvector extension in the tenant PostgreSQL service}
+  external.opa-engine:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L256, phrase: Local OPA engine}
+  external.otel-backend:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L257, phrase: Prometheus and Jaeger-compatible storage}
+  external.tenant-source-endpoints:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L258, phrase: Explicitly allowlisted tenant data endpoints}
+  external.tenant-object-store:
+    kinds: [ARTIFACT_PATH, EXTERNAL]
+    source: {ref: architecture/services.yaml#L259, phrase: Tenant PVC or tenant-supplied S3-compatible endpoint}
+  external.tenant-model-volume:
+    kinds: [ARTIFACT_PATH]
+    source: {ref: architecture/services.yaml#L260, phrase: 'Pre-staged, license-approved local model artifacts'}
+  external.local-model-backend:
+    kinds: [EXTERNAL]
+    source: {ref: architecture/services.yaml#L261, phrase: 'Selected Ollama, llama.cpp, or vLLM backend'}
+  external.signed-catalog:
+    kinds: [ARTIFACT_PATH]
+    source: {ref: architecture/services.yaml#L262, phrase: Digest-pinned contract/module catalog artifact}
+  external.signed-industry-packs:
+    kinds: [ARTIFACT_PATH]
+    source: {ref: architecture/services.yaml#L263, phrase: Digest-pinned industry-pack artifact}
+edges:
+- consumer: bundle-verifier
+  dependency: external.local-oci-source
+  lifecyclePhase: INSTALL
+  requiredState: local-oci-source-verified
+  owner: {provider: OPERATOR, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: OCI_LAYOUT
+    endpoint: {kind: ARTIFACT_PATH, path: oci-layout}
+    tls: {required: false}
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.local-oci-source}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: bundle-verifier
+  dependency: external.release-trust-store
+  lifecyclePhase: INSTALL
+  requiredState: release-trust-store-verified
+  owner: {provider: OPERATOR, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: release-trust-store}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: otel-collector
+  dependency: external.otel-backend
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-backend-accepting
+  owner: {provider: TENANT, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: EXTERNAL, ref: external.otel-backend}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Buffer locally within the configured byte/time budget; readiness fails when the budget is exhausted. Catalog degradationPolicy: bounded (timeSeconds
+    3600, bytes 536870912; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: operator
+  dependency: external.kubernetes-api
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: kubernetes-api-reachable
+  owner: {provider: OPERATOR, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: EXTERNAL, ref: external.kubernetes-api}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: operator
+  dependency: bundle-verifier
+  lifecyclePhase: INSTALL
+  requiredState: bundle-verifier-verified
+  owner: {provider: mas-harness-operator, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: VIA, via: external.kubernetes-api}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: policy-decision
+  dependency: external.opa-engine
+  lifecyclePhase: INVOCATION
+  requiredState: opa-engine-ready
+  owner: {provider: OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.opa-engine}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: policy-decision
+  dependency: external.release-trust-store
+  lifecyclePhase: STARTUP
+  requiredState: release-trust-store-verified
+  owner: {provider: OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: release-trust-store}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: policy-decision
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Decision service continues inside bounded local telemetry buffering; audit decisions remain durably recorded by callers. Catalog degradationPolicy:
+    bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: sandbox-runner
+  dependency: external.kubernetes-api
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: kubernetes-api-reachable
+  owner: {provider: OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: EXTERNAL, ref: external.kubernetes-api}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: sandbox-runner
+  dependency: external.release-trust-store
+  lifecyclePhase: STARTUP
+  requiredState: release-trust-store-verified
+  owner: {provider: OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: release-trust-store}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: fleet-sync-agent
+  dependency: operator
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: operator-ready
+  owner: {provider: mas-harness-operator, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: VIA, via: external.kubernetes-api}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: fleet-sync-agent
+  dependency: bundle-verifier
+  lifecyclePhase: INSTALL
+  requiredState: bundle-verifier-verified
+  owner: {provider: mas-harness-operator, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: VIA, via: external.kubernetes-api}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: fleet-sync-agent
+  dependency: external.kubernetes-api
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: kubernetes-api-reachable
+  owner: {provider: OPERATOR, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: EXTERNAL, ref: external.kubernetes-api}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: fleet-sync-agent
+  dependency: external.local-oci-source
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: local-oci-source-reachable
+  owner: {provider: OPERATOR, consumer: mas-harness-operator, escalation: mas-harness-operator}
+  transport:
+  - protocol: OCI_LAYOUT
+    endpoint: {kind: ARTIFACT_PATH, path: oci-layout}
+    tls: {required: false}
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.local-oci-source}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Existing workloads continue on last verified state; new sync remains pending. Catalog degradationPolicy: disableImmediately (capability management.fleet-pull).'
+  auditEvidence: NOT_CARRIED
+- consumer: guardrail-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: guardrail-service
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Continues with bounded local metrics; guardrail result itself is returned synchronously. Catalog degradationPolicy: bounded (timeSeconds 300, bytes
+    16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: usage-ledger
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: usage-ledger
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Ledger remains authoritative while metric export buffers locally. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
+    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: usage-ledger
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: governance-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: governance-service
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Telemetry buffers locally within the bounded budget; the database audit chain is not discarded. Catalog degradationPolicy: bounded (timeSeconds 300,
+    bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: governance-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: domain-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: domain-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: domain-service
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Metrics buffer locally within the bounded budget; validation evidence remains stored. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216;
+    exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: registry-service
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: registry-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: registry-service
+  dependency: external.signed-catalog
+  lifecyclePhase: STARTUP
+  requiredState: signed-catalog-verified
+  owner: {provider: PLATFORM_RELEASE, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: signed-catalog}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: registry-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: inference-api
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-model-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: inference-api
+  dependency: guardrail-service
+  lifecyclePhase: INVOCATION
+  requiredState: guardrail-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-model-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: guardrail-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: inference-api
+  dependency: external.local-model-backend
+  lifecyclePhase: INVOCATION
+  requiredState: local-model-backend-ready
+  owner: {provider: OPERATOR, consumer: mas-harness-model-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.local-model-backend}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: inference-api
+  dependency: external.tenant-model-volume
+  lifecyclePhase: STARTUP
+  requiredState: tenant-model-volume-verified
+  owner: {provider: OPERATOR, consumer: mas-harness-model-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: model-volume}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: inference-api
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-model-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Bounded telemetry degradation; usage observations remain locally buffered. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust
+    when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: connector-controller
+  dependency: domain-service
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: domain-service-reachable
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: domain-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: connector-controller
+  dependency: policy-decision
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: policy-decision-reachable
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: connector-controller
+  dependency: external.tenant-source-endpoints
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: tenant-source-endpoints-reachable
+  owner: {provider: TENANT, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.tenant-source-endpoints}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Controller remains ready; unavailable individual sources become DEGRADED and are not scheduled. Catalog degradationPolicy: disableImmediately (capability
+    tenant.source-endpoints).'
+  auditEvidence: NOT_CARRIED
+- consumer: connector-controller
+  dependency: external.postgresql
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: postgresql-reachable
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: connector-controller
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Telemetry buffers locally within the bounded budget; readiness evidence remains durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes
+    16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: memory-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: memory-service
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: memory-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: memory-service
+  dependency: external.pgvector
+  lifecyclePhase: INVOCATION
+  requiredState: pgvector-ready
+  owner: {provider: TENANT, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.pgvector}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Exact and relational memory remain available; semantic search and vector writes are disabled immediately. Catalog degradationPolicy: disableImmediately
+    (capability memory.semantic).'
+  auditEvidence: NOT_CARRIED
+- consumer: memory-service
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Content-free metrics buffer locally; deletion receipts remain durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust
+    when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: control-web
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-control-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: control-web
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-control-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: control-web
+  dependency: registry-service
+  lifecyclePhase: INVOCATION
+  requiredState: registry-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-control-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: registry-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: control-web
+  dependency: external.signed-industry-packs
+  lifecyclePhase: STARTUP
+  requiredState: signed-industry-packs-verified
+  owner: {provider: PLATFORM_RELEASE, consumer: mas-harness-control-plane, escalation: mas-harness-control-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: signed-industry-packs}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: control-web
+  dependency: external.oidc-provider
+  lifecyclePhase: INVOCATION
+  requiredState: oidc-provider-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-control-plane, escalation: mas-harness-control-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.oidc-provider}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: control-web
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-control-plane, escalation: mas-harness-control-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: control-web
+  dependency: operator
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: installation-projection-current
+  owner: {provider: mas-harness-operator, consumer: mas-harness-control-plane, escalation: mas-harness-operator}
+  transport:
+  - protocol: KUBERNETES_API
+    endpoint: {kind: VIA, via: external.kubernetes-api}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'The last verified installation projection remains readable with explicit stale/source-unavailable status while new operator summaries are unavailable.
+    Catalog degradationPolicy: bounded (timeSeconds 300, workItems 1000; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: ingest-worker
+  dependency: connector-controller
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: connector-controller-ready
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: VIA, via: external.postgresql}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ingest-worker
+  dependency: domain-service
+  lifecyclePhase: INVOCATION
+  requiredState: domain-service-ready
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: domain-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ingest-worker
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ingest-worker
+  dependency: external.tenant-source-endpoints
+  lifecyclePhase: INVOCATION
+  requiredState: tenant-source-endpoints-ready
+  owner: {provider: TENANT, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.tenant-source-endpoints}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ingest-worker
+  dependency: external.postgresql
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: postgresql-reachable
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ingest-worker
+  dependency: external.tenant-object-store
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: tenant-object-store-reachable
+  owner: {provider: TENANT, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: tenant-pvc}
+    tls: {required: false}
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.tenant-object-store}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Object-backed source jobs stop before acknowledging their checkpoint; database-only source jobs continue. Catalog degradationPolicy: disableImmediately
+    (capability storage.object-required).'
+  auditEvidence: {preservedBy: object-backed source jobs stop before acknowledging their checkpoint}
+- consumer: ingest-worker
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Bounded telemetry buffer; ingestion evidence remains in PostgreSQL. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
+    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: retrieval-service
+  dependency: domain-service
+  lifecyclePhase: INVOCATION
+  requiredState: domain-service-ready
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: domain-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: retrieval-service
+  dependency: connector-controller
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: source-readiness-observable
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: VIA, via: external.postgresql}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: retrieval-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: retrieval-service
+  dependency: inference-api
+  lifecyclePhase: INVOCATION
+  requiredState: inference-api-ready
+  owner: {provider: mas-harness-model-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: inference-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Disable optional semantic reranking and use approved PostgreSQL FTS/vector path. Catalog degradationPolicy: disableImmediately (capability retrieval.rerank.local).'
+  auditEvidence: NOT_CARRIED
+- consumer: retrieval-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: retrieval-service
+  dependency: external.pgvector
+  lifecyclePhase: INVOCATION
+  requiredState: pgvector-ready
+  owner: {provider: TENANT, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.pgvector}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: 'Vector retrieval is disabled immediately; approved PostgreSQL FTS routes remain available and vector-required routes fail explicitly. Catalog degradationPolicy:
+    disableImmediately (capability retrieval.vector).'
+  auditEvidence: NOT_CARRIED
+- consumer: retrieval-service
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Content-free metrics buffer locally. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: protocol-gateway
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: protocol-gateway
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: protocol-gateway
+  dependency: registry-service
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: registry-service-reachable
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: registry-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: protocol-gateway
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: protocol-gateway
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Content-free telemetry buffers locally within the bounded budget. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
+    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: evidence-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: evidence-service
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: evidence-service
+  dependency: registry-service
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: registry-service-reachable
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: registry-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: evidence-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: evidence-service
+  dependency: external.tenant-object-store
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: tenant-object-store-reachable
+  owner: {provider: TENANT, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: tenant-pvc}
+    tls: {required: false}
+  - protocol: HTTP
+    endpoint: {kind: EXTERNAL, ref: external.tenant-object-store}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Large-object submissions stop before metadata acknowledgment; inline metadata-only evidence remains available. Catalog degradationPolicy: disableImmediately
+    (capability storage.object-required).'
+  auditEvidence: {preservedBy: large-object submissions stop before metadata acknowledgment}
+- consumer: evidence-service
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Evidence remains durable while metrics buffer locally. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: profile-compiler-worker
+  dependency: control-web
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: control-web-reachable
+  owner: {provider: mas-harness-control-plane, consumer: mas-harness-control-plane, escalation: mas-harness-control-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: control-web, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Existing validated jobs continue from PostgreSQL; no new jobs are created while the web producer is unavailable. Catalog degradationPolicy: bounded
+    (timeSeconds 1800, workItems 100; exhaust when ANY; STOP_CLAIMING_WORK_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: profile-compiler-worker
+  dependency: registry-service
+  lifecyclePhase: STARTUP
+  requiredState: registry-service-verified
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-control-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: registry-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: profile-compiler-worker
+  dependency: external.signed-industry-packs
+  lifecyclePhase: STARTUP
+  requiredState: signed-industry-packs-verified
+  owner: {provider: PLATFORM_RELEASE, consumer: mas-harness-control-plane, escalation: mas-harness-control-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: signed-industry-packs}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: UNSPECIFIED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: profile-compiler-worker
+  dependency: external.postgresql
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: postgresql-reachable
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-control-plane, escalation: mas-harness-control-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: index-worker
+  dependency: ingest-worker
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: ingest-batches-committed
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: VIA, via: external.postgresql}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: index-worker
+  dependency: inference-api
+  lifecyclePhase: INVOCATION
+  requiredState: inference-api-ready
+  owner: {provider: mas-harness-model-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: inference-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Use configured non-model FTS path; vector-required profiles instead fail readiness through the conditional module requirement. Catalog degradationPolicy:
+    disableImmediately (capability embedding.local-and-approved).'
+  auditEvidence: NOT_CARRIED
+- consumer: index-worker
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: index-worker
+  dependency: external.postgresql
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: postgresql-reachable
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: index-worker
+  dependency: external.pgvector
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: pgvector-reachable
+  owner: {provider: TENANT, consumer: mas-harness-knowledge-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.pgvector}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Vector index jobs pause before pointer swap; FTS-only jobs continue. Catalog degradationPolicy: disableImmediately (capability retrieval.vector).'
+  auditEvidence: NOT_CARRIED
+- consumer: index-worker
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-knowledge-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Metrics buffer; index evidence remains durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: orchestration-api
+  dependency: protocol-gateway
+  lifecyclePhase: INVOCATION
+  requiredState: protocol-gateway-ready
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: protocol-gateway, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-api
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-api
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-api
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-api
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Content-free telemetry buffers while task/audit state remains durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust
+    when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: decision-service
+  dependency: connector-controller
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: source-versions-accepted
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: VIA, via: external.postgresql}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: decision-service
+  dependency: inference-api
+  lifecyclePhase: INVOCATION
+  requiredState: inference-api-ready
+  owner: {provider: mas-harness-model-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: inference-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Deterministic scikit-learn/ONNX/OR-Tools decisions continue; model-assisted capability is disabled. Catalog degradationPolicy: disableImmediately
+    (capability model.inference).'
+  auditEvidence: NOT_CARRIED
+- consumer: decision-service
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: decision-service
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: decision-service
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: assurance-worker
+  dependency: evidence-service
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: evidence-service-reachable
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: evidence-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: assurance-worker
+  dependency: ingest-worker
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: ingest-provenance-accepted
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: VIA, via: external.postgresql}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: assurance-worker
+  dependency: inference-api
+  lifecyclePhase: INVOCATION
+  requiredState: inference-api-ready
+  owner: {provider: mas-harness-model-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: inference-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Deterministic evaluators continue; local-model judge cases become NOT_RUN_ENV_UNAVAILABLE when the optional judge is unavailable. Catalog degradationPolicy:
+    disableImmediately (capability assurance.local-model-judge).'
+  auditEvidence: NOT_CARRIED
+- consumer: assurance-worker
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: assurance-worker
+  dependency: external.postgresql
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: postgresql-reachable
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: assurance-worker
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-trust-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Campaign evidence remains durable while metrics buffer. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: tool-broker
+  dependency: orchestration-api
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: orchestration-api-reachable
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: orchestration-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: tool-broker
+  dependency: sandbox-runner
+  lifecyclePhase: STARTUP
+  requiredState: sandbox-runner-verified
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: FILESYSTEM
+    endpoint: {kind: ARTIFACT_PATH, path: sandbox-runner/job-spec, digest: REQUIRED}
+    tls: {required: false}
+  timeout:
+    fetchSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {integrity: REQUIRED, readiness: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: tool-broker
+  dependency: policy-decision
+  lifecyclePhase: INVOCATION
+  requiredState: policy-decision-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: tool-broker
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: tool-broker
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: tool-broker
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Execution receipts remain durable while metrics buffer. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: orchestration-worker
+  dependency: orchestration-api
+  lifecyclePhase: BACKGROUND_RECONCILIATION
+  requiredState: orchestration-api-reachable
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: orchestration-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    reconcileSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {convergence: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Existing admitted tasks continue from PostgreSQL; no new tasks arrive while the API producer is unavailable. Catalog degradationPolicy: bounded (timeSeconds
+    3600, workItems 1000; exhaust when ANY; STOP_CLAIMING_WORK_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: orchestration-worker
+  dependency: protocol-gateway
+  lifecyclePhase: INVOCATION
+  requiredState: protocol-gateway-ready
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: protocol-gateway, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-worker
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-worker
+  dependency: inference-api
+  lifecyclePhase: INVOCATION
+  requiredState: inference-api-ready
+  owner: {provider: mas-harness-model-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: inference-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Deterministic workflows remain available; agent/model steps pause without consuming retry budget. Catalog degradationPolicy: disableImmediately (capability
+    model.inference).'
+  auditEvidence: NOT_CARRIED
+- consumer: orchestration-worker
+  dependency: retrieval-service
+  lifecyclePhase: INVOCATION
+  requiredState: retrieval-service-ready
+  owner: {provider: mas-harness-knowledge-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-knowledge-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: retrieval-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'No-context workflows continue only when the signed workflow permits it. Catalog degradationPolicy: disableImmediately (capability knowledge.retrieval).'
+  auditEvidence: NOT_CARRIED
+- consumer: orchestration-worker
+  dependency: tool-broker
+  lifecyclePhase: INVOCATION
+  requiredState: tool-broker-ready
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: tool-broker, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Read-only/no-tool tasks continue; tool steps pause. Catalog degradationPolicy: disableImmediately (capability tool.governed-execution).'
+  auditEvidence: NOT_CARRIED
+- consumer: orchestration-worker
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-execution-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: orchestration-worker
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-execution-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Durable task evidence remains while content-free telemetry buffers. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
+    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: ai-gateway
+  dependency: inference-api
+  lifecyclePhase: INVOCATION
+  requiredState: inference-api-ready
+  owner: {provider: mas-harness-model-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-model-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: inference-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: 2
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: 30
+    deadline: PROPAGATED
+    basis: {kind: DOCUMENTED_BOUND, ref: docs/harnesses/runtime.ai-gateway.md#L150, lineSha256: 09d95e06a7ab636f68a5c3dd5df2e25d095fd43b847bb2a322cd0d00a1105bdf}
+  retry:
+    operations:
+    - {class: idempotent-requests, idempotency: NATIVE, policy: IDEMPOTENT_ONLY, maxAttempts: 3}
+    - {class: non-idempotent-requests, idempotency: NONE, policy: NONE, maxAttempts: 1}
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: DOCUMENTED_BOUND, ref: docs/harnesses/runtime.ai-gateway.md#L151, lineSha256: 9ba4cfbf4df6ab9a30c0ac943cbca883ce1b1d9cc695e6b4b3b2c915f7210e7c}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ai-gateway
+  dependency: policy-decision
+  lifecyclePhase: ADMISSION
+  requiredState: policy-decision-admitting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: policy-decision, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each service on the path authorizes its own resource scope with policy-decision, and policy-decision evaluates each of those decisions
+    with external.opa-engine; decisions are not cached, because the catalog requires current policy admission on every route and request
+  degradation: null
+  auditEvidence: null
+- consumer: ai-gateway
+  dependency: guardrail-service
+  lifecyclePhase: ADMISSION
+  requiredState: guardrail-service-admitting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: guardrail-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ai-gateway
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NATIVE
+    policy: NONE
+    maxAttempts: UNSPECIFIED
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ai-gateway
+  dependency: usage-ledger
+  lifecyclePhase: ADMISSION
+  requiredState: usage-ledger-admitting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: usage-ledger, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: ai-gateway
+  dependency: orchestration-api
+  lifecyclePhase: INVOCATION
+  requiredState: orchestration-api-ready
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: orchestration-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Direct model routes remain available; agent/task routes are disabled. Catalog degradationPolicy: disableImmediately (capability task.orchestration).'
+  auditEvidence: NOT_CARRIED
+- consumer: ai-gateway
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-runtime-plane, escalation: mas-harness-runtime-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: ai-gateway
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Usage/audit records remain durable while telemetry buffers. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when ANY;
+    MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+- consumer: experience-gateway
+  dependency: ai-gateway
+  lifecyclePhase: INVOCATION
+  requiredState: ai-gateway-ready
+  owner: {provider: mas-harness-runtime-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-runtime-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: ai-gateway, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: experience-gateway
+  dependency: orchestration-api
+  lifecyclePhase: INVOCATION
+  requiredState: orchestration-api-ready
+  owner: {provider: mas-harness-execution-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-execution-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: orchestration-api, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Non-task sessions and direct-model interactions remain available; task submission, state, input, resume, and cancel are disabled. Catalog degradationPolicy:
+    disableImmediately (capability task.orchestration).'
+  auditEvidence: NOT_CARRIED
+- consumer: experience-gateway
+  dependency: governance-service
+  lifecyclePhase: INVOCATION
+  requiredState: governance-service-ready
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: HTTP
+    endpoint: {kind: SERVICE_DNS, service: governance-service, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: null
+  auditEvidence: null
+- consumer: experience-gateway
+  dependency: external.postgresql
+  lifecyclePhase: INVOCATION
+  requiredState: postgresql-ready
+  owner: {provider: TENANT_OR_OPERATOR, consumer: mas-harness-runtime-plane, escalation: mas-harness-runtime-plane}
+  transport:
+  - protocol: POSTGRESQL
+    endpoint: {kind: EXTERNAL, ref: external.postgresql}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    connectSeconds: UNSPECIFIED
+    attemptSeconds: UNSPECIFIED
+    ceilingSeconds: UNSPECIFIED
+    deadline: PROPAGATED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {latency: UNSPECIFIED, deadlinePropagation: REQUIRED, cancellation: REQUIRED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: each call reaches the calling service's own catalog store in the shared PostgreSQL service; orchestration-api and orchestration-worker
+    share schema:orchestration only as the declared outbox handoff's write and lease, and retrieval-service's two calls read schema:retrieval through FTS and pgvector;
+    no call repeats another call's read
+  degradation: null
+  auditEvidence: null
+- consumer: experience-gateway
+  dependency: otel-collector
+  lifecyclePhase: OBSERVATION
+  requiredState: otel-collector-accepting
+  owner: {provider: mas-harness-trust-plane, consumer: mas-harness-runtime-plane, escalation: mas-harness-trust-plane}
+  transport:
+  - protocol: OTLP
+    endpoint: {kind: SERVICE_DNS, service: otel-collector, port: https}
+    tls: {required: true, minVersion: '1.3'}
+  timeout:
+    publishAckSeconds: UNSPECIFIED
+    basis: {kind: UNSPECIFIED}
+  retry:
+    idempotency: NONE
+    policy: NONE
+    maxAttempts: 1
+    backoff: {initialSeconds: UNSPECIFIED, maxSeconds: UNSPECIFIED, jitter: UNSPECIFIED}
+    basis: {kind: UNSPECIFIED}
+  objectives: {lag: UNSPECIFIED, acknowledgementAge: UNSPECIFIED}
+  capacityAndOverloadRule: UNSPECIFIED
+  sli: UNSPECIFIED
+  cache: {kind: NONE}
+  repeatedCallJustification: null
+  degradation: 'Content-free telemetry buffers; interaction events remain durable. Catalog degradationPolicy: bounded (timeSeconds 300, bytes 16777216; exhaust when
+    ANY; MARK_DEGRADED_AND_FAIL_READINESS).'
+  auditEvidence: NOT_CARRIED
+handoffs:
+- {kind: REQUEST, branch: task, from: orchestration-api, to: orchestration-worker, via: external.postgresql, write: orchestration-api->external.postgresql, lease: orchestration-worker->external.postgresql}
+- kind: CONTROLLER
+  from: fleet-sync-agent
+  to: operator
+  via: external.kubernetes-api
+  object: &id001 {kind: KUBERNETES_RESOURCE, resource: HarnessInstallation, subresource: status}
+  consumerSide: fleet-sync-agent->external.kubernetes-api
+  controllerSide: operator->external.kubernetes-api
+- kind: CONTROLLER
+  from: control-web
+  to: operator
+  via: external.kubernetes-api
+  object: *id001
+  consumerSide: control-web->external.kubernetes-api
+  controllerSide: operator->external.kubernetes-api
+- kind: CONTROLLER
+  from: ingest-worker
+  to: connector-controller
+  via: external.postgresql
+  object: &id002
+    kind: DATABASE_SCHEMA
+    schema: ingestion
+    objects: [sources, profiles, leases, readiness, outbox]
+  consumerSide: ingest-worker->external.postgresql
+  controllerSide: connector-controller->external.postgresql
+- kind: CONTROLLER
+  from: retrieval-service
+  to: connector-controller
+  via: external.postgresql
+  object: *id002
+  consumerSide: retrieval-service->external.postgresql
+  controllerSide: connector-controller->external.postgresql
+- kind: CONTROLLER
+  from: decision-service
+  to: connector-controller
+  via: external.postgresql
+  object: *id002
+  consumerSide: decision-service->external.postgresql
+  controllerSide: connector-controller->external.postgresql
+graphMapping:
+- {branch: common, from: ai-gateway, to: policy-decision, edge: ai-gateway->policy-decision}
+- {branch: common, from: ai-gateway, to: guardrail-service, edge: ai-gateway->guardrail-service}
+- {branch: common, from: ai-gateway, to: usage-ledger, edge: ai-gateway->usage-ledger}
+- {branch: direct-model, from: experience-gateway, to: ai-gateway, edge: experience-gateway->ai-gateway}
+- {branch: direct-model, from: ai-gateway, to: inference-api, edge: ai-gateway->inference-api}
+- {branch: task, from: experience-gateway, to: ai-gateway, edge: experience-gateway->ai-gateway}
+- {branch: task, from: ai-gateway, to: orchestration-api, edge: ai-gateway->orchestration-api}
+- {branch: task, from: orchestration-worker, to: retrieval-service, edge: orchestration-worker->retrieval-service}
+- {branch: task, from: orchestration-worker, to: inference-api, edge: orchestration-worker->inference-api}
+- {branch: task, from: orchestration-worker, to: tool-broker, edge: orchestration-worker->tool-broker}
+- {branch: experience-task-control, from: experience-gateway, to: orchestration-api, edge: experience-gateway->orchestration-api}
+- {branch: experience-task-control, from: experience-gateway, to: governance-service, edge: experience-gateway->governance-service}
+catalogGaps:
+- edge: control-web->operator
+  via: external.kubernetes-api
+  missing: control-web->external.kubernetes-api
+  source: {ref: architecture/services.yaml#L910, phrase: installation projection}
+counts:
+  edges: 129
+  byLifecyclePhase: {ADMISSION: 3, BACKGROUND_RECONCILIATION: 28, INSTALL: 4, INVOCATION: 66, OBSERVATION: 20, STARTUP: 8}
+  byProtocol: {FILESYSTEM: 10, HTTP: 66, KUBERNETES_API: 7, OCI_LAYOUT: 2, OTLP: 20, POSTGRESQL: 28}
+  byEndpointKind: {ARTIFACT_PATH: 12, EXTERNAL: 36, SERVICE_DNS: 76, VIA: 9}
+  byIdempotency: {NATIVE: 73, NONE: 57}
+  networkForms: 112
+  localForms: 12
+  viaForms: 9
+  numericEdges: 1
+  shapeOnlyEdges: 71
+repeatedCalls:
+- branch: direct-model
+  path: [ai-gateway, guardrail-service]
+  class: policy
+  edges: [ai-gateway->policy-decision, guardrail-service->policy-decision]
+- branch: direct-model
+  path: [ai-gateway, inference-api]
+  class: policy
+  edges: [ai-gateway->policy-decision, inference-api->policy-decision]
+- branch: direct-model
+  path: [ai-gateway, policy-decision]
+  class: policy
+  edges: [ai-gateway->policy-decision, policy-decision->external.opa-engine]
+- branch: direct-model
+  path: &id003 [ai-gateway, usage-ledger]
+  class: policy
+  edges: [ai-gateway->policy-decision, usage-ledger->policy-decision]
+- branch: direct-model
+  path: *id003
+  class: database
+  edges: [ai-gateway->external.postgresql, usage-ledger->external.postgresql]
+- branch: direct-model
+  path: &id004 [experience-gateway, ai-gateway, guardrail-service]
+  class: policy
+  edges: [ai-gateway->policy-decision, guardrail-service->policy-decision]
+- branch: direct-model
+  path: *id004
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql]
+- branch: direct-model
+  path: &id005 [experience-gateway, ai-gateway, inference-api]
+  class: policy
+  edges: [ai-gateway->policy-decision, inference-api->policy-decision]
+- branch: direct-model
+  path: *id005
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql]
+- branch: direct-model
+  path: &id006 [experience-gateway, ai-gateway, policy-decision]
+  class: policy
+  edges: [ai-gateway->policy-decision, policy-decision->external.opa-engine]
+- branch: direct-model
+  path: *id006
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql]
+- branch: direct-model
+  path: &id007 [experience-gateway, ai-gateway, usage-ledger]
+  class: policy
+  edges: [ai-gateway->policy-decision, usage-ledger->policy-decision]
+- branch: direct-model
+  path: *id007
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql, usage-ledger->external.postgresql]
+- branch: task
+  path: [ai-gateway, guardrail-service]
+  class: policy
+  edges: [ai-gateway->policy-decision, guardrail-service->policy-decision]
+- branch: task
+  path: &id008 [ai-gateway, orchestration-api, orchestration-worker, inference-api]
+  class: policy
+  edges: [ai-gateway->policy-decision, inference-api->policy-decision, orchestration-api->policy-decision]
+- branch: task
+  path: *id008
+  class: database
+  edges: [ai-gateway->external.postgresql, orchestration-api->external.postgresql, orchestration-worker->external.postgresql]
+- branch: task
+  path: &id009 [ai-gateway, orchestration-api, orchestration-worker, retrieval-service]
+  class: policy
+  edges: [ai-gateway->policy-decision, orchestration-api->policy-decision, retrieval-service->policy-decision]
+- branch: task
+  path: *id009
+  class: database
+  edges: [ai-gateway->external.postgresql, orchestration-api->external.postgresql, orchestration-worker->external.postgresql, retrieval-service->external.pgvector,
+    retrieval-service->external.postgresql]
+- branch: task
+  path: &id010 [ai-gateway, orchestration-api, orchestration-worker, tool-broker]
+  class: policy
+  edges: [ai-gateway->policy-decision, orchestration-api->policy-decision, tool-broker->policy-decision]
+- branch: task
+  path: *id010
+  class: database
+  edges: [ai-gateway->external.postgresql, orchestration-api->external.postgresql, orchestration-worker->external.postgresql, tool-broker->external.postgresql]
+- branch: task
+  path: [ai-gateway, policy-decision]
+  class: policy
+  edges: [ai-gateway->policy-decision, policy-decision->external.opa-engine]
+- branch: task
+  path: &id011 [ai-gateway, usage-ledger]
+  class: policy
+  edges: [ai-gateway->policy-decision, usage-ledger->policy-decision]
+- branch: task
+  path: *id011
+  class: database
+  edges: [ai-gateway->external.postgresql, usage-ledger->external.postgresql]
+- branch: task
+  path: &id012 [experience-gateway, ai-gateway, guardrail-service]
+  class: policy
+  edges: [ai-gateway->policy-decision, guardrail-service->policy-decision]
+- branch: task
+  path: *id012
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql]
+- branch: task
+  path: &id013 [experience-gateway, ai-gateway, orchestration-api, orchestration-worker, inference-api]
+  class: policy
+  edges: [ai-gateway->policy-decision, inference-api->policy-decision, orchestration-api->policy-decision]
+- branch: task
+  path: *id013
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql, orchestration-api->external.postgresql, orchestration-worker->external.postgresql]
+- branch: task
+  path: &id014 [experience-gateway, ai-gateway, orchestration-api, orchestration-worker, retrieval-service]
+  class: policy
+  edges: [ai-gateway->policy-decision, orchestration-api->policy-decision, retrieval-service->policy-decision]
+- branch: task
+  path: *id014
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql, orchestration-api->external.postgresql, orchestration-worker->external.postgresql,
+    retrieval-service->external.pgvector, retrieval-service->external.postgresql]
+- branch: task
+  path: &id015 [experience-gateway, ai-gateway, orchestration-api, orchestration-worker, tool-broker]
+  class: policy
+  edges: [ai-gateway->policy-decision, orchestration-api->policy-decision, tool-broker->policy-decision]
+- branch: task
+  path: *id015
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql, orchestration-api->external.postgresql, orchestration-worker->external.postgresql,
+    tool-broker->external.postgresql]
+- branch: task
+  path: &id016 [experience-gateway, ai-gateway, policy-decision]
+  class: policy
+  edges: [ai-gateway->policy-decision, policy-decision->external.opa-engine]
+- branch: task
+  path: *id016
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql]
+- branch: task
+  path: &id017 [experience-gateway, ai-gateway, usage-ledger]
+  class: policy
+  edges: [ai-gateway->policy-decision, usage-ledger->policy-decision]
+- branch: task
+  path: *id017
+  class: database
+  edges: [ai-gateway->external.postgresql, experience-gateway->external.postgresql, usage-ledger->external.postgresql]
+- branch: experience-task-control
+  path: [experience-gateway, governance-service]
+  class: database
+  edges: [experience-gateway->external.postgresql, governance-service->external.postgresql]
+- branch: experience-task-control
+  path: [experience-gateway, orchestration-api]
+  class: database
+  edges: [experience-gateway->external.postgresql, orchestration-api->external.postgresql]

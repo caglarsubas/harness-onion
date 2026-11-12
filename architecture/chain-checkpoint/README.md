@@ -182,11 +182,11 @@ first node that read them.
 **The ledger freeze.** Schema v1 is frozen at 286; any later member means a rewrite (VIS-048-READ).
 
 **The rewrite.** The second checkpoint is written at 286 by a full G0 run (condition (i)) and attests layers 189-285. Its
-authority names `record.json` in `changedFiles` with exactly `{beforeSha256, afterSha256, reverseHunksRecord: {path,
-sha256}}`, and the reverse hunks live in the closed side record `ledger-hunks/<slot>.json` (`{authorityPath, path,
-beforeSha256, afterSha256, reverseHunks}`), named in newFiles. The writer builds and checks it (`check_ledger_hunks`);
-the slot's hunk-class record lists `record.json` with an empty class list. `record.json` is in the exclusion, so the
-reader never replays it.
+authority names `record.json` in `changedFiles` in the plain three-key form `{beforeSha256, afterSha256, reverseHunks}`,
+with the writer's 1,974 line-run reverse hunks inline (CONTRACT_286 erratum 8, the inline form); no side record exists.
+The slot's hunk-class record gives `record.json` the class "other" for every hunk (V6a). The writer can still build a
+side record (`check_ledger_hunks`, vectors 28-35), which binds nothing (errata 8 and 10). `record.json` is in the
+exclusion, so the reader never replays it.
 
 **Class rule v2.4** (`RULE_V24_SHA256`, `classify_v24`):
 - R1, member forms: F1, one `successor...NEW_PACKET` chain (K = 0 only); F2, that chain followed by the

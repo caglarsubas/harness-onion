@@ -1,6 +1,33 @@
 # Harness-Onion — unified development roadmap
 
-## Current checkpoint — MET-PERF-049 source preparation, November 9, 2026
+## Current checkpoint — MET-006 source preparation, November 11, 2026
+
+Alpha2 OPEN. MET-PERF-049 passed required verify and merged as main d69848c (CHAIN-COMPACTION-002's ledger rewrite).
+MET-006 (the lane monitor's owner-delegated rulings MON-287-RULINGS, MON-287-CR3-AB, MON-287-AB-PROCEED,
+MON-287-CR4-RULINGS, MON-287-C1R-RULINGS, MON-287-C2-RULINGS, MON-287-C3E-RULINGS and MON-287-C3F-RULINGS) is SERVICE-EDGES-001, the service-edge record beside the catalog: architecture/service-edges.yaml carries one entry per catalog dependency (129), each with its lifecycle phase, owner, transport and TLS, timeout, retry and idempotency, its mode's objectives, its cache rule and, on a FAIL_OPEN edge, its named degradation, with its schema, its checker (SE-1 to SE-14) and its tests; the catalog, the graph and their schemas stay byte-equal; and CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the corpus count in two tests are carried as authored edits. The packet registers its own review series, MET-006/packet, in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS) and the D5a oracle tests/test_met_006_oracle.py (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head.
+It is built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule at K = 0, with the R13 guard
+of architecture/chain-inheritance/: every older chain validator changes only by the bump vocabulary, 286's layer by the
+bridge vocabulary, and the new head's test keeps the full fan-in. MET-006 is the 287th specification (298
+packets at slot 287).
+
+| Phase | ID | Status | Description / gate |
+|---|---|---|---|
+| Alpha2A | MET-006 / SERVICE-EDGES-001 | SOURCE_PREPARED | The service-edge record (287th packet, K = 0): one entry per catalog dependency with lifecycle phase, owner, transport and TLS, timeout, retry and idempotency, objectives, cache and degradation, with its schema, checker and tests; CONTRACT_286 errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the corpus count in two tests carried |
+| Alpha2A | MET-PERF-049 / CHAIN-COMPACTION-002 | VERIFY_PASSED_MERGED | Merged as main d69848c |
+| Alpha2A | W03 | IN_PROGRESS | R10 enforcement packets (primary lane) |
+| Alpha2A | W04 | IN_PROGRESS | R12 test source (parallel lane); W04-4b, W04-4c and W04-5 stopped pending a human author or a later decision |
+| Alpha2A | MAS-RA-009 | WAITING_PACKET_PUBLICATION | Proposed contract packet |
+| Alpha2A | MAS-RA-005 | WAITING_PACKET_PUBLICATION | Ready (MAS-RA-001 and MAS-RA-002 both done) |
+| Alpha2A | MAS-RA-006 | WAITING_PACKET_PUBLICATION | Consumer of MAS-RA-003, now merged |
+| Alpha2A | W02-PROD | BLOCKED | Production backend profile and the I06 successor (primary lane), after W05 |
+| Alpha2 | IND-BANK-001 to IND-BANK-005, KN-BANK-001, CTRL-BANK-001, DIST-BANK-001, CONF-BANK-001 | WAITING_PACKET_PUBLICATION | Banking pack, inputs and journey |
+| Alpha2 qualification | CONF-LINUX-001 / CONF-A2-001 | WAITING_PREREQUISITES | Linux verification only when mandatory |
+
+Keep the inherited 64 argv unchanged (the new layer validator adds no argv and runs inside the outer pytest) and 32 MiB.
+No R10 and no R12 file changes, and nothing is installed (bundle v7 is live).
+Phase-end effort transition NOT_DUE. Prior checkpoints below are history only.
+
+## Historical ledger rewrite source checkpoint — MET-PERF-049 source preparation, November 9, 2026
 
 Alpha2 OPEN. MET-ADOPT-008 passed required verify and merged as main 0fd885f (issue 237's fix). MET-PERF-049 (the lane
 monitor's owner-delegated rulings MON-286-RULINGS, MON-286-WTRIAL-RULE, MON-C286-Q1-T1, MON-C286-Q2-E1 and MON-286-CR1)
@@ -3328,7 +3355,8 @@ These checkboxes count only the named deliverable at the stated evidence level. 
 - [x] Alpha 2A · issue 235 / MET-VERIFY-007 · Fix the packet runner to hash the raw bytes it read (strict UTF-8, CR and BOM refused; K = 3, 293 packets at slot 283, with the three transport successors); gate material (the registry rider, the runner, its tests and the weights with the transport approval, and 283's D5a oracle and 282's as corrected at R3); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
 - [x] Alpha 2A · LAB-REPO-001 / MET-REGISTRY-001 · Register R13 mas-harness-research-lab (kind meta, releaseSet EXCLUDED) and publish its first product packet LAB-REPO-001 (K = 1, 295 packets at slot 284); gate material (the registry rider, the release lock, the weights with the transport approval, and the D5a oracle); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
 - [x] Alpha 2A · issue 237 / MET-ADOPT-008 · Fix the authority map's reference ledger so a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with VB-11 and the refused-step invariant (K = 0, 296 packets at slot 285); gate material (the registry rider, the weights with the transport approval, the D5a oracle, and 281's D5a oracle as corrected by the lane monitor); pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
-- [ ] Alpha 2A · CHAIN-COMPACTION-002 / MET-PERF-049 · Rewrite the chain checkpoint's ledger at slot 286 with the reader's class cache, class rule v2.4, the demoted (authored) classification and twelve parallel-suite workers (K = 0, 297 packets at slot 286); gate material (the ci/ sources and the weights with the transport approval, the registry rider, and the D5a oracle); the writing run under the owner's head-bound approval; pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
+- [x] Alpha 2A · CHAIN-COMPACTION-002 / MET-PERF-049 · Rewrite the chain checkpoint's ledger at slot 286 with the reader's class cache, class rule v2.4, the demoted (authored) classification and twelve parallel-suite workers (K = 0, 297 packets at slot 286); gate material (its seven gate paths: the registry rider architecture/review-record/briefs.json; ci/chain_checkpoint.py, ci/parallel_suite.py, the weights ci/parallel_suite_weights.json and the root conftest.py, with the transport approval; and the D5a oracle tests/test_met_perf_049_oracle.py with 282's corrected tests/test_met_perf_047_oracle.py); the writing run under the owner's head-bound approval; pass a dry run, then required verify through the owner's App after the owner's per-PR and transport approval of the exact head.
+- [ ] Alpha 2A · SERVICE-EDGES-001 / MET-006 · Publish the service-edge record beside the catalog (architecture/service-edges.yaml, one entry per catalog dependency, with its schema, checker and tests; K = 0, 298 packets at slot 287) and carry CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the corpus count in two tests; gate material (the registry rider and the D5a oracle); pass a dry run, then required verify through the owner's App after the owner's per-PR approval of the exact head.
 - [ ] Alpha 2A · CONF-FIX-010 · Complete safe design and exact authority before any product attempt. (NON_DISPATCHABLE_RETAINED_HISTORY by MET-LIVE-002)
 - [ ] Alpha 2A · CONF-LIVE-004 · Produce the exact native-probe source implementation and separately qualify it. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
 - [ ] Alpha 2A · CONF-LIVE-005 · Produce a reproducible selected package and operator handoff. (not dispatchable as written; moved scope to LINUX-PROBE-KIT-001; narrowed R12 successor pending)
