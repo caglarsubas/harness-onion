@@ -83,10 +83,24 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     for path in files:
         packet = packets[path.stem]
         validator.validate(packet)
-        assert packet["branch"].startswith(f"codex/{path.stem.casefold()}")
+        # MET-007 (slot 288, R4-OQ4; MON-288-PRECHECK-RULE): readiness's branch-prefix rule in its exact-set form. The
+        # product packet LAB-SYNC-001 keeps R13's PR 5 branch from the Research-Lab's inputs file; the exemption is
+        # exactly {"LAB-SYNC-001"} and holds only while that packet's branch starts with codex/lab-sync-.
+        assert (
+            packet["branch"].startswith(f"codex/{path.stem.casefold()}")
+            or (path.stem in {"LAB-SYNC-001"} and packet["branch"].startswith("codex/lab-sync-"))
+        )
         branches.append(packet["branch"])
 
     assert len(branches) == len(set(branches))
+    # The exempted set holds only LAB-SYNC-001 (R4-OQ4): the exemption is the only one and is in use, so a branch
+    # that no longer needs it fails here until the exemption is removed.
+    exempted = {
+        packet_id
+        for packet_id, packet in packets.items()
+        if not packet["branch"].startswith(f"codex/{packet_id.casefold()}")
+    }
+    assert exempted == {"LAB-SYNC-001"}
 
 
 def test_catalog_covers_all_thirteen_repositories() -> None:

@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_007_oracle.py",
-  "sha256": "df6aa2ada32f187c57b198f58e83e55fad91f7fd9f76bc45d180b7122ef742cd"
+  "sha256": "4b0001b85008f99d08eb9b2f989d1a1b3ec7c85501c67cb5cdda2eed5e132d05"
  },
  "oracle": {
   "agentId": "a9bedced8ff0dbfcf",
@@ -25,7 +25,7 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-288-C3-CLEAR",
+  "ref": "MON-288-O288-PC3-CLEAR",
   "date": "2026-11-12"
  },
  "disclosures": [
@@ -35,6 +35,7 @@
   "classified by the non-author lane monitor (MON-288-C3-CLASS): the one failure is a contract gap (class c): E4's order is established by the era checker's DC_BASIS (the pinned effective digest), which the contract now states by claim (C3-1); the candidate is unchanged; the author made the one case consistent in one hunk, relayed by the operator, cleared by the monitor (25f27a4b -> df6aa2ad)",
   "BP-14 (MON-288-BP14): the record's operationIds.origin text corrected (the gateway mints for agent-originated work; an agent never mints); the candidate moved r4 07207bad -> r5 e37a2850 by text and pins only (the record, the authority, the head)",
   "blind run 2, the corrected file on r5 e37a2850 with the test runner in-process: rc 0, tests 160, failures 0, errors 0, skipped 0; asserts 154, 0 without a cite (junit d09a5025, log 9b3a4308); VERDICT PASS",
-  "placed at c3 with this identity ruled KEEP by the lane monitor (MON-288-C3-CLEAR); the author's work folder holds a bytecode cache from py_compile"
+  "placed at c3 with this identity ruled KEEP by the lane monitor (MON-288-C3-CLEAR); the author's work folder holds a bytecode cache from py_compile",
+  "updated for CONTRACT_288 section 9 [PC-3] by the same non-author through R00's relay and cleared by the lane monitor (diff 3721f487)"
  ]
 }

@@ -6,7 +6,7 @@ MET-007 (slot 288): DATA-CORRECTNESS-001 and R14's registration row, a K = 1 ste
 architecture/data-correctness/record.json over the 24 durable writers with its schema, vectors, model, checker and
 tests; R14 mas-harness-reference-lab (kind meta, releaseSet EXCLUDED) in the successor registry record; the product
 packet LAB-SYNC-001 (mas-harness-research-lab, R13's PR 5); and the class rule v2.5 in ci/chain_checkpoint.py;
-gate material (the registry rider, ci/chain_checkpoint.py (GATE_CI) and the D5a oracle).
+gate material (the registry rider, ci/chain_checkpoint.py (GATE_CI), the D5a oracle and 287's corrected D5a oracle).
 Alpha2 OPEN; 298 accepted (the catalog at slot 287) plus MET-007 and its product only.
 
 ## Historical service edges source preparation — MET-006

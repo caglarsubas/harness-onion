@@ -1826,7 +1826,10 @@ def test_se5_accepts_deadlines_within_their_bounds(mutate):
 
 
 def _bytes(path) -> bytes:
-    return (ROOT / path).read_bytes()
+    # The head layer's inputs are 287's era view, read as the chain reads them: through the head's own
+    # reviewed_bytes (the reader under its _verified and _bound_read), which projects a successor's newer bytes
+    # back to this era and is the plain file bytes while no successor is bridged.
+    return _head().reviewed_bytes(str(path))
 
 
 def _raises_met006(function, *arguments) -> str:
@@ -2083,7 +2086,7 @@ def _rider_sites(node):
 
 def _registry_inputs():
     head = _head()
-    return _bytes(REGISTRY), {head.PACKET_BRIEF: (ROOT / head.PACKET_BRIEF).read_bytes()}
+    return _bytes(REGISTRY), {head.PACKET_BRIEF: _bytes(head.PACKET_BRIEF)}
 
 
 def test_v4_rider_is_appended_last():

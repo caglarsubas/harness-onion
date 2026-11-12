@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/data-correctness-authority.json"
-AUTHORITY_SHA256 = "ea41ddee883446761f47822b75aa70406802e1dcc093ab970b2d7d2e345ecd4e"
+AUTHORITY_SHA256 = "56fec0b3555c704a70c586c5dac0a934ae0e6a26c7b418b6f8585496d1e36bc6"
 VALIDATOR_PATH = "scripts/validate_met_007.py"
 BASE_COMMIT = "4875648cffb3f838650d96a5291445b3634bf9b3"
 NEW_PACKET = "MET-007"
@@ -359,7 +359,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # MET-007 (DATA-CORRECTNESS-001 and R14's registration row; the lane monitor's owner-delegated rulings MON-288-SCOPE,
 # MON-288-SCOPE-CORR, MON-288-LAB-SYNC, MON-288-LAB-SYNC-INPUTS, MON-288-DESIGN-GO, MON-288-RULINGS, MON-288-CR1-RULE,
 # MON-288-Q2-RULE, MON-288-CR2-RULE, MON-288-C1R2-RULE, MON-288-C2-RULE, MON-288-C2R2-RULE, MON-288-RD1-RULE,
-# MON-288-C2R3-RULE, MON-288-RD2-RULE, MON-288-C3-BRIEF, MON-288-C3-CLASS, MON-288-BP14 and MON-288-C3-CLEAR)
+# MON-288-C2R3-RULE, MON-288-RD2-RULE, MON-288-C3-BRIEF, MON-288-C3-CLASS, MON-288-BP14, MON-288-C3-CLEAR,
+# MON-288-PRECHECK-RULE, MON-288-O287-CLEAR and MON-288-C4-RULE)
 # adds, in a K = 1 step publishing the
 # product packet LAB-SYNC-001: part A, architecture/data-correctness/record.json with its schema, its thirteen
 # vectors, the reference model scripts/data_correctness.py, the checker scripts/validate_data_correctness.py and
@@ -431,6 +432,7 @@ ERA_SHA256 = MappingProxyType({
 })
 ERRATA_LINES = MappingProxyType({
     "architecture/chain-checkpoint/README.md": ((87, 87), (230, 231)),
+    "architecture/oracle-identity-met-006.json": ((5, 5), (8, 8), (28, 29), (39, 39)),
     "architecture/repository-registration/language-placement.json": ((11, 48),),
     "architecture/repository-registration/repositories.json": ((6, 14),),
     "ci/chain_checkpoint.py": ((10, 11), (68, 68), (71, 72), (98, 99), (483, 484), (486, 486), (573, 573), (599, 599), (659, 659), (678, 678), (687, 687), (699, 699), (804, 804), (818, 818), (1104, 1104), (1206, 1206)),
@@ -443,10 +445,11 @@ ERRATA_LINES = MappingProxyType({
     "task-packets/README.md": ((1795, 1796),),
     "tests/test_chain_checkpoint.py": ((45, 45), (244, 244), (662, 662), (666, 666), (1150, 1151)),
     "tests/test_language_placement.py": ((59, 59), (63, 63), (315, 315), (319, 319), (652, 652), (1203, 1203), (1242, 1242), (1245, 1245)),
+    "tests/test_met_006_oracle.py": ((1829, 1829), (2086, 2086)),
     "tests/test_packet_declaration_consistency.py": ((77, 77),),
     "tests/test_release_lock_registration.py": ((28, 29), (80, 81), (105, 105), (120, 120), (205, 205), (219, 219)),
     "tests/test_sector_catalog.py": ((748, 774),),
-    "tests/test_task_packets.py": ((105, 105),),
+    "tests/test_task_packets.py": ((86, 86), (89, 90), (105, 105)),
 })
 VECTOR_EXPECT = MappingProxyType({
     "architecture/data-correctness/vectors/rf1-concurrent-reservations.json": {"refuse": "DC_WRITE_SKEW"},

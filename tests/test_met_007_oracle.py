@@ -155,6 +155,9 @@ SECTION9_REQUIRED = (
     "docs/MASTER_DEVELOPMENT_PLAN.md",
 )
 SECTION9_READER_FILES = ("ci/chain_checkpoint.py", "architecture/chain-checkpoint/README.md", "tests/test_chain_checkpoint.py")
+# CONTRACT_288 section 9 [PC-3]: 287's re-bound oracle identity and its corrected oracle join section 9's files.
+SECTION9_PC3_FILES = ("architecture/oracle-identity-met-006.json", "tests/test_met_006_oracle.py")
+SECTION9_READER_FILES = SECTION9_READER_FILES + SECTION9_PC3_FILES
 
 # CONTRACT_288 section 9: the base lines each authored edit replaces, as the contract names them.
 NAMED_LINES = (
