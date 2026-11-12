@@ -75,7 +75,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 298
+    assert len(files) == EXPECTED_PACKET_COUNT == 300
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -102,7 +102,13 @@ def test_catalog_covers_all_thirteen_repositories() -> None:
     assert len(registered_names) == 13
     # MET-REGISTRY-001: the packets cover the registry with its successor rows (R13 through the successor record).
     composed_names = {row["name"] for row in registry_rows(ROOT, _registry_safe_load)}  # VIS-284-LPORACLE
-    assert packet_repositories == composed_names
+    assert packet_repositories == composed_names - {"mas-harness-reference-lab"}
+    # MET-007 (slot 288): R14 mas-harness-reference-lab is registered without a packet, the only registered
+    # repository without one; REF-ESTATE-001's first packet (the bundle v8 route) removes this exemption. The exempted
+    # set is exactly R14's name and that name has no packet, so R14's first packet fails here until it removes the
+    # exemption, which therefore expires on its own (C2-2).
+    assert composed_names - packet_repositories == {"mas-harness-reference-lab"}
+    assert "mas-harness-reference-lab" not in packet_repositories
 
 
 def test_predecessor_graph_is_closed_acyclic_and_indexed_topologically() -> None:

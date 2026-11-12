@@ -1,0 +1,32 @@
+id: LAB-SYNC-001
+repository: mas-harness-research-lab
+branch: codex/lab-sync-a2482753
+objective: "R13 mas-harness-research-lab's research sync, PR 5 on branch codex/lab-sync-a2482753 (head 9992d1755f71): research/** changes over LAB-REPO-001's merge 2e977f4f5a31 on R13's main, published as a LAB packet by MET-007 at slot 288 (K = 1; MON-288-LAB-SYNC) so that the lab's own hosted run verifies it; it keeps LAB-REPO-001's six acceptance commands byte-exact and in order."
+predecessors: ["LAB-REPO-001"]
+allowedPaths: ["research/"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - "Head: PR 5 of R13 mas-harness-research-lab on branch codex/lab-sync-a2482753, head 9992d1755f71edc2ac25eacd8aceff9f06a76af7 (tree 2112241e3a53e133783f8951ebc024075b15d5d5), over the base 2e977f4f5a3162bd2ec3e939b9c2c16c8956a994 (LAB-REPO-001's merge); the packet's file set is research/** only (allowedPaths [\"research/\"])."
+  - "Transport binding: the installed approval record mas-harness-research-lab--9992d1755f71edc2ac25eacd8aceff9f06a76af7.json, sha256 4694ddcb18be59f45253648f405bae1c3c39f34e74bdf54d45b2615649f1a3d2 (161 bytes), binds the head 9992d1755f71edc2ac25eacd8aceff9f06a76af7 and PR 5 under the schema planeon.transport-approval/v1; the repository's full name is read at packet time and never spelled here."
+  - "Inheritance: LAB-REPO-001 is the comparator under the chain-inheritance rule R13 (architecture/chain-inheritance/README.md items 2-6), pinned in MET-007's productComparators; its six offlineAcceptanceCommands are kept byte-exact and in order, and R8 clause 2 admits mas-harness-research-lab through the allowed names (R13 from slot 284; scripts/repository_registration_288.py)."
+  - "Route: verified on R13's hosted run only, under bundle v7's R13 policy row (LAB-REPO-001: later LAB packets are verified under the ordinary hosted route); harness-onion's own verify does not run the six commands (Q-288-V1)."
+deliverables:
+  - "The head 9992d1755f71edc2ac25eacd8aceff9f06a76af7 of PR 5: research/** only, as the expectedEvidence lines state; no other path."
+  - "The six inherited commands pass in order under ./ci/verify-offline.sh on R13's hosted route."
+excluded:
+  - "Any experiment run, fetch, search, export or heavy job; network; .github; node, uv, make or pip; any bridge path; the lane file; any other repository; history rewriting; product code; packets; roadmap writes."
+prefetchCommands: []
+offlineAcceptanceCommands: [["python3","-I","-B","ci/zero_bill_scan.py"],["python3","-I","-B","research/tools/manifest_check.py","research/MANIFEST.json"],["python3","-I","-B","research/tools/privacy_check.py","research/MANIFEST.json"],["python3","-I","-B","research/tools/prereg_check.py","research/hypotheses/REGISTER.md","research/experiments"],["python3","-I","-B","research/tools/rerun_results.py","research/tools/rerun_table.json"],["python3","-I","-B","research/tools/page_check.py","research/MANIFEST.json"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - "Head name-status against the base: 37 A, 9 M, 0 D, 46 paths, every one under research/; the 9 M are research/README.md, build_research.py, history.json, hypotheses/CLAIMS.json, hypotheses/CLAIMS.md, hypotheses/REGISTER.md, research.html, research.json, MANIFEST.json; ci/, README.md, LICENSE and .gitignore unchanged from the base."
+  - "research/** of the head equals the bridge's research tree at a2482753e83158cbd71d790a608358f0fdd836f9 blob by blob, plus research/MANIFEST.json regenerated with bridgeCommit = that commit."
+  - "Command 1 (zero_bill_scan): no output, exit 0."
+  - "Command 2 (manifest_check): \"MANIFEST OK: 325 files\"; research/MANIFEST.json sha256 62c8725eec740d18c98eca2644b03e1ed68365ae5feed04e444e89f0904d4cb8; keys = the head's tracked set minus the manifest."
+  - "Command 3 (privacy_check): \"PRIVACY OK: 322 files, 0 hits, 0 name digests loaded\" under the verifier (RESEARCH_NAME_DIGESTS absent); 4 loaded and 0 hits in the lab's local pre-push run."
+  - "Command 4 (prereg_check): \"PREREG OK: 23 folders, 10 reviewed, 1 records\"."
+  - "Command 5 (rerun_results): \"RERUN OK: 23 entries; LEDGER_REDERIVED 10, RAW_REPRODUCED 0, INDEPENDENT_REPLICATION 0, RECORDED 13\"."
+  - "Command 6 (page_check): \"PAGE OK: 23 experiments, 48 tools, 26 reads, 7 record keys\"."
+  - "The six commands finish in seconds in one deny-all process tree under ./ci/verify-offline.sh; no heavy job."
+rollback: "Revert the PR; main returns to 2e977f4f5a3162bd2ec3e939b9c2c16c8956a994 (LAB-REPO-001's merge) and the bridge stays the authoritative research tree, so nothing is lost."

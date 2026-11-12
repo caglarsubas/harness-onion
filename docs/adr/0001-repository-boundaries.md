@@ -26,13 +26,14 @@ or hide tenant-selectable capabilities inside one undifferentiated product.
 ## Decision
 
 The canonical architecture contains exactly sixteen harness IDs across four
-planes and exactly fourteen repositories. `Harness-Engineering` owns the
+planes and exactly fifteen repositories. `Harness-Engineering` owns the
 architecture authorities and execution packets but contains no tenant runtime
 service. The twelve product `mas-harness-*` repositories own product contracts, SDKs,
 industry guidance, plane services, installation, distribution, and conformance.
-`mas-harness-research-lab` (R13) is, like `Harness-Engineering`, of kind meta: it
-holds the Research-Lab's research records only, no other session writes there, and
-the lab reads other repositories only through exports. Its row lives in the successor
+`mas-harness-research-lab` (R13) and `mas-harness-reference-lab` (R14, slot 288) are, like
+`Harness-Engineering`, of kind meta: R13 holds the Research-Lab's research records only, no other session
+writes there, and the lab reads other repositories only through exports; R14 holds the Reference-Lab's
+synthetic reference estates. Their rows live in the successor
 registry record `architecture/repository-registration/repositories.json`, read with the
 registry's thirteen rows through one composition reader; `architecture/repositories.yaml`
 itself keeps the thirteen.
@@ -62,7 +63,7 @@ phases: the operator is built first, distribution assembles already released
 artifacts, and the installed operator later consumes the verified bundle. It is
 not a source or build cycle.
 
-Warm-start repositories are not members of the fourteen-repository product
+Warm-start repositories are not members of the fifteen-repository product
 graph. They remain immutable reference-only provenance. Implementation runs may
 not mount or read them, and no direct copy is authorized by this decision.
 

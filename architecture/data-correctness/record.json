@@ -117,7 +117,7 @@
     }
   ],
   "operationIds": {
-    "origin": "minted once, by the experience gateway or by the API caller",
+    "origin": "minted once, by the experience gateway for agent-originated work (an agent never mints); an external human caller's key is registered by the gateway as that mint",
     "shape": "opaque, unique per business operation, carried unchanged",
     "propagation": "through orchestration, the tool broker and the AI gateway to the effect, deduplicated at the effect's own store, so retries and outbox replays apply once; bound by tool effect class, never classified from an operation class's lifecyclePhase or idempotency",
     "receiptKey": {

@@ -25,14 +25,17 @@ published packet ids, and returns its refusals as (code, message) pairs, in the 
 - DC_COUNTS: the counts, and every row's obligations against the rule families' predicates.
 - DC_VECTORS: the model replays every vector, read by the exact paths the rule families list, to its expected outcome,
   and every model code is refused by at least one vector.
-Standard library plus the repository's safe YAML loader, sector_catalog and the reference model
-(scripts/data_correctness.py). Data checks only; it enforces nothing.
+Standard library plus the repository's safe YAML loader, sector_catalog's public effective_bytes_from and the
+reference model (scripts/data_correctness.py). main() reads through the checker's own disk_reader and
+published_packets, as scripts/release_profile.py keeps its own reader and packet set (Q-RP-PROJ (a1);
+MON-288-C2-RULE OQ-3). Data checks only; it enforces nothing.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import re
+import stat
 import sys
 from collections import Counter
 from pathlib import Path
@@ -40,11 +43,11 @@ from pathlib import Path
 try:
     import data_correctness as model
     from safe_yaml import safe_load
-    from sector_catalog import disk_reader, effective_bytes_from, published_packets
+    from sector_catalog import effective_bytes_from
 except ImportError:
     from scripts import data_correctness as model
     from scripts.safe_yaml import safe_load
-    from scripts.sector_catalog import disk_reader, effective_bytes_from, published_packets
+    from scripts.sector_catalog import effective_bytes_from
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD_PATH = "architecture/data-correctness/record.json"
@@ -452,6 +455,52 @@ def check(read, packets):
         except Exception as exc:
             refusals.append((code, str(exc)))
     return refusals
+
+
+MAX_BYTES = 16_777_216
+
+
+def _refuse_unless(ok: bool, message: str) -> None:
+    if not ok:
+        raise ValueError(message)
+
+
+def disk_reader(root: Path = ROOT):
+    """The checker's own repository reader, for main() and the checker's tests (MON-288-C2-RULE OQ-3): bounded, regular,
+    single-link files under root, exact relative paths only, linked ancestors refused (sector_catalog's reader form)."""
+    def read(path: str) -> bytes:
+        _refuse_unless(type(path) is str and path and not path.startswith("/") and "\\" not in path and "\n" not in path
+                       and all(part not in ("", ".", "..") for part in path.split("/")),
+                       "unsafe repository path: %r" % (path,))
+        parent = root
+        for part in path.split("/")[:-1]:
+            parent /= part
+            _refuse_unless(stat.S_ISDIR(parent.lstat().st_mode), "linked or missing ancestor: " + path)
+        target = parent / path.split("/")[-1]
+        before = target.lstat()
+        _refuse_unless(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size <= MAX_BYTES,
+                       "bounded regular single-link file: " + path)
+        raw = target.read_bytes()
+        after = target.lstat()
+        identity = lambda row: (row.st_dev, row.st_ino, row.st_mode, row.st_nlink, row.st_size, row.st_mtime_ns,
+                                row.st_ctime_ns)
+        _refuse_unless(identity(before) == identity(after) and len(raw) == before.st_size,
+                       "file changed during read: " + path)
+        return raw
+    return read
+
+
+def published_packets(root: Path = ROOT) -> frozenset:
+    """The ids of the published task packets, for main() and the checker's tests (MON-288-C2-RULE OQ-3); a non-regular
+    task-packets/*.yaml entry (a link, a dangling link, a directory) is refused, never skipped (sector_catalog's form)."""
+    folder = root / "task-packets"
+    _refuse_unless(stat.S_ISDIR(folder.lstat().st_mode), "task-packets directory")
+    names = []
+    for entry in folder.iterdir():
+        if entry.name.endswith(".yaml"):
+            _refuse_unless(stat.S_ISREG(entry.lstat().st_mode), "non-regular task packet entry: " + entry.name)
+            names.append(entry.name[:-5])
+    return frozenset(names)
 
 
 def main(argv=None):

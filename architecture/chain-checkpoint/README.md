@@ -84,7 +84,7 @@ Every digest is at the checkpoint tree.
   digest-mismatched, malformed, miscounted or duplicated, or an authority that carries classes itself, is class A,
   kind input, as is a bad context, and so is a named record that is a link, not a file, or unreadable (an unnamed
   one changes nothing). Each class is re-checked by position by the rule the record names: `hunkClassRuleSha256`
-  picks chainmech v2.2's, v2.3's or v2.4's (`RULES_BY_SHA`; the reader holds v2.3's and v2.4's copies, and v2.2's is
+  picks chainmech v2.2's, v2.3's, v2.4's or v2.5's (`RULES_BY_SHA`; the reader holds v2.3's, v2.4's and v2.5's copies, and v2.2's is
   v2.3's with `register` off; MET-PERF-049), any other digest is class A, and `hunkClassVocabulary` must be that rule's vocabulary. A
   reordered record is class A.
 - A reverse hunk that carries a `class` member is checked as an entry first: a class that is not a string is a
@@ -227,3 +227,25 @@ when the reader exposes one (P-048-2). At 286 the module is absent, so everythin
 - 047 saves no verify time: it adds at most 15 s.
 - The completeness of a captured input set is not claimed. Shadow mode measures it.
 - Nothing is claimed about any other repository.
+
+## MET-007 (slot 288): class rule v2.5
+
+**Class rule v2.5** (`RULE_V25_SHA256`, `classify_v25`; CONTRACT_288 rev 4 section 8.1), the block after v2.4's in
+the reader, is `classify_v24` with two counted changes, so that its member forms read the K >= 1 forms the chain
+tools write:
+- C1, the product chain: F2's `*...PRODUCT_PACKETS` chain takes its optional receiver after the star, then at least
+  one `successor.` (`*profile.successor...PRODUCT_PACKETS`, the deepen tool's form), and ends where its element ends
+  (a comma or a closing bracket follows). The receiver-less form still matches; a receiver that no successor chain
+  follows, or a chain that continues past its element, stays other.
+- C2, the bridged loop (K >= 1 only, and only when the hunk's before-lines hold no such loop): each run `in (N, N, P)`
+  of its after-lines (the keyword `in`, with no name character, ASCII or not, and no dot before it; N a
+  `successor...NEW_PACKET` chain, P a v2.5 product chain) reads back as `== N` before the rest test and the F2 cut
+  decide the hunk, which must still reduce exactly; F3 is not tried in a hunk where a run was read back. v2.4's K = 0
+  case is unchanged.
+- Era binding, by the slot the reader counts: `newer_authorities` takes `ckpt_slot` (the Reader passes the ledger's
+  `checkpointSlot`) and gives each newer authority its slot, `ckpt_slot` plus its 1-based rank by ascending baseline,
+  as `head_slot` counts. `attach_classes` refuses unless the record is named exactly `<slot>.json` and names
+  `RULE_V25_SHA256` if and only if slot >= `V25_FROM_SLOT` (288), and it refuses when no slot is given (fail closed):
+  a chosen file name never picks its own era. Records 282 to 287 keep the rule they carry. `RULES_BY_SHA` holds v2.5
+  as (CLASSES, register), and a v2.5 record has v2.4's six members and five context keys. Over 286's and 287's
+  records (K = 0 contexts, where v2.5's path is v2.4's) v2.5 gives exactly their recorded classes.

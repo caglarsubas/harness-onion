@@ -56,11 +56,11 @@ def _with_catalogue(path, old, new):
 
 def test_head_is_accepted_with_the_designed_counts():
     assert lp.check(ROOT) == {
-        "repositories": 14, "deployables": 28,
+        "repositories": 15, "deployables": 28,
         "byStatus": {"AS_PLANNED": 15, "PENDING_HOTPATH_DECISION": 4, "CONTROL_LOOP_TO_BE_CONFIRMED": 1,
                      "NO_STATED_DEFAULT": 8},
         "byPlane": {"CONTROL": 2, "DATA": 3, "UNSTATED": 23},
-        "outsideCatalogue": 5, "exceptions": 5, "spans": 114,
+        "outsideCatalogue": 5, "exceptions": 5, "spans": 116,
         "byImplementationStatus": {"PLANNED": 27, "APPROVED": 0, "IMPLEMENTED": 0, "UPSTREAM_MANAGED": 1},
         "nativeRows": 2, "harnesses": 16, "bindings": 31,
         "byKind": {"CATALOG_MODULE": 18, "OPTIONAL_ADAPTER": 2, "PLAN_LIBRARY": 1, "DEFERRED": 10}}
@@ -312,11 +312,11 @@ def test_source_mutations_are_r5(name):
 
 
 HEAD_SUMMARY = {
-    "repositories": 14, "deployables": 28,
+    "repositories": 15, "deployables": 28,
     "byStatus": {"AS_PLANNED": 15, "PENDING_HOTPATH_DECISION": 4, "CONTROL_LOOP_TO_BE_CONFIRMED": 1,
                  "NO_STATED_DEFAULT": 8},
     "byPlane": {"CONTROL": 2, "DATA": 3, "UNSTATED": 23},
-    "outsideCatalogue": 5, "exceptions": 5, "spans": 114,
+    "outsideCatalogue": 5, "exceptions": 5, "spans": 116,
     "byImplementationStatus": {"PLANNED": 27, "APPROVED": 0, "IMPLEMENTED": 0, "UPSTREAM_MANAGED": 1},
     "nativeRows": 2, "harnesses": 16, "bindings": 31,
     "byKind": {"CATALOG_MODULE": 18, "OPTIONAL_ADAPTER": 2, "PLAN_LIBRARY": 1, "DEFERRED": 10}}
@@ -649,7 +649,7 @@ def test_br_tt_4_native_rows_and_frameworks_sources():
     natives = [r for r in data["outsideCatalogue"] if r["id"] in lp.NATIVE_ROWS]
     assert len(natives) == 2 and all(r["frameworks"] == [] and "frameworksSources" not in r for r in natives)
     assert all(d["frameworksSources"] for d in data["deployables"] if d["plannedLanguage"] != "UPSTREAM_OWN")
-    assert HEAD_SUMMARY["spans"] == 114
+    assert HEAD_SUMMARY["spans"] == 116
 
 
 def test_br_tt_5_the_v1_cases_change_as_appendix_c_states():
@@ -1200,7 +1200,7 @@ def test_a_root_without_the_successor_record_reads_the_base_rows_without_the_mod
 def test_a_root_with_the_successor_record_and_without_its_module_is_refused(monkeypatch, tmp_path):
     data = json.loads((ROOT / lp.DATA_PATH).read_bytes())
     root = _catalogue_root(tmp_path, True)
-    assert len(lp._catalogues(data, root, {})[1]["repositories"]) == lp.COMPOSED_REPOSITORY_COUNT == 14
+    assert len(lp._catalogues(data, root, {})[1]["repositories"]) == lp.COMPOSED_REPOSITORY_COUNT == 15
     _block_the_composition_module(monkeypatch)
     with pytest.raises(lp.Refusal, match="successor registry record present without its composition module"):
         lp._catalogues(data, root, {})
@@ -1239,10 +1239,10 @@ def _copied_root(tmp_path, registry: bool, placement: bool):
 
 
 @pytest.mark.parametrize("registry,placement,expected", [
-    (True, True, "fourteen"), (False, False, "thirteen"), (True, False, "R4"), (False, True, "R4")])
+    (True, True, "fifteen"), (False, False, "thirteen"), (True, False, "R4"), (False, True, "R4")])
 def test_each_base_file_has_its_own_predicate_and_both_records_go_together(tmp_path, registry, placement, expected):
     root = _copied_root(tmp_path, registry, placement)
-    if expected == "fourteen":
+    if expected == "fifteen":
         assert lp.check(root) == HEAD_SUMMARY
     elif expected == "thirteen":
         summary = lp.check(root)

@@ -1,6 +1,14 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-006
+## Current source preparation — MET-007
+
+MET-007 (slot 288): DATA-CORRECTNESS-001 and R14's registration row, a K = 1 step (300 packets at slot 288):
+architecture/data-correctness/record.json over the 24 durable writers with its schema, vectors, model, checker and
+tests; R14 mas-harness-reference-lab (kind meta, releaseSet EXCLUDED) in the successor registry record; and the product
+packet LAB-SYNC-001 (mas-harness-research-lab, R13's PR 5); gate material (the registry rider and the D5a oracle).
+Alpha2 OPEN; 298 accepted (the catalog at slot 287) plus MET-007 and its product only.
+
+## Historical service edges source preparation — MET-006
 
 MET-006 (slot 287): SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0, 298 packets at slot 287):
 architecture/service-edges.yaml with one entry per catalog dependency, its schema, checker and tests, and the errata
@@ -1793,3 +1801,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 296 | `MET-ADOPT-008` | `Harness-Engineering` | AUTHORITY-MAP-001-F, issue 237's fix (K = 0, 296 packets at slot 285): a down usage ledger refuses every mutation of an existing reservation, an exact commit replay included, with no state change; VB-11 and the refused-step invariant |
 | 297 | `MET-PERF-049` | `Harness-Engineering` | CHAIN-COMPACTION-002's ledger rewrite step (K = 0, 297 packets at slot 286): the reader's class cache, class rule v2.4, the demoted (authored) classification and twelve parallel-suite workers; the second checkpoint written at slot 286 |
 | 298 | `MET-006` | `Harness-Engineering` | SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0, 298 packets at slot 287): one entry per catalog dependency with its schema, checker and tests; CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the corpus count in two tests carried |
+| 299 | `MET-007` | `Harness-Engineering` | DATA-CORRECTNESS-001 and R14's registration row (K = 1, 300 packets at slot 288): the data-correctness record over the 24 durable writers with its schema, vectors, model, checker and tests; R14 mas-harness-reference-lab registered (kind meta, releaseSet EXCLUDED); publishes LAB-SYNC-001 |
+| 300 | `LAB-SYNC-001` | `mas-harness-research-lab` | R13's research sync, PR 5 on branch codex/lab-sync-a2482753 (head 9992d1755f71) over LAB-REPO-001's merge 2e977f4f5a31: research/** only, LAB-REPO-001's six commands inherited in order (product, published by MET-007) |

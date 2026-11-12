@@ -26,6 +26,7 @@ SCHEMA_PATH = ROOT / "architecture/repository-registration/repositories.schema.j
 SCHEMA_PIN = {"path": "architecture/repository-registration/repositories.schema.json",
               "sha256": json.loads(SUCCESSOR_PATH.read_text(encoding="utf-8"))["schema"]["sha256"]}
 R13_ROW = {"id": "research-lab", "name": "mas-harness-research-lab", "kind": "meta", "dependsOn": [], "releaseSet": "EXCLUDED"}
+R14_ROW = {"id": "reference-lab", "name": "mas-harness-reference-lab", "kind": "meta", "dependsOn": [], "releaseSet": "EXCLUDED"}
 
 
 def _load_module(name: str, path: Path):
@@ -77,8 +78,9 @@ def test_excluded_release_set_is_refused_on_a_product_repository(monkeypatch, tm
 
 def test_excluded_release_set_is_admitted_on_the_meta_repository(tmp_path: Path) -> None:
     rows = CHECKER.registry_with_successors()
-    assert len(rows) == 14
-    assert [(r["id"], r["kind"]) for r in rows if r.get("releaseSet") == "EXCLUDED"] == [("research-lab", "meta")]
+    assert len(rows) == 15
+    assert [(r["id"], r["kind"]) for r in rows if r.get("releaseSet") == "EXCLUDED"] == [("research-lab", "meta"),
+                                                                                     ("reference-lab", "meta")]
     document = fixture_document()
     _, report = validate_mutation(tmp_path, document)
     assert report.repositories == 13
@@ -102,7 +104,7 @@ def _record(rows: list) -> bytes:
 def test_the_composed_rows_are_the_registry_then_the_successor_rows() -> None:
     base = safe_yaml_load(REGISTRY_PATH.read_bytes())["repositories"]
     rows = composed_rows(REGISTRY_PATH.read_bytes(), SUCCESSOR_PATH.read_bytes(), SCHEMA_PATH.read_bytes(), safe_yaml_load)
-    assert len(base) == 13 and list(rows[:13]) == base and list(rows[13:]) == [R13_ROW]
+    assert len(base) == 13 and list(rows[:13]) == base and list(rows[13:]) == [R13_ROW, R14_ROW]
     assert registry_rows(ROOT, safe_yaml_load) == rows
 
 
@@ -117,7 +119,7 @@ def test_the_record_in_the_root_decides_base_rows_or_composed_and_pinned(tmp_pat
     with pytest.raises(Refused, match="repositories.schema.json cannot be read"):
         registry_rows(root, safe_yaml_load)
     _copy_into(root, SCHEMA_PATH)
-    assert list(registry_rows(root, safe_yaml_load)[13:]) == [R13_ROW]
+    assert list(registry_rows(root, safe_yaml_load)[13:]) == [R13_ROW, R14_ROW]
     record = root / SUCCESSOR_PATH.relative_to(ROOT)
     record.unlink()
     record.mkdir()
@@ -202,7 +204,8 @@ def test_both_successor_records_meet_their_schemas_and_the_placement_reader_comp
         jsonschema.Draft202012Validator(json.loads(schema.read_bytes())).validate(json.loads(record.read_bytes()))
     base = json.loads((ROOT / registration.BASE_PLACEMENT_PATH).read_bytes())["repositories"]
     rows = registration.placement_rows(ROOT)
-    assert len(base) == 13 and list(rows[:13]) == base and [r["id"] for r in rows[13:]] == ["research-lab"]
+    assert len(base) == 13 and list(rows[:13]) == base and [r["id"] for r in rows[13:]] == ["research-lab",
+                                                                                           "reference-lab"]
     assert registration.placement_record_present(ROOT) and registration.record_present(ROOT)
 
 
@@ -216,7 +219,7 @@ def test_the_placement_record_decides_in_its_own_root_and_refuses_never_degrades
     with pytest.raises(Refused, match="language-placement.schema.json cannot be read"):
         registration.placement_rows(root)
     _copy_into(root, schema)
-    assert len(registration.placement_rows(root)) == 14
+    assert len(registration.placement_rows(root)) == 15
     base, raw, schema_raw = json.loads(data.read_bytes())["repositories"], record.read_bytes(), schema.read_bytes()
     at = len(schema_raw) // 2
     with pytest.raises(Refused, match="successor placement schema is not the pinned one"):

@@ -74,7 +74,12 @@ def _assert_semantic_catalog_consistency(
             if (match := PLAN_ROOT_PATTERN.match(line)) is not None
         }
     assert plan_owners == physical_owners, "canonical packet owners differ"
-    assert set(root_sets) == set(physical_owners.values()), "repository membership differs"
+    # MET-007 (slot 288, MON-288-C2-RULE OQ-2): R14 mas-harness-reference-lab has its plan page and no packet. The root
+    # side's exemption is exactly {"mas-harness-reference-lab"} and holds only while that name owns no packet;
+    # REF-ESTATE-001's first packet removes it (C2-2's form), so that packet fails here until the exemption goes.
+    unpacketed = {"mas-harness-reference-lab"}
+    assert not unpacketed & set(physical_owners.values()), "an exempted repository owns a packet"
+    assert set(root_sets) - unpacketed == set(physical_owners.values()), "repository membership differs"
 
     rows = CATALOG_OWNER_PATTERN.findall(readme)
     assert [int(order) for order, _, _ in rows] == list(range(1, len(packets) + 1)), "ordered index differs"

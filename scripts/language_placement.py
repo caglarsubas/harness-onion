@@ -101,7 +101,7 @@ CATALOGUES = (SERVICES_PATH, REPOSITORIES_PATH, PROVIDERS_PATH)
 PLANS_DIR = "docs/repositories"
 HARNESSES_DIR = "docs/harnesses"
 REPOSITORY_COUNT = 13
-COMPOSED_REPOSITORY_COUNT = 14  # MET-REGISTRY-001: with the successor registry record's rows (VIS-284-LPORACLE)
+COMPOSED_REPOSITORY_COUNT = 15  # MET-REGISTRY-001: with the successor registry record's rows (VIS-284-LPORACLE)
 # The sha256 of the UTF-8 bytes of LANG-D2 (a), 1,051 characters, without a line feed (owner LANG-D2; D2-2).
 POLICY_SHA256 = "4b0a8a4b9e043823cfa884bdb883ae5b8f796877ead7bdbc413b318082fbc441"
 POLICY_BEGIN = "<!-- language-policy:begin -->"
@@ -184,6 +184,7 @@ REPO_LANGUAGES = {
     "distribution": ("PYTHON",),
     "conformance-labs": ("PYTHON", "RUST"),
     "research-lab": ("PYTHON",),
+    "reference-lab": ("PYTHON",),
 }
 
 # ---------------------------------------------------------------- the v2 closed constants (MET-GOV-005; BR-TT-1..4)
@@ -229,6 +230,7 @@ TOOLCHAIN_EXPECTED = {
         "distribution": "Python 3.12.14",
         "conformance-labs": "Python 3.12.14",
         "research-lab": "Python 3.12.14",
+        "reference-lab": "Python 3.12.14",
     },
     "deployables": {
         "bundle-verifier": "Go 1.26.7",

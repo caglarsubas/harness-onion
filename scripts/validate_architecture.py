@@ -400,8 +400,9 @@ def _validate_repositories(
 
 
 # MET-REGISTRY-001 (VIS-284-ARGV): the registry with its successor rows, through the one composition reader: the
-# canonical thirteen above, then EXPECTED_SUCCESSOR_REPOSITORIES, fourteen in all.
-EXPECTED_SUCCESSOR_REPOSITORIES = {"research-lab": "mas-harness-research-lab"}
+# canonical thirteen above, then EXPECTED_SUCCESSOR_REPOSITORIES, fifteen in all.
+EXPECTED_SUCCESSOR_REPOSITORIES = {"research-lab": "mas-harness-research-lab",
+                                   "reference-lab": "mas-harness-reference-lab"}
 
 
 def _validate_composed_repositories(root: Path, repositories: dict[str, str]) -> None:
@@ -410,10 +411,10 @@ def _validate_composed_repositories(root: Path, repositories: dict[str, str]) ->
     except (OSError, ValueError) as exc:
         raise ArchitectureValidationError(f"cannot compose the repository registry: {exc}") from exc
     composed = {row["id"]: row["name"] for row in rows}
-    _require(len(rows) == len(composed) == 14, "the registry with its successor rows must hold exactly 14 unique records")
+    _require(len(rows) == len(composed) == 15, "the registry with its successor rows must hold exactly 15 unique records")
     _require(
         composed == {**repositories, **EXPECTED_SUCCESSOR_REPOSITORIES},
-        "repository IDs and names differ from the canonical fourteen",
+        "repository IDs and names differ from the canonical fifteen",
     )
 
 
