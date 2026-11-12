@@ -123,7 +123,8 @@ def _sha256(data: bytes) -> str:
 
 
 def _live(rel: str) -> bytes:
-    return (ROOT / rel).read_bytes()
+    # Slot 284's era view: the head's era reader, where a bridged successor projects newer bytes back.
+    return importlib.import_module("scripts.validate_met_registry_001").reviewed_bytes(rel)
 
 
 def _json_bytes(obj: object) -> bytes:
@@ -280,13 +281,17 @@ def safe_load():
 
 
 @pytest.fixture(scope="module")
-def live_rows(reg, safe_load):
-    return reg.registry_rows(ROOT, safe_load)
+def live_rows(reg, safe_load, tmp_path_factory):
+    root = tmp_path_factory.mktemp("era-registry")  # the live root's records in slot 284's era view (_live)
+    _copy(root, BASE_REGISTRY, SUCCESSOR_REGISTRY, REGISTRY_SCHEMA)
+    return reg.registry_rows(root, safe_load)
 
 
 @pytest.fixture(scope="module")
-def live_placement(reg):
-    return reg.placement_rows(ROOT)
+def live_placement(reg, tmp_path_factory):
+    root = tmp_path_factory.mktemp("era-placement")  # the live root's records in slot 284's era view (_live)
+    _copy(root, BASE_PLACEMENT, SUCCESSOR_PLACEMENT, PLACEMENT_SCHEMA)
+    return reg.placement_rows(root)
 
 
 # ---------------------------------------------------------------- 1. E1, E2 and section 4

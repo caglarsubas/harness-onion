@@ -57,7 +57,9 @@ def _load(relative, name):
         module = importlib.util.module_from_spec(spec)
         sys.modules[name] = module
         try:
-            spec.loader.exec_module(module)
+            # Slot 286's era view: the head's era reader (a bridged successor projects newer bytes back).
+            era = importlib.import_module("scripts.validate_met_perf_049").reviewed_bytes(relative)
+            exec(compile(era, spec.origin, "exec", dont_inherit=True), module.__dict__)
         except BaseException:
             sys.modules.pop(name, None)
             raise

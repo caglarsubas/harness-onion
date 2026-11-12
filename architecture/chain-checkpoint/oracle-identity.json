@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_perf_047_oracle.py",
-  "sha256": "a3ca8c0dfea47b432fdab042f732ff8eaa8e7c4405aad75fe87ef49044a40942"
+  "sha256": "f239dd142a2c324bfb188d27d9b1e79f6d31020590e9d86294b0f4fb4cf7b0fc"
  },
  "oracle": {
   "agentId": "local_e5eba7b8-6525-4b8a-b967-3749ce4fa839",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-286-O282-KEEP",
-  "date": "2026-11-10"
+  "ref": "MON-288-O3-CLEAR",
+  "date": "2026-11-13"
  },
  "disclosures": [
   "brief d48e23a2 and the c6 update note a81d1ee9 (MON-282-W1-A2 item 6); the inputs are the README, the reader's docstring and vectors.json only, at W0 and then at c6 (cn-c6); the oracle never read the reader's source, the writer or any test, and the operator never opened the oracle or a run's detail (MON-282-ORACLE-RUN)",
@@ -41,6 +41,8 @@
   "the author's F-round slips: two Edit calls in one message once; a parametrize decorator briefly moved onto a helper and moved back before the run; extra JSON-parse calls; __pycache__ in WORK (moved to the Trash by the operator)",
   "ruling KEEP (MON-282-ORACLE-KEEP) on the counted run on W″ a64e29d7 (77 passed); after the writer's pair dedupe (MON-282-PAIRS-DEDUPE) and dry_run_compare's fix (MON-282-DRYRUN-FIND), the counted run was repeated on W⁶ b2f6f030: 77 passed, 0 failed, 0 skipped; candidateCommit is W⁶; F differs from candidate W⁶ b2f6f030 only by the two oracle identities (their candidateCommit and notes) and the build's write set (MON-282-ORACLE-RECOUNT)",
   "corrected under MON-283-PRE-RULED R3 (owner's word) by the non-author lane monitor; reviewed VIS-283-R3-REVIEW; was 6f601d04",
-  "corrected under MON-286-O282 by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), applying the text of Build-R12-ConformanceLabs's non-author run on c1b (75 of 77 passing; both failures stale by design under CONTRACT_286 r4: the countEffect table's two new rows and v2.4's rule digest); 2 edits; was a7386061; the monitor's run of the corrected file on c1b: 77 of 77; briefSha256 unchanged; R00 placed it by bytes and never opened it"
+  "corrected under MON-286-O282 by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), applying the text of Build-R12-ConformanceLabs's non-author run on c1b (75 of 77 passing; both failures stale by design under CONTRACT_286 r4: the countEffect table's two new rows and v2.4's rule digest); 2 edits; was a7386061; the monitor's run of the corrected file on c1b: 77 of 77; briefSha256 unchanged; R00 placed it by bytes and never opened it",
+  "corrected under MON-288-O3-CLEAR by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent); was a3ca8c0d; candidateCommit, launched, finished and briefSha256 unchanged; R00 placed it by bytes at slot 288's c4c (CONTRACT_288 [PC-4]) and never opened it",
+  "the correction was produced by a general-purpose subagent of the monitor session and cleared by the monitor (diff fb4aacfc)"
  ]
 }
