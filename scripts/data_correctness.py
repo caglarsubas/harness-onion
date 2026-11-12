@@ -115,6 +115,7 @@ def _fence(setup, steps):
     newest, expired, violated = None, set(), False
     for s in steps:
         holder = s.get("holder")
+        _need(type(holder) is str and holder != "", "an RF-2 step names its holder")
         if s["op"] == "acquire":
             token = _int(s.get("token"), "a lease grant names its token")
             if newest is not None and token <= newest:

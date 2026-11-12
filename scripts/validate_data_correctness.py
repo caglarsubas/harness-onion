@@ -228,6 +228,7 @@ def check_shape(record):
             closed(s, ("name", "ownership"), where + " store")
         for w in r["writePaths"]:
             closed(w, ("store", "guard"), where + " write path")
+            text(w["store"], where + " write path store")
             valued(w["guard"], GUARDS, where + " guard")
         if r["lease"] is not None:
             closed(r["lease"], ("resource", "source", "fencing"), where + ".lease")
@@ -239,11 +240,13 @@ def check_shape(record):
         valued(r["clock"]["skewMarginMs"], int, where + ".clock.skewMarginMs")
         for k in r["recordKinds"]:
             closed(k, ("kind", "source", "version", "window"), where + " record kind")
+            text(k["kind"], where + " record kind")
             source(k["source"], where + " record kind source")
             valued(k["version"], str, where + " record kind version")
             valued(k["window"], WINDOWS, where + " record kind window")
         for d in r["derivedStores"]:
             closed(d, ("store", "source", "feed", "deletion"), where + " derived store")
+            text(d["store"], where + " derived store")
             source(d["source"], where + " derived store source")
             valued(d["feed"], FEEDS, where + " derived store feed")
             valued(d["deletion"], DELETIONS, where + " derived store deletion")

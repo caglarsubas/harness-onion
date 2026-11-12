@@ -2,7 +2,7 @@
   "schemaVersion": "harness.planeon.ai/data-correctness/v1",
   "schema": {
     "path": "architecture/data-correctness/schema.json",
-    "sha256": "f51253de041a28bb90b5524e90feab187755bbb8063dbc2005a605c6954bef03"
+    "sha256": "f0e5e0968b6f184154f557b756e6a69a565c888a264a3652f58d2e3387f2258d"
   },
   "basis": {
     "catalog": {
@@ -107,7 +107,7 @@
       "id": "RF-7",
       "name": "REPLAY_STATE",
       "property": "the durable state a replay consults is an input beside the log, so a log-only replay vector is expected to diverge",
-      "appliesWhen": "the deployable's catalog entry names an outbox or a replay (its replays read the log and the state beside it)",
+      "appliesWhen": "the deployable's catalog entry names an outbox, or it is the usage ledger (its replays of idempotent usage observations read the reservations and budgets beside them)",
       "staticChecks": [
         "DC_VECTORS"
       ],

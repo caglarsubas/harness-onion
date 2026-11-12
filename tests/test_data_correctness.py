@@ -75,6 +75,7 @@ def test_every_vector_replays_to_its_expectation_and_every_model_code_is_refused
     {"id": "x", "family": "RF-1", "setup": {}, "steps": [], "expect": "ACCEPT"},
     {"id": "x", "family": "RF-9", "setup": {}, "steps": [{"op": "replay"}], "expect": "ACCEPT"},
     {"id": "x", "family": "RF-7", "setup": {}, "steps": [{"op": "call"}], "expect": "ACCEPT"},
+    {"id": "x", "family": "RF-2", "setup": {}, "steps": [{"op": "expire"}], "expect": "ACCEPT"},
     {"id": "x", "family": "RF-7", "setup": {}, "steps": [{"op": "replay", "inputs": [], "consulted": []}], "expect": {"refuse": "DC_SHAPE"}},
     {"id": "x", "family": "RF-7", "setup": {}, "steps": [{"op": "replay", "inputs": [], "consulted": []}], "expect": "ACCEPT", "more": 1},
 ])
@@ -106,6 +107,10 @@ def _mutate_catalog_name(r):
 
 def _mutate_write_paths_object(r):
     r["deployables"][0]["writePaths"] = {}
+
+
+def _mutate_store_not_text(r):
+    r["deployables"][0]["writePaths"][0]["store"] = 7
 
 
 def _mutate_count_boolean(r):
@@ -156,7 +161,7 @@ def _mutate_counts(r):
 
 @pytest.mark.parametrize("mutate,code", [
     (_mutate_shape, "DC_SHAPE"), (_mutate_valued, "DC_SHAPE"), (_mutate_catalog_name, "DC_SHAPE"),
-    (_mutate_write_paths_object, "DC_SHAPE"), (_mutate_count_boolean, "DC_SHAPE"), (_mutate_source_outside_entry, "DC_SOURCES"),
+    (_mutate_write_paths_object, "DC_SHAPE"), (_mutate_store_not_text, "DC_SHAPE"), (_mutate_count_boolean, "DC_SHAPE"), (_mutate_source_outside_entry, "DC_SOURCES"),
     (_mutate_basis, "DC_BASIS"), (_mutate_rows, "DC_ROWS"), (_mutate_sources, "DC_SOURCES"), (_mutate_fencing, "DC_FENCING"),
     (_mutate_versions, "DC_VERSIONS"), (_mutate_derived, "DC_DERIVED_STORES"), (_mutate_opids, "DC_OPIDS"),
     (_mutate_budget, "DC_BUDGET"), (_mutate_counts, "DC_COUNTS")])
