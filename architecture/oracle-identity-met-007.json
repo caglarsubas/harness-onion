@@ -1,0 +1,40 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_007_oracle.py",
+  "sha256": "df6aa2ada32f187c57b198f58e83e55fad91f7fd9f76bc45d180b7122ef742cd"
+ },
+ "oracle": {
+  "agentId": "a9bedced8ff0dbfcf",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "bf6383ea-f2e4-4ad6-aef2-b38999710a1e",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "bf6383ea-f2e4-4ad6-aef2-b38999710a1e"
+  ]
+ },
+ "briefSha256": "1bbbb7fc4e799f42434183c837b769d801b277fb4c7a3127e0b17f5bd0469db7",
+ "candidateCommit": "e37a285011aba95379de8d289907803b6b81cb45",
+ "launched": "2026-11-12T16:59:25+08:00",
+ "finished": "2026-11-12T17:48:19+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-288-C3-CLEAR",
+  "date": "2026-11-12"
+ },
+ "disclosures": [
+  "brief 1bbbb7fc (template 6f8ea872, MON-288-C3-BRIEF: every expected value cites a CONTRACT_288 section) and launch prompt de419925 (template bf8d6d03, its final-report line aligned to the brief's disclosures); the author's only inputs are CONTRACT_288 rev 4 (69389cbb), r4's data-correctness record (e8f3b50d), schema (f0e5e096) and thirteen vectors bundled (4a59fcdb), the catalog (857376b5), the service-edge record (20a4b631), the authority map (1a5de064) and r4's meta YAML with 8 closed-path strings masked (fd621638); the operator-stated facts are the checker's, the model's and the head layer's signatures with line numbers computed from r4's blobs",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran py_compile only, no test run; it was cut off once by the usage limit and resumed by message after RESUME; its file 25f27a4b (1,747 lines, 44 tests, 160 nodes, 151 asserts, each with a CONTRACT_288 section cite)",
+  "blind run 1 by the operator, R00, the test runner in-process on a git-archive export of r4 07207bad: rc 1, tests 160, failures 1, errors 0; asserts 151, 0 without a cite (junit 4a508d28, log b0b1c5b3; the operator read the testsuite counts only)",
+  "classified by the non-author lane monitor (MON-288-C3-CLASS): the one failure is a contract gap (class c): E4's order is established by the era checker's DC_BASIS (the pinned effective digest), which the contract now states by claim (C3-1); the candidate is unchanged; the author made the one case consistent in one hunk, relayed by the operator, cleared by the monitor (25f27a4b -> df6aa2ad)",
+  "BP-14 (MON-288-BP14): the record's operationIds.origin text corrected (the gateway mints for agent-originated work; an agent never mints); the candidate moved r4 07207bad -> r5 e37a2850 by text and pins only (the record, the authority, the head)",
+  "blind run 2, the corrected file on r5 e37a2850 with the test runner in-process: rc 0, tests 160, failures 0, errors 0, skipped 0; asserts 154, 0 without a cite (junit d09a5025, log 9b3a4308); VERDICT PASS",
+  "placed at c3 with this identity ruled KEEP by the lane monitor (MON-288-C3-CLEAR); the author's work folder holds a bytecode cache from py_compile"
+ ]
+}

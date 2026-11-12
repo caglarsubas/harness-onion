@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/data-correctness-authority.json"
-AUTHORITY_SHA256 = "033bdbcdf75311358ed16bcf308c706bc2979826e5d441b2cfa24250cf664d9f"
+AUTHORITY_SHA256 = "ea41ddee883446761f47822b75aa70406802e1dcc093ab970b2d7d2e345ecd4e"
 VALIDATOR_PATH = "scripts/validate_met_007.py"
 BASE_COMMIT = "4875648cffb3f838650d96a5291445b3634bf9b3"
 NEW_PACKET = "MET-007"
@@ -358,7 +358,9 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 
 # MET-007 (DATA-CORRECTNESS-001 and R14's registration row; the lane monitor's owner-delegated rulings MON-288-SCOPE,
 # MON-288-SCOPE-CORR, MON-288-LAB-SYNC, MON-288-LAB-SYNC-INPUTS, MON-288-DESIGN-GO, MON-288-RULINGS, MON-288-CR1-RULE,
-# MON-288-Q2-RULE, MON-288-CR2-RULE, MON-288-C1R2-RULE and MON-288-C2-RULE) adds, in a K = 1 step publishing the
+# MON-288-Q2-RULE, MON-288-CR2-RULE, MON-288-C1R2-RULE, MON-288-C2-RULE, MON-288-C2R2-RULE, MON-288-RD1-RULE,
+# MON-288-C2R3-RULE, MON-288-RD2-RULE, MON-288-C3-BRIEF, MON-288-C3-CLASS, MON-288-BP14 and MON-288-C3-CLEAR)
+# adds, in a K = 1 step publishing the
 # product packet LAB-SYNC-001: part A, architecture/data-correctness/record.json with its schema, its thirteen
 # vectors, the reference model scripts/data_correctness.py, the checker scripts/validate_data_correctness.py and
 # their tests; part B, R14 mas-harness-reference-lab's rows in the two successor records, its plan page and the
