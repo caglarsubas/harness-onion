@@ -168,6 +168,9 @@ SECTION9_PC4_FILES = (
     "architecture/chain-checkpoint/oracle-identity.json",
 )
 SECTION9_READER_FILES = SECTION9_READER_FILES + SECTION9_PC4_FILES
+# CONTRACT_288 section 9 [PC-5]: the runner's process-spawn fix, an authored edit in three hunks.
+SECTION9_PC5_FILES = ("ci/run_packet_argv.py",)
+SECTION9_READER_FILES = SECTION9_READER_FILES + SECTION9_PC5_FILES
 
 # CONTRACT_288 section 9: the base lines each authored edit replaces, as the contract names them.
 NAMED_LINES = (

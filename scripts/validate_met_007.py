@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/data-correctness-authority.json"
-AUTHORITY_SHA256 = "7becf818fe5f1fcdbccbdf58bfa1323b7e283507e39b311766bfc28578af520c"
+AUTHORITY_SHA256 = "59ceff9aa1604df147a5a44aa48caff3cc00be8a3f4e47f34fe590a411508610"
 VALIDATOR_PATH = "scripts/validate_met_007.py"
 BASE_COMMIT = "4875648cffb3f838650d96a5291445b3634bf9b3"
 NEW_PACKET = "MET-007"
@@ -360,7 +360,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # MON-288-SCOPE-CORR, MON-288-LAB-SYNC, MON-288-LAB-SYNC-INPUTS, MON-288-DESIGN-GO, MON-288-RULINGS, MON-288-CR1-RULE,
 # MON-288-Q2-RULE, MON-288-CR2-RULE, MON-288-C1R2-RULE, MON-288-C2-RULE, MON-288-C2R2-RULE, MON-288-RD1-RULE,
 # MON-288-C2R3-RULE, MON-288-RD2-RULE, MON-288-C3-BRIEF, MON-288-C3-CLASS, MON-288-BP14, MON-288-C3-CLEAR,
-# MON-288-PRECHECK-RULE, MON-288-O287-CLEAR, MON-288-C4-RULE, MON-288-AB-RULE and MON-288-O3-CLEAR)
+# MON-288-PRECHECK-RULE, MON-288-O287-CLEAR, MON-288-C4-RULE, MON-288-AB-RULE, MON-288-O3-CLEAR,
+# MON-288-SPAWN-PREP, MON-288-PC5-RUNNER, MON-288-PC5-GO and MON-288-O288-PC5-CLEAR)
 # adds, in a K = 1 step publishing the
 # product packet LAB-SYNC-001: part A, architecture/data-correctness/record.json with its schema, its thirteen
 # vectors, the reference model scripts/data_correctness.py, the checker scripts/validate_data_correctness.py and
@@ -439,6 +440,7 @@ ERRATA_LINES = MappingProxyType({
     "architecture/repository-registration/language-placement.json": ((11, 48),),
     "architecture/repository-registration/repositories.json": ((6, 14),),
     "ci/chain_checkpoint.py": ((10, 11), (68, 68), (71, 72), (98, 99), (483, 484), (486, 486), (573, 573), (599, 599), (659, 659), (678, 678), (687, 687), (699, 699), (804, 804), (818, 818), (1104, 1104), (1206, 1206)),
+    "ci/run_packet_argv.py": ((9, 10), (177, 178), (192, 192)),
     "docs/MASTER_DEVELOPMENT_PLAN.md": ((3136, 3136),),
     "docs/adr/0001-repository-boundaries.md": ((29, 29), (33, 35), (65, 65)),
     "docs/repositories/13-mas-harness-research-lab.md": ((69, 70),),
