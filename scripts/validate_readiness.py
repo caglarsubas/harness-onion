@@ -158,7 +158,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 298
+EXPECTED_PACKET_COUNT = 300
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -691,8 +691,8 @@ def validate_architecture(validation: Validation) -> tuple[set[str], set[str]]:
         live_rows = ()
     live_names = {item["name"] for item in live_rows}
     validation.require(
-        EXPECTED_REPOSITORIES < live_names and len(live_names) == len(live_rows) == 14,
-        "repository registry with its successor rows must contain exactly 14 approved repositories",
+        EXPECTED_REPOSITORIES < live_names and len(live_names) == len(live_rows) == 15,
+        "repository registry with its successor rows must contain exactly 15 approved repositories",
     )
     try:
         successor_record = load_json(ROOT / SUCCESSOR_REGISTRY)
@@ -4081,8 +4081,12 @@ def validate_packets(
             packet["repository"] == declared_packet_owners.get(packet_id),
             f"packet {packet_id} must target its declaring repository {declared_packet_owners.get(packet_id)!r}",
         )
+        # MET-007 (slot 288, MON-288-C2-RULE OQ-4): the product packet LAB-SYNC-001 keeps R13's PR 5 branch from the
+        # Research-Lab's inputs file; the exemption is exactly {"LAB-SYNC-001"} and holds only while that packet's
+        # branch starts with codex/lab-sync-. Product branches start with codex/<packet id, lower case> from now on.
         validation.require(
-            packet["branch"].startswith(f"codex/{packet_id.casefold()}"),
+            packet["branch"].startswith(f"codex/{packet_id.casefold()}")
+            or (packet_id in {"LAB-SYNC-001"} and packet["branch"].startswith("codex/lab-sync-")),
             f"packet {packet_id} branch must start with codex/{packet_id.casefold()}",
         )
         covered_repositories.add(packet["repository"])
@@ -5231,6 +5235,11 @@ def validate_packets(
                             for path in packets["MET-006"]["allowedPaths"]
                             if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
     authority_owner["task-packets/MET-006.yaml"] = "MET-006"
+    authority_owner.update({path: "MET-007"
+                            for path in packets["MET-007"]["allowedPaths"]
+                            if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
+    authority_owner["task-packets/MET-007.yaml"] = "MET-007"
+    authority_owner["task-packets/LAB-SYNC-001.yaml"] = "MET-007"
     authority_owner["task-packets/LAB-REPO-001.yaml"] = "MET-REGISTRY-001"
     authority_owner["task-packets/DIST-TRANSPORT-002.yaml"] = "MET-VERIFY-007"
     authority_owner["task-packets/CTRL-TRANSPORT-002.yaml"] = "MET-VERIFY-007"
@@ -5334,6 +5343,14 @@ def validate_packets(
         "one yaml file per packet" in packet_readme.casefold(),
         "task-packets README must state the one-file-per-packet execution rule",
     )
+    # MET-007 (slot 288, MON-288-C2-RULE OQ-5): R14 mas-harness-reference-lab is registered without a task packet. The
+    # exemption is exactly {"mas-harness-reference-lab"} and holds only while no packet names it; REF-ESTATE-001's
+    # first packet removes it (C2-2's form), so that packet fails here until the exemption goes.
+    unpacketed_repositories = {"mas-harness-reference-lab"}
+    validation.require(
+        not unpacketed_repositories & covered_repositories,
+        "an exempted repository has a task packet: remove its exemption",
+    )
     for repository in repository_names:
         registry_id = next(
             (
@@ -5344,7 +5361,8 @@ def validate_packets(
             None,
         )
         validation.require(
-            repository in covered_repositories or registry_id in covered_repositories,
+            repository in covered_repositories or registry_id in covered_repositories
+            or repository in unpacketed_repositories,
             f"repository {repository} has no task packet",
         )
 

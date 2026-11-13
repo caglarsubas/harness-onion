@@ -1,0 +1,1588 @@
+{
+ "authorityPath": "architecture/data-correctness-authority.json",
+ "classes": {
+  "architecture/chain-checkpoint/README.md": [
+   "other",
+   "other"
+  ],
+  "architecture/chain-checkpoint/oracle-identity.json": [
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "architecture/oracle-identity-met-006.json": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "architecture/oracle-identity-met-perf-049.json": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "architecture/oracle-identity-met-registry-001.json": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "architecture/repository-registration/language-placement.json": [
+   "other"
+  ],
+  "architecture/repository-registration/repositories.json": [
+   "other"
+  ],
+  "architecture/review-record/briefs.json": [
+   "record"
+  ],
+  "ci/chain_checkpoint.py": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "ci/run_packet_argv.py": [
+   "other",
+   "other",
+   "other"
+  ],
+  "docs/MASTER_DEVELOPMENT_PLAN.md": [
+   "record",
+   "other",
+   "register"
+  ],
+  "docs/adr/0001-repository-boundaries.md": [
+   "other",
+   "other",
+   "other"
+  ],
+  "docs/repositories/00-harness-engineering.md": [
+   "record",
+   "record"
+  ],
+  "docs/repositories/13-mas-harness-research-lab.md": [
+   "other"
+  ],
+  "scripts/language_placement.py": [
+   "other",
+   "other",
+   "other"
+  ],
+  "scripts/validate_admission_channel_v3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_admission_semantics_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_agent_loop.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_architecture.py": [
+   "other",
+   "other",
+   "other"
+  ],
+  "scripts/validate_authority_map.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_backend_distribution.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_backend_timing.py": [
+   "cascade"
+  ],
+  "scripts/validate_benchmark_transport.py": [
+   "cascade"
+  ],
+  "scripts/validate_broker_handoff.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_canonical_repair_plan.py": [
+   "cascade"
+  ],
+  "scripts/validate_chain_compaction.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_chain_depth_headroom.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_chain_product_publish.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_ci_performance.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_ci_runner_admission.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_compiled_filter_programs.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_compiled_filter_programs_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_compiled_filter_programs_v3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_completion_profiling.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_completion.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_consumer_closure.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_performance.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_performance_followup.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_publication.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_reference_measurement.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_conformance_successor_checkpoint.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_credential_lifecycle.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_credential_ordering.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_custody_handoff.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_dedicated_verifier_account.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_diagnostic_caps.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_document_repair_execution.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_edge_record_v12.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_edge_record_v9.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_enforcement_test_plan.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_evolution_surface.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_host_interface_hs43.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_host_interface_resolution.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i05_gate_channel.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i05_gate_channel_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i05_gate_channel_v4.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i06_backend_profile.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i06_backend_profile_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i06_backend_profile_v4.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i07_policy_write.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_i07_policy_write_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_in_session_predecessor_proof.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_isolated_network_canary.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_isolated_offline_runner.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_lab_run_plan.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_license_amendment.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_license_amendment_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linear_history_rechecks.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_probe_interface.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_probe_kit_admission.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_probe_kit_gate.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_readiness.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_repair.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_runner_contract.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_linux_test_ownership.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_live_backend_readiness.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_load_deadlines.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_local_acceptance.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_006.py": [
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge"
+  ],
+  "scripts/validate_met_adopt_005.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_adopt_008.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_gov_004.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_gov_005.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_linux_008.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_linux_009.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_perf_043.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_perf_045.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_perf_046.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_perf_047.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_perf_049.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_registry_001.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_sector_003.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_sector_004.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_sector_005.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_verify_005.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_verify_006.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_met_verify_007.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_model_api_inventory.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_model_fixture_scope.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_native_profile_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_native_profile_v3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_native_profile_v4.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_native_profile_v5.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_native_qualification.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_owner_verifier.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_packet_scalar_repair.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_packet_schema_performance.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_parallel_suite.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_parallel_suite_followup.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_policy_observation.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_policy_observation_digests.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_policy_observation_digests_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_portable_warm_snapshot_temp.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_probe_kit_scope.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_projection_reuse.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_provider_adoption.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_proxy_contract.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_proxy_diagnostics.py": [
+   "cascade"
+  ],
+  "scripts/validate_pytest_headroom.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_readiness.py": [
+   "cascade",
+   "other",
+   "other",
+   "other",
+   "other",
+   "register",
+   "other",
+   "other"
+  ],
+  "scripts/validate_readiness_repairs.py": [
+   "cascade"
+  ],
+  "scripts/validate_release_profile.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_research_adoption.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_research_adoption_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_research_adoption_v3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_reuse.py": [
+   "cascade"
+  ],
+  "scripts/validate_review_record.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_run_events.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_run_manifest.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_seccomp_allowlists.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_seccomp_observer_listener.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_seccomp_v3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_seccomp_v4.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_sector_catalog.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_sector_direction.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_selinux_matrix.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_selinux_matrix_v2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_selinux_matrix_v3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_selinux_matrix_v4.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_selinux_replay.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_successor_inventory.py": [
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_topology_coordination.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_unified_roadmap.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_validation_performance.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_verdict_ledger.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_verify_headroom.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_w01_amendment.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_w02_notes_errata.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_w03_amendment.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_w03_plan_amend_2.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "scripts/validate_w03_plan_amend_3.py": [
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "task-packets/README.md": [
+   "record",
+   "other"
+  ],
+  "tests/test_accounting_scope.py": [
+   "cascade"
+  ],
+  "tests/test_admission_channel_v3.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_admission_semantics_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_agent_loop.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_alpha2_readiness.py": [
+   "cascade"
+  ],
+  "tests/test_authority_map.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_backend_distribution.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_backend_timing.py": [
+   "cascade"
+  ],
+  "tests/test_benchmark_transport.py": [
+   "cascade"
+  ],
+  "tests/test_broker_handoff.py": [
+   "cascade"
+  ],
+  "tests/test_canonical_repair_plan.py": [
+   "cascade"
+  ],
+  "tests/test_catalog_traversal.py": [
+   "cascade"
+  ],
+  "tests/test_chain_checkpoint.py": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "tests/test_chain_compaction.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_chain_depth_headroom.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_chain_product_publish.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_ci_performance.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_ci_runner_admission.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_compiled_filter_programs.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_compiled_filter_programs_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_compiled_filter_programs_v3.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_completion_integration.py": [
+   "cascade"
+  ],
+  "tests/test_completion_profiling.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_conformance_completion.py": [
+   "cascade"
+  ],
+  "tests/test_conformance_consumer_closure.py": [
+   "cascade"
+  ],
+  "tests/test_conformance_performance.py": [
+   "cascade"
+  ],
+  "tests/test_conformance_performance_followup.py": [
+   "cascade"
+  ],
+  "tests/test_conformance_publication.py": [
+   "cascade"
+  ],
+  "tests/test_conformance_reference_measurement.py": [
+   "cascade"
+  ],
+  "tests/test_conformance_successor_checkpoint.py": [
+   "cascade"
+  ],
+  "tests/test_credential_lifecycle.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_credential_ordering.py": [
+   "cascade"
+  ],
+  "tests/test_custody_handoff.py": [
+   "cascade"
+  ],
+  "tests/test_dedicated_verifier_account.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_diagnostic_caps.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_document_repair_execution.py": [
+   "cascade"
+  ],
+  "tests/test_document_repair_plan.py": [
+   "cascade"
+  ],
+  "tests/test_edge_record_v12.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_edge_record_v9.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_enforcement_integration.py": [
+   "cascade"
+  ],
+  "tests/test_enforcement_test_plan.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_evolution_surface.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_factory_diagnostics.py": [
+   "cascade"
+  ],
+  "tests/test_guard_cost_repair.py": [
+   "cascade"
+  ],
+  "tests/test_guard_traversal.py": [
+   "cascade"
+  ],
+  "tests/test_host_interface.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_host_interface_hs43.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_host_interface_resolution.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i05_gate_channel.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i05_gate_channel_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i05_gate_channel_v4.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i06_backend_profile.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i06_backend_profile_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i06_backend_profile_v4.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i07_policy_write.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_i07_policy_write_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_in_session_predecessor_proof.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_isolated_network_canary.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_isolated_offline_runner.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_lab_run_plan.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_language_placement.py": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "tests/test_license_amendment.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_license_amendment_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_linear_history_rechecks.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_linux_probe_interface.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_linux_probe_kit_admission.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_linux_probe_kit_gate.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_linux_readiness.py": [
+   "cascade"
+  ],
+  "tests/test_linux_repair.py": [
+   "cascade"
+  ],
+  "tests/test_linux_runner_contract.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_linux_test_ownership.py": [
+   "cascade"
+  ],
+  "tests/test_live_backend_readiness.py": [
+   "cascade"
+  ],
+  "tests/test_load_deadlines.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_local_acceptance.py": [
+   "cascade"
+  ],
+  "tests/test_met_006.py": [
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge",
+   "bridge"
+  ],
+  "tests/test_met_006_oracle.py": [
+   "other",
+   "other"
+  ],
+  "tests/test_met_adopt_005.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_adopt_008.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_gov_004.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_gov_005.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_linux_008.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_linux_009.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_perf_043.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_perf_045.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_perf_046.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_perf_047.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_perf_047_oracle.py": [
+   "other"
+  ],
+  "tests/test_met_perf_049.py": [
+   "cascade"
+  ],
+  "tests/test_met_perf_049_oracle.py": [
+   "other"
+  ],
+  "tests/test_met_registry_001.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_registry_001_oracle.py": [
+   "other",
+   "other",
+   "other"
+  ],
+  "tests/test_met_sector_003.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_sector_004.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_sector_005.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_verify_005.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_verify_006.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_met_verify_007.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_model_api_inventory.py": [
+   "cascade"
+  ],
+  "tests/test_model_fixture_scope.py": [
+   "cascade"
+  ],
+  "tests/test_native_profile_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_native_profile_v3.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_native_profile_v4.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_native_profile_v5.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_native_qualification.py": [
+   "cascade"
+  ],
+  "tests/test_observation_enforcement.py": [
+   "cascade"
+  ],
+  "tests/test_owner_verifier.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_packet_declaration_consistency.py": [
+   "other"
+  ],
+  "tests/test_packet_scalar_repair.py": [
+   "cascade"
+  ],
+  "tests/test_packet_schema_performance.py": [
+   "cascade",
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_packet_semantic_reuse.py": [
+   "cascade"
+  ],
+  "tests/test_parallel_suite.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_parallel_suite_followup.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_policy_observation.py": [
+   "cascade"
+  ],
+  "tests/test_policy_observation_digests.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_policy_observation_digests_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_portable_warm_snapshot_temp.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_probe_kit_scope.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_projection_reuse.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_provider_adoption.py": [
+   "cascade"
+  ],
+  "tests/test_proxy_contract.py": [
+   "cascade"
+  ],
+  "tests/test_proxy_diagnostics.py": [
+   "cascade"
+  ],
+  "tests/test_pytest_headroom.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_release_lock_registration.py": [
+   "other",
+   "other",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "tests/test_release_profile.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_research_adoption.py": [
+   "cascade"
+  ],
+  "tests/test_research_adoption_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_research_adoption_v3.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_reuse.py": [
+   "cascade"
+  ],
+  "tests/test_review_record.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_run_events.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_run_manifest.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_seccomp_allowlists.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_seccomp_observer_listener.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_seccomp_v3.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_seccomp_v4.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_sector_catalog.py": [
+   "cascade",
+   "cascade",
+   "other",
+   "other",
+   "other",
+   "other"
+  ],
+  "tests/test_sector_direction.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_selinux_matrix.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_selinux_matrix_v2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_selinux_matrix_v3.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_selinux_matrix_v4.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_selinux_replay.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_successor_inventory.py": [
+   "cascade"
+  ],
+  "tests/test_task_packets.py": [
+   "cascade",
+   "other",
+   "other",
+   "other"
+  ],
+  "tests/test_topology_coordination.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_validation_performance.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_verdict_ledger.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_verify_headroom.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_w01_amendment.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_w02_notes_errata.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_w03_amendment.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_w03_plan_amend_2.py": [
+   "cascade",
+   "cascade"
+  ],
+  "tests/test_w03_plan_amend_3.py": [
+   "cascade",
+   "cascade"
+  ]
+ },
+ "hunkClassContext": {
+  "countPairs": [
+   [
+    315,
+    317
+   ]
+  ],
+  "newPacket": "MET-007",
+  "prevTest": "tests/test_met_006.py",
+  "prevValidator": "scripts/validate_met_006.py",
+  "steps": [
+   1,
+   2
+  ]
+ },
+ "hunkClassRuleSha256": "106e577175d692a5d627b2b21a0adfab8c4cb9cc4e06d7d45d97be5ef663c778",
+ "hunkClassVocabulary": [
+  "bridge",
+  "cascade",
+  "other",
+  "record",
+  "register"
+ ],
+ "outcomeStatements": []
+}

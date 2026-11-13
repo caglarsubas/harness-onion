@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "harness.planeon.ai/repository-registration-rule/v1",
+  "packet": "MET-007",
+  "extends": [
+    {
+      "path": "architecture/repository-registration/rule.json",
+      "sha256": "4405e9da30db3181eb257b2a0e47bc7bcdda0f6e35e29e4f16de564a2bd1445f",
+      "clause": "allowedNames"
+    },
+    {
+      "path": "scripts/repository_registration.py",
+      "sha256": "e8635f23dbf10572da331237483c8245ee590f9f423f54d6c8ce28b11c01736c",
+      "clause": "R8 clause 2"
+    },
+    {
+      "path": "scripts/repository_registration_288.py",
+      "sha256": "6aff2571fa8db90c52d26124d74289021877f6347fe6f60bdf5f9348b1fb5d4f",
+      "clause": "R8 clause 2 from slot 288"
+    }
+  ],
+  "allowedNames": [
+    {
+      "fromSlot": 288,
+      "add": [
+        "mas-harness-reference-lab"
+      ]
+    }
+  ],
+  "refusedName": "Harness-Engineering",
+  "kindNote": [
+    "R14 mas-harness-reference-lab is kind meta in its row of the successor registry record, while its",
+    "first packet (REF-ESTATE-001, on the bundle v8 route) will be a product packet in the chain vocabulary;",
+    "allowedNames reads only the name, so there is no conflict (VIS-284)."
+  ]
+}

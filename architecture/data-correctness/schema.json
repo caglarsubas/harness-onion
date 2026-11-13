@@ -1,0 +1,1250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "harness.planeon.ai/data-correctness/v1",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "line",
+        "phrase"
+      ],
+      "properties": {
+        "basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "phrase": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "schema",
+    "basis",
+    "ruleFamilies",
+    "operationIds",
+    "deployables",
+    "counts"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "harness.planeon.ai/data-correctness/v1"
+    },
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "architecture/data-correctness/schema.json"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalog",
+        "serviceEdges",
+        "authorityMap"
+      ],
+      "properties": {
+        "catalog": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "view",
+            "sha256",
+            "services",
+            "dependencyEntries",
+            "parity"
+          ],
+          "properties": {
+            "view": {
+              "const": "EFFECTIVE"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "services": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "dependencyEntries": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "parity": {
+              "const": "RAW_EQUALS_EFFECTIVE"
+            }
+          }
+        },
+        "serviceEdges": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "const": "architecture/service-edges.yaml"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "authorityMap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256",
+            "budgetRow"
+          ],
+          "properties": {
+            "path": {
+              "const": "architecture/authority-map.json"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "budgetRow": {
+              "const": "AM-02"
+            }
+          }
+        }
+      }
+    },
+    "ruleFamilies": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "property",
+          "appliesWhen",
+          "staticChecks",
+          "vectors"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "RF-1",
+              "RF-2",
+              "RF-3",
+              "RF-4",
+              "RF-5",
+              "RF-6",
+              "RF-7"
+            ]
+          },
+          "name": {
+            "enum": [
+              "WRITE_SKEW",
+              "FENCING",
+              "CLOCKS",
+              "OPERATION_IDS",
+              "COMPATIBILITY",
+              "DERIVED_DATA",
+              "REPLAY_STATE"
+            ]
+          },
+          "property": {
+            "type": "string",
+            "minLength": 1
+          },
+          "appliesWhen": {
+            "type": "string",
+            "minLength": 1
+          },
+          "staticChecks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "vectors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^architecture/data-correctness/vectors/[a-z0-9-]+\\.json$"
+            }
+          }
+        }
+      }
+    },
+    "operationIds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "origin",
+        "shape",
+        "propagation",
+        "receiptKey",
+        "native",
+        "none",
+        "outcomes",
+        "toolEffectClasses",
+        "edges"
+      ],
+      "properties": {
+        "origin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shape": {
+          "type": "string",
+          "minLength": 1
+        },
+        "propagation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receiptKey": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "binds",
+            "rule"
+          ],
+          "properties": {
+            "binds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "rule": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "native": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "binds",
+            "rule"
+          ],
+          "properties": {
+            "binds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "rule": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "none": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "binds",
+            "rule"
+          ],
+          "properties": {
+            "binds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "rule": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "outcomes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "terms",
+            "citedFrom",
+            "owner",
+            "unknown",
+            "separations"
+          ],
+          "properties": {
+            "terms": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "citedFrom": {
+              "type": "string",
+              "minLength": 1
+            },
+            "owner": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unknown": {
+              "type": "string",
+              "minLength": 1
+            },
+            "separations": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "toolEffectClasses": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "class",
+              "retry",
+              "approval"
+            ],
+            "properties": {
+              "class": {
+                "enum": [
+                  "READ",
+                  "IDEMPOTENT_WRITE",
+                  "NON_IDEMPOTENT",
+                  "IRREVERSIBLE"
+                ]
+              },
+              "retry": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approval": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "edges": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "edges",
+            "operationClasses",
+            "byIdempotency",
+            "perEdge",
+            "splitEdges"
+          ],
+          "properties": {
+            "edges": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "operationClasses": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "byIdempotency": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "NATIVE",
+                "NONE",
+                "RECEIPT_KEY"
+              ],
+              "properties": {
+                "NATIVE": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "NONE": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "RECEIPT_KEY": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "perEdge": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "NATIVE",
+                "NONE",
+                "SPLIT"
+              ],
+              "properties": {
+                "NATIVE": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "NONE": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "SPLIT": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "splitEdges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "consumer",
+                  "dependency"
+                ],
+                "properties": {
+                  "consumer": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dependency": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "deployables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "stateMode",
+          "stores",
+          "writePaths",
+          "lease",
+          "clock",
+          "recordKinds",
+          "derivedStores",
+          "outbox",
+          "transactionBoundary",
+          "obligations"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "stateMode": {
+            "enum": [
+              "STATEFUL",
+              "STATELESS_DURABLE"
+            ]
+          },
+          "stores": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "ownership"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "ownership": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "writePaths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "store",
+                "guard"
+              ],
+              "properties": {
+                "store": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "guard": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "source"
+                  ],
+                  "properties": {
+                    "value": {
+                      "enum": [
+                        "SERIALIZABLE",
+                        "ROW_LOCK",
+                        "ADVISORY_LOCK",
+                        "SINGLE_WRITER",
+                        "APPEND_ONLY",
+                        "UNSPECIFIED"
+                      ]
+                    },
+                    "source": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/source"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "value": {
+                        "const": "UNSPECIFIED"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "source": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "source": {
+                        "$ref": "#/$defs/source"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "lease": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "resource",
+                  "source",
+                  "fencing"
+                ],
+                "properties": {
+                  "resource": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "source": {
+                    "$ref": "#/$defs/source"
+                  },
+                  "fencing": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "value",
+                      "source"
+                    ],
+                    "properties": {
+                      "value": {
+                        "enum": [
+                          "STORE_CHECKED_TOKEN",
+                          "TARGET_CHECKED_GENERATION",
+                          "UNSPECIFIED"
+                        ]
+                      },
+                      "source": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/$defs/source"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "if": {
+                      "properties": {
+                        "value": {
+                          "const": "UNSPECIFIED"
+                        }
+                      }
+                    },
+                    "then": {
+                      "properties": {
+                        "source": {
+                          "type": "null"
+                        }
+                      }
+                    },
+                    "else": {
+                      "properties": {
+                        "source": {
+                          "$ref": "#/$defs/source"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "clock": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "use",
+              "skewMarginMs"
+            ],
+            "properties": {
+              "use": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "value",
+                  "source"
+                ],
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "NONE",
+                      "DURATION",
+                      "WALL_COMPARISON",
+                      "UNSPECIFIED"
+                    ]
+                  },
+                  "source": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/source"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "value": {
+                      "const": "UNSPECIFIED"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "source": {
+                      "type": "null"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "source": {
+                      "$ref": "#/$defs/source"
+                    }
+                  }
+                }
+              },
+              "skewMarginMs": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "value",
+                  "source"
+                ],
+                "properties": {
+                  "value": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "const": "UNSPECIFIED"
+                      }
+                    ]
+                  },
+                  "source": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/$defs/source"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "value": {
+                      "const": "UNSPECIFIED"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "source": {
+                      "type": "null"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "source": {
+                      "$ref": "#/$defs/source"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "recordKinds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "source",
+                "version",
+                "window"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "$ref": "#/$defs/source"
+                },
+                "version": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "source"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "source": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/source"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "value": {
+                        "const": "UNSPECIFIED"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "source": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "source": {
+                        "$ref": "#/$defs/source"
+                      }
+                    }
+                  }
+                },
+                "window": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "source"
+                  ],
+                  "properties": {
+                    "value": {
+                      "enum": [
+                        "N_MINUS_1_BOTH_DIRECTIONS",
+                        "UNSPECIFIED"
+                      ]
+                    },
+                    "source": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/source"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "value": {
+                        "const": "UNSPECIFIED"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "source": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "source": {
+                        "$ref": "#/$defs/source"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "derivedStores": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "store",
+                "source",
+                "feed",
+                "deletion"
+              ],
+              "properties": {
+                "store": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "$ref": "#/$defs/source"
+                },
+                "feed": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "source"
+                  ],
+                  "properties": {
+                    "value": {
+                      "enum": [
+                        "CHANGE_LOG",
+                        "REBUILD",
+                        "UNSPECIFIED"
+                      ]
+                    },
+                    "source": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/source"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "value": {
+                        "const": "UNSPECIFIED"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "source": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "source": {
+                        "$ref": "#/$defs/source"
+                      }
+                    }
+                  }
+                },
+                "deletion": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "source"
+                  ],
+                  "properties": {
+                    "value": {
+                      "enum": [
+                        "PROPAGATED",
+                        "UNSPECIFIED"
+                      ]
+                    },
+                    "source": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/$defs/source"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "value": {
+                        "const": "UNSPECIFIED"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "source": {
+                        "type": "null"
+                      }
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "source": {
+                        "$ref": "#/$defs/source"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outbox": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "source"
+                ],
+                "properties": {
+                  "source": {
+                    "$ref": "#/$defs/source"
+                  }
+                }
+              }
+            ]
+          },
+          "transactionBoundary": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "source"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/source"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "if": {
+              "properties": {
+                "value": {
+                  "const": "UNSPECIFIED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "source": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "source": {
+                  "$ref": "#/$defs/source"
+                }
+              }
+            }
+          },
+          "obligations": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "RF-1",
+                "RF-2",
+                "RF-3",
+                "RF-4",
+                "RF-5",
+                "RF-6",
+                "RF-7"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deployables",
+        "byStateMode",
+        "withLease",
+        "withOutbox",
+        "withDerivedStores",
+        "withTransactionBoundary",
+        "guards",
+        "unspecifiedByMember",
+        "obligationsByFamily",
+        "vectorsByFamily"
+      ],
+      "properties": {
+        "deployables": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "byStateMode": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "propertyNames": {
+            "enum": [
+              "STATEFUL",
+              "STATELESS_DURABLE"
+            ]
+          }
+        },
+        "withLease": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "withOutbox": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "withDerivedStores": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "withTransactionBoundary": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guards": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "propertyNames": {
+            "enum": [
+              "SERIALIZABLE",
+              "ROW_LOCK",
+              "ADVISORY_LOCK",
+              "SINGLE_WRITER",
+              "APPEND_ONLY",
+              "UNSPECIFIED"
+            ]
+          }
+        },
+        "unspecifiedByMember": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "propertyNames": {
+            "enum": [
+              "clockUse",
+              "deletion",
+              "feed",
+              "fencing",
+              "guard",
+              "skewMarginMs",
+              "transactionBoundary",
+              "version",
+              "window"
+            ]
+          }
+        },
+        "obligationsByFamily": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "RF-1",
+            "RF-2",
+            "RF-3",
+            "RF-4",
+            "RF-5",
+            "RF-6",
+            "RF-7"
+          ],
+          "properties": {
+            "RF-1": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-2": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-3": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-4": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-5": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-6": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-7": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "vectorsByFamily": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "RF-1",
+            "RF-2",
+            "RF-3",
+            "RF-4",
+            "RF-5",
+            "RF-6",
+            "RF-7"
+          ],
+          "properties": {
+            "RF-1": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-2": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-3": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-4": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-5": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-6": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "RF-7": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

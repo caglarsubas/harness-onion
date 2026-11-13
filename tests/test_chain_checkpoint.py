@@ -42,7 +42,14 @@ def _ctx(packet):
 
 
 def _side_path(root, apath):
-    return root / CK.HUNK_CLASSES_DIR / (Path(apath).stem + ".json")
+    """The synthetic hunk-class record of the authority at apath, named for the slot the reader counts
+    (MET007-RD1-3; MON-288-C2R2-RULE OQ-R2-1 (a)): the ledger's checkpointSlot plus the authority's 1-based rank by
+    ascending baseline among the authorities newer than the checkpoint, as head_slot counts (each below 288)."""
+    ledger = json.loads((root / CK.RECORD_PATH).read_bytes())
+    size = lambda path: len(json.loads(path.read_bytes()).get("baselinePackets", {}))
+    newer = sorted(n for n in map(size, (root / "architecture").glob("*-authority.json"))
+                   if n > ledger["checkpointBaseline"])
+    return root / CK.HUNK_CLASSES_DIR / ("%d.json" % (ledger["checkpointSlot"] + 1 + newer.index(size(root / apath))))
 
 
 def _bind(root, apath, side_raw):
@@ -241,7 +248,12 @@ def test_v11_281s_edited_files_rebuild_to_their_before_digests():
     classed = copy.deepcopy(auth)
     classed.update(authorityPacket="MET-ADOPT-007", hunkClassVocabulary=list(CK.CLASSES), hunkClassRuleSha256=CK.RULE_SHA256,
                    hunkClassContext=ctx)
-    newer = CK.newer_authorities(ROOT, len(auth["baselinePackets"]))
+    # MET007-RD1-3: the reader counts each newer authority's slot from the ledger's checkpointSlot, as head_slot counts;
+    # this newer set starts at 281's baseline, so it is counted from the ledger's checkpointSlot less the authorities
+    # between 281's baseline and the checkpoint's (its first authority, 282's, is counted 282)
+    ledger, since = json.loads((ROOT / CK.RECORD_PATH).read_bytes()), len(auth["baselinePackets"])
+    ckpt = ledger["checkpointSlot"] - sum(1 for n, _, _ in CK._authorities(ROOT) if since < n <= ledger["checkpointBaseline"])
+    newer = CK.newer_authorities(ROOT, since, ckpt_slot=ckpt)
     norm, exact, partial, pending, unauthored = CK.normalised({"normalisedRecordClass": True}), 0, set(), 0, set()
     for path, entry in classed["changedFiles"].items():
         live = (ROOT / path).read_bytes()
@@ -659,11 +671,12 @@ def test_a_class_key_inside_a_reverse_hunk(tmp_path, cls, expect):
 @pytest.mark.parametrize("vocab, rule, reason", [
     (("bridge", "cascade", "other", "record"), "v22", None),
     (("bridge", "cascade", "other", "record", "register"), "v22", "hunkClassVocabulary is not the closed vocabulary of its rule"),
-    (("bridge", "cascade", "other", "record", "register"), "none", "not a rule the reader holds (v2.2, v2.3 or v2.4)")])
+    (("bridge", "cascade", "other", "record", "register"), "none", "not a rule the reader holds (v2.2, v2.3, v2.4 or v2.5)")])
 def test_rules_by_sha_bind_each_records_own_rule(tmp_path, vocab, rule, reason):
     """MON-282-W2-RULED: a record's hunkClassRuleSha256 picks chainmech v2.2's or v2.3's rule and its vocabulary."""
     assert CK.RULES_BY_SHA == {CK.RULE_V22_SHA256: (("bridge", "cascade", "other", "record"), False),
-                               CK.RULE_SHA256: (CK.CLASSES, True), CK.RULE_V24_SHA256: (CK.CLASSES, True)}
+                               CK.RULE_SHA256: (CK.CLASSES, True), CK.RULE_V24_SHA256: (CK.CLASSES, True),
+                               CK.RULE_V25_SHA256: (CK.CLASSES, True)}
     assert CK.CLASSES == ("bridge", "cascade", "other", "record", "register")
     root = _cascade_repo(tmp_path)
     apath = "architecture/next1-authority.json"
@@ -1147,3 +1160,192 @@ def test_v46_the_member_set_is_picked_by_the_rule_digest(tmp_path):
         _bind(root, apath, (json.dumps(side) + "\n").encode())
         found = _reader(root).disagreements
         assert found and "members are not the closed set" in found[0][3], rule
+
+
+# ---- MET-007 (slot 288): class rule v2.5 (CONTRACT_288 rev 4 section 8.1; MON-288-C2-RULE OQ-1 (a)) ----
+V25_MARKS = (b"# ---- chainmech v2.5's class rule", b"# ---- end of chainmech v2.5's class rule ----\n")
+V25_K1 = _c24(k=1, pairs=((40, 42),))     # [R4-R2-2]: a pair that is no catalog count, declared in the vectors' context
+V25_S1 = b"successor."
+V25_S2 = b"successor.successor."
+V25_N1 = V25_S1 + b"NEW_PACKET"
+V25_N2 = V25_S2 + b"NEW_PACKET"
+V25_PP = b"*" + V25_S2 + b"PRODUCT_PACKETS"
+V25_R = lambda chain: b"*profile." + chain[1:] if chain.startswith(b"*") else b"profile." + chain
+V25_T_BEFORE = b"    assert set(a) == {profile.NEW_PACKET,\n                      " + V25_R(V25_N1) + b"}\n"
+V25_T_AFTER = (b"    assert set(a) == {profile.NEW_PACKET,\n                      " + V25_R(V25_N1) + b",\n                      "
+               + V25_R(V25_N2) + b",\n                      " + V25_R(V25_PP) + b"}\n")
+V25_LOOP_BEFORE = b"        if path.stem == " + V25_N1 + b":\n"
+V25_LOOP_AFTER = b"        if path.stem in (" + V25_N1 + b", " + V25_N2 + b", " + V25_PP + b"):\n"
+V25_L_BEFORE = (b"    require(len(paths) == 40\n            and stems == old | {NEW_PACKET, " + V25_N1 + b"},\n"
+                b"            \"closed 40-packet catalog\")\n    for path in paths:\n" + V25_LOOP_BEFORE + b"            continue\n")
+V25_L_AFTER = (b"    require(len(paths) == 42\n            and stems == old | {NEW_PACKET, " + V25_N1 + b", " + V25_N2 + b", "
+               + V25_PP + b"},\n            \"closed 42-packet catalog\")\n    for path in paths:\n" + V25_LOOP_AFTER
+               + b"            continue\n")
+V25_CHAIN = b"CHAIN = {A, " + V25_N1 + b"}\n"
+V25_LEDGER = {"checkpointSlot": 286, "checkpointBaseline": 38}     # the three-way test's synthetic checkpoint
+
+
+def test_class_rule_v2_5_the_block_digest_is_the_readers_own():
+    """The block between the v2.5 marks, cut from the reader's own bytes, hashes to RULE_V25_SHA256; RULES_BY_SHA holds
+    it with v2.4's vocabulary and register, and the era starts at slot 288."""
+    raw = (ROOT / "ci/chain_checkpoint.py").read_bytes()
+    assert raw.count(V25_MARKS[0]) == 1 and raw.count(V25_MARKS[1]) == 1
+    block = raw[raw.index(V25_MARKS[0]):raw.index(V25_MARKS[1]) + len(V25_MARKS[1])]
+    assert sha(block) == CK.RULE_V25_SHA256
+    assert CK.RULE_V25_SHA256 not in (CK.RULE_V22_SHA256, CK.RULE_SHA256, CK.RULE_V24_SHA256)
+    assert CK.RULES_BY_SHA[CK.RULE_V25_SHA256] == (CK.CLASSES, True) and CK.V25_FROM_SLOT == 288
+
+
+def _v25_era_repo(root):
+    """Two authorities newer than V25_LEDGER's checkpoint (baselines 39 and 40, counted 287 and 288), each at K = 1 with
+    one product and one changed file holding the bridged layer's loop (one hunk, which v2.4 reads as other and v2.5 as
+    cascade), each with its hunk-class record named for its counted slot: 287.json naming RULE_V24_SHA256 with v2.4's
+    class, 288.json naming RULE_V25_SHA256 with v2.5's. Returns {slot: (authority path, changed file)}."""
+    made = {}
+    at, rm, ins = _h24(V25_LOOP_BEFORE, V25_LOOP_AFTER)
+    for slot, size, rule, cls in ((287, 39, CK.RULE_V24_SHA256, "other"), (288, 40, CK.RULE_V25_SHA256, "cascade")):
+        apath, path = "architecture/v25-era-%d-authority.json" % slot, "scripts/validate_v25_era_%d.py" % slot
+        rel = "%s/%d.json" % (CK.HUNK_CLASSES_DIR, slot)
+        side = {"authorityPath": apath, "hunkClassVocabulary": list(CK.CLASSES), "hunkClassRuleSha256": rule,
+                "hunkClassContext": {"newPacket": "MET-V25-%d" % slot, "prevValidator": "scripts/validate_prev.py",
+                                     "prevTest": "tests/test_prev.py", "steps": [1, 2], "countPairs": []},
+                "classes": {path: [cls]}, "outcomeStatements": []}
+        raw = (json.dumps(side) + "\n").encode()
+        body = {"authorityPacket": "MET-V25-%d" % slot, "baselinePackets": {str(j): "x" for j in range(size)},
+                "productPackets": {"PROD-%d" % slot: "0" * 64}, "newFiles": {rel: sha(raw)},
+                "changedFiles": {path: {"afterSha256": sha(V25_LOOP_AFTER), "beforeSha256": sha(V25_LOOP_BEFORE),
+                                        "reverseHunks": [{"at": at, "removeBase64": base64.b64encode(rm).decode(),
+                                                          "insertBase64": base64.b64encode(ins).decode()}]}}}
+        for name, data in ((rel, raw), (apath, (json.dumps(body) + "\n").encode()), (path, V25_LOOP_AFTER)):
+            (root / name).parent.mkdir(parents=True, exist_ok=True)
+            (root / name).write_bytes(data)
+        made[slot] = (apath, path)
+    return made
+
+
+def _v25_attach(root, apath, name, rule, slot):
+    """attach_classes, in memory, on the synthetic authority at apath with its record named hunk-classes/<name> and
+    naming the given rule, at the given counted slot (None: no slot); the binding fault, or None."""
+    body = json.loads((root / apath).read_bytes())
+    (rel, digest), = body["newFiles"].items()
+    side = json.loads((root / rel).read_bytes())
+    new = CK.HUNK_CLASSES_DIR + "/" + name
+    return CK.attach_classes(apath, dict(body, newFiles={new: digest}),
+                             {new: (digest, dict(side, hunkClassRuleSha256=rule))}, slot).get("hunkClassBinding")
+
+
+def test_class_rule_v2_5_era_binding_three_ways(tmp_path):
+    """MON-288-C2R2-RULE OQ-R2-1 (a) and MON-288-RD1-RULE 2: the era binds the slot the reader counts (ckpt_slot plus the
+    rank by baseline, as head_slot counts), never a chosen file name. With the synthetic checkpoint at slot 286 the
+    records count 287 and 288: 288.json naming RULE_V25_SHA256 binds and its hunk classes through classify_v25 (cascade,
+    which v2.4 reads as other); 287.json naming RULE_V24_SHA256 binds and classes through classify_v24 (other); a record
+    named next1-authority.json is refused with the reader's era fault, as are the other era's digest at each counted slot
+    and an attach with no slot (fail closed)."""
+    era = "is not its slot's era"
+    made = _v25_era_repo(tmp_path)
+    assert CK.head_slot(V25_LEDGER, CK._authorities(tmp_path)) == 288
+    newer = {n: rec for n, _, rec in CK.newer_authorities(tmp_path, V25_LEDGER["checkpointBaseline"],
+                                                           ckpt_slot=V25_LEDGER["checkpointSlot"])}
+    assert sorted(newer) == [39, 40]
+    for size, slot, rule, cls, other in ((40, 288, CK.RULE_V25_SHA256, "cascade", "other"),
+                                         (39, 287, CK.RULE_V24_SHA256, "other", "cascade")):
+        apath, path = made[slot]
+        rec = newer[size]
+        assert CK.bind_context(apath, rec) is None and rec["hunkClassRuleSha256"] == rule
+        hunk = rec["changedFiles"][path]["reverseHunks"][0]
+        args = (path, V25_LOOP_AFTER, hunk["at"], base64.b64decode(hunk["removeBase64"]),
+                base64.b64decode(hunk["insertBase64"]), CK.context_v24(rec, rec["hunkClassContext"]))
+        assert hunk["class"] == cls
+        if slot == 288:
+            assert CK.classify_v25(*args, seen=set()) == cls and CK.classify_v24(*args, seen=set()) == other
+        else:
+            assert CK.classify_v24(*args, seen=set()) == cls and CK.classify_v25(*args, seen=set()) == other
+        # the reader's own replay re-checks the recorded class by the record's rule: 288's cascade is undone, 287's other
+        # passes the v2.4 re-check and stays a class not normalised
+        at_checkpoint, reverted, unexplained = CK.rebuild(path, V25_LOOP_AFTER, [(size, apath, rec)], CK.normalised({}))
+        assert reverted == [(apath, {cls: 1})]
+        if slot == 288:
+            assert at_checkpoint == V25_LOOP_BEFORE and unexplained == []
+        else:
+            assert unexplained == [(apath, "1 of 1 hunks of a class not normalised")]
+    assert _v25_attach(tmp_path, made[288][0], "288.json", CK.RULE_V25_SHA256, 288) is None
+    assert _v25_attach(tmp_path, made[287][0], "287.json", CK.RULE_V24_SHA256, 287) is None
+    for slot, name, rule, counted in ((288, "288.json", CK.RULE_V24_SHA256, 288), (287, "287.json", CK.RULE_V25_SHA256, 287),
+                                      (288, "288.json", CK.RULE_V25_SHA256, None), (288, "287.json", CK.RULE_V25_SHA256, 288)):
+        fault = _v25_attach(tmp_path, made[slot][0], name, rule, counted)
+        assert isinstance(fault, str) and era in fault, (name, counted)
+    apath = made[288][0]
+    body = json.loads((tmp_path / apath).read_bytes())
+    old, new = CK.HUNK_CLASSES_DIR + "/288.json", CK.HUNK_CLASSES_DIR + "/next1-authority.json"
+    (tmp_path / old).rename(tmp_path / new)
+    body["newFiles"] = {new: body["newFiles"][old]}
+    (tmp_path / apath).write_text(json.dumps(body) + "\n")
+    refused = {n: rec for n, _, rec in CK.newer_authorities(tmp_path, V25_LEDGER["checkpointBaseline"],
+                                                             ckpt_slot=V25_LEDGER["checkpointSlot"])}
+    fault = refused[40].get("hunkClassBinding")
+    assert isinstance(fault, str) and era in fault and CK.bind_context(apath, refused[40]) == fault
+    assert refused[39].get("hunkClassBinding") is None
+
+
+def _v25_cls(path, before, after, ctx):
+    at, rm, ins = _h24(before, after)
+    return CK.classify_v25(path, after, at, rm, ins, ctx, seen=set())
+
+
+def test_class_rule_v2_5_case_25_the_receiver_after_the_star_is_cascade():
+    """C1: the K = 1 member insertion with a receiver after the star (the deepen form) is cascade; the receiver-less
+    product chain stays cascade."""
+    assert _v25_cls(L24, V25_T_BEFORE, V25_T_AFTER, V25_K1) == "cascade"
+    assert _v25_cls(L24, V25_CHAIN, b"CHAIN = {A, " + V25_N1 + b", " + V25_N2 + b", " + V25_PP + b"}\n", V25_K1) == "cascade"
+
+
+def test_class_rule_v2_5_case_26_the_bridged_loop_is_cascade():
+    """C2: the bridged loop with the set insertion and the count in one hunk, the loop alone, and the loop with
+    receivers (C1 and C2) are cascade; deepening an existing bridged loop at K = 1 stays cascade (RD1-4)."""
+    assert _v25_cls(L24, V25_L_BEFORE, V25_L_AFTER, V25_K1) == "cascade"
+    assert _v25_cls(L24, V25_LOOP_BEFORE, V25_LOOP_AFTER, V25_K1) == "cascade"
+    assert _v25_cls(L24, b"        if x == " + V25_R(V25_N1) + b":\n",
+                    b"        if x in (" + V25_R(V25_N1) + b", " + V25_R(V25_N2) + b", " + V25_R(V25_PP) + b"):\n",
+                    V25_K1) == "cascade"
+    assert _v25_cls(L24, V25_LOOP_AFTER, b"        if path.stem in (" + V25_N2 + b", " + V25_S2 + V25_S1 + b"NEW_PACKET, *"
+                    + V25_S2 + V25_S1 + b"PRODUCT_PACKETS):\n", V25_K1) == "cascade"
+
+
+def test_class_rule_v2_5_case_27_a_receiver_without_a_successor_chain_is_other():
+    """A receiver after the star with no successor chain, or one that a successor chain does not follow, is other
+    (RD1-5: one successor after the second receiver)."""
+    assert _v25_cls(L24, V25_T_BEFORE, V25_T_AFTER.replace(V25_R(V25_PP), b"*profile.PRODUCT_PACKETS"), V25_K1) == "other"
+    assert _v25_cls(L24, V25_T_BEFORE, V25_T_AFTER.replace(V25_R(V25_PP), b"*profile.helper." + V25_S1 + b"PRODUCT_PACKETS"),
+                    V25_K1) == "other"
+
+
+def test_class_rule_v2_5_case_28_an_authored_token_in_a_matching_f2_line_is_other():
+    """An authored token inside a matching F2 line, or after the matching F2 run on its line, is other; a product chain
+    that continues past its element (+ EXTRA), with a receiver and without one, is other (RD1-2)."""
+    assert _v25_cls(L24, V25_T_BEFORE, V25_T_AFTER.replace(V25_R(V25_PP) + b"}", V25_R(V25_PP) + b", EXTRA}"),
+                    V25_K1) == "other"
+    assert _v25_cls(L24, V25_CHAIN, b"CHAIN = {A, " + V25_N1 + b", " + V25_N2 + b", " + V25_PP + b"} | AUTHORED\n",
+                    V25_K1) == "other"
+    assert _v25_cls(L24, b"T = (A, B + EXTRA)\n", b"T = (A, B, " + V25_N1 + b", *profile." + V25_S1
+                    + b"PRODUCT_PACKETS + EXTRA)\n", V25_K1) == "other"
+    assert _v25_cls(L24, b"T = (A, B + EXTRA)\n", b"T = (A, B, " + V25_N1 + b", *" + V25_S1 + b"PRODUCT_PACKETS + EXTRA)\n",
+                    V25_K1) == "other"
+
+
+def test_class_rule_v2_5_case_29_an_authored_token_with_the_bridged_loop_is_other():
+    """An authored token inside the bridged loop's line, or elsewhere in a hunk with the loop, the loop in another order
+    (the product chain first), a call whose name ends in "in" (min), a dotted "in" (x.in) whose read-back would equal
+    the before, and a non-ASCII letter before "in" are other (RD1-1, RD2-1, RD2-5)."""
+    assert _v25_cls(L24, V25_LOOP_BEFORE, V25_LOOP_AFTER.replace(b"):\n", b") or authored:\n"), V25_K1) == "other"
+    assert _v25_cls(L24, V25_L_BEFORE, V25_L_AFTER.replace(b"continue\n", b"continue  # authored\n"), V25_K1) == "other"
+    assert _v25_cls(L24, V25_LOOP_BEFORE, b"        if path.stem in (" + V25_PP + b", " + V25_N1 + b", " + V25_N2 + b"):\n",
+                    V25_K1) == "other"
+    for before, call in ((b"if m == ", b"if min("), (b"if x.== ", b"if x.in("), (b"if \xc3\xa9 == ", b"if \xc3\xa9in(")):
+        assert _v25_cls(L24, b"        " + before + V25_N1 + b":\n",
+                        b"        " + call + V25_N1 + b", " + V25_N2 + b", " + V25_PP + b"):\n", V25_K1) == "other", call
+
+
+def test_class_rule_v2_5_case_30_the_k1_forms_under_a_k0_context_are_other():
+    """The bridged loop and the K = 1 receiver form under a K = 0 context are other."""
+    assert _v25_cls(L24, V25_LOOP_BEFORE, V25_LOOP_AFTER, _c24()) == "other"
+    assert _v25_cls(L24, V25_T_BEFORE, V25_T_AFTER, _c24()) == "other"

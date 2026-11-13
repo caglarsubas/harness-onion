@@ -128,7 +128,10 @@ def cc():
     spec = importlib.util.spec_from_file_location(name, READER)
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
-    spec.loader.exec_module(mod)
+    # The era view of this file's last correction (slot 286, v2.4 in RULES_BY_SHA): that head's era reader, where a
+    # bridged successor projects newer bytes back.
+    era = importlib.import_module("scripts.validate_met_perf_049").reviewed_bytes(READER.relative_to(ROOT).as_posix())
+    exec(compile(era, spec.origin, "exec", dont_inherit=True), mod.__dict__)
     return mod
 
 

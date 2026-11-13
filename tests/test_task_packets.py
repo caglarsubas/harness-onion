@@ -75,7 +75,7 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     packets = packets_by_id()
     validator = task_packet_validator()
 
-    assert len(files) == EXPECTED_PACKET_COUNT == 298
+    assert len(files) == EXPECTED_PACKET_COUNT == 300
     assert len(packets) == EXPECTED_PACKET_COUNT
     assert {path.stem for path in files} == set(packets)
 
@@ -83,10 +83,24 @@ def test_complete_catalog_is_schema_valid_and_identity_unique() -> None:
     for path in files:
         packet = packets[path.stem]
         validator.validate(packet)
-        assert packet["branch"].startswith(f"codex/{path.stem.casefold()}")
+        # MET-007 (slot 288, R4-OQ4; MON-288-PRECHECK-RULE): readiness's branch-prefix rule in its exact-set form. The
+        # product packet LAB-SYNC-001 keeps R13's PR 5 branch from the Research-Lab's inputs file; the exemption is
+        # exactly {"LAB-SYNC-001"} and holds only while that packet's branch starts with codex/lab-sync-.
+        assert (
+            packet["branch"].startswith(f"codex/{path.stem.casefold()}")
+            or (path.stem in {"LAB-SYNC-001"} and packet["branch"].startswith("codex/lab-sync-"))
+        )
         branches.append(packet["branch"])
 
     assert len(branches) == len(set(branches))
+    # The exempted set holds only LAB-SYNC-001 (R4-OQ4): the exemption is the only one and is in use, so a branch
+    # that no longer needs it fails here until the exemption is removed.
+    exempted = {
+        packet_id
+        for packet_id, packet in packets.items()
+        if not packet["branch"].startswith(f"codex/{packet_id.casefold()}")
+    }
+    assert exempted == {"LAB-SYNC-001"}
 
 
 def test_catalog_covers_all_thirteen_repositories() -> None:
@@ -102,7 +116,13 @@ def test_catalog_covers_all_thirteen_repositories() -> None:
     assert len(registered_names) == 13
     # MET-REGISTRY-001: the packets cover the registry with its successor rows (R13 through the successor record).
     composed_names = {row["name"] for row in registry_rows(ROOT, _registry_safe_load)}  # VIS-284-LPORACLE
-    assert packet_repositories == composed_names
+    assert packet_repositories == composed_names - {"mas-harness-reference-lab"}
+    # MET-007 (slot 288): R14 mas-harness-reference-lab is registered without a packet, the only registered
+    # repository without one; REF-ESTATE-001's first packet (the bundle v8 route) removes this exemption. The exempted
+    # set is exactly R14's name and that name has no packet, so R14's first packet fails here until it removes the
+    # exemption, which therefore expires on its own (C2-2).
+    assert composed_names - packet_repositories == {"mas-harness-reference-lab"}
+    assert "mas-harness-reference-lab" not in packet_repositories
 
 
 def test_predecessor_graph_is_closed_acyclic_and_indexed_topologically() -> None:

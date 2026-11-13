@@ -67,6 +67,9 @@ None. The repository holds no warm source and no reuse index entry.
    levels, privacy, page check), the bridge's research records added or modified since the base (41 and 4 files, the
    packet's frozen set), the manifest regenerated, the page rebuilt and the lab's YES record with its review record;
    verifiable only once bundle v7 is installed, through its self-retiring first-packet route.
+2. `LAB-SYNC-001-research-sync`: PR 5 (branch codex/lab-sync-a2482753, head 9992d1755f71) over LAB-REPO-001's merge 2e977f4f5a31: research/** only,
+   keeping LAB-REPO-001's six commands byte-exact and in order; published by MET-007 at slot 288 (K = 1) and verified
+   on R13's hosted route under bundle v7's R13 policy row.
 
 ## Testing, verification, and acceptance
 

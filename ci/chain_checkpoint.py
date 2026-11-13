@@ -7,8 +7,8 @@ observes and records only; nothing here raises out of a hook or changes an exit 
 
 Public interface: Reader(root, clock, cap, tree, in_dry_run).start(); .report(nodeid, when, outcome, duration);
 .finish(head_sha=None) -> (summary line, record dict); rebuild(path, live, newer, normalised, budget); sample(tree,
-slots, fraction); naming_authority(root, live_sha, budget, auths); newer_authorities(root, baseline, budget, auths);
-check_ledger(record); head_slot(record, auths); entry_fault(entry); attach_classes(apath, rec, sides);
+slots, fraction); naming_authority(root, live_sha, budget, auths); newer_authorities(root, baseline, budget, auths, sides, ckpt_slot);
+check_ledger(record); head_slot(record, auths); entry_fault(entry); attach_classes(apath, rec, sides, slot);
 unauthored(reverted, unexplained);
 check_pairs(entries); pin_normalised(raw, default); and the CLI
 `chain_checkpoint.py dry-run-compare LOG OUT` (the dry-run runner's comparison, parameters.shadowIn == "dryRunOnly").
@@ -65,10 +65,20 @@ MET-PERF-049 (slot 286, CONTRACT_286 r3) adds:
   the replay continues with every hunk of every newer authority on the path, gates kept, to the attested digest; on an
   exact landing every layer attesting the path is demoted (neutral) and runs live; otherwise class A. A demoted layer's
   changed outcome is "demoted-outcome-explained", countEffect "pending isolation", only with a matching
-  outcomeStatements entry of the authoring v2.4 record; otherwise class A.
+  outcomeStatements entry of the authoring v2.4 or v2.5 record; otherwise class A.
 - **MET-PERF-048's inert provisions:** P-048-1, the G1 module ci/chain_checkpoint_g1.py is loaded only when present;
   P-048-3, the mode of record is the verifier's declaration (the T1 signal file under HOME, checked by signal_check)
   plus the module's presence. MODE is the default mode; at 286 the module is absent, so the run is shadow.
+
+MET-007 (slot 288, CONTRACT_288 r4 section 8.1) adds:
+- **Class rule v2.5** (RULE_V25_SHA256, the block after v2.4's): classify_v24 with two changes: C1, the product chain
+  takes its optional receiver after the star (*profile.successor...PRODUCT_PACKETS) and ends where its element ends;
+  C2, at K >= 1 and only when the before-lines hold no such loop, the bridged layer's loop in (N, N, P) (the keyword
+  in, no name character, ASCII or not, and no dot before it) reads back as == N before the hunk must reduce exactly.
+  Era-bound by the slot the reader counts: a newer authority's record must be named <slot>.json, its slot
+  checkpointSlot plus its rank by baseline (as head_slot counts), and names RULE_V25_SHA256 if and only if slot >=
+  V25_FROM_SLOT (288); records 282 to 287 keep their own rule. A v2.5 record has v2.4's closed members and context
+  keys.
 """
 import base64
 import difflib
@@ -96,6 +106,9 @@ SIGNAL_MAX = 4096
 RULE_SHA256 = "007112479ff663fea703347aed5e8f8ee9ff39a540118002dfd7b42ac592748f"   # the pinned hunk_class_v23.py (MON-282-W2-RULED)
 RULE_V22_SHA256 = "c4a77f027b244d6f1c22178fadfa7c0d4b6f7b607ada89b2eebdebc01417427b"   # the pinned hunk_class_v22.py
 RULE_V24_SHA256 = "8c61a0df32e396d52e3c3b2dc3cef416f3d9473b684b855a18ba357377dcc0c4"   # the pinned hunk_class_v24.py (CONTRACT_286 r3 3.1)
+RULE_V25_SHA256 = "106e577175d692a5d627b2b21a0adfab8c4cb9cc4e06d7d45d97be5ef663c778"   # the pinned hunk_class_v25.py (CONTRACT_288 r4 8.1)
+V25_FROM_SLOT = 288   # OQ-1 (1), MET007-RD1-3: a newer authority's record is named <slot>.json (the slot counted as
+# head_slot counts) and names RULE_V25_SHA256 if and only if slot >= V25_FROM_SLOT
 PREFIX = "chain-checkpoint shadow:"
 RECORD_LINE = "chain-checkpoint shadow record:"
 COUNT_EFFECT = {"input": ("A", "restart"), "stale": ("A", "restart"), "outcome": ("B", "restart"),
@@ -481,9 +494,76 @@ def classify_v24(path, after, at, remove, insert, ctx, seen=None):
                     return "cascade"
     return register_class(path, after, at, remove, insert, new_id, seen)
 # ---- end of chainmech v2.4's class rule ----
+# ---- chainmech v2.5's class rule (hunk_class_v25.py; CONTRACT_288 rev 4 section 8.1), copied byte for byte into the
+# ---- reader after v2.4's rule; it reuses v2.3's RECORDS, _lines, record_class and register_class and v2.4's
+# ---- V24_CHAIN_NEW, V24_F1, V24_WEIGHTS, _rest_ok_v24, _v24_id_run, _v24_quoted_as_line and weights_class_v24.
+# classify_v25 is classify_v24 with exactly two changes (MON-288-C2-RULE OQ-1 (a)):
+# C1: the product chain V25_CHAIN_PROD puts the optional receiver after the star (the deepen tool's
+#   *profile.successor...PRODUCT_PACKETS), then at least one "successor.", and ends where the element ends (a comma or a
+#   closing bracket follows, MET007-RD1-2); V25_F2 replaces V24_F2 in F2 (K >= 1).
+# C2: at K >= 1, when the hunk's before-lines hold no such loop (MET007-RD1-4), each run of its after-lines matching
+#   V25_LOOP, the keyword "in" (no name character, ASCII or not, and no dot before it, MET007-RD1-1, RD2-1) then "(N, N, P)" with N a NEW_PACKET
+#   chain and P a V25 product chain (the bridged layer's loop), is read back as "== " and the run's first chain before
+#   the rest test and the F2 cut decide the hunk, which must still reduce exactly; F3 is not tried in a hunk where a run
+#   was read back.
+V25_CHAIN_PROD = rb"\*(?:[A-Za-z_][A-Za-z_0-9]*\.)?(?:successor\.)+PRODUCT_PACKETS(?=\s*[,)}\]])"
+V25_F2 = re.compile(V24_CHAIN_NEW + rb"\s*,\s*" + V25_CHAIN_PROD)
+V25_LOOP = re.compile(rb"(?<![A-Za-z_0-9.\x80-\xff])in\s*\(\s*(" + V24_CHAIN_NEW + rb")\s*,\s*" + V24_CHAIN_NEW + rb"\s*,\s*"
+                      + V25_CHAIN_PROD + rb"\s*\)")
+
+
+def classify_v25(path, after, at, remove, insert, ctx, seen=None):
+    """The closed v2.5 class of one reverse hunk: classify_v24 with C1 and C2 above. ctx as classify_v24's:
+    prevValidator, prevTest, newPacket, products, steps, pairs and newTests."""
+    if path in (ctx["prevValidator"], ctx["prevTest"]):
+        return "bridge"
+    new_id, products, k = ctx["newPacket"], list(ctx["products"]), len(ctx["products"])
+    if path == V24_WEIGHTS:
+        return weights_class_v24(after, at, remove, insert, frozenset(ctx["newTests"]))
+    if path in RECORDS:
+        c = record_class(path, after, at, remove, insert, new_id, seen)
+        return register_class(path, after, at, remove, insert, new_id, seen) if c == "other" else c
+    a_lines, b_lines = _lines(after, at, remove, insert)
+    if re.search(rb"==\s*(successor\.)+NEW_PACKET", b_lines) and \
+            re.search(rb"in\s*\(\s*(successor\.)+NEW_PACKET,\s*(successor\.)+NEW_PACKET\s*\)", a_lines):
+        return "cascade"
+    pairs = frozenset(tuple(p) for p in ctx["pairs"])
+    read_back = 0
+    if k and not V25_LOOP.search(b_lines):                   # C2
+        a_lines, read_back = V25_LOOP.subn(lambda m: b"== " + m.group(1), a_lines)
+    if _rest_ok_v24(b_lines, a_lines, pairs):
+        return "cascade"
+    lo = 0
+    while lo < min(len(a_lines), len(b_lines)) and a_lines[lo] == b_lines[lo]:
+        lo += 1
+    hi = 0
+    while hi < min(len(a_lines), len(b_lines)) - lo and a_lines[len(a_lines) - 1 - hi] == b_lines[len(b_lines) - 1 - hi]:
+        hi += 1
+    window = (max(0, lo - 300), len(a_lines) - hi + 300)
+    start = after.rfind(b"\n", 0, at) + 1     # a_lines == after[start:...], as _lines cuts it (before any read-back)
+    if k == 0:
+        forms = [V24_F1] + list(_v24_id_run([new_id]))
+    else:                                                    # C1 (V25_F2); C2 (no F3 after a read-back)
+        forms = [V25_F2] + ([] if read_back else list(_v24_id_run([new_id] + products)))
+    for form in forms:
+        for m in form.finditer(a_lines):
+            s, e = m.span()
+            if e < window[0] or s > window[1]:
+                continue
+            if form is V24_F1 and a_lines[max(0, s - 1):s] == b"*":
+                continue
+            left = re.search(rb",\s*\Z", a_lines[:s])
+            right = re.match(rb"\s*,", a_lines[e:])
+            for cut in ((left.start(), e) if left else None, (s, e + right.end()) if right else None):
+                if cut and _rest_ok_v24(b_lines, a_lines[:cut[0]] + a_lines[cut[1]:], pairs) and (
+                        form is V24_F1 or form is V25_F2 or _v24_quoted_as_line(after, start + s, start + e)):
+                    return "cascade"
+    return register_class(path, after, at, remove, insert, new_id, seen)
+# ---- end of chainmech v2.5's class rule ----
 VOCABULARY_V22 = ("bridge", "cascade", "other", "record")   # chainmech v2.2's closed vocabulary
 RULES_BY_SHA = {RULE_V22_SHA256: (VOCABULARY_V22, False), RULE_SHA256: (CLASSES, True),
-                RULE_V24_SHA256: (CLASSES, True)}   # (vocabulary, register); v2.4 classifies by classify_v24
+                RULE_V24_SHA256: (CLASSES, True), RULE_V25_SHA256: (CLASSES, True)}   # (vocabulary, register); v2.4
+# classifies by classify_v24 and v2.5 by classify_v25; a v2.5 record has v2.4's members and context keys
 
 
 def _sha(raw):
@@ -570,7 +650,7 @@ def _hunk_class_records(root, budget=None):
     return out
 
 
-def attach_classes(apath, rec, sides):
+def attach_classes(apath, rec, sides, slot=None):
     """MON-282-W1-A2: the authority with its hunk-class record attached, in memory: its vocabulary, rule sha256 and
     context, and each hunk's class in the authority's reverseHunks order. The authority's newFiles names exactly one
     record, whose bytes hash to the named digest and whose authorityPath is the authority's (condition 2'). A binding
@@ -596,7 +676,12 @@ def attach_classes(apath, rec, sides):
         return bad("the hunk-class record's bytes do not hash to the authority's digest")
     if not isinstance(side, dict):
         return bad("the hunk-class record does not parse as an object")
-    members = SIDE_MEMBERS_V24 if side.get("hunkClassRuleSha256") == RULE_V24_SHA256 else SIDE_MEMBERS
+    name = named[0].rsplit("/", 1)[1]
+    if type(slot) is not int or name != "%d.json" % slot or not re.fullmatch(r"[1-9][0-9]*\.json", name) \
+            or (side.get("hunkClassRuleSha256") == RULE_V25_SHA256) != (slot >= V25_FROM_SLOT):
+        return bad("the hunk-class record's rule is not its slot's era (named <slot>.json for its counted slot; "
+                   "v2.5 if and only if slot >= %d)" % V25_FROM_SLOT)
+    members = SIDE_MEMBERS_V24 if side.get("hunkClassRuleSha256") in (RULE_V24_SHA256, RULE_V25_SHA256) else SIDE_MEMBERS
     if set(side) != members:
         return bad("the hunk-class record's members are not the closed set")
     if members is SIDE_MEMBERS_V24:
@@ -656,7 +741,7 @@ def statements_fault(statements, changed):
     return None
 
 
-def newer_authorities(root, baseline, budget=None, auths=None, sides=None):
+def newer_authorities(root, baseline, budget=None, auths=None, sides=None, ckpt_slot=None):
     out = [(n, path, rec) for n, path, rec in (auths if auths is not None else _authorities(root, budget)) if n > baseline]
     out.sort(key=lambda t: -t[0])
     by_size, by_packet = {}, {}
@@ -675,7 +760,9 @@ def newer_authorities(root, baseline, budget=None, auths=None, sides=None):
     if not out:
         return out
     sides = sides if sides is not None else _hunk_class_records(root, budget)     # MON-282-W1-A
-    return [(n, path, attach_classes(path, rec, sides)) for n, path, rec in out]
+    asc = sorted(n for n, _, _ in out)     # MET007-RD1-3: each newer authority's slot, counted as head_slot counts
+    return [(n, path, attach_classes(path, rec, sides, None if ckpt_slot is None else ckpt_slot + 1 + asc.index(n)))
+            for n, path, rec in out]
 
 
 def bind_context(apath, rec):
@@ -684,7 +771,7 @@ def bind_context(apath, rec):
     if rec.get("hunkClassBinding"):     # MON-282-W1-A2, condition 2': a binding fault is class A
         return rec["hunkClassBinding"]
     ctx = rec.get("hunkClassContext")
-    v24 = rec.get("hunkClassRuleSha256") == RULE_V24_SHA256
+    v24 = rec.get("hunkClassRuleSha256") in (RULE_V24_SHA256, RULE_V25_SHA256)
     if not (isinstance(ctx, dict) and set(ctx) == (CONTEXT_KEYS_V24 if v24 else CONTEXT_KEYS)):
         return "hunkClassContext missing or malformed"
     if ctx["newPacket"] != rec.get("authorityPacket"):
@@ -696,7 +783,7 @@ def bind_context(apath, rec):
     rule_sha = rec.get("hunkClassRuleSha256")
     rule = RULES_BY_SHA.get(rule_sha) if isinstance(rule_sha, str) else None
     if rule is None:     # MON-282-W2-RULED: the record's rule picks its vocabulary and whether register is decided
-        return "hunkClassRuleSha256 is not a rule the reader holds (v2.2, v2.3 or v2.4)"
+        return "hunkClassRuleSha256 is not a rule the reader holds (v2.2, v2.3, v2.4 or v2.5)"
     if rec.get("hunkClassVocabulary") != list(rule[0]):
         return "hunkClassVocabulary is not the closed vocabulary of its rule"
     if v24:     # 286 3.1: countPairs, distinct integer pairs each moving by steps[1], never the catalog pair
@@ -801,7 +888,8 @@ def _recheck(path, cur, apath, rec, entry, classes):
         key = (classes[0][apath], path)
     hit = classes[1].get(key) if key else None
     keep, seen, prior = [], set(), -1
-    v24 = rec["hunkClassRuleSha256"] == RULE_V24_SHA256
+    v24 = rec["hunkClassRuleSha256"] in (RULE_V24_SHA256, RULE_V25_SHA256)
+    rule_v = classify_v25 if rec["hunkClassRuleSha256"] == RULE_V25_SHA256 else classify_v24
     c24 = context_v24(rec, ctx) if v24 else None
     register = RULES_BY_SHA[rec["hunkClassRuleSha256"]][1]
     for i, h in enumerate(entry["reverseHunks"]):
@@ -815,7 +903,7 @@ def _recheck(path, cur, apath, rec, entry, classes):
         if hit is not None:
             again = hit[i]
         elif v24:
-            again = classify_v24(path, cur, h["at"], rm, ins, c24, seen=seen)
+            again = rule_v(path, cur, h["at"], rm, ins, c24, seen=seen)
         else:
             again = classify(path, cur, h["at"], rm, ins, ctx["prevValidator"], ctx["prevTest"], ctx["newPacket"],
                              tuple(ctx["steps"]), seen=seen, register=register)
@@ -1101,7 +1189,8 @@ class Reader:
             self.ledger_state = "the ledger's checkpointSlot or checkpointBaseline is malformed"
         check_ledger(record)
         self.record = record
-        newer = newer_authorities(self.root, record["checkpointBaseline"], self._budget, auths=auths)     # before the skip (P047-C5-1)
+        newer = newer_authorities(self.root, record["checkpointBaseline"], self._budget, auths=auths,
+                                  ckpt_slot=record["checkpointSlot"])     # before the skip (P047-C5-1); MET007-RD1-3
         self._newer = newer          # L2's invariant: one newer set per invocation, fixed here
         self._provisions()
         if record["parameters"].get("shadowIn") == "dryRunOnly" and not self.in_dry_run:
@@ -1203,7 +1292,7 @@ class Reader:
             self.mode_of_record = "sampled"
 
     def _statement(self, slot, nodes):
-        """C2's statement check for a demoted layer whose outcome differs: the authoring v2.4 record states that
+        """C2's statement check for a demoted layer whose outcome differs: the authoring v2.4 or v2.5 record states that
         layer, the path and every differing node, and the path's hunks include a class-other hunk. Returns the
         explained event (countEffect "pending isolation"), or None. c1b (286 3.11 E1 step 1): restoredPaths lists every
         attested file of the layer whose live digest differs from the ledger's, demoted and cascade-replayed alike,

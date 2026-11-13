@@ -1,0 +1,2152 @@
+{
+  "schemaVersion": "harness.planeon.ai/data-correctness/v1",
+  "schema": {
+    "path": "architecture/data-correctness/schema.json",
+    "sha256": "f0e5e0968b6f184154f557b756e6a69a565c888a264a3652f58d2e3387f2258d"
+  },
+  "basis": {
+    "catalog": {
+      "view": "EFFECTIVE",
+      "sha256": "f1ccfecd3fd0d716d45d0c0cd423f9de1425ed3a91f9ec4e0b64f96a836aac35",
+      "services": 28,
+      "dependencyEntries": 129,
+      "parity": "RAW_EQUALS_EFFECTIVE"
+    },
+    "serviceEdges": {
+      "path": "architecture/service-edges.yaml",
+      "sha256": "20a4b631c54dd8dbe72930b85893b0f57dbd743c7f8dc2a01298796f374444a6"
+    },
+    "authorityMap": {
+      "path": "architecture/authority-map.json",
+      "sha256": "1a5de06452d7133d90520b4b89670b2b0486e341fb2e20f2bf46a6ea86462440",
+      "budgetRow": "AM-02"
+    }
+  },
+  "ruleFamilies": [
+    {
+      "id": "RF-1",
+      "name": "WRITE_SKEW",
+      "property": "a write path that decides on rows another writer can change (a reservation, a budget, a uniqueness) runs under SERIALIZABLE isolation or holds a lock covering its read set for the transaction, and a serialization-failure retry never reissues an external effect",
+      "appliesWhen": "the deployable writes a store (any ownership but read-only)",
+      "staticChecks": [
+        "DC_SHAPE",
+        "DC_SOURCES"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf1-concurrent-reservations.json"
+      ]
+    },
+    {
+      "id": "RF-2",
+      "name": "FENCING",
+      "property": "a lease-bearing deployable writes only with a monotonic fencing token that the store checks, or under a generation that the effect target checks; a holder that resumes after its lease expired is refused",
+      "appliesWhen": "the deployable's catalog entry names a lease",
+      "staticChecks": [
+        "DC_FENCING"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf2-paused-holder.json"
+      ]
+    },
+    {
+      "id": "RF-3",
+      "name": "CLOCKS",
+      "property": "durations use a monotonic source; a wall-clock comparison carries a declared skew margin; a clock jump never extends a lease or a budget window; ordering uses sequence numbers or the fencing token, never wall-clock time; lease expiry is persisted, so a lease survives the replacement of its host",
+      "appliesWhen": "the deployable holds a lease, or its clock use is not stated as NONE",
+      "staticChecks": [
+        "DC_SHAPE",
+        "DC_SOURCES"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf3-skew-and-jump.json"
+      ]
+    },
+    {
+      "id": "RF-4",
+      "name": "OPERATION_IDS",
+      "property": "an operation ID is minted once, carried unchanged on every effect edge and deduplicated at the effect's own store, so retries and outbox replays apply once (operationIds)",
+      "appliesWhen": "the deployable's catalog entry names an outbox, or it is the tool broker on operationIds.propagation's path (its idempotency and receipt store)",
+      "staticChecks": [
+        "DC_OPIDS"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf4-replay-per-class.json",
+        "architecture/data-correctness/vectors/rf4-retry-after-unknown.json",
+        "architecture/data-correctness/vectors/rf4-receipt-key-restart.json",
+        "architecture/data-correctness/vectors/rf4-receipt-key-per-attempt.json",
+        "architecture/data-correctness/vectors/neg-bounded-not-exactly-once.json",
+        "architecture/data-correctness/vectors/neg-exception-path-dedup.json"
+      ]
+    },
+    {
+      "id": "RF-5",
+      "name": "COMPATIBILITY",
+      "property": "every persisted record kind carries a schema version, and readers accept the previous and the current version in both directions during a rollout. Public input may reject unknown fields and versions. Stored envelopes keep opaque extension data without meaning or authority. Migrations name reader-writer pairs, including rollback",
+      "appliesWhen": "the deployable persists a record kind (one entry per written store, cited by the store's purpose line)",
+      "staticChecks": [
+        "DC_VERSIONS"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf5-mixed-versions.json",
+        "architecture/data-correctness/vectors/rf5-reader-drops-previous-version.json"
+      ]
+    },
+    {
+      "id": "RF-6",
+      "name": "DERIVED_DATA",
+      "property": "every derived store (an index, an embedding, a projection, a cache, memory vectors) is fed from a change log or rebuilt from its source; a deletion reaches every derived store, with a receipt; a periodic rebuild-and-compare audit finds drift. Every data class names access, provenance, correction, retention, deletion and restore",
+      "appliesWhen": "the deployable owns a derived store",
+      "staticChecks": [
+        "DC_DERIVED_STORES"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf6-deletion-through-derived.json"
+      ]
+    },
+    {
+      "id": "RF-7",
+      "name": "REPLAY_STATE",
+      "property": "the durable state a replay consults is an input beside the log, so a log-only replay vector is expected to diverge",
+      "appliesWhen": "the deployable's catalog entry names an outbox, or it is the usage ledger (its replays of idempotent usage observations read the reservations and budgets beside them)",
+      "staticChecks": [
+        "DC_VECTORS"
+      ],
+      "vectors": [
+        "architecture/data-correctness/vectors/rf7-log-only-replay-diverges.json"
+      ]
+    }
+  ],
+  "operationIds": {
+    "origin": "minted once, by the experience gateway for agent-originated work (an agent never mints); an external human caller's key is registered by the gateway as that mint",
+    "shape": "opaque, unique per business operation, carried unchanged",
+    "propagation": "through orchestration, the tool broker and the AI gateway to the effect, deduplicated at the effect's own store, so retries and outbox replays apply once; bound by tool effect class, never classified from an operation class's lifecyclePhase or idempotency",
+    "receiptKey": {
+      "binds": [
+        "NON_IDEMPOTENT",
+        "IRREVERSIBLE"
+      ],
+      "rule": "the caller's receipt key is a function of the operation ID and the edge, never a fresh value per attempt"
+    },
+    "native": {
+      "binds": [
+        "IDEMPOTENT_WRITE"
+      ],
+      "rule": "the callee's idempotency is keyed by the same operation ID"
+    },
+    "none": {
+      "binds": [
+        "NON_IDEMPOTENT",
+        "IRREVERSIBLE"
+      ],
+      "rule": "a handed-off effect carries the ID into its outbox record and is reconciled from a status lookup, never retried"
+    },
+    "outcomes": {
+      "terms": [
+        "accepted",
+        "committed",
+        "final",
+        "unknown",
+        "rejected"
+      ],
+      "citedFrom": "BNK-UC-1 rule 10",
+      "owner": "EFFECT-ADAPTER-001",
+      "unknown": "reconciled through the status lookup",
+      "separations": [
+        "happened against acknowledged",
+        "cancellation against reversal"
+      ]
+    },
+    "toolEffectClasses": [
+      {
+        "class": "READ",
+        "retry": "retry freely; the ID is carried for tracing",
+        "approval": "none"
+      },
+      {
+        "class": "IDEMPOTENT_WRITE",
+        "retry": "retry with the same operation ID",
+        "approval": "the tool's policy"
+      },
+      {
+        "class": "NON_IDEMPOTENT",
+        "retry": "no retry without a receipt key; an unknown outcome is reconciled",
+        "approval": "the tool's policy"
+      },
+      {
+        "class": "IRREVERSIBLE",
+        "retry": "no retry; an unknown outcome is reconciled",
+        "approval": "human approval before the effect"
+      }
+    ],
+    "edges": {
+      "edges": 129,
+      "operationClasses": 130,
+      "byIdempotency": {
+        "NATIVE": 73,
+        "NONE": 57,
+        "RECEIPT_KEY": 0
+      },
+      "perEdge": {
+        "NATIVE": 72,
+        "NONE": 56,
+        "SPLIT": 1
+      },
+      "splitEdges": [
+        {
+          "consumer": "ai-gateway",
+          "dependency": "inference-api"
+        }
+      ]
+    }
+  },
+  "deployables": [
+    {
+      "id": "otel-collector",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "collector-wal",
+          "ownership": "owned"
+        },
+        {
+          "name": "external.otel-backend",
+          "ownership": "write"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "collector-wal",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.otel-backend",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "collector-wal",
+          "source": {
+            "basis": "catalog",
+            "line": 336,
+            "phrase": "Bounded local telemetry buffer."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "external.otel-backend",
+          "source": {
+            "basis": "catalog",
+            "line": 339,
+            "phrase": "Local metrics and trace storage."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "operator",
+      "stateMode": "STATELESS_DURABLE",
+      "stores": [
+        {
+          "name": "external.kubernetes-api",
+          "ownership": "control"
+        },
+        {
+          "name": "installation-inventory-configmap",
+          "ownership": "owned"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.kubernetes-api",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "installation-inventory-configmap",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": {
+        "resource": "leader lease",
+        "source": {
+          "basis": "catalog",
+          "line": 386,
+          "phrase": "leader lease"
+        },
+        "fencing": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.kubernetes-api",
+          "source": {
+            "basis": "catalog",
+            "line": 370,
+            "phrase": "HarnessInstallation spec/status and managed resources."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "installation-inventory-configmap",
+          "source": {
+            "basis": "catalog",
+            "line": 373,
+            "phrase": "Generation-scoped resource UID and digest inventory."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-2",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "fleet-sync-agent",
+      "stateMode": "STATELESS_DURABLE",
+      "stores": [
+        {
+          "name": "external.kubernetes-api",
+          "ownership": "control"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.kubernetes-api",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.kubernetes-api",
+          "source": {
+            "basis": "catalog",
+            "line": 477,
+            "phrase": "Desired HarnessInstallation references and observed sync cursor."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "usage-ledger",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:usage"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 555,
+            "phrase": "Immutable observations, reservations, budgets, and aggregates."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "governance-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:governance"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 595,
+            "phrase": "Approvals, waivers, exceptions, autonomy, and audit chain."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "domain-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:domain"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 635,
+            "phrase": "Ontology versions, mappings, and SHACL validation results."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "registry-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:registry"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 674,
+            "phrase": "Module, agent, release, certification, promotion, and revocation records."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "inference-api",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.tenant-model-volume",
+          "ownership": "read-only"
+        },
+        {
+          "name": "route-activation-volume",
+          "ownership": "owned"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "route-activation-volume",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "route-activation-volume",
+          "source": {
+            "basis": "catalog",
+            "line": 716,
+            "phrase": "Verified desired/observed and last-known-good route digests."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "connector-controller",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:ingestion"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": {
+        "resource": "connector leases",
+        "source": {
+          "basis": "catalog",
+          "line": 761,
+          "phrase": "connector leases"
+        },
+        "fencing": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 765,
+            "phrase": "Sources, profiles, leases, readiness, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 765,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-2",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "memory-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:memory"
+        },
+        {
+          "name": "external.pgvector",
+          "ownership": "schema:memory"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.pgvector",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 817,
+            "phrase": "Purpose-bound memories, consent, TTL, tombstones, and receipts."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "external.pgvector",
+          "source": {
+            "basis": "catalog",
+            "line": 820,
+            "phrase": "Tenant-isolated memory vectors only."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [
+        {
+          "store": "external.pgvector",
+          "source": {
+            "basis": "catalog",
+            "line": 820,
+            "phrase": "memory vectors"
+          },
+          "feed": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5",
+        "RF-6"
+      ]
+    },
+    {
+      "id": "control-web",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:control"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 874,
+            "phrase": "Tenants, sessions, answers, findings, demands, profiles, approvals, operations, tenant/plane/harness status projections, source cursors, audit, outbox/inbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [
+        {
+          "store": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 870,
+            "phrase": "status projections"
+          },
+          "feed": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 870,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-6",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "ingest-worker",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:ingestion"
+        },
+        {
+          "name": "external.tenant-object-store",
+          "ownership": "write"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.tenant-object-store",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": {
+        "resource": "leases",
+        "source": {
+          "basis": "catalog",
+          "line": 930,
+          "phrase": "leases"
+        },
+        "fencing": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 934,
+            "phrase": "Jobs, leases, checkpoints, batches, provenance, freshness, and coverage."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "external.tenant-object-store",
+          "source": {
+            "basis": "catalog",
+            "line": 937,
+            "phrase": "Tenant source objects/evidence by digest reference."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "Worker pauses when batch/provenance/checkpoint cannot commit atomically",
+        "source": {
+          "basis": "catalog",
+          "line": 963,
+          "phrase": "Worker pauses when batch/provenance/checkpoint cannot commit atomically"
+        }
+      },
+      "obligations": [
+        "RF-1",
+        "RF-2",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "retrieval-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:retrieval"
+        },
+        {
+          "name": "external.pgvector",
+          "ownership": "schema:retrieval"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.pgvector",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1001,
+            "phrase": "Chunks, citations, source/index versions, and ready pointers."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "external.pgvector",
+          "source": {
+            "basis": "catalog",
+            "line": 1004,
+            "phrase": "Tenant/source-version-scoped embeddings."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [
+        {
+          "store": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1001,
+            "phrase": "Chunks, citations, source/index versions"
+          },
+          "feed": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.pgvector",
+          "source": {
+            "basis": "catalog",
+            "line": 1004,
+            "phrase": "embeddings"
+          },
+          "feed": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5",
+        "RF-6"
+      ]
+    },
+    {
+      "id": "protocol-gateway",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:protocol"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1071,
+            "phrase": "Capabilities, negotiated versions, inbox/outbox, and revocations."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [
+        {
+          "store": "capability registry cache",
+          "source": {
+            "basis": "catalog",
+            "line": 1067,
+            "phrase": "capability registry cache"
+          },
+          "feed": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1067,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-6",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "evidence-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:evidence"
+        },
+        {
+          "name": "external.tenant-object-store",
+          "ownership": "write"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.tenant-object-store",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1120,
+            "phrase": "Evidence metadata, controls, status, provenance, and staleness."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "external.tenant-object-store",
+          "source": {
+            "basis": "catalog",
+            "line": 1123,
+            "phrase": "Large evidence objects by digest reference."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "profile-compiler-worker",
+      "stateMode": "STATELESS_DURABLE",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:control"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": {
+        "resource": "compilation leases",
+        "source": {
+          "basis": "catalog",
+          "line": 1178,
+          "phrase": "compilation leases"
+        },
+        "fencing": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1182,
+            "phrase": "Compilation jobs, leases, operations, profile revisions, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1182,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "No job acknowledgment before atomic profile/operation/outbox commit",
+        "source": {
+          "basis": "catalog",
+          "line": 1208,
+          "phrase": "No job acknowledgment before atomic profile/operation/outbox commit"
+        }
+      },
+      "obligations": [
+        "RF-1",
+        "RF-2",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "index-worker",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:retrieval"
+        },
+        {
+          "name": "external.pgvector",
+          "ownership": "schema:retrieval"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.pgvector",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1226,
+            "phrase": "Index jobs, chunks, vectors, citations, and ready pointers."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "kind": "external.pgvector",
+          "source": {
+            "basis": "catalog",
+            "line": 1229,
+            "phrase": "Versioned embeddings."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [
+        {
+          "store": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1226,
+            "phrase": "chunks, vectors, citations"
+          },
+          "feed": {
+            "value": "REBUILD",
+            "source": {
+              "basis": "catalog",
+              "line": 1222,
+              "phrase": "create-then-swap index jobs"
+            }
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        },
+        {
+          "store": "external.pgvector",
+          "source": {
+            "basis": "catalog",
+            "line": 1229,
+            "phrase": "Versioned embeddings"
+          },
+          "feed": {
+            "value": "REBUILD",
+            "source": {
+              "basis": "catalog",
+              "line": 1222,
+              "phrase": "create-then-swap index jobs"
+            }
+          },
+          "deletion": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5",
+        "RF-6"
+      ]
+    },
+    {
+      "id": "orchestration-api",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:orchestration"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1291,
+            "phrase": "Tasks, events, checkpoints, input, budgets, idempotency, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1291,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "Mutations fail without durable task/outbox commit",
+        "source": {
+          "basis": "catalog",
+          "line": 1312,
+          "phrase": "Mutations fail without durable task/outbox commit"
+        }
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "decision-service",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:decision"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1340,
+            "phrase": "Requests, results, feature/provenance references, and artifact versions."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "assurance-worker",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:evidence"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": {
+        "resource": "campaign leases",
+        "source": {
+          "basis": "catalog",
+          "line": 1383,
+          "phrase": "campaign leases"
+        },
+        "fencing": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1387,
+            "phrase": "Campaigns, leases, observations, evaluator/calibration references, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1387,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "Campaign leases, observations, and outbox records must commit before work is acknowledged",
+        "source": {
+          "basis": "catalog",
+          "line": 1422,
+          "phrase": "Campaign leases, observations, and outbox records must commit before work is acknowledged"
+        }
+      },
+      "obligations": [
+        "RF-1",
+        "RF-2",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "tool-broker",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:tools"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1450,
+            "phrase": "Catalog, plans, approvals, executions, receipts, compensation, idempotency, and review."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": null,
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-4",
+        "RF-5"
+      ]
+    },
+    {
+      "id": "orchestration-worker",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:orchestration"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": {
+        "resource": "task leases",
+        "source": {
+          "basis": "catalog",
+          "line": 1500,
+          "phrase": "task leases"
+        },
+        "fencing": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1504,
+            "phrase": "Task leases, checkpoints, attempts, pending input, budgets, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1504,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "Worker pauses without checkpoint/state/outbox atomic commit",
+        "source": {
+          "basis": "catalog",
+          "line": 1554,
+          "phrase": "Worker pauses without checkpoint/state/outbox atomic commit"
+        }
+      },
+      "obligations": [
+        "RF-1",
+        "RF-2",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "ai-gateway",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:gateway"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1583,
+            "phrase": "Route activation, request deduplication, budget reservations, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1583,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    },
+    {
+      "id": "experience-gateway",
+      "stateMode": "STATEFUL",
+      "stores": [
+        {
+          "name": "external.postgresql",
+          "ownership": "schema:experience"
+        }
+      ],
+      "writePaths": [
+        {
+          "store": "external.postgresql",
+          "guard": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "lease": null,
+      "clock": {
+        "use": {
+          "value": "UNSPECIFIED",
+          "source": null
+        },
+        "skewMarginMs": {
+          "value": "UNSPECIFIED",
+          "source": null
+        }
+      },
+      "recordKinds": [
+        {
+          "kind": "external.postgresql",
+          "source": {
+            "basis": "catalog",
+            "line": 1651,
+            "phrase": "Interactions, ordered events, pending input, cancellation, retention, and outbox."
+          },
+          "version": {
+            "value": "UNSPECIFIED",
+            "source": null
+          },
+          "window": {
+            "value": "UNSPECIFIED",
+            "source": null
+          }
+        }
+      ],
+      "derivedStores": [],
+      "outbox": {
+        "source": {
+          "basis": "catalog",
+          "line": 1651,
+          "phrase": "outbox"
+        }
+      },
+      "transactionBoundary": {
+        "value": "UNSPECIFIED",
+        "source": null
+      },
+      "obligations": [
+        "RF-1",
+        "RF-3",
+        "RF-4",
+        "RF-5",
+        "RF-7"
+      ]
+    }
+  ],
+  "counts": {
+    "deployables": 24,
+    "byStateMode": {
+      "STATEFUL": 21,
+      "STATELESS_DURABLE": 3
+    },
+    "withLease": 6,
+    "withOutbox": 9,
+    "withDerivedStores": 5,
+    "withTransactionBoundary": 5,
+    "guards": {
+      "UNSPECIFIED": 31
+    },
+    "unspecifiedByMember": {
+      "clockUse": 24,
+      "deletion": 7,
+      "feed": 5,
+      "fencing": 6,
+      "guard": 31,
+      "skewMarginMs": 24,
+      "transactionBoundary": 19,
+      "version": 31,
+      "window": 31
+    },
+    "obligationsByFamily": {
+      "RF-1": 24,
+      "RF-2": 6,
+      "RF-3": 24,
+      "RF-4": 10,
+      "RF-5": 24,
+      "RF-6": 5,
+      "RF-7": 10
+    },
+    "vectorsByFamily": {
+      "RF-1": 1,
+      "RF-2": 1,
+      "RF-3": 1,
+      "RF-4": 6,
+      "RF-5": 2,
+      "RF-6": 1,
+      "RF-7": 1
+    }
+  }
+}
