@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "harness.planeon.ai/release-evidence/v1/schema.json",
+  "title": "RELEASE-EVIDENCE-001: the capability evidence matrix (MET-008)",
+  "description": "Closed at every level. Resolution, the own-row fragment rule and the null-when-NOT_SELECTED pairing are the checker's (RE_CELLS), since a closed schema cannot read the basis files.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "basis", "producerStatus", "states", "columns", "claimDomains", "rows", "exclusionRows", "counts"],
+  "properties": {
+    "schemaVersion": {"const": "harness.planeon.ai/release-evidence/v1"},
+    "basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "deployableRecord", "releaseLock"],
+      "properties": {
+        "profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "id", "sha256"],
+          "properties": {"path": {"const": "architecture/release-profile.json"}, "id": {"type": "string"}, "sha256": {"$ref": "#/$defs/hex64"}}
+        },
+        "deployableRecord": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {"path": {"const": "architecture/language-placement.json"}, "sha256": {"$ref": "#/$defs/hex64"}}
+        },
+        "releaseLock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {"path": {"const": "release/repos.lock.json"}, "sha256": {"$ref": "#/$defs/hex64"}}
+        }
+      }
+    },
+    "producerStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "asOf", "statuses"],
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "path", "commit", "sha256"],
+          "properties": {
+            "repository": {"const": "harness-onion-roadmap"},
+            "path": {"const": "roadmap/roadmap.json"},
+            "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+            "sha256": {"$ref": "#/$defs/hex64"}
+          }
+        },
+        "asOf": {"$ref": "#/$defs/date"},
+        "statuses": {
+          "type": "object",
+          "propertyNames": {"pattern": "^([A-Z][A-Z0-9]*(-[A-Z0-9]+)+|human-probes item)$"},
+          "additionalProperties": {"enum": ["BLOCKED", "WAITING_OWNER", "READY", "IN_PROGRESS", "DONE"]}
+        }
+      }
+    },
+    "states": {"const": ["NOT_RUN", "NOT_SELECTED", "BLOCKED", "FAILED", "QUALIFIED"]},
+    "columns": {"const": ["sourceCommit", "artifactDigest", "deploymentProfile", "runtimeCampaign", "independentAssurance", "tenantAcceptance", "executionMode", "qualificationBundle"]},
+    "claimDomains": {"const": ["containment", "applicationAuthorization", "effectSemantics", "retrievalQuality", "deploymentRecovery", "customerAcceptance"]},
+    "rows": {"type": "array", "items": {"$ref": "#/$defs/row"}},
+    "exclusionRows": {"type": "array", "items": {"$ref": "#/$defs/exclusionRow"}},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rows", "exclusionRows", "cellsByState"],
+      "properties": {
+        "rows": {"type": "integer", "minimum": 0},
+        "exclusionRows": {"type": "integer", "minimum": 0},
+        "cellsByState": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["NOT_RUN", "NOT_SELECTED", "BLOCKED", "FAILED", "QUALIFIED"],
+          "properties": {
+            "NOT_RUN": {"type": "integer", "minimum": 0},
+            "NOT_SELECTED": {"type": "integer", "minimum": 0},
+            "BLOCKED": {"type": "integer", "minimum": 0},
+            "FAILED": {"type": "integer", "minimum": 0},
+            "QUALIFIED": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hex64": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "rNumber": {"type": "string", "pattern": "^R[0-9]{2}$"},
+    "reference": {
+      "oneOf": [
+        {"type": "null"},
+        {"const": "release/repos.lock.json"},
+        {"type": "string", "pattern": "^architecture/release-profile\\.json#[a-z0-9][a-z0-9.-]*$"},
+        {"type": "string", "pattern": "^packet:[A-Z][A-Z0-9]*(-[A-Z0-9]+)+$"}
+      ]
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "reference", "producer", "requiredSource", "owner", "date", "nextAction"],
+      "properties": {
+        "state": {"enum": ["NOT_RUN", "NOT_SELECTED", "BLOCKED", "FAILED", "QUALIFIED"]},
+        "reference": {"$ref": "#/$defs/reference"},
+        "producer": {"type": ["string", "null"]},
+        "requiredSource": {"type": ["string", "null"]},
+        "owner": {"type": "string", "pattern": "^(R[0-9]{2}|TENANT)$"},
+        "date": {"$ref": "#/$defs/date"},
+        "nextAction": {"type": "string", "minLength": 1}
+      }
+    },
+    "cells": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceCommit", "artifactDigest", "deploymentProfile", "runtimeCampaign", "independentAssurance", "tenantAcceptance", "executionMode", "qualificationBundle"],
+      "properties": {
+        "sourceCommit": {"$ref": "#/$defs/cell"},
+        "artifactDigest": {"$ref": "#/$defs/cell"},
+        "deploymentProfile": {"$ref": "#/$defs/cell"},
+        "runtimeCampaign": {"$ref": "#/$defs/cell"},
+        "independentAssurance": {"$ref": "#/$defs/cell"},
+        "tenantAcceptance": {"$ref": "#/$defs/cell"},
+        "executionMode": {"$ref": "#/$defs/cell"},
+        "qualificationBundle": {"$ref": "#/$defs/cell"}
+      }
+    },
+    "claimDomains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["containment", "applicationAuthorization", "effectSemantics", "retrievalQuality", "deploymentRecovery", "customerAcceptance"],
+      "properties": {
+        "containment": {"$ref": "#/$defs/cell"},
+        "applicationAuthorization": {"$ref": "#/$defs/cell"},
+        "effectSemantics": {"$ref": "#/$defs/cell"},
+        "retrievalQuality": {"$ref": "#/$defs/cell"},
+        "deploymentRecovery": {"$ref": "#/$defs/cell"},
+        "customerAcceptance": {"$ref": "#/$defs/cell"}
+      }
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "nodeClass", "kind", "owningService", "owner", "implementation", "deployables", "cells", "claimDomains"],
+      "properties": {
+        "id": {"type": "string"},
+        "nodeClass": {"enum": ["SELECTED", "CLOSURE", "TENANT_FACT"]},
+        "kind": {"type": "string"},
+        "owningService": {"type": ["string", "null"]},
+        "owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "rNumber"],
+          "properties": {"type": {"type": "string"}, "name": {"type": "string"}, "rNumber": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/rNumber"}]}}
+        },
+        "implementation": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["packetId", "deliverableIndex"],
+              "properties": {"packetId": {"type": "string"}, "deliverableIndex": {"type": "integer"}}
+            }
+          ]
+        },
+        "deployables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "type", "deployableRecord", "plannedLanguage", "status"],
+            "properties": {
+              "name": {"type": "string"},
+              "type": {"type": "string"},
+              "deployableRecord": {"type": "string"},
+              "plannedLanguage": {"type": ["string", "null"]},
+              "status": {"type": ["string", "null"]}
+            }
+          }
+        },
+        "cells": {"$ref": "#/$defs/cells"},
+        "claimDomains": {"$ref": "#/$defs/claimDomains"}
+      }
+    },
+    "exclusionRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "repository", "artifact", "side", "rider", "source", "cells", "claimDomains"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(distribution|control-plane)\\.[a-z0-9]+(-[a-z0-9]+)*$"},
+        "repository": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "name", "rNumber"],
+          "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "rNumber": {"$ref": "#/$defs/rNumber"}}
+        },
+        "artifact": {"type": "string"},
+        "side": {"const": "PRODUCER"},
+        "rider": {"enum": ["RELEASE-PROFILE-001 errata (2026-10-31): R11 finding 2, Q-R11-FIRST", "RELEASE-PROFILE-001 errata (2026-10-31): F-R04-2"]},
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["registryRow", "mainPin", "note", "path"],
+          "properties": {
+            "registryRow": {"type": "string"},
+            "mainPin": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{8,40}$"}]},
+            "note": {"type": "string"},
+            "path": {"type": "string"}
+          }
+        },
+        "cells": {"$ref": "#/$defs/cells"},
+        "claimDomains": {"$ref": "#/$defs/claimDomains"}
+      }
+    }
+  }
+}
