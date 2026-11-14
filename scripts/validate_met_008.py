@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/release-evidence-authority.json"
-AUTHORITY_SHA256 = "1b505996b60a501533b57427e7941f08071c8e545e8062c0aeb27c3fd3574a76"
+AUTHORITY_SHA256 = "122b58ed45658f38790070f53246edbe9eded48c274e67f198ab92d1e2542810"
 VALIDATOR_PATH = "scripts/validate_met_008.py"
 BASE_COMMIT = "7e17f292a4640a3a15ebbc815ebb71e20ff99920"
 NEW_PACKET = "MET-008"
@@ -342,8 +342,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
         require(supplied_sha == payload_sha, "changed packet payload: " + name)
 
 
-# MET-008 (RELEASE-EVIDENCE-001 with PERF-WORKERS-ENV; the lane monitor's owner-delegated rulings MON-289-GO-CHAIN,
-# MON-289-T1-RULE, MON-289-DRY-RULE and MON-289-D9-FIX; CONTRACT_289 rev 3, c2) adds, in a K = 0 step of two
+# MET-008 (RELEASE-EVIDENCE-001 with PERF-WORKERS-ENV; the rulings in force are CONTRACT_289 section 2's (dbd22c24
+# or its successor); CONTRACT_289 rev 3, c2) adds, in a K = 0 step of two
 # commits:
 # architecture/release-evidence.json with its schema, the projection scripts/release_evidence.py, the checker
 # scripts/validate_release_evidence.py and their tests (c-A); the environment overrides of the parallel
