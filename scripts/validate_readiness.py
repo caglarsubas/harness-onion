@@ -158,7 +158,7 @@ EXPECTED_BASE_SOURCES = {
     "harness-onion-raster",
 }
 
-EXPECTED_PACKET_COUNT = 300
+EXPECTED_PACKET_COUNT = 301
 EXPECTED_REUSE_PATH_COUNT = 5107
 LIVE_CAMPAIGN_PACKET_IDS = {
     "CONF-A1-001",
@@ -5239,6 +5239,10 @@ def validate_packets(
                             for path in packets["MET-007"]["allowedPaths"]
                             if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
     authority_owner["task-packets/MET-007.yaml"] = "MET-007"
+    authority_owner.update({path: "MET-008"
+                            for path in packets["MET-008"]["allowedPaths"]
+                            if path in authority_owner or path.startswith(("architecture/", "scripts/"))})
+    authority_owner["task-packets/MET-008.yaml"] = "MET-008"
     authority_owner["task-packets/LAB-SYNC-001.yaml"] = "MET-007"
     authority_owner["task-packets/LAB-REPO-001.yaml"] = "MET-REGISTRY-001"
     authority_owner["task-packets/DIST-TRANSPORT-002.yaml"] = "MET-VERIFY-007"
