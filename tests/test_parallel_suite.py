@@ -57,7 +57,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 300 and len(accepted) == 215
+    assert len(current) == 301 and len(accepted) == 215
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -137,7 +137,8 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
     assert len(yprofile.historical_catalog(current)) == 214
     assert len(xprofile.historical_catalog(current)) == 213
     assert len(pprofile.historical_catalog(current)) == 212
@@ -987,9 +988,12 @@ def test_an_inherited_ignored_hangup_stays_ignored(tmp_path):
 
 def test_deadline_fits_inside_the_verify_budget():
     # argv 1-62 take about 2 minutes and the launcher's setup about 1, so a 900 s worker deadline fires before the
-    # trusted 1200 s cap (bundle v4, MET-PERF-038), leaving the parent nodes their time; the unchanged local 750 s gate
+    # trusted 1,500 s cap (bundle v8, 288-D-CAP), leaving the parent nodes their time; the unchanged local 750 s gate
     # can still stop a local run before the deadline fires.
     assert SUITE.DEADLINE_SECONDS == 900
+    # Q-289-T1 (b): the default deadline fits under the 1,500 s cap with the setup counted, in MET-PERF-038's terms:
+    # the launcher's setup 60 s, argv before the suite 120 s and the parent nodes 90 s (900 + 270 = 1,170).
+    assert SUITE.configured({})[1] + 60 + 120 + 90 <= 1500
 
 
 _SESSION_ATTRIBUTES = {"session", "pluginmanager", "stats", "testscollected", "testsfailed", "terminalreporter",
@@ -1069,3 +1073,121 @@ def test_every_test_that_writes_past_capture_runs_in_the_parent():
         writers |= {rel + "::" + name for name in _live_writers(ast.parse(path.read_text()))}
     linux = _load("_met_perf_035_linux_conftest_copy2", "tests/linux_runner/conftest.py")
     assert set(SUITE.PARENT_NODES) == writers | {linux.PREDECESSOR_PROOF_NODE}
+
+
+# PERF-WORKERS-ENV (MET-008; WORKERS-D1; Q-289-2): the worker count and the deadline from the environment, read once in
+# the parent; C12's vectors.
+from types import SimpleNamespace as _NS  # noqa: E402
+
+
+def _pinned_files():
+    weights = json.loads((profile.ROOT / SUITE.WEIGHTS_PATH).read_text(encoding="utf-8"))
+    return {name: [name + "::test"] for name in weights}
+
+
+@pytest.mark.parametrize("workers", [1, 12, 32, 64])
+def test_the_plan_partitions_the_pinned_weights_for_each_worker_count(workers):
+    files = _pinned_files()
+    assert SUITE.configured({SUITE.WORKERS_ENV: str(workers)}) == (workers, SUITE.DEADLINE_SECONDS)
+    plan = SUITE._plan(files, workers, profile.ROOT)
+    assert 1 <= len(plan) <= workers and sorted(name for bucket in plan for name in bucket) == sorted(files)
+    assert len(plan) == min(workers, len(files))
+
+
+@pytest.mark.parametrize("name, value", [
+    ("PLANEON_PARALLEL_SUITE_WORKERS", "0"), ("PLANEON_PARALLEL_SUITE_WORKERS", "65"),
+    ("PLANEON_PARALLEL_SUITE_WORKERS", "twelve"), ("PLANEON_PARALLEL_SUITE_WORKERS", "-4"),
+    ("PLANEON_PARALLEL_SUITE_DEADLINE", "899"), ("PLANEON_PARALLEL_SUITE_DEADLINE", "3601"),
+    ("PLANEON_PARALLEL_SUITE_DEADLINE", "1e3"),
+] + [(name, value) for name in ("PLANEON_PARALLEL_SUITE_WORKERS", "PLANEON_PARALLEL_SUITE_DEADLINE")
+     for value in ("", " 12", "+12", "1_2", "12.0", "\u0661\u0662")])
+def test_an_out_of_range_or_malformed_setting_is_refused_by_name(name, value):
+    low, high = SUITE.WORKERS_BOUNDS if name == SUITE.WORKERS_ENV else SUITE.DEADLINE_BOUNDS
+    with pytest.raises(pytest.UsageError, match="%s=.* from %d to %d$" % (name, low, high)):
+        SUITE.configured({name: value})
+
+
+def test_both_bounds_are_accepted(monkeypatch):
+    for workers, deadline in (("1", "3600"), ("64", "900")):
+        monkeypatch.setenv(SUITE.WORKERS_ENV, workers)
+        monkeypatch.setenv(SUITE.DEADLINE_ENV, deadline)
+        assert SUITE.configured(os.environ) == (int(workers), int(deadline))
+
+
+def test_with_the_environment_unset_the_assignment_is_unchanged(monkeypatch):
+    for name in (SUITE.WORKERS_ENV, SUITE.DEADLINE_ENV):
+        monkeypatch.delenv(name, raising=False)
+    files = _pinned_files()
+    assert SUITE.configured(os.environ) == SUITE.configured({}) == (SUITE.WORKERS, SUITE.DEADLINE_SECONDS) == (12, 900)
+    assert SUITE._plan(files, SUITE.configured({})[0], profile.ROOT) == SUITE._plan(files, 12, profile.ROOT)
+
+
+class _Stop(Exception):
+    """The session's Interrupted or Failed, as the run loop raises it."""
+
+
+class _Worker:
+    """A worker process that never finishes by itself: poll() is None until kill()."""
+    returncode = None
+
+    def poll(self):
+        return self.returncode
+
+    def kill(self):
+        self.returncode = -9
+
+    def wait(self):
+        return self.returncode
+
+
+class _Reporter:
+    def __init__(self):
+        self.lines, self.stats = [], []
+
+    def write_line(self, line, **markup):
+        self.lines.append(line)
+
+    def _add_stats(self, name, entries):
+        self.stats.append((name, entries))
+
+
+def _loop_session(reporter=None, testsfailed=0):
+    config = _NS(option=_NS(collectonly=False, continue_on_collection_errors=False), rootpath=profile.ROOT,
+                 pluginmanager=_NS(get_plugin=lambda name: reporter))
+    return _NS(config=config, items=[_NS(nodeid="tests/test_scratch.py::test_one")], testsfailed=testsfailed,
+               Interrupted=_Stop, Failed=_Stop)
+
+
+def _open_the_gate(monkeypatch, workers, deadline):
+    """Everything but the configured worker count lets the run loop past its serial gate."""
+    for name, value in (("_sink", None), ("_inherited_serial", False), ("_seen", None), ("_workers", workers),
+                        ("_deadline", deadline), ("paths_only", lambda config: True), ("interpreter_options", lambda: [])):
+        monkeypatch.setattr(SUITE, name, value)
+
+
+def test_a_worker_count_of_one_takes_the_serial_path(monkeypatch):
+    workers, deadline = SUITE.configured({SUITE.WORKERS_ENV: "1"})
+    assert (workers, deadline) == (1, SUITE.DEADLINE_SECONDS)
+    _open_the_gate(monkeypatch, workers, deadline)
+    assert SUITE.pytest_runtestloop(_loop_session(testsfailed=1)) is None
+    # The same session with two workers passes the serial gate, and its collection error then stops it.
+    monkeypatch.setattr(SUITE, "_workers", 2)
+    with pytest.raises(_Stop, match="1 error during collection"):
+        SUITE.pytest_runtestloop(_loop_session(testsfailed=1))
+
+
+def test_the_run_loop_enforces_the_configured_deadline_and_names_it(monkeypatch, tmp_path):
+    workers, deadline = SUITE.configured({SUITE.DEADLINE_ENV: "1234"})
+    assert (workers, deadline) == (SUITE.WORKERS, 1234)
+    _open_the_gate(monkeypatch, workers, deadline)
+    work, clock, reporter = tmp_path / "work", [0.0, 1000.0, 1235.0], _Reporter()
+    work.mkdir()
+    # The patched clock passes the default 900 s first (no problem yet), then the configured 1,234 s.
+    monkeypatch.setattr(SUITE, "time", _NS(monotonic=lambda: clock.pop(0) if len(clock) > 1 else clock[0],
+                                           sleep=lambda seconds: None))
+    monkeypatch.setattr(SUITE, "tempfile", _NS(mkdtemp=lambda prefix: str(work)))
+    monkeypatch.setattr(SUITE, "subprocess", _NS(Popen=lambda *args, **kwargs: _Worker(), STDOUT=_subprocess.STDOUT))
+    with pytest.raises(_Stop, match="parallel suite incomplete: deadline of 1234 s"):
+        SUITE.pytest_runtestloop(_loop_session(reporter))
+    assert "  deadline of 1234 s" in reporter.lines and not any("deadline of 900 s" in line for line in reporter.lines)
+    assert reporter.stats == [(SUITE.INCOMPLETE_STAT, ["deadline of 1234 s"])]
