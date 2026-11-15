@@ -1,0 +1,42 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_perf_050_oracle.py",
+  "sha256": "2d191cecd080a9202442b23becb50fc9208e1760e99a2f804d537614b213fb8a"
+ },
+ "oracle": {
+  "agentId": "a10051a26b7dfab04",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "bf6383ea-f2e4-4ad6-aef2-b38999710a1e",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "bf6383ea-f2e4-4ad6-aef2-b38999710a1e"
+  ]
+ },
+ "briefSha256": "77fc5d7933b07a2331d943e87a2ad7da85d7d3086c93738c29bf59902f057dd5",
+ "candidateCommit": "b84878e11ef8ff1ae36ca4c93f1938e050f713a3",
+ "launched": "2026-11-15T16:22:03+08:00",
+ "finished": "2026-11-15T16:59:37+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-290-IDENTITY-KEEP",
+  "date": "2026-11-15"
+ },
+ "disclosures": [
+  "bound inputs (CONTRACT_290 rev 2 implementation note 1, MON-290-C3PATHS): exactly the oracle 2d191cecd080a9202442b23becb50fc9208e1760e99a2f804d537614b213fb8a, the table f77fb6c5acdacc2361f7266978bac6d205e9a54e06eec217fa88f739732348f0, the inputs record 2c3ca74271bda1c0ddaf9ef59951c16efdca02719ffe078284ff5bfd680cd7e3 and the oracle sweep's rc/wall line 6fc2f5b0df9d2789aba8edde25ac1c7f89344ccaf919a1ecb3e9f5219c057c05 (rc=1 wall=7s); this record binds no other digest: not the authority, the head or the YAML, which change when it is added",
+  "brief 77fc5d79 and launch prompt 7944e4cc (derived from 289's kit by derive_kit290.py); the author's only inputs are CONTRACT_290 rev 2 (0acb5e68) and the packet YAML at c2 9b258a30 with closed-path strings masked; the operator-stated facts are the head's and the planner's names and signatures, with line numbers computed from c2's head and planner blobs",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran py_compile only, no test run; its first file 423a2f5d; its report: 32 tests, 51 parametrized cases, 4 asserts without a CONTRACT_290 cite (the author's own count); its slips: one message carried three Edit calls, against the one-tool-call rule; construction slip: the string walker descended only into dict, so two tests failed in blind run 1; fixed in r2 (MON-290-B1C-CLASS class (a)), no expectation, assertion or node count changed",
+  "blind run 1 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 423a2f5d, rc 1, passed 72, failed 3, skipped 0, errors 0, collected 75 (stated 75); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 2 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 423a2f5d, rc 1, passed 72, failed 3, skipped 0, errors 0, collected 75 (stated 75); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 3 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 2d191cec, rc 1, passed 74, failed 1, skipped 0, errors 0, collected 75 (stated 75); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "the oracle sweep at the c3 commit b84878e1, the pre-check way, one file: rc 1, wall 7 s, failed 1, errors 0, collected 75; VERDICT FAIL in the classified state: its one failure is the packet YAML's allowedPaths count, 296, which reaches 297 only once this record is placed (MON-290-B1C-CLASS class (c), MON-290-B2-OK, MON-290-IDENTITY-A); its rc/wall line is this record's only timing input: the oracle's measured row rawSeconds 7.0, overheadSeconds 1.26, headTests 5.7 (CONTRACT_290 rev 2 section 4)",
+  "the full pass is blind run 3 at the final head (allowedPaths 297, 75 of 75 required), run after this record is placed and recorded in c3's final-head block (CONTRACT_290 rev 2 implementation notes 2 and 3, MON-290-IDENTITY-A); this record cannot bind it",
+  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-290-IDENTITY-KEEP)"
+ ]
+}
