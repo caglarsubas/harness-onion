@@ -849,8 +849,14 @@
    6227000
   ]
  },
- "headTests": {},
- "headTestsSource": {},
+ "headTests": {
+  "tests/test_met_perf_050.py": 1.0
+ },
+ "headTestsSource": {
+  "tests/test_met_perf_050.py": {
+   "mode": "provisional"
+  }
+ },
  "kappa": 0.5772,
  "kappaSource": "the median, over the keys in both main cf253506's table and the parse with a positive main weight and a positive mean, of main weight / mean",
  "rule": "table[f] = round((dryRunUs[f][0] + dryRunUs[f][1]) / 2 / 1000000 * kappa, 1) for every dryRunUs key, and table[k] = headTests[k] for every headTests key (disjoint from the dryRunUs keys); the table holds exactly these keys, written as json.dumps(table, indent=1, sort_keys=True) + newline; round and json.dumps are Python 3's (round half to even on the binary float; json.dumps' default float form)",
