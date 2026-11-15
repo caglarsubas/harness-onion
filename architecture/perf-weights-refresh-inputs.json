@@ -1,0 +1,858 @@
+{
+ "dryRunSource": {
+  "d1": {
+   "bytes": 25318530,
+   "logSha256": "15f21a668be5abf2b9a44a3e789c96ba5a9395efe6c175de257c0eea9f42f0c0"
+  },
+  "d2": {
+   "bytes": 25316048,
+   "logSha256": "0ecbce05c79bd17c4111d997cbdd412ff885ee5e8182a3b953d7d1877a3010bb"
+  },
+  "run": "slot 289's dry runs d1 and d2 at c3 91ce09ef (tree e55c1461 = main cf253506's), argv 63",
+  "selection": "28991 node ids collected at main's tree, 3 parent-node ids excluded, 209 worker files"
+ },
+ "dryRunUs": {
+  "ci/test_offline_runner.py": [
+   1525000,
+   1762000
+  ],
+  "ci/test_warm_snapshot.py": [
+   1188000,
+   1220000
+  ],
+  "tests/linux_runner/test_authority.py": [
+   444000,
+   424000
+  ],
+  "tests/linux_runner/test_build_and_predecessors.py": [
+   35000,
+   29000
+  ],
+  "tests/linux_runner/test_isolation.py": [
+   32000,
+   29000
+  ],
+  "tests/linux_runner/test_manifest_gate.py": [
+   34000,
+   31000
+  ],
+  "tests/linux_runner/test_predecessor_diagnostics.py": [
+   29000,
+   29000
+  ],
+  "tests/linux_runner/test_predecessor_proof.py": [
+   13000,
+   12000
+  ],
+  "tests/linux_runner/test_root_aliases.py": [
+   165000,
+   152000
+  ],
+  "tests/linux_runner/test_system_inventory_v2.py": [
+   37000,
+   34000
+  ],
+  "tests/linux_runner/test_toolchain.py": [
+   26000,
+   30000
+  ],
+  "tests/linux_runner/test_workspace_v2.py": [
+   28000,
+   23000
+  ],
+  "tests/test_accounting_scope.py": [
+   22807000,
+   21034000
+  ],
+  "tests/test_admission_channel_v3.py": [
+   44138000,
+   41607000
+  ],
+  "tests/test_admission_semantics_v2.py": [
+   16520000,
+   14988000
+  ],
+  "tests/test_admission_semantics_v4_oracle.py": [
+   210000,
+   200000
+  ],
+  "tests/test_agent_loop.py": [
+   42809000,
+   40038000
+  ],
+  "tests/test_alpha2_readiness.py": [
+   6560000,
+   6019000
+  ],
+  "tests/test_architecture.py": [
+   8045000,
+   7259000
+  ],
+  "tests/test_authority_map.py": [
+   18059000,
+   16373000
+  ],
+  "tests/test_authority_recheck_reuse.py": [
+   547000,
+   593000
+  ],
+  "tests/test_backend_distribution.py": [
+   37893000,
+   37703000
+  ],
+  "tests/test_backend_timing.py": [
+   45739000,
+   43223000
+  ],
+  "tests/test_benchmark_transport.py": [
+   30311000,
+   28513000
+  ],
+  "tests/test_broker_handoff.py": [
+   24184000,
+   22290000
+  ],
+  "tests/test_canonical_repair_plan.py": [
+   38339000,
+   38127000
+  ],
+  "tests/test_catalog_traversal.py": [
+   40661000,
+   38176000
+  ],
+  "tests/test_chain_checkpoint.py": [
+   10635000,
+   10237000
+  ],
+  "tests/test_chain_compaction.py": [
+   132335000,
+   127556000
+  ],
+  "tests/test_chain_depth_headroom.py": [
+   24378000,
+   24805000
+  ],
+  "tests/test_chain_product_publish.py": [
+   26191000,
+   23416000
+  ],
+  "tests/test_ci_performance.py": [
+   127941000,
+   124937000
+  ],
+  "tests/test_ci_runner_admission.py": [
+   6213000,
+   6011000
+  ],
+  "tests/test_compiled_filter_programs.py": [
+   60715000,
+   60245000
+  ],
+  "tests/test_compiled_filter_programs_v2.py": [
+   55280000,
+   53734000
+  ],
+  "tests/test_compiled_filter_programs_v3.py": [
+   153412000,
+   145032000
+  ],
+  "tests/test_completion_integration.py": [
+   41228000,
+   40675000
+  ],
+  "tests/test_completion_profiling.py": [
+   44718000,
+   44297000
+  ],
+  "tests/test_conformance_completion.py": [
+   43114000,
+   41783000
+  ],
+  "tests/test_conformance_consumer_closure.py": [
+   83679000,
+   72469000
+  ],
+  "tests/test_conformance_performance.py": [
+   51122000,
+   47779000
+  ],
+  "tests/test_conformance_performance_followup.py": [
+   76857000,
+   68121000
+  ],
+  "tests/test_conformance_publication.py": [
+   53235000,
+   49463000
+  ],
+  "tests/test_conformance_reference_measurement.py": [
+   57373000,
+   56332000
+  ],
+  "tests/test_conformance_successor_checkpoint.py": [
+   46894000,
+   45448000
+  ],
+  "tests/test_credential_lifecycle.py": [
+   210855000,
+   200752000
+  ],
+  "tests/test_credential_ordering.py": [
+   90124000,
+   77337000
+  ],
+  "tests/test_custody_handoff.py": [
+   32587000,
+   29984000
+  ],
+  "tests/test_data_correctness.py": [
+   3461000,
+   3315000
+  ],
+  "tests/test_data_harness_v1_observation.py": [
+   5166000,
+   5134000
+  ],
+  "tests/test_dedicated_verifier_account.py": [
+   17353000,
+   15073000
+  ],
+  "tests/test_diagnostic_caps.py": [
+   39309000,
+   38881000
+  ],
+  "tests/test_diagnostic_repair.py": [
+   314000,
+   276000
+  ],
+  "tests/test_document_repair_execution.py": [
+   41387000,
+   38358000
+  ],
+  "tests/test_document_repair_plan.py": [
+   30685000,
+   29681000
+  ],
+  "tests/test_edge_record_v12.py": [
+   31021000,
+   28722000
+  ],
+  "tests/test_edge_record_v9.py": [
+   29116000,
+   27717000
+  ],
+  "tests/test_enforcement_integration.py": [
+   27719000,
+   25726000
+  ],
+  "tests/test_enforcement_test_plan.py": [
+   55721000,
+   48370000
+  ],
+  "tests/test_evolution_surface.py": [
+   34363000,
+   34216000
+  ],
+  "tests/test_evolution_surface_oracle.py": [
+   11547000,
+   11812000
+  ],
+  "tests/test_factory_diagnostics.py": [
+   35148000,
+   35391000
+  ],
+  "tests/test_guard_cost_repair.py": [
+   32511000,
+   31507000
+  ],
+  "tests/test_guard_traversal.py": [
+   28891000,
+   25817000
+  ],
+  "tests/test_historical_snapshot_decode.py": [
+   190000,
+   231000
+  ],
+  "tests/test_host_interface.py": [
+   70495000,
+   69035000
+  ],
+  "tests/test_host_interface_hs43.py": [
+   31766000,
+   31646000
+  ],
+  "tests/test_host_interface_resolution.py": [
+   19106000,
+   18216000
+  ],
+  "tests/test_i05_gate_channel.py": [
+   22068000,
+   19951000
+  ],
+  "tests/test_i05_gate_channel_v2.py": [
+   25364000,
+   23988000
+  ],
+  "tests/test_i05_gate_channel_v4.py": [
+   45167000,
+   42489000
+  ],
+  "tests/test_i06_backend_profile.py": [
+   20637000,
+   20206000
+  ],
+  "tests/test_i06_backend_profile_v2.py": [
+   40132000,
+   36868000
+  ],
+  "tests/test_i06_backend_profile_v4.py": [
+   285031000,
+   266358000
+  ],
+  "tests/test_i07_policy_write.py": [
+   18351000,
+   17679000
+  ],
+  "tests/test_i07_policy_write_v2.py": [
+   21624000,
+   21152000
+  ],
+  "tests/test_in_session_predecessor_proof.py": [
+   13001000,
+   11891000
+  ],
+  "tests/test_isolated_network_canary.py": [
+   15562000,
+   15680000
+  ],
+  "tests/test_isolated_offline_runner.py": [
+   14698000,
+   14277000
+  ],
+  "tests/test_lab_run_plan.py": [
+   51539000,
+   49751000
+  ],
+  "tests/test_language_placement.py": [
+   16120000,
+   14993000
+  ],
+  "tests/test_language_placement_oracle.py": [
+   21525000,
+   20065000
+  ],
+  "tests/test_license_amendment.py": [
+   37042000,
+   35258000
+  ],
+  "tests/test_license_amendment_v2.py": [
+   42612000,
+   39901000
+  ],
+  "tests/test_linear_history_rechecks.py": [
+   15345000,
+   14458000
+  ],
+  "tests/test_linux_host_authority.py": [
+   27568000,
+   26213000
+  ],
+  "tests/test_linux_host_authority_oracle.py": [
+   774000,
+   781000
+  ],
+  "tests/test_linux_probe_interface.py": [
+   31426000,
+   28953000
+  ],
+  "tests/test_linux_probe_interface_oracle.py": [
+   353000,
+   299000
+  ],
+  "tests/test_linux_probe_kit_admission.py": [
+   39072000,
+   36548000
+  ],
+  "tests/test_linux_probe_kit_gate.py": [
+   26963000,
+   25763000
+  ],
+  "tests/test_linux_readiness.py": [
+   22357000,
+   21976000
+  ],
+  "tests/test_linux_repair.py": [
+   7329000,
+   7888000
+  ],
+  "tests/test_linux_runner_contract.py": [
+   12316000,
+   11695000
+  ],
+  "tests/test_linux_test_ownership.py": [
+   8233000,
+   7666000
+  ],
+  "tests/test_live_backend_readiness.py": [
+   20750000,
+   20183000
+  ],
+  "tests/test_live_campaign_envelope.py": [
+   36000,
+   42000
+  ],
+  "tests/test_load_deadlines.py": [
+   22235000,
+   20556000
+  ],
+  "tests/test_local_acceptance.py": [
+   53088000,
+   49671000
+  ],
+  "tests/test_met_006.py": [
+   25885000,
+   25048000
+  ],
+  "tests/test_met_006_oracle.py": [
+   6379000,
+   6298000
+  ],
+  "tests/test_met_007.py": [
+   41000000,
+   37433000
+  ],
+  "tests/test_met_007_oracle.py": [
+   10654000,
+   10039000
+  ],
+  "tests/test_met_008.py": [
+   35583000,
+   34247000
+  ],
+  "tests/test_met_008_oracle.py": [
+   230404000,
+   210908000
+  ],
+  "tests/test_met_adopt_005.py": [
+   26212000,
+   23907000
+  ],
+  "tests/test_met_adopt_006_oracle.py": [
+   12440000,
+   11093000
+  ],
+  "tests/test_met_adopt_007_oracle.py": [
+   564000,
+   507000
+  ],
+  "tests/test_met_adopt_008.py": [
+   39873000,
+   34049000
+  ],
+  "tests/test_met_adopt_008_oracle.py": [
+   279000,
+   232000
+  ],
+  "tests/test_met_enforce_043_oracle.py": [
+   152000,
+   161000
+  ],
+  "tests/test_met_gov_004.py": [
+   28149000,
+   24511000
+  ],
+  "tests/test_met_gov_005.py": [
+   22454000,
+   23587000
+  ],
+  "tests/test_met_linux_008.py": [
+   39094000,
+   33589000
+  ],
+  "tests/test_met_linux_009.py": [
+   27294000,
+   26112000
+  ],
+  "tests/test_met_linux_009_oracle.py": [
+   298000,
+   283000
+  ],
+  "tests/test_met_perf_043.py": [
+   24323000,
+   23422000
+  ],
+  "tests/test_met_perf_043_oracle.py": [
+   5860000,
+   5406000
+  ],
+  "tests/test_met_perf_044_oracle.py": [
+   1140000,
+   1011000
+  ],
+  "tests/test_met_perf_045.py": [
+   23491000,
+   22039000
+  ],
+  "tests/test_met_perf_046.py": [
+   20710000,
+   19258000
+  ],
+  "tests/test_met_perf_047.py": [
+   177625000,
+   167374000
+  ],
+  "tests/test_met_perf_047_oracle.py": [
+   4432000,
+   3983000
+  ],
+  "tests/test_met_perf_049.py": [
+   31536000,
+   30259000
+  ],
+  "tests/test_met_perf_049_oracle.py": [
+   161000,
+   155000
+  ],
+  "tests/test_met_registry_001.py": [
+   39398000,
+   37503000
+  ],
+  "tests/test_met_registry_001_oracle.py": [
+   4046000,
+   3813000
+  ],
+  "tests/test_met_sector_003.py": [
+   32932000,
+   31016000
+  ],
+  "tests/test_met_sector_004.py": [
+   35575000,
+   33605000
+  ],
+  "tests/test_met_sector_005.py": [
+   43801000,
+   40762000
+  ],
+  "tests/test_met_verify_005.py": [
+   43425000,
+   42023000
+  ],
+  "tests/test_met_verify_006.py": [
+   72393000,
+   68980000
+  ],
+  "tests/test_met_verify_007.py": [
+   38792000,
+   34991000
+  ],
+  "tests/test_met_verify_007_oracle.py": [
+   2450000,
+   2314000
+  ],
+  "tests/test_model_api_inventory.py": [
+   5224000,
+   4943000
+  ],
+  "tests/test_model_fixture_scope.py": [
+   4471000,
+   4209000
+  ],
+  "tests/test_model_usage_observation.py": [
+   4289000,
+   3852000
+  ],
+  "tests/test_native_profile_v2.py": [
+   29899000,
+   27487000
+  ],
+  "tests/test_native_profile_v3.py": [
+   60085000,
+   56474000
+  ],
+  "tests/test_native_profile_v4.py": [
+   187778000,
+   183041000
+  ],
+  "tests/test_native_profile_v5.py": [
+   215640000,
+   202892000
+  ],
+  "tests/test_native_qualification.py": [
+   49787000,
+   44321000
+  ],
+  "tests/test_observation_enforcement.py": [
+   39586000,
+   34216000
+  ],
+  "tests/test_owner_verifier.py": [
+   10584000,
+   10860000
+  ],
+  "tests/test_packet_declaration_consistency.py": [
+   520000,
+   547000
+  ],
+  "tests/test_packet_scalar_repair.py": [
+   11624000,
+   10196000
+  ],
+  "tests/test_packet_schema_performance.py": [
+   10550000,
+   10711000
+  ],
+  "tests/test_packet_semantic_reuse.py": [
+   271000,
+   289000
+  ],
+  "tests/test_parallel_suite.py": [
+   53109000,
+   47433000
+  ],
+  "tests/test_parallel_suite_followup.py": [
+   38403000,
+   32767000
+  ],
+  "tests/test_policy_observation.py": [
+   24821000,
+   21592000
+  ],
+  "tests/test_policy_observation_digests.py": [
+   24416000,
+   23178000
+  ],
+  "tests/test_policy_observation_digests_oracle.py": [
+   726000,
+   608000
+  ],
+  "tests/test_policy_observation_digests_v2.py": [
+   22383000,
+   23445000
+  ],
+  "tests/test_policy_observation_digests_v2_oracle.py": [
+   3120000,
+   2894000
+  ],
+  "tests/test_portable_warm_snapshot_temp.py": [
+   12616000,
+   12020000
+  ],
+  "tests/test_probe_kit_scope.py": [
+   52324000,
+   50264000
+  ],
+  "tests/test_probe_kit_scope_oracle.py": [
+   59115000,
+   51692000
+  ],
+  "tests/test_projection_reuse.py": [
+   16261000,
+   14663000
+  ],
+  "tests/test_provider_adoption.py": [
+   33653000,
+   32382000
+  ],
+  "tests/test_proxy_contract.py": [
+   7703000,
+   7188000
+  ],
+  "tests/test_proxy_diagnostics.py": [
+   46328000,
+   43273000
+  ],
+  "tests/test_proxy_profile_v2_oracle.py": [
+   881000,
+   844000
+  ],
+  "tests/test_pytest_diagnostics.py": [
+   266000,
+   238000
+  ],
+  "tests/test_pytest_headroom.py": [
+   24841000,
+   20933000
+  ],
+  "tests/test_readiness.py": [
+   180678000,
+   170878000
+  ],
+  "tests/test_readiness_repairs.py": [
+   40865000,
+   38567000
+  ],
+  "tests/test_reference_observer.py": [
+   19000,
+   17000
+  ],
+  "tests/test_release_evidence.py": [
+   1985000,
+   2085000
+  ],
+  "tests/test_release_lock.py": [
+   1705000,
+   1831000
+  ],
+  "tests/test_release_lock_registration.py": [
+   7862000,
+   7444000
+  ],
+  "tests/test_release_profile.py": [
+   118422000,
+   111547000
+  ],
+  "tests/test_repository_tree_observation.py": [
+   11000,
+   10000
+  ],
+  "tests/test_research_adoption.py": [
+   18356000,
+   19487000
+  ],
+  "tests/test_research_adoption_v2.py": [
+   24834000,
+   22741000
+  ],
+  "tests/test_research_adoption_v3.py": [
+   17998000,
+   19219000
+  ],
+  "tests/test_reuse.py": [
+   18470000,
+   19300000
+  ],
+  "tests/test_review_record.py": [
+   26655000,
+   24715000
+  ],
+  "tests/test_review_record_oracle.py": [
+   648000,
+   650000
+  ],
+  "tests/test_review_records_in_tree.py": [
+   185000,
+   186000
+  ],
+  "tests/test_run_events.py": [
+   30877000,
+   29922000
+  ],
+  "tests/test_run_manifest.py": [
+   28290000,
+   29147000
+  ],
+  "tests/test_seccomp_allowlists.py": [
+   22172000,
+   22465000
+  ],
+  "tests/test_seccomp_observer_listener.py": [
+   66012000,
+   67052000
+  ],
+  "tests/test_seccomp_v3.py": [
+   20836000,
+   20049000
+  ],
+  "tests/test_seccomp_v4.py": [
+   38151000,
+   35216000
+  ],
+  "tests/test_sector_catalog.py": [
+   49111000,
+   49693000
+  ],
+  "tests/test_sector_direction.py": [
+   36128000,
+   33698000
+  ],
+  "tests/test_selinux_matrix.py": [
+   26097000,
+   27152000
+  ],
+  "tests/test_selinux_matrix_v2.py": [
+   27200000,
+   25857000
+  ],
+  "tests/test_selinux_matrix_v3.py": [
+   66008000,
+   60483000
+  ],
+  "tests/test_selinux_matrix_v4.py": [
+   170172000,
+   154609000
+  ],
+  "tests/test_selinux_replay.py": [
+   17269000,
+   16374000
+  ],
+  "tests/test_service_edges.py": [
+   458000,
+   460000
+  ],
+  "tests/test_source_recipe_projection.py": [
+   412000,
+   380000
+  ],
+  "tests/test_successor_inventory.py": [
+   11262000,
+   10799000
+  ],
+  "tests/test_task_packets.py": [
+   7193000,
+   6756000
+  ],
+  "tests/test_topology_coordination.py": [
+   50307000,
+   48865000
+  ],
+  "tests/test_unified_roadmap.py": [
+   5272000,
+   5360000
+  ],
+  "tests/test_validation_performance.py": [
+   74755000,
+   71062000
+  ],
+  "tests/test_validator_units.py": [
+   3882000,
+   3813000
+  ],
+  "tests/test_verdict_ledger.py": [
+   29753000,
+   28755000
+  ],
+  "tests/test_verify_headroom.py": [
+   9683000,
+   9699000
+  ],
+  "tests/test_w01_amendment.py": [
+   24666000,
+   23575000
+  ],
+  "tests/test_w02_notes_errata.py": [
+   105058000,
+   104084000
+  ],
+  "tests/test_w03_amendment.py": [
+   36297000,
+   37713000
+  ],
+  "tests/test_w03_plan_amend_2.py": [
+   35466000,
+   37360000
+  ],
+  "tests/test_w03_plan_amend_3.py": [
+   42136000,
+   43174000
+  ],
+  "tests/test_zero_bill.py": [
+   7573000,
+   6227000
+  ]
+ },
+ "headTests": {},
+ "headTestsSource": {},
+ "kappa": 0.5772,
+ "kappaSource": "the median, over the keys in both main cf253506's table and the parse with a positive main weight and a positive mean, of main weight / mean",
+ "rule": "table[f] = round((dryRunUs[f][0] + dryRunUs[f][1]) / 2 / 1000000 * kappa, 1) for every dryRunUs key, and table[k] = headTests[k] for every headTests key (disjoint from the dryRunUs keys); the table holds exactly these keys, written as json.dumps(table, indent=1, sort_keys=True) + newline; round and json.dumps are Python 3's (round half to even on the binary float; json.dumps' default float form)",
+ "schemaVersion": "harness.planeon.ai/perf-weights-refresh-inputs/v1"
+}

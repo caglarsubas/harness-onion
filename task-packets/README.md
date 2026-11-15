@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-008
+## Current source preparation — MET-PERF-050
+
+MET-PERF-050 (slot 290): PERF-WEIGHTS-REFRESH, a K = 0 step (302 packets at slot 290): ci/parallel_suite_weights.json
+refreshed in full by 279's method from slot 289's two dry runs, with its inputs record
+architecture/perf-weights-refresh-inputs.json; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI)).
+Alpha2 OPEN; 301 accepted (the catalog at slot 289) plus MET-PERF-050 only.
+
+## Historical release evidence source preparation — MET-008
 
 MET-008 (slot 289): RELEASE-EVIDENCE-001, a K = 0 step (301 packets at slot 289): architecture/release-evidence.json
 over the release profile's 41 closure nodes with its schema, projection, checker and tests; and PERF-WORKERS-ENV in
@@ -1812,3 +1819,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 299 | `MET-007` | `Harness-Engineering` | DATA-CORRECTNESS-001 and R14's registration row (K = 1, 300 packets at slot 288): the data-correctness record over the 24 durable writers with its schema, vectors, model, checker and tests; R14 mas-harness-reference-lab registered (kind meta, releaseSet EXCLUDED); the class rule v2.5 in ci/chain_checkpoint.py; publishes LAB-SYNC-001 |
 | 300 | `LAB-SYNC-001` | `mas-harness-research-lab` | R13's research sync, PR 5 on branch codex/lab-sync-a2482753 (head 9992d1755f71) over LAB-REPO-001's merge 2e977f4f5a31: research/** only, LAB-REPO-001's six commands inherited in order (product, published by MET-007) |
 | 301 | `MET-008` | `Harness-Engineering` | RELEASE-EVIDENCE-001 (K = 0, 301 packets at slot 289): the release evidence matrix over the release profile's 41 closure nodes with its schema, projection, checker and tests; PERF-WORKERS-ENV in ci/parallel_suite.py |
+| 302 | `MET-PERF-050` | `Harness-Engineering` | PERF-WEIGHTS-REFRESH (K = 0, 302 packets at slot 290): the parallel suite's weights refreshed in full by 279's method, with their inputs record |
