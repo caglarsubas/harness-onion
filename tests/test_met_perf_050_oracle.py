@@ -573,8 +573,8 @@ def test_packet_yaml_at_c3(yaml_raw):
     # CONTRACT_290 section 6 (two items, the first C13's text) and section 10 (quoted exactly, whitespace collapsed)
     assert len(evidence) == 2 and " ".join(evidence[0].split()) == " ".join(C13_TEXT.split())
     allowed = data["allowedPaths"]
-    # CONTRACT_290 section 11 (allowedPaths 297) and section 9 (c3 step 2: allowedPaths + 2)
-    assert len(allowed) == 297
+    # CONTRACT_290 section 11 as amended by IMPL_NOTE_290_5 (allowedPaths 299: 295, the oracle and its identity, [PC-1]'s two files)
+    assert len(allowed) == 299
     # CONTRACT_290 section 6 and section 11 (the oracle and its identity join at c3)
     assert ORACLE in allowed and ORACLE_IDENTITY in allowed
     # CONTRACT_290 sections 3, 4 and 5 (the table, the record, the head, its test, the authority, 290.json)
@@ -600,8 +600,8 @@ def test_head_names_the_contract_paths_and_file_sets(head):
     assert sorted(_rel(path) for path in head.PACKET_FILES) == sorted([INPUTS, TABLE])
     # CONTRACT_290 section 5 (BASE_FILES 1: ci/parallel_suite.py)
     assert [_rel(path) for path in head.BASE_FILES] == [PLANNER]
-    # CONTRACT_290 section 5 (ERRATA_LINES 3 files) and section 7 (the three named files)
-    assert sorted(_rel(path) for path in head.ERRATA_LINES) == sorted([TABLE, *COUNT_FILES])
+    # CONTRACT_290 section 11 as amended by IMPL_NOTE_290_5 (E3 names 5 files) and section 7
+    assert sorted(_rel(path) for path in head.ERRATA_LINES) == sorted([TABLE, *COUNT_FILES, "tests/test_met_008_oracle.py", "architecture/oracle-identity-met-008.json"])
     # CONTRACT_290 section 4 (the record's eight members)
     assert sorted(head.INPUTS_MEMBERS) == list(INPUT_MEMBERS)
 
@@ -797,10 +797,10 @@ def test_e2_refuses(head, authority, change):
 
 
 def test_e3_named_files_spans_and_classes(head, record_raw):
-    """CONTRACT_290 sections 5 and 7 (E3): class other only on the three named files; the count lines are named."""
+    """CONTRACT_290 sections 5 and 7 (E3): class other only on the five named files; the count lines are named."""
     classes = json.loads(record_raw)["classes"]
-    named = sorted([TABLE, *COUNT_FILES])
-    # CONTRACT_290 section 5 (E3: class-other hunks only on the 3 named files) and section 7
+    named = sorted([TABLE, *COUNT_FILES, "tests/test_met_008_oracle.py", "architecture/oracle-identity-met-008.json"])
+    # CONTRACT_290 section 11 as amended by IMPL_NOTE_290_5 (E3: class-other hunks only on the 5 named files) and section 7
     assert sorted(path for path, kinds in classes.items() if "other" in kinds) == named
     # CONTRACT_290 section 7 (the table's hunks, all class other under rule W)
     assert classes[TABLE] and set(classes[TABLE]) == {"other"}
@@ -817,7 +817,7 @@ def test_e3_accepts_the_live_record(head, authority, record_raw):
 
 @pytest.mark.parametrize("position", ["first", "middle", "last"])
 def test_e3_refuses_other_on_any_other_file(head, authority, record_raw, position):
-    """CONTRACT_290 sections 5 and 7 (E3): class other on a file outside the three named files is refused."""
+    """CONTRACT_290 sections 5 and 7 (E3): class other on a file outside the five named files is refused."""
     classes = copy.deepcopy(json.loads(record_raw)["classes"])
     named = {_rel(path) for path in head.ERRATA_LINES}
     eligible = sorted(
@@ -830,7 +830,7 @@ def test_e3_refuses_other_on_any_other_file(head, authority, record_raw, positio
     index = next(number for number, kind in enumerate(classes[path]) if kind != "other")
     classes[path][index] = "other"
     befores = _befores(head, authority)
-    # CONTRACT_290 section 5 (E3: class other only on the 3 named files at their named spans)
+    # CONTRACT_290 section 5 (E3: class other only on the 5 named files at their named spans)
     with pytest.raises(ValueError, match=TAG):
         head.check_errata(classes, authority["changedFiles"], befores)
 

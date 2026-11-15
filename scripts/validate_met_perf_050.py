@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/perf-weights-refresh-authority.json"
-AUTHORITY_SHA256 = "42a31d6e434d1000bfb7ec696eea36b2225c541b3a885ee77b282b54f7507303"
+AUTHORITY_SHA256 = "cceee872f0645dd890fcd5e1e64fcde92be297f5e44721c73ec55450e61da713"
 VALIDATOR_PATH = "scripts/validate_met_perf_050.py"
 BASE_COMMIT = "cf2535065bf1d79efaccdc6bbc2aebac5bcd2aae"
 NEW_PACKET = "MET-PERF-050"
@@ -370,9 +370,11 @@ ERA_SHA256 = MappingProxyType({
     "ci/parallel_suite_weights.json": "f77fb6c5acdacc2361f7266978bac6d205e9a54e06eec217fa88f739732348f0",
 })
 ERRATA_LINES = MappingProxyType({
+    "architecture/oracle-identity-met-008.json": ((5, 5), (8, 8), (28, 29), (37, 37)),
     "ci/parallel_suite_weights.json": ((3, 3), (14, 16), (18, 52), (54, 54), (56, 66), (68, 76), (78, 88), (90, 96), (98, 103), (105, 155), (157, 159), (161, 163), (165, 188), (190, 198)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_008_oracle.py": ((259, 259),),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"
