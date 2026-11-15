@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/perf-weights-refresh-authority.json"
-AUTHORITY_SHA256 = "91f7161334838c51064cab1639c54d0d3a041d1b636e09b8920575162c608780"
+AUTHORITY_SHA256 = "06f8d5deeaa970aa88cd59ffa95e873990a5918155f40ac9f11a3c9904e13bb3"
 VALIDATOR_PATH = "scripts/validate_met_perf_050.py"
 BASE_COMMIT = "cf2535065bf1d79efaccdc6bbc2aebac5bcd2aae"
 NEW_PACKET = "MET-PERF-050"
@@ -362,12 +362,12 @@ BASE_SHA256 = MappingProxyType({
     "ci/parallel_suite.py": "33f6b82dbd5d4eefd1110e89da5e7dd2697028657d4539c157c30126b8ed44c8",
 })
 ERA_SHA256 = MappingProxyType({
-    "architecture/perf-weights-refresh-inputs.json": "b52278045372a25751726e9add086e9dab84d1790e6bc9e5dc767e117590697a",
+    "architecture/perf-weights-refresh-inputs.json": "8fda6c32b48aede78afd097146ae4194cc1a01e623f4a7d9ad7d1d0bd17cc38c",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "6d9feddd94587ca20bf6e3418dabfc0b9aff9971e60577c8c4b1cd2d5389f04c",
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
     "ci/parallel_suite.py": "33f6b82dbd5d4eefd1110e89da5e7dd2697028657d4539c157c30126b8ed44c8",
-    "ci/parallel_suite_weights.json": "1bc023f91aa4693a995e1e3576bbe402731c8968558ae00eb2a158f6d1a60dfa",
+    "ci/parallel_suite_weights.json": "597625ed05a5c57b008f538212e18e0e34ad0dd8af219a41c814147dd7994620",
 })
 ERRATA_LINES = MappingProxyType({
     "ci/parallel_suite_weights.json": ((3, 3), (14, 16), (18, 52), (54, 54), (56, 66), (68, 76), (78, 88), (90, 96), (98, 103), (105, 155), (157, 159), (161, 163), (165, 188), (190, 198)),
