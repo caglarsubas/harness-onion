@@ -19,6 +19,10 @@ evenly over about 100 test files, and every packet adds to it. Owner decisions (
     `pytest.main` keep pytest's serial loop (MET-PERF-037, review R3-01).
   - The parent collects as usual and assigns whole test files to 12 worker processes (MET-PERF-049; 8 before), by the
     pinned weights in `ci/parallel_suite_weights.json`.
+  - PERF-WORKERS-ENV (MET-008): `PLANEON_PARALLEL_SUITE_WORKERS` (1 to 64) and `PLANEON_PARALLEL_SUITE_DEADLINE`
+    (900 to 3,600 s) set the worker count and the worker deadline, read once in the parent at `pytest_configure`.
+    Unset, the defaults hold (12 workers, 900 s); any other value is refused, naming the variable. The verify's runner
+    scrubs both names (it keeps only its allow-listed environment names), so a verify always runs with the defaults.
   - Each worker runs `python -m pytest -p ci.parallel_suite <its files>` in the same checkout and sandbox. It streams
     pytest's own serialized reports, and the warnings recorded while its tests run, to a private file.
   - The parent restores each report's tuple fields (JSON has none) and replays it through its own hooks: terminal

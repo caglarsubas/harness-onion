@@ -209,7 +209,8 @@ def _memo(key, make):
 
 
 def _bytes(relative):
-    return (ROOT / relative).read_bytes()
+    """Slot 288's era bytes of relative: the head's reviewed_bytes projects a successor's newer bytes back first."""
+    return HEAD.reviewed_bytes(relative)
 
 
 def _sha(data):
@@ -1773,6 +1774,6 @@ def test_authority_digests_match_the_tree():
     new_faults = 0
     for path, digest in authority["newFiles"].items():
         target = ROOT / path
-        new_faults += int(not target.is_file() or _sha(target.read_bytes()) != digest)
+        new_faults += int(not target.is_file() or _sha(_bytes(path)) != digest)
     # CONTRACT_288 section 8 (each new file by its sha256)
     assert new_faults == 0

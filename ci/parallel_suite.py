@@ -65,6 +65,12 @@ DEADLINE_SECONDS = 900
 WEIGHTS_PATH = "ci/parallel_suite_weights.json"
 ASSIGNMENT_ENV = "PLANEON_PARALLEL_SUITE_ASSIGNMENT"
 SERIAL_ENV = "PLANEON_PARALLEL_SUITE_SERIAL"
+# PERF-WORKERS-ENV (MET-008): the worker count and the worker deadline may be set from the environment, read once in
+# the parent at pytest_configure; WORKERS and DEADLINE_SECONDS stay the defaults (Q-289-2 bounds).
+WORKERS_ENV = "PLANEON_PARALLEL_SUITE_WORKERS"
+DEADLINE_ENV = "PLANEON_PARALLEL_SUITE_DEADLINE"
+WORKERS_BOUNDS = (1, 64)
+DEADLINE_BOUNDS = (900, 3600)
 PARENT_NODES = frozenset({
     # Reads the whole session's own results (MET-PERF-030 in-session predecessor proof).
     "tests/linux_runner/test_build_and_predecessors.py::test_full_predecessor_suites_and_validators_remain_green",
@@ -81,6 +87,7 @@ _sink = None      # worker: its record stream
 _config = None    # worker: its config, for report serialization
 _seen = None      # parent: nodeid -> [(when, outcome)] from every report the parent's hooks receive
 _inherited_serial = False  # whether this session itself was started as a serial descendant
+_workers, _deadline = WORKERS, DEADLINE_SECONDS  # parent: the configured worker count and deadline
 
 
 def _write(record):
@@ -121,10 +128,29 @@ def _watch_parent(parent):
             os._exit(70)
 
 
+def configured(environ):
+    """The worker count and the worker deadline in seconds: each from its environment name when set, as a whole decimal
+    number within its bounds, otherwise the constant; any other value is refused, naming the variable."""
+    values = []
+    for name, default, (low, high) in ((WORKERS_ENV, WORKERS, WORKERS_BOUNDS),
+                                       (DEADLINE_ENV, DEADLINE_SECONDS, DEADLINE_BOUNDS)):
+        raw = environ.get(name)
+        if raw is None:
+            values.append(default)
+        elif raw.isascii() and raw.isdigit() and low <= int(raw) <= high:
+            values.append(int(raw))
+        else:
+            raise pytest.UsageError("parallel suite: %s=%r is refused: it must be a whole number from %d to %d"
+                                    % (name, raw[:40], low, high))
+    return tuple(values)
+
+
 def pytest_configure(config):
     """The assignment is popped so that no nested pytest acts as a worker; descendants of every session run serially."""
-    global _sink, _config, _inherited_serial
+    global _sink, _config, _inherited_serial, _workers, _deadline
     assignment = os.environ.pop(ASSIGNMENT_ENV, None)
+    if not assignment:
+        _workers, _deadline = configured(os.environ)
     _inherited_serial = bool(os.environ.get(SERIAL_ENV))
     os.environ[SERIAL_ENV] = "1"
     if assignment:
@@ -270,7 +296,7 @@ def pytest_runtestloop(session):
     config = session.config
     diagnostics = getattr(config, DIAGNOSTICS_KEY, None)
     options = interpreter_options()
-    if (_sink is not None or WORKERS == 1 or _inherited_serial or config.option.collectonly
+    if (_sink is not None or _workers == 1 or _inherited_serial or config.option.collectonly
             or not session.items or not paths_only(config) or options is None):
         return None
     if session.testsfailed and not config.option.continue_on_collection_errors:
@@ -340,7 +366,7 @@ def pytest_runtestloop(session):
     previous = {number: signal.signal(number, _interrupt) for number in (signal.SIGTERM, signal.SIGHUP)
                 if signal.getsignal(number) == signal.SIG_DFL}
     try:
-        for index, names in enumerate(_plan(files, WORKERS, config.rootpath)):
+        for index, names in enumerate(_plan(files, _workers, config.rootpath)):
             assignment = work / ("worker%d.json" % index)
             nodeids = [node for name in names for node in files[name]]
             owner.update((node, assignment.name) for node in nodeids)
@@ -354,14 +380,14 @@ def pytest_runtestloop(session):
                                        stdout=log, stderr=subprocess.STDOUT)
             workers.append({"process": process, "name": assignment.name, "log": log, "offset": 0, "pending": b"",
                             "failed": 0, "reports": Path(str(assignment) + ".reports.jsonl"), "nodeids": nodeids})
-        deadline = time.monotonic() + DEADLINE_SECONDS
+        deadline = time.monotonic() + _deadline
         while True:
             for worker in workers:
                 drain(worker)
             if all(worker["process"].poll() is not None for worker in workers):
                 break
             if time.monotonic() > deadline:
-                problems.append("deadline of %d s" % DEADLINE_SECONDS)
+                problems.append("deadline of %d s" % _deadline)
                 break
             time.sleep(0.05)
     except KeyboardInterrupt:

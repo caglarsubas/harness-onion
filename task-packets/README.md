@@ -1,6 +1,13 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-007
+## Current source preparation — MET-008
+
+MET-008 (slot 289): RELEASE-EVIDENCE-001, a K = 0 step (301 packets at slot 289): architecture/release-evidence.json
+over the release profile's 41 closure nodes with its schema, projection, checker and tests; and PERF-WORKERS-ENV in
+ci/parallel_suite.py; gate material (the registry rider, ci/parallel_suite.py (GATE_CI), the D5a oracle).
+Alpha2 OPEN; 300 accepted (the catalog at slot 288) plus MET-008 only.
+
+## Historical data correctness source preparation — MET-007
 
 MET-007 (slot 288): DATA-CORRECTNESS-001 and R14's registration row, a K = 1 step (300 packets at slot 288):
 architecture/data-correctness/record.json over the 24 durable writers with its schema, vectors, model, checker and
@@ -1804,3 +1811,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 298 | `MET-006` | `Harness-Engineering` | SERVICE-EDGES-001, the service-edge record beside the catalog (K = 0, 298 packets at slot 287): one entry per catalog dependency with its schema, checker and tests; CONTRACT_286's errata 10-12 and the sector-catalog test's NAMING_RECORDS and LITERAL_READERS registrations and the corpus count in two tests carried |
 | 299 | `MET-007` | `Harness-Engineering` | DATA-CORRECTNESS-001 and R14's registration row (K = 1, 300 packets at slot 288): the data-correctness record over the 24 durable writers with its schema, vectors, model, checker and tests; R14 mas-harness-reference-lab registered (kind meta, releaseSet EXCLUDED); the class rule v2.5 in ci/chain_checkpoint.py; publishes LAB-SYNC-001 |
 | 300 | `LAB-SYNC-001` | `mas-harness-research-lab` | R13's research sync, PR 5 on branch codex/lab-sync-a2482753 (head 9992d1755f71) over LAB-REPO-001's merge 2e977f4f5a31: research/** only, LAB-REPO-001's six commands inherited in order (product, published by MET-007) |
+| 301 | `MET-008` | `Harness-Engineering` | RELEASE-EVIDENCE-001 (K = 0, 301 packets at slot 289): the release evidence matrix over the release profile's 41 closure nodes with its schema, projection, checker and tests; PERF-WORKERS-ENV in ci/parallel_suite.py |
