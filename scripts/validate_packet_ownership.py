@@ -8,6 +8,8 @@ rules small enough to exercise with negative unit vectors.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 from pathlib import PurePosixPath
 from typing import Any
@@ -78,7 +80,81 @@ MAKE_TARGET_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 MAKE_VARIABLE_PATTERN = re.compile(r"^([A-Z][A-Z0-9_]*)=([^\x00\s;|&`$<>]+)$")
 
 
-def packet_ancestors(packets: dict[str, dict[str, Any]]) -> dict[str, set[str]]:
+# MET-009 (slot 291; MON-291-DESIGN-RULE D1 (a), ANNEX_291): each plane's health shell precedes the plane's registered
+# bootstrap. Closed: exactly these three rows, each five strings. A row orders its shell before its registered bootstrap
+# only while both packets are in the mapping, each names its plane's repository, and each packet's canonical content
+# digest (sha256 of the parsed packet as sorted-key compact JSON; this module does no workspace I/O) equals the row's;
+# it orders nothing else. A row whose shell is absent is skipped; a present shell without its registered bootstrap, a
+# repository mismatch, and a digest that differs or cannot be computed each refuse that row. The published YAML
+# digests of the same packets:
+#   RUN-001 YAML sha256 4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457; PLANE-BOOTSTRAP-R05 YAML sha256 a9c03745470c3c9fd209fd111249b96a9705151571a589576f6f2e93aa6dcd2b
+#   MODEL-001 YAML sha256 753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0; PLANE-BOOTSTRAP-R06 YAML sha256 8718777c765977bd26015c26cd62a593e6db9d960c7eb4f6d44748ac35e4f4ae
+#   EXEC-001 YAML sha256 7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108; PLANE-BOOTSTRAP-R08 YAML sha256 534065bd434de67faddb91af738c61ebe33e9acaa2d2dec5110e0e1181c877ec
+PLANE_SHELL_ORDER = (
+    ("mas-harness-runtime-plane", "RUN-001", "78e61ca9adba62e5e11e49d58c1a28ea7a98ed0f61f8b30d6b2f4cb0b8597150", "PLANE-BOOTSTRAP-R05", "c961cb71c3ffde53681364619ab6c8eb4a674135d64c5b486e30df7ab47b9f03"),
+    ("mas-harness-model-plane", "MODEL-001", "3151b8f0d5568a916e44df7d3147be598d3420e38cddf6dd3f2ddd44f3e98d6d", "PLANE-BOOTSTRAP-R06", "b7f2a079dc05e901a86bf1ed9e06c61c194bea70c5400ab732c7cea492a1340d"),
+    ("mas-harness-execution-plane", "EXEC-001", "296daa3ddd4e361c54dc87f33fc63c341ffac8f805f1f0858c7c4870a40ee99d", "PLANE-BOOTSTRAP-R08", "70a9a32c6092ac7301bc399a3421a93bb804977e37431b53ebc403c6bdf0a74e"),
+)
+
+
+def packet_content_sha256(packet: dict[str, Any]) -> str:
+    """The canonical content digest of one parsed packet."""
+
+    return hashlib.sha256(
+        json.dumps(packet, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def plane_shell_order(
+    packets: dict[str, dict[str, Any]], table: tuple[tuple[str, str, str, str, str], ...] | None = None
+) -> tuple[dict[str, tuple[str, ...]], list[str]]:
+    """The extra predecessors the closed plane-shell table grants, and its refusals."""
+
+    rows = PLANE_SHELL_ORDER if table is None else table
+    planes = {
+        "mas-harness-runtime-plane": "PLANE-BOOTSTRAP-R05",
+        "mas-harness-model-plane": "PLANE-BOOTSTRAP-R06",
+        "mas-harness-execution-plane": "PLANE-BOOTSTRAP-R08",
+    }
+    if (
+        len(rows) != 3
+        or any(not isinstance(row, tuple) or len(row) != 5 for row in rows)
+        or any(not isinstance(cell, str) for row in rows for cell in row)
+        or sorted(row[0] for row in rows) != sorted(planes)
+        or any(row[1] != PRODUCT_BOOTSTRAP_PACKETS.get(row[0]) for row in rows)
+        or any(row[3] != planes.get(row[0]) for row in rows)
+        or len({row[1] for row in rows} | {row[3] for row in rows}) != 6
+    ):
+        return {}, ["plane shell order table must hold exactly the three closed rows"]
+    extra: dict[str, tuple[str, ...]] = {}
+    errors: list[str] = []
+    for repository, registered_id, registered_sha, shell_id, shell_sha in rows:
+        if shell_id not in packets:
+            continue
+        if registered_id not in packets:
+            errors.append(f"plane shell order row {shell_id}: {registered_id} absent")
+            continue
+        registered, shell = packets[registered_id], packets[shell_id]
+        if registered.get("repository") != repository or shell.get("repository") != repository:
+            errors.append(f"plane shell order row {shell_id}: repository mismatch")
+            continue
+        for packet_id, packet, expected in ((registered_id, registered, registered_sha), (shell_id, shell, shell_sha)):
+            try:
+                digest = packet_content_sha256(packet)
+            except (TypeError, ValueError, UnicodeEncodeError, RecursionError):
+                errors.append(f"plane shell order row {shell_id}: {packet_id} content digest unavailable")
+                break
+            if digest != expected:
+                errors.append(f"plane shell order row {shell_id}: {packet_id} content digest mismatch")
+                break
+        else:
+            extra[registered_id] = (shell_id,)
+    return extra, errors
+
+
+def packet_ancestors(
+    packets: dict[str, dict[str, Any]], extra: dict[str, tuple[str, ...]] | None = None
+) -> dict[str, set[str]]:
     """Return the transitive predecessor closure for every packet."""
 
     cache: dict[str, set[str]] = {}
@@ -90,7 +166,7 @@ def packet_ancestors(packets: dict[str, dict[str, Any]]) -> dict[str, set[str]]:
             return set()
         next_visiting = {*visiting, packet_id}
         result: set[str] = set()
-        for predecessor in packets.get(packet_id, {}).get("predecessors", []):
+        for predecessor in [*packets.get(packet_id, {}).get("predecessors", []), *(extra or {}).get(packet_id, ())]:
             result.add(predecessor)
             result.update(visit(predecessor, next_visiting))
         cache[packet_id] = result
@@ -181,7 +257,9 @@ def validate_packet_ownership(packets: dict[str, dict[str, Any]]) -> list[str]:
     """Validate Make, CLI, porting-ledger, and path ownership closure."""
 
     errors: list[str] = []
-    ancestors = packet_ancestors(packets)
+    extra, order_errors = plane_shell_order(packets)
+    errors.extend(order_errors)
+    ancestors = packet_ancestors(packets, extra)
 
     present_product_repositories = {
         packet.get("repository")
