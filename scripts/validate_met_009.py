@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/plane-bootstraps-authority.json"
-AUTHORITY_SHA256 = "661a457d55ec6d9196c47e486706074f5c9de8aea4720f67a40aa567337d3bb2"
+AUTHORITY_SHA256 = "985ab049c260177716be7adb4dd947a5b3f30c54f0eda32656af41eef672dbed"
 VALIDATOR_PATH = "scripts/validate_met_009.py"
 BASE_COMMIT = "cee2cc76482ff1dd35abed5c2a1d70cdf8e5f6bd"
 NEW_PACKET = "MET-009"
