@@ -256,7 +256,8 @@ def _disk(relative):
     target = ROOT / text
     if not target.is_file():
         raise FileNotFoundError(text)
-    return target.read_bytes()
+    # Era read ([PC-1]): the head's reviewed_bytes, which projects a bridged successor's newer bytes back first.
+    return head().reviewed_bytes(text)
 
 
 def _reader(served=None):

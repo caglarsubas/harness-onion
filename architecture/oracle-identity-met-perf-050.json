@@ -1,0 +1,44 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_perf_050_oracle.py",
+  "sha256": "e71d93d3464b02bd10e7045636cef92fe4248e7b077fbb83576e333989df0c1d"
+ },
+ "oracle": {
+  "agentId": "a10051a26b7dfab04",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "bf6383ea-f2e4-4ad6-aef2-b38999710a1e",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "bf6383ea-f2e4-4ad6-aef2-b38999710a1e"
+  ]
+ },
+ "briefSha256": "77fc5d7933b07a2331d943e87a2ad7da85d7d3086c93738c29bf59902f057dd5",
+ "candidateCommit": "3e808346132bbb29f7dbef75b08de3f5c5f384b7",
+ "launched": "2026-11-15T16:22:03+08:00",
+ "finished": "2026-11-15T23:34:22+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-290-PC1-KEEP",
+  "date": "2026-11-15"
+ },
+ "disclosures": [
+  "bound inputs (CONTRACT_290 rev 2 implementation note 1, MON-290-C3PATHS): exactly the oracle e71d93d3464b02bd10e7045636cef92fe4248e7b077fbb83576e333989df0c1d, the table 81b50ed06b796509d348395149501206ec67ca9c7d89eff9cdccd40e05d71a12, the inputs record 7203b0134b68eb4dc9bb2ce6cea0e5e4c289eecf0606ac379f3dd0d43004ff0e and the oracle sweep's rc/wall line bd9bd625ce6a0781463e59f43af626ed361bdd868263e9c9c77dbcf7a13277b6 (rc=0 wall=6s); this record binds no other digest: not the authority, the head or the YAML, which change when it is added",
+  "brief 77fc5d79 and launch prompt 7944e4cc (derived from 289's kit by derive_kit290.py); the author's only inputs are CONTRACT_290 rev 2 (0acb5e68) and the packet YAML at c2 9b258a30 with closed-path strings masked; the operator-stated facts are the head's and the planner's names and signatures, with line numbers computed from c2's head and planner blobs",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran py_compile only, no test run; its first file 423a2f5d; its report: 32 tests, 51 parametrized cases, 4 asserts without a CONTRACT_290 cite (the author's own count); its slips: one message carried three Edit calls, against the one-tool-call rule; construction slip: the string walker descended only into dict, so two tests failed in blind run 1; fixed in r2 (MON-290-B1C-CLASS class (a)), no expectation, assertion or node count changed; r3 ([PC-1]): one message carried three Edit calls, against the one-tool-call rule; r4: ran shasum and wc -l once each beyond py_compile, for its report",
+  "[PC-1] (IMPL_NOTE_290_5; MON-290-PC1-RULE, MON-290-ORACLE-R3): after the dry run found class (a) failures in 289's oracle, the lane monitor's non-author agent corrected that file (placed by bytes, its identity re-bound KEEP) and the same author revised this file twice: r3 moved allowedPaths to 299 and named [PC-1]'s two files in E3 (cleared class (c) by the lane monitor's own diff); r4 changed only three stale words in two docstrings and one comment (a script proof: no code line changed); the blind runs before r3 ran r1 or r2",
+  "blind run 1 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 423a2f5d, rc 1, passed 72, failed 3, skipped 0, errors 0, collected 75 (stated 75); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 2 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 423a2f5d, rc 1, passed 72, failed 3, skipped 0, errors 0, collected 75 (stated 75); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 3 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 2d191cec, rc 1, passed 74, failed 1, skipped 0, errors 0, collected 75 (stated 75); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 4 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 2d191cec, rc 0, passed 75, failed 0, skipped 0, errors 0, collected 75 (stated 75); VERDICT PASS (node counts only; the operator never opens the file)",
+  "blind run 5 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle e71d93d3, rc 0, passed 75, failed 0, skipped 0, errors 0, collected 75 (stated 75); VERDICT PASS (node counts only; the operator never opens the file)",
+  "the oracle sweep at the c3 [PC-1] commit 3e808346, the pre-check way, one file: rc 0, wall 6 s, failed 0, errors 0, collected 75; VERDICT PASS; its rc/wall line is this record's only timing input: the oracle's measured row rawSeconds 6.0, overheadSeconds 1.26, headTests 4.7 (CONTRACT_290 rev 2 section 4)",
+  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-290-PC1-KEEP)"
+ ]
+}
