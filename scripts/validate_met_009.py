@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/plane-bootstraps-authority.json"
-AUTHORITY_SHA256 = "985ab049c260177716be7adb4dd947a5b3f30c54f0eda32656af41eef672dbed"
+AUTHORITY_SHA256 = "bca8646190181870804da45f4e02afe1a30a642b45cb34897e4586ceaead8b3a"
 VALIDATOR_PATH = "scripts/validate_met_009.py"
 BASE_COMMIT = "cee2cc76482ff1dd35abed5c2a1d70cdf8e5f6bd"
 NEW_PACKET = "MET-009"
@@ -371,14 +371,14 @@ ERA_SHA256 = MappingProxyType({
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "562bff3eceb36a9f49461427fe45a5dae9d48cf8ec804790e00a8607cf245f78",
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
-    "scripts/validate_packet_ownership.py": "0c2353d14f7a912b3943953faf711a96d4e6e59b08b6fc9b6de3e7452ad0dc61",
+    "scripts/validate_packet_ownership.py": "39b1594200b301e2cb4ff71ad4db40d970025a92c23c70833daf28b4f9b5c056",
     "task-packets/CTRL-TRANSPORT-002A.yaml": "b189824cc10125ac8eff0da2157a29912b0e5ef5d6e61e86e83d673055979e2b",
     "task-packets/DIST-TRANSPORT-002A.yaml": "6ea7de7fa2db4e2c39ba96bf4a5339226a1f267b1a9628044276f74648e365d8",
     "task-packets/IND-TRANSPORT-001A.yaml": "d1c27e920352a022acb6fbe59c99de61562fbb42740f72b7cd6a2a50f1c9adfc",
     "task-packets/LAB-TRANSPORT-001.yaml": "b4120531e1260f5cb2c2f08e648a26258cb55bab47dfb484971ba1aa772b5aee",
-    "task-packets/PLANE-BOOTSTRAP-R05.yaml": "a9c03745470c3c9fd209fd111249b96a9705151571a589576f6f2e93aa6dcd2b",
-    "task-packets/PLANE-BOOTSTRAP-R06.yaml": "8718777c765977bd26015c26cd62a593e6db9d960c7eb4f6d44748ac35e4f4ae",
-    "task-packets/PLANE-BOOTSTRAP-R08.yaml": "534065bd434de67faddb91af738c61ebe33e9acaa2d2dec5110e0e1181c877ec",
+    "task-packets/PLANE-BOOTSTRAP-R05.yaml": "bc3ebb3b1f2d79faa8e4ff7680c29d34a59119c3293246c690546887bb773758",
+    "task-packets/PLANE-BOOTSTRAP-R06.yaml": "880c30f21c681a99df2b4ee624a77c2261e6196333a628b236bbda65c60e3df5",
+    "task-packets/PLANE-BOOTSTRAP-R08.yaml": "f86897163204cb3881f3c756ab2d8614dcd183f3d26ea975934a437f0f577fa4",
     "tests/test_plane_shell_order.py": "d8a20d435231f2ac7b7dcbf718887976ca45e0b978eb5b1120ea70ff091b61a8",
 })
 ERRATA_LINES = MappingProxyType({

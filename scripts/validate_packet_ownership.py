@@ -87,13 +87,13 @@ MAKE_VARIABLE_PATTERN = re.compile(r"^([A-Z][A-Z0-9_]*)=([^\x00\s;|&`$<>]+)$")
 # it orders nothing else. A row whose shell is absent is skipped; a present shell without its registered bootstrap, a
 # repository mismatch, and a digest that differs or cannot be computed each refuse that row. The published YAML
 # digests of the same packets:
-#   RUN-001 YAML sha256 4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457; PLANE-BOOTSTRAP-R05 YAML sha256 a9c03745470c3c9fd209fd111249b96a9705151571a589576f6f2e93aa6dcd2b
-#   MODEL-001 YAML sha256 753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0; PLANE-BOOTSTRAP-R06 YAML sha256 8718777c765977bd26015c26cd62a593e6db9d960c7eb4f6d44748ac35e4f4ae
-#   EXEC-001 YAML sha256 7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108; PLANE-BOOTSTRAP-R08 YAML sha256 534065bd434de67faddb91af738c61ebe33e9acaa2d2dec5110e0e1181c877ec
+#   RUN-001 YAML sha256 4fa60ad4793d2268ccd5f84e0cbc4ce3d45340abf2ba824b30cc895b5a618457; PLANE-BOOTSTRAP-R05 YAML sha256 bc3ebb3b1f2d79faa8e4ff7680c29d34a59119c3293246c690546887bb773758
+#   MODEL-001 YAML sha256 753847ad57b2247a281b23c8f7db1956da3ae5d33f32433b25e80d44585160c0; PLANE-BOOTSTRAP-R06 YAML sha256 880c30f21c681a99df2b4ee624a77c2261e6196333a628b236bbda65c60e3df5
+#   EXEC-001 YAML sha256 7a6a95f429315d157c8f2ee4bcfb63584bbfd2ae9dcfb26420adaf30fbf76108; PLANE-BOOTSTRAP-R08 YAML sha256 f86897163204cb3881f3c756ab2d8614dcd183f3d26ea975934a437f0f577fa4
 PLANE_SHELL_ORDER = (
-    ("mas-harness-runtime-plane", "RUN-001", "78e61ca9adba62e5e11e49d58c1a28ea7a98ed0f61f8b30d6b2f4cb0b8597150", "PLANE-BOOTSTRAP-R05", "c961cb71c3ffde53681364619ab6c8eb4a674135d64c5b486e30df7ab47b9f03"),
-    ("mas-harness-model-plane", "MODEL-001", "3151b8f0d5568a916e44df7d3147be598d3420e38cddf6dd3f2ddd44f3e98d6d", "PLANE-BOOTSTRAP-R06", "b7f2a079dc05e901a86bf1ed9e06c61c194bea70c5400ab732c7cea492a1340d"),
-    ("mas-harness-execution-plane", "EXEC-001", "296daa3ddd4e361c54dc87f33fc63c341ffac8f805f1f0858c7c4870a40ee99d", "PLANE-BOOTSTRAP-R08", "70a9a32c6092ac7301bc399a3421a93bb804977e37431b53ebc403c6bdf0a74e"),
+    ("mas-harness-runtime-plane", "RUN-001", "78e61ca9adba62e5e11e49d58c1a28ea7a98ed0f61f8b30d6b2f4cb0b8597150", "PLANE-BOOTSTRAP-R05", "e0d841c4cddb00e2043400580ef3c52d3ee9b84ad98c36cd3892ddc260130509"),
+    ("mas-harness-model-plane", "MODEL-001", "3151b8f0d5568a916e44df7d3147be598d3420e38cddf6dd3f2ddd44f3e98d6d", "PLANE-BOOTSTRAP-R06", "2e04132ef679657303321432ded2b2d7e9894a18b5310e8a0cb6d0c16641ee30"),
+    ("mas-harness-execution-plane", "EXEC-001", "296daa3ddd4e361c54dc87f33fc63c341ffac8f805f1f0858c7c4870a40ee99d", "PLANE-BOOTSTRAP-R08", "8a87d633b19c98e3d5a9d5d8cac973cdf7e9149212f736c291ec1b99c88b06f4"),
 )
 
 

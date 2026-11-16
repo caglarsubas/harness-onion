@@ -26,5 +26,5 @@ expectedEvidence:
   - "The head's name-status against e3331fe740834cdc4001d3e78794ec03029e6614 is exactly the Tree contract's 11 A entries; the four transport files equal contracts[1] by sha256, size and mode."
   - "The health unittest passes under the hash-pinned offline runner with all outbound network denied; health() and the WSGI callable answer as contracts[2] states."
   - "pyproject.toml declares no dependency, and no file imports anything outside the standard library or the shell's own package."
-  - "Source, offline unit, PR check and merge are the only evidence this packet can prove; image, deployment, runtime, live security, assurance and tenant acceptance stay NOT_RUN or pending."
+  - "Source, offline unit, PR check and merge are the only evidence this packet can prove; image, deployment, runtime, live security, assurance and tenant acceptance stay not run or pending."
 rollback: Revert the shell's commit before EXEC-001 or any other R08 packet merges; the owner's empty initial commit stays the base, and no data, schema or dependency state is involved.
