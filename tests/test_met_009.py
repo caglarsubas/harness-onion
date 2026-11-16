@@ -788,8 +788,8 @@ def test_full_packet_expectations_initialize_once_and_remain_immutable(monkeypat
 
     monkeypatch.setattr(profile, "safe_load", counted)
     rules = profile._packet_rules()
-    assert len(rules) == 310 and len(parsed) == 302
-    assert profile._packet_rules() is rules and len(parsed) == 302
+    assert len(rules) == 310 and len(parsed) == 309
+    assert profile._packet_rules() is rules and len(parsed) == 309
     with pytest.raises(TypeError):
         rules["MET-001"] = ("0" * 64, "0" * 64)
 
