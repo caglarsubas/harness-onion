@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_009_oracle.py",
-  "sha256": "bff59f1b653ed7a676be82d584749a50d47cef23bd1c18733241716b43afb2fd"
+  "sha256": "f1e31eed1498e5027e20eec6b57f39498888ea01347a4a3bc3ee533c7da5f422"
  },
  "oracle": {
   "agentId": "acc6c8355b7ad607b",
@@ -19,25 +19,26 @@
   ]
  },
  "briefSha256": "8205208eca6765cf166673b60470fd8d2d2a860a730b5e7f5946003dfbcabdea",
- "candidateCommit": "3b3e37c6298ef735a1c045f0ced2e41c78309a92",
+ "candidateCommit": "cf3150d12057895d62e69ca221948da6970aa778",
  "launched": "2026-11-16T21:02:20+08:00",
  "finished": "2026-11-16T22:27:55+08:00",
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-291-IDENTITY-KEEP",
-  "date": "2026-11-16"
+  "ref": "MON-291-ERA-R4-KEEP",
+  "date": "2026-11-17"
  },
  "disclosures": [
-  "bound inputs: exactly the oracle bff59f1b653ed7a676be82d584749a50d47cef23bd1c18733241716b43afb2fd, the table ed2127b886a1361b6b91cf1424777cd73a8596a117374b8b1576557da6113d16 and the oracle sweep's rc/wall line c87bcf74c6949cfa360081248b6a36e2b2e529731c9e404a9bc50c49d1d508d2 (rc=0 wall=12s); this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "bound inputs: exactly the oracle f1e31eed1498e5027e20eec6b57f39498888ea01347a4a3bc3ee533c7da5f422, the table ed2127b886a1361b6b91cf1424777cd73a8596a117374b8b1576557da6113d16 and the oracle sweep's rc/wall line 8400ed5f0d7fcd5f4226ab3530ad9bd720b7fd22ee3e7e19824ed2a4712804ca (rc=0 wall=19s); this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
   "brief 8205208e and launch prompt 03c36c7b (derived from 290's kit); the author's only inputs are CONTRACT_291 rev 3 (8837aa6a) and the packet YAML at c2 411bf9ee with closed-path strings masked, plus the lane monitor's operator-stated facts relayed in contract terms",
-  "the author is a fresh agent that authored nothing in c1..c2 and ran py_compile only, no test run; its first file 1857b2b1; its revisions 1857b2b1 -> 7c4bb315 -> bff59f1b on the lane monitor's routing: r2 for one construction slip (MON-291-B1C-CLASS: historical_catalog takes the complete current catalog, with a fail-closed vector for a partial mapping) and r3 under a narrow runtime allowance for that one test (MON-291-R2-RULE: it lists the tree's task-packets/*.yaml and parses each with the repository's safe loader, asserting the contract's 310); its report: 33 tests, 112 parametrized cases, 0 asserts without a cite (the author's own count); its slips: r1: one wc -l over the brief and the CN files (counts only, off the brief's list); r1: it grepped its own file to audit its cites; r3: twice two tool calls in one message (an Edit with its py_compile)",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran py_compile only, no test run; its first file 1857b2b1; its revisions 1857b2b1 -> 7c4bb315 -> bff59f1b -> f1e31eed on the lane monitor's routing: r2 for one construction slip (MON-291-B1C-CLASS: historical_catalog takes the complete current catalog, with a fail-closed vector for a partial mapping) and r3 under a narrow runtime allowance for that one test (MON-291-R2-RULE: it lists the tree's task-packets/*.yaml and parses each with the repository's safe loader, asserting the contract's 310); r4 is the lane monitor's era correction of r3 as the non-author (MON-291-ERA-R4, class (c)): exactly the three plane-shell prefix literals of its PREFIXES table, moved from the shells' pre-c4 bytes to their c4 bytes (MON-291-C4-RULE); its content is otherwise r3's; its report: 33 tests, 112 parametrized cases, 0 asserts without a cite (the author's own count); its slips: r1: one wc -l over the brief and the CN files (counts only, off the brief's list); r1: it grepped its own file to audit its cites; r3: twice two tool calls in one message (an Edit with its py_compile)",
   "blind run 1 by the operator, R00, the pre-check form on the c3 candidate over c2 411bf9ee (uncommitted): oracle 1857b2b1, rc 1, passed 129, failed 1, skipped 0, errors 0, collected 130 (stated 130); VERDICT FAIL (node counts only; the operator never opens the file)",
   "blind run 2 by the operator, R00, the pre-check form on the c3 candidate over c2 411bf9ee (uncommitted): oracle 1857b2b1, rc 1, passed 129, failed 1, skipped 0, errors 0, collected 130 (stated 130); VERDICT FAIL (node counts only; the operator never opens the file)",
   "blind run 3 by the operator, R00, the pre-check form on the c3 candidate over c2 411bf9ee (uncommitted): oracle bff59f1b, rc 0, passed 131, failed 0, skipped 0, errors 0, collected 131 (stated 131); VERDICT PASS (node counts only; the operator never opens the file)",
   "blind run 4 by the operator, R00, the pre-check form on the c3 candidate over c2 411bf9ee (uncommitted): oracle bff59f1b, rc 0, passed 131, failed 0, skipped 0, errors 0, collected 131 (stated 131); VERDICT PASS (node counts only; the operator never opens the file)",
-  "the oracle sweep at the c3 commit 3b3e37c6, the pre-check way, one file: rc 0, wall 12 s, failed 0, errors 0, collected 131; VERDICT PASS; the oracle has no weights row (291 refreshes no weights)",
-  "the head-test row is measured from the head-test pre-check at 3b3e37c6 (summary 68546cbe): 197 of 197 passed, pytest 21.90 s -> 21.9; the table is main cee2cc76's plus that one row (212 entries)",
-  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks, and its one allowed test lists task-packets/*.yaml; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-291-IDENTITY-KEEP)"
+  "blind run 5 by the operator, R00, the pre-check form on a fresh clone at the c5 commit cf3150d1 (committed): oracle f1e31eed, rc 0, passed 131, failed 0, skipped 0, errors 0, collected 131 (stated 131); VERDICT PASS (node counts only; the operator never opens the file)",
+  "the oracle sweep at the c5 commit cf3150d1, the pre-check way, one file: rc 0, wall 19 s, failed 0, errors 0, collected 131; VERDICT PASS; the oracle has no weights row (291 refreshes no weights)",
+  "the head-test row is measured from the head-test pre-check at the c3 commit 3b3e37c6 (summary 68546cbe): 197 of 197 passed, pytest 21.90 s -> 21.9; the table is main cee2cc76's plus that one row (212 entries); the row stays at c5 (MON-291-C5-SHAPE): the head-test pre-check at c5 gives 197 of 197 passed",
+  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks, and its one allowed test lists task-packets/*.yaml; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-291-ERA-R4-KEEP)"
  ]
 }
