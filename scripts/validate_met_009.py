@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/plane-bootstraps-authority.json"
-AUTHORITY_SHA256 = "1c76b16f6b2b6cd9fc8522366ddfe13a1851cf8a55d52c4fbff0d6936d88c9da"
+AUTHORITY_SHA256 = "88a6f471db2be1c548cb1eb265eed7c4a0f3ca7daa45d4531a3138cf547abfcd"
 VALIDATOR_PATH = "scripts/validate_met_009.py"
 BASE_COMMIT = "cee2cc76482ff1dd35abed5c2a1d70cdf8e5f6bd"
 NEW_PACKET = "MET-009"
@@ -392,6 +392,7 @@ ERRATA_LINES = MappingProxyType({
     "docs/repositories/13-mas-harness-research-lab.md": ((72, 73),),
     "scripts/validate_packet_ownership.py": ((10, 11), (81, 81), (93, 93), (184, 184)),
     "task-packets/README.md": ((3, 3), (1822, 1823)),
+    "tests/test_chain_compaction.py": ((1426, 1427), (1430, 1430), (1436, 1437)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
     "tests/test_met_perf_050_oracle.py": ((109, 109),),
