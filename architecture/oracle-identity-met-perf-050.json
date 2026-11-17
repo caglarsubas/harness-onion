@@ -2,10 +2,10 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_perf_050_oracle.py",
-  "sha256": "e71d93d3464b02bd10e7045636cef92fe4248e7b077fbb83576e333989df0c1d"
+  "sha256": "bf0a748c2922c6468d949cd4e4ae76b1133498d750df162a44a3b8e20330fe13"
  },
  "oracle": {
-  "agentId": "a10051a26b7dfab04",
+  "agentId": "local_9518a6f0-65d2-4755-9789-4a6f6c2fed2d",
   "model": "claude-opus-5-5"
  },
  "operator": {
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-290-PC1-KEEP",
-  "date": "2026-11-15"
+  "ref": "MON-291-PRE038-KEEP",
+  "date": "2026-11-17"
  },
  "disclosures": [
   "bound inputs (CONTRACT_290 rev 2 implementation note 1, MON-290-C3PATHS): exactly the oracle e71d93d3464b02bd10e7045636cef92fe4248e7b077fbb83576e333989df0c1d, the table 81b50ed06b796509d348395149501206ec67ca9c7d89eff9cdccd40e05d71a12, the inputs record 7203b0134b68eb4dc9bb2ce6cea0e5e4c289eecf0606ac379f3dd0d43004ff0e and the oracle sweep's rc/wall line bd9bd625ce6a0781463e59f43af626ed361bdd868263e9c9c77dbcf7a13277b6 (rc=0 wall=6s); this record binds no other digest: not the authority, the head or the YAML, which change when it is added",
@@ -39,6 +39,8 @@
   "blind run 4 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle 2d191cec, rc 0, passed 75, failed 0, skipped 0, errors 0, collected 75 (stated 75); VERDICT PASS (node counts only; the operator never opens the file)",
   "blind run 5 by the operator, R00, the pre-check form on the c3 candidate over c2 9b258a30 (uncommitted): oracle e71d93d3, rc 0, passed 75, failed 0, skipped 0, errors 0, collected 75 (stated 75); VERDICT PASS (node counts only; the operator never opens the file)",
   "the oracle sweep at the c3 [PC-1] commit 3e808346, the pre-check way, one file: rc 0, wall 6 s, failed 0, errors 0, collected 75; VERDICT PASS; its rc/wall line is this record's only timing input: the oracle's measured row rawSeconds 6.0, overheadSeconds 1.26, headTests 4.7 (CONTRACT_290 rev 2 section 4)",
-  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-290-PC1-KEEP)"
+  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-290-PC1-KEEP)",
+  "corrected under MON-291-PRE038-RULE and MON-291-PRE038-KEEP (290's [PC-1] form) by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), on class (a) of 291's pre-check list (15 of its 75 tests failed on live reads at 291's c7: the weights table, the registry rider and briefs.json; 75 of 75 pass after it at c7 and at the base cee2cc76, the lane monitor's runs); one counted replacement in the `_read` helper (one hunk: base line 109 replaced by 2 lines): the bytes come through 290's head reviewed_bytes(); was e71d93d3; candidateCommit, launched, finished and briefSha256 unchanged; the two earlier disclosures that name e71d93d3 record its placement and a blind run and stay as written; R00 applied the monitor's script by bytes and never opened the file",
+  "the correction was produced by the lane monitor's era script (a9ed66cf), which refuses any input but e71d93d3 and any output but bf0a748c"
  ]
 }
