@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/plane-bootstraps-authority.json"
-AUTHORITY_SHA256 = "1a5d68c272243b73970ef28534264bdcc6db5ecfbc862a813c59673261921302"
+AUTHORITY_SHA256 = "18d64a6fd88368123f7da1a7e5a7fb7ed505fe184fc6f0bb83adbc1ec658bb4b"
 VALIDATOR_PATH = "scripts/validate_met_009.py"
 BASE_COMMIT = "cee2cc76482ff1dd35abed5c2a1d70cdf8e5f6bd"
 NEW_PACKET = "MET-009"
@@ -393,6 +393,7 @@ ERRATA_LINES = MappingProxyType({
     "task-packets/README.md": ((3, 3), (1822, 1823)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_sector_005.py": ((1065, 1065), (1067, 1067)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"

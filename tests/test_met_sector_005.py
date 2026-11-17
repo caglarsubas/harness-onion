@@ -1064,9 +1064,12 @@ V_TESTS = {
 }
 
 def _packets():
-    """The live packets, read as validate() reads them (each file's bytes through the layer, parsed by safe_load)."""
+    """The era packets, read as validate() reads them: the authority's baselinePackets, NEW_PACKET and the
+    PRODUCT_PACKETS (validate()'s set, which skips every later slot's packets); each file's bytes through the layer,
+    parsed by safe_load."""
+    era = set(profile.authority()["baselinePackets"]) | {profile.NEW_PACKET, *profile.PRODUCT_PACKETS}
     return {path.stem: profile.safe_load(profile.regular_bytes("task-packets/" + path.name))
-            for path in sorted((profile.ROOT / "task-packets").glob("*.yaml"))}
+            for path in sorted((profile.ROOT / "task-packets").glob("*.yaml")) if path.stem in era}
 
 
 def _one_byte(raw):
