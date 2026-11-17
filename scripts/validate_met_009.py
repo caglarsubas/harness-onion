@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/plane-bootstraps-authority.json"
-AUTHORITY_SHA256 = "88a6f471db2be1c548cb1eb265eed7c4a0f3ca7daa45d4531a3138cf547abfcd"
+AUTHORITY_SHA256 = "fe8add9306780330eff5a9dea3aee9851aa23e7a11ffb7f8742610d7f0c73555"
 VALIDATOR_PATH = "scripts/validate_met_009.py"
 BASE_COMMIT = "cee2cc76482ff1dd35abed5c2a1d70cdf8e5f6bd"
 NEW_PACKET = "MET-009"
@@ -356,8 +356,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
         require(supplied_sha == payload_sha, "changed packet payload: " + name)
 
 
-# MET-009 (CONTRACT_291 rev 3; the lane monitor's rulings MON-291-DESIGN-RULE, MON-291-DRY2-RULE,
-# MON-291-R1-RULE and MON-291-CA-OK) publishes, in a K = 7 step, the three plane health-shell bootstraps
+# MET-009 (rulings: CONTRACT_291 rev 8, section 2 and its notes) publishes, in a K = 7 step, the three plane
+# health-shell bootstraps
 # PLANE-BOOTSTRAP-R05, -R06 and -R08 and the four transport successors DIST-TRANSPORT-002A, CTRL-TRANSPORT-002A,
 # IND-TRANSPORT-001A and LAB-TRANSPORT-001 at their frozen bytes, with the plane-shell ordering annex in
 # scripts/validate_packet_ownership.py and its test. Repository bytes are read only through reviewed_bytes; an
