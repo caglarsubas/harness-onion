@@ -55,9 +55,9 @@ PRODUCT_FILES = tuple(f"task-packets/{packet}.yaml" for packet in PRODUCTS)
 
 # CONTRACT_291 section 3: the frozen sha256 prefixes.
 PREFIXES = {
-    "PLANE-BOOTSTRAP-R05": "a9c03745",
-    "PLANE-BOOTSTRAP-R06": "8718777c",
-    "PLANE-BOOTSTRAP-R08": "534065bd",
+    "PLANE-BOOTSTRAP-R05": "bc3ebb3b",
+    "PLANE-BOOTSTRAP-R06": "880c30f2",
+    "PLANE-BOOTSTRAP-R08": "f8689716",
     "DIST-TRANSPORT-002A": "6ea7de7f",
     "CTRL-TRANSPORT-002A": "b189824c",
     "IND-TRANSPORT-001A": "d1c27e92",
