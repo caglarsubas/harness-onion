@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/first-rider-pair-authority.json"
-AUTHORITY_SHA256 = "ae6725646ab40538fd03e1c7a8a55dde89ad09baf8c15487d621a394e872bead"
+AUTHORITY_SHA256 = "ebb79115c2f9335b73a9f0b24e5da3773b1ccfd804161d6ad0a7158427d70f2d"
 VALIDATOR_PATH = "scripts/validate_met_010.py"
 BASE_COMMIT = "d144e3fcdefbc55053e01db982bbd990c7f552b5"
 NEW_PACKET = "MET-010"
@@ -374,7 +374,7 @@ ERA_SHA256 = MappingProxyType({
 })
 ERRATA_LINES = MappingProxyType({
     "docs/repositories/03-mas-harness-industry-packs.md": ((457, 458),),
-    "docs/repositories/13-mas-harness-research-lab.md": ((73, 74),),
+    "docs/repositories/13-mas-harness-research-lab.md": ((33, 34), (73, 74)),
     "task-packets/README.md": ((3, 3), (1835, 1836)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
