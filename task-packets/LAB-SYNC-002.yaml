@@ -1,0 +1,32 @@
+id: LAB-SYNC-002
+repository: mas-harness-research-lab
+branch: codex/lab-sync-002
+objective: "R13 mas-harness-research-lab's research sync, PR 8 on branch codex/lab-sync-002 (head d479c813979310bdfbf82aa0a024c0308dea02a6): research/** and the two design mirror files over LAB-TRANSPORT-001's adoption merge 9d9821ac425f1e9bf4f358557af81a58242791f4 on R13's main, published as a LAB packet by MET-010 at slot 292 (K = 2) so that the lab's own hosted run verifies it; it keeps LAB-TRANSPORT-001's six acceptance commands byte-exact and in order."
+predecessors: ["LAB-TRANSPORT-001"]
+allowedPaths: ["research/", "design/tokens/pages.css", "design/pages/glossary-families.md"]
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - "Head: PR 8 of R13 mas-harness-research-lab on branch codex/lab-sync-002, head d479c813979310bdfbf82aa0a024c0308dea02a6 (tree 177e6afaa6cf4b1c55d62dbcc4c85877fbd20e31), over the base 9d9821ac425f1e9bf4f358557af81a58242791f4 (LAB-TRANSPORT-001's adoption merge); the packet's file set is research/** and the two design mirror files (allowedPaths [\"research/\", \"design/tokens/pages.css\", \"design/pages/glossary-families.md\"])."
+  - "Inheritance: LAB-TRANSPORT-001 is the comparator under the chain-inheritance rule R13, pinned in MET-010's productComparators; its six offlineAcceptanceCommands are kept byte-exact and in order."
+  - "Route: verified on R13's hosted run only, under bundle v9, after LAB-TRANSPORT-001's adoption (A-292-3); harness-onion's own verify does not run the six commands."
+deliverables:
+  - "The head d479c813979310bdfbf82aa0a024c0308dea02a6 of PR 8: research/** and the two design mirror files only, as the expectedEvidence lines state; no other path."
+  - "The six inherited commands pass in order under ./ci/verify-offline.sh on R13's hosted route."
+excluded:
+  - "Any experiment run, fetch, search, export or heavy job; network; .github; node, uv, make or pip; any bridge path; the lane file; any other repository; history rewriting; product code; packets; roadmap writes."
+prefetchCommands: []
+offlineAcceptanceCommands: [["python3","-I","-B","ci/zero_bill_scan.py"],["python3","-I","-B","research/tools/manifest_check.py","research/MANIFEST.json"],["python3","-I","-B","research/tools/privacy_check.py","research/MANIFEST.json"],["python3","-I","-B","research/tools/prereg_check.py","research/hypotheses/REGISTER.md","research/experiments"],["python3","-I","-B","research/tools/rerun_results.py","research/tools/rerun_table.json"],["python3","-I","-B","research/tools/page_check.py","research/MANIFEST.json"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - "Head name-status against the base: 46 A, 16 M, 0 D, 62 paths: research/** and the two design mirror paths (RL-M101 section 5 plus research/tools/rerun_results.py)."
+  - "research/** of the head equals the bridge's research tree at 7b07ba9825e05065fad65f562a13a28b526759b3 blob by blob, plus research/MANIFEST.json regenerated with bridgeCommit = that commit."
+  - "The two design mirror files equal the bridge at 7b07ba9825e05065fad65f562a13a28b526759b3 byte for byte (A-292-1): design/tokens/pages.css sha256 e74dbbebc165acb1fa60fafd6e30da02051e29167f80a0f1fa2339c32b3c13df, design/pages/glossary-families.md sha256 5c0d874b7ded4a4425de6f64cd4320202ae5b10a2750934bc3311768bda06d31."
+  - "Command 1 (zero_bill_scan): no output, exit 0."
+  - "Command 2 (manifest_check): \"MANIFEST OK: 371 files\"; research/MANIFEST.json sha256 5d1f04ec4562fe4bc2320d3198c61be0f0e15b61444e1e35f9edd4dbb1acde7d."
+  - "Command 3 (privacy_check): \"PRIVACY OK: 368 files, 0 hits, 0 name digests loaded\"."
+  - "Command 4 (prereg_check): \"PREREG OK: 24 folders (1 pending), 10 reviewed, 3 records\"."
+  - "Command 5 (rerun_results): \"RERUN OK: 23 entries (1 pending); LEDGER_REDERIVED 10, RAW_REPRODUCED 0, INDEPENDENT_REPLICATION 0, RECORDED 13\"."
+  - "Command 6 (page_check): \"PAGE OK: 24 experiments, 50 tools, 30 reads, 7 record keys\"."
+  - "The six commands finish in seconds in one deny-all process tree under ./ci/verify-offline.sh; no heavy job."
+rollback: "Revert the PR; main returns to 9d9821ac425f1e9bf4f358557af81a58242791f4 (LAB-TRANSPORT-001's adoption merge) and the bridge stays the authoritative research tree."

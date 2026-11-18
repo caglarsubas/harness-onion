@@ -71,6 +71,7 @@ None. The repository holds no warm source and no reuse index entry.
    keeping LAB-REPO-001's six commands byte-exact and in order; published by MET-007 at slot 288 (K = 1) and verified
    on R13's hosted route under bundle v7's R13 policy row.
 3. `LAB-TRANSPORT-001-runner-v9`: the research lab's transport packet after LAB-SYNC-001 (published by MET-009): re-copy harness-onion's offline runner ci/run_packet_argv.py at verifier bundle v9's pin byte for byte (283's raw-byte digest and refusals, plus slot 288's posix_spawn child start and its inheritable-descriptor refusal), and regenerate research/MANIFEST.json so its runner entry follows, without changing any other transport file, test, descriptor, make target, product source, dependency, dispatch rule or public contract. Verifiable only once the owner installs verifier bundle v9.
+4. `LAB-SYNC-002-research-sync`: PR 8 (branch codex/lab-sync-002, head d479c8139793) over LAB-TRANSPORT-001's adoption merge 9d9821ac425f: research/** and the two design mirror files, keeping LAB-TRANSPORT-001's six commands byte-exact and in order; published by MET-010 at slot 292 (K = 2) and verified on R13's hosted route under bundle v9.
 
 ## Testing, verification, and acceptance
 

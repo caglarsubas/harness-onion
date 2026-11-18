@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-009
+## Current source preparation — MET-010
+
+MET-010 (slot 292): the first rider pair, a K = 2 step (313 packets at slot 292): IND-BANK-003 (mas-harness-industry-packs), the banking governance-and-integration slice (pack 0.3.0) over R03's IND-TRANSPORT-001A adoption merge 9034e0f, keeping IND-TRANSPORT-001A's 12 commands in order, and LAB-SYNC-002 (mas-harness-research-lab), R13 PR 8's research sync with the two design mirror files over R13's LAB-TRANSPORT-001 adoption merge 9d9821a, keeping the six commands byte-exact; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the D5a oracle).
+Alpha2 OPEN; 310 accepted (the catalog at slot 291) plus MET-010 and its two products only.
+
+## Historical plane bootstraps and transport successors source preparation — MET-009
 
 MET-009 (slot 291): the plane bootstraps and transport successors, a K = 7 step (310 packets at slot 291): the plane health-shell bootstraps PLANE-BOOTSTRAP-R05 (mas-harness-runtime-plane), PLANE-BOOTSTRAP-R06 (mas-harness-model-plane) and PLANE-BOOTSTRAP-R08 (mas-harness-execution-plane) and the transport successors DIST-TRANSPORT-002A (mas-harness-distribution), CTRL-TRANSPORT-002A (mas-harness-control-plane), IND-TRANSPORT-001A (mas-harness-industry-packs) and LAB-TRANSPORT-001 (mas-harness-research-lab), each re-copying the runner at verifier bundle v9's pin, with the plane-shell ordering annex in scripts/validate_packet_ownership.py; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the D5a oracle).
 Alpha2 OPEN; 302 accepted (the catalog at slot 290) plus MET-009 and its seven products only.
@@ -1833,3 +1838,6 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 308 | `CTRL-TRANSPORT-002A` | `mas-harness-control-plane` | The control-plane transport successor of CTRL-TRANSPORT-002: the runner re-copied at bundle v9's pin (product, published by MET-009) |
 | 309 | `IND-TRANSPORT-001A` | `mas-harness-industry-packs` | The industry-packs transport successor of IND-TRANSPORT-001: the runner re-copied at bundle v9's pin (product, published by MET-009) |
 | 310 | `LAB-TRANSPORT-001` | `mas-harness-research-lab` | The research-lab transport packet after LAB-SYNC-001: the runner re-copied at bundle v9's pin and research/MANIFEST.json's runner entry regenerated (product, published by MET-009) |
+| 311 | `MET-010` | `Harness-Engineering` | The first rider pair (K = 2, 313 packets at slot 292): publishes IND-BANK-003 and LAB-SYNC-002; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
+| 312 | `IND-BANK-003` | `mas-harness-industry-packs` | The banking governance-and-integration slice (pack 0.3.0), over IND-TRANSPORT-001A's adoption merge (product, published by MET-010) |
+| 313 | `LAB-SYNC-002` | `mas-harness-research-lab` | The research lab's second research sync (PR 8), with the two design mirror files, over LAB-TRANSPORT-001's adoption merge (product, published by MET-010) |
