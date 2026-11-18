@@ -167,6 +167,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `EXEC-SBX-002`: gVisor/Kata provider manifests/capability probes; unavailable environment yields explicit non-certification.
 7. `EXEC-ML-001`: scikit-learn/ONNX/OR-Tools adapters, signed artifact/provenance input, deterministic result, and evidence.
 8. `EXEC-002-resilience`: duplicate/out-of-order events, crashes around commits/receipts, dependency outages, multi-tenant isolation, and air-gap campaign.
+9. `PLANE-BOOTSTRAP-R08-health-shell`: Bootstrap R08 mas-harness-execution-plane as a health-only shell over its empty initial commit (owner PA-D1 (D1a), the KN-001 pattern): exact CPython 3.12.14, standard library only, one health module with its unittest, and harness-onion's four offline transport files at verifier bundle v9's pins; no image, database, deployment, hosted workflow, model server, Makefile, porting ledger or runtime code (published by MET-009). It precedes EXEC-001 by harness-onion's plane-shell ordering annex and is verifiable only once the owner installs verifier bundle v9.
 
 ## Testing, verification, and acceptance
 

@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-PERF-050
+## Current source preparation — MET-009
+
+MET-009 (slot 291): the plane bootstraps and transport successors, a K = 7 step (310 packets at slot 291): the plane health-shell bootstraps PLANE-BOOTSTRAP-R05 (mas-harness-runtime-plane), PLANE-BOOTSTRAP-R06 (mas-harness-model-plane) and PLANE-BOOTSTRAP-R08 (mas-harness-execution-plane) and the transport successors DIST-TRANSPORT-002A (mas-harness-distribution), CTRL-TRANSPORT-002A (mas-harness-control-plane), IND-TRANSPORT-001A (mas-harness-industry-packs) and LAB-TRANSPORT-001 (mas-harness-research-lab), each re-copying the runner at verifier bundle v9's pin, with the plane-shell ordering annex in scripts/validate_packet_ownership.py; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the D5a oracle).
+Alpha2 OPEN; 302 accepted (the catalog at slot 290) plus MET-009 and its seven products only.
+
+## Historical weights refresh source preparation — MET-PERF-050
 
 MET-PERF-050 (slot 290): PERF-WEIGHTS-REFRESH, a K = 0 step (302 packets at slot 290): ci/parallel_suite_weights.json
 refreshed in full by 279's method from slot 289's two dry runs, with its inputs record
@@ -1820,3 +1825,11 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 300 | `LAB-SYNC-001` | `mas-harness-research-lab` | R13's research sync, PR 5 on branch codex/lab-sync-a2482753 (head 9992d1755f71) over LAB-REPO-001's merge 2e977f4f5a31: research/** only, LAB-REPO-001's six commands inherited in order (product, published by MET-007) |
 | 301 | `MET-008` | `Harness-Engineering` | RELEASE-EVIDENCE-001 (K = 0, 301 packets at slot 289): the release evidence matrix over the release profile's 41 closure nodes with its schema, projection, checker and tests; PERF-WORKERS-ENV in ci/parallel_suite.py |
 | 302 | `MET-PERF-050` | `Harness-Engineering` | PERF-WEIGHTS-REFRESH (K = 0, 302 packets at slot 290): the parallel suite's weights refreshed in full by 279's method, with their inputs record |
+| 303 | `MET-009` | `Harness-Engineering` | The plane bootstraps and transport successors (K = 7, 310 packets at slot 291): the plane-shell ordering annex in scripts/validate_packet_ownership.py (each plane's health shell precedes its registered bootstrap); publishes PLANE-BOOTSTRAP-R05, PLANE-BOOTSTRAP-R06, PLANE-BOOTSTRAP-R08, DIST-TRANSPORT-002A, CTRL-TRANSPORT-002A, IND-TRANSPORT-001A and LAB-TRANSPORT-001; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
+| 304 | `PLANE-BOOTSTRAP-R05` | `mas-harness-runtime-plane` | The runtime plane's health-only shell over its empty initial commit: exact CPython 3.12.14, standard library only, one health module with its unittest and harness-onion's four offline transport files at bundle v9's pins (product, published by MET-009) |
+| 305 | `PLANE-BOOTSTRAP-R06` | `mas-harness-model-plane` | The model plane's health-only shell over its empty initial commit: exact CPython 3.12.14, standard library only, one health module with its unittest and harness-onion's four offline transport files at bundle v9's pins (product, published by MET-009) |
+| 306 | `PLANE-BOOTSTRAP-R08` | `mas-harness-execution-plane` | The execution plane's health-only shell over its empty initial commit: exact CPython 3.12.14, standard library only, one health module with its unittest and harness-onion's four offline transport files at bundle v9's pins (product, published by MET-009) |
+| 307 | `DIST-TRANSPORT-002A` | `mas-harness-distribution` | The distribution transport successor of DIST-TRANSPORT-002: the runner re-copied at bundle v9's pin (product, published by MET-009) |
+| 308 | `CTRL-TRANSPORT-002A` | `mas-harness-control-plane` | The control-plane transport successor of CTRL-TRANSPORT-002: the runner re-copied at bundle v9's pin (product, published by MET-009) |
+| 309 | `IND-TRANSPORT-001A` | `mas-harness-industry-packs` | The industry-packs transport successor of IND-TRANSPORT-001: the runner re-copied at bundle v9's pin (product, published by MET-009) |
+| 310 | `LAB-TRANSPORT-001` | `mas-harness-research-lab` | The research-lab transport packet after LAB-SYNC-001: the runner re-copied at bundle v9's pin and research/MANIFEST.json's runner entry regenerated (product, published by MET-009) |

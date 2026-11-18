@@ -109,7 +109,7 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 302 and len(accepted) == 254
+    assert len(current) == 310 and len(accepted) == 254
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             profile.successor.successor.NEW_PACKET,
                                             profile.successor.successor.successor.NEW_PACKET,
@@ -152,7 +152,9 @@ def test_exact_current_source_and_complete_history_chain():
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
                                             *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
-                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET}
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.NEW_PACKET,
+                                            *profile.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.successor.PRODUCT_PACKETS}
     assert len(i6v4.historical_catalog(current)) == 253
     assert len(dcap.historical_catalog(current)) == 252
     assert len(np5.historical_catalog(current)) == 251
@@ -1424,17 +1426,53 @@ def test_every_listed_product_meets_the_rule():
     assert count == sum(len(ids) for ids in listed.values())
 
 
+def _annex_scope(listed, catalogs):
+    """MET-009's R13 scope (MON-291-C13-OPTION-RULE, option 1; Q-291-D1 (a)): the closed plane-shell ordering annex of
+    scripts/validate_packet_ownership.py orders each plane's health shell before its plane's published packets.
+    Taken only from the annex's own plane_shell_order (no refusal) and packet_ancestors over the parsed catalog: each
+    listed (slot, product) from the cut on whose product is an annex shell and is in the ancestry of every YAML of its
+    repository first catalogued before its slot (R13's steps 1 and 2). Returns the scope and the annex's shells."""
+    from scripts import validate_packet_ownership as ownership
+
+    first = identity_v3.first_slots(catalogs)
+    raw = {y: profile.regular_bytes("task-packets/%s.yaml" % y) for y in sorted(first)}
+    packets = {y: safe_load(raw[y]) for y in raw}
+    extra, refusals = ownership.plane_shell_order(packets)
+    assert refusals == []
+    ancestors = ownership.packet_ancestors(packets, extra)
+    shells = {row[3] for row in ownership.PLANE_SHELL_ORDER}
+    repos = {y: identity_v2.line_repository(raw[y]) for y in raw}
+    scoped = set()
+    for slot, ids in listed.items():
+        for product in ids:
+            if slot < identity_v3.CUT_SLOT or product not in shells:
+                continue
+            candidates = [y for y, f in first.items() if f < slot and y != product and repos[y] == repos[product]]
+            if all(product in ancestors.get(y, set()) for y in candidates):
+                scoped.add((slot, product))
+    return scoped, shells
+
+
 def test_every_listed_product_keeps_its_inherited_commands():
     """MET-SECTOR-005 R13 (architecture/chain-inheritance): every product listed at a slot from the cut on keeps every
     acceptance command of its repository's newest earlier catalog YAML, pinned in its layer's productComparators;
-    slots below the cut are not judged. Argv 63 runs it at every later PR."""
+    slots below the cut are not judged. Argv 63 runs it at every later PR. MET-009 (MON-291-C13-OPTION-RULE, option 1;
+    Q-291-D1 (a)): a plane shell in the annex scope (_annex_scope) has no comparator, so its layer pins nothing for it
+    and it is judged with no pin; every other product goes to R13 unchanged; the scope is exactly the annex's shells,
+    all at slot 291."""
     rule = _rule()
     v2, ext3 = _v3()
     chain = identity.walk_layers(profile.regular_bytes, rule)
     listed = {slot: identity_v3.layer_products(tree, v2) for slot, _, _, tree in chain}
     catalogs, pins = _catalogs_and_pins(chain)
-    judged = identity_v3.check_inheritance(ext3, listed, catalogs, pins, profile.regular_bytes, safe_load, v2)
-    assert judged == sum(len(ids) for slot, ids in listed.items() if slot >= identity_v3.CUT_SLOT)
+    scoped, shells = _annex_scope(listed, catalogs)
+    for slot, product in sorted(scoped):
+        assert product not in (pins.get(slot) or {}), "a comparator pin for the annex shell %s" % product
+    rest = {slot: tuple(p for p in ids if (slot, p) not in scoped) for slot, ids in listed.items()}
+    judged = identity_v3.check_inheritance(ext3, rest, catalogs, pins, profile.regular_bytes, safe_load, v2)
+    assert {product for _, product in scoped} == shells and len(scoped) == len(shells)
+    assert {slot for slot, _ in scoped} == {291}
+    assert judged + len(scoped) == sum(len(ids) for slot, ids in listed.items() if slot >= identity_v3.CUT_SLOT)
 
 
 def test_v3_pins_v2_and_equals_it_below_the_cut():

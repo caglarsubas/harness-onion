@@ -161,6 +161,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 5. `MODEL-VLLM-001`: vLLM adapter/backend, accelerator capability declarations, batching, rerank/embeddings where supported.
 6. `MODEL-003-telemetry-security`: tenant/request identity, usage observations, content redaction, backpressure, denial, arbitrary UID, and offline startup.
 7. `MODEL-004-performance`: reproducible local benchmark profiles and admission thresholds; performance results are evidence, not hardcoded marketing claims.
+8. `PLANE-BOOTSTRAP-R06-health-shell`: Bootstrap R06 mas-harness-model-plane as a health-only shell over its empty initial commit (owner PA-D1-R06, the KN-001 pattern): exact CPython 3.12.14, standard library only, one health module with its unittest, and harness-onion's four offline transport files at verifier bundle v9's pins; no image, database, deployment, hosted workflow, model server, Makefile, porting ledger or runtime code (published by MET-009). It precedes MODEL-001 by harness-onion's plane-shell ordering annex and is verifiable only once the owner installs verifier bundle v9.
 
 ## Testing, verification, and acceptance
 

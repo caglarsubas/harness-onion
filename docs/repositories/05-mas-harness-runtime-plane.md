@@ -162,6 +162,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 3. `RUN-GW-002-streaming`: SSE streaming, cancellation, bounded buffers, timeouts, backpressure, fallback, and no-raw-content observability.
 4. `RUN-EXP-001-interactions`: interaction lifecycle, event replay, input-required/resume/cancel, retention, and reference web client.
 5. `RUN-002-security-resilience`: tenant isolation, duplicate calls, upstream outages, last-known-good route, audit correlation, and offline egress tests.
+6. `PLANE-BOOTSTRAP-R05-health-shell`: Bootstrap R05 mas-harness-runtime-plane as a health-only shell over its empty initial commit (owner PA-D1 (D1a), the KN-001 pattern): exact CPython 3.12.14, standard library only, one health module with its unittest, and harness-onion's four offline transport files at verifier bundle v9's pins; no image, database, deployment, hosted workflow, model server, Makefile, porting ledger or runtime code (published by MET-009). It precedes RUN-001 by harness-onion's plane-shell ordering annex and is verifiable only once the owner installs verifier bundle v9.
 
 ## Testing, verification, and acceptance
 

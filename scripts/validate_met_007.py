@@ -949,12 +949,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "data correctness validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 302
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET} | set(PRODUCT_PACKETS),
-            "closed 302-packet catalog retaining the 300-packet checkpoint")
+    require(len(paths) == 310
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
+            "closed 310-packet catalog retaining the 300-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -995,4 +995,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Data correctness valid: 302 current specifications at slot 288; 300-packet checkpoint and exact 298-packet predecessor; contract reviewed.")
+    print("Data correctness valid: 310 current specifications at slot 288; 300-packet checkpoint and exact 298-packet predecessor; contract reviewed.")

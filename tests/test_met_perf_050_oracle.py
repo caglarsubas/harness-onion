@@ -106,7 +106,8 @@ def _load(relative: str, name: str):
 
 
 def _read(relative: str) -> bytes:
-    return (ROOT / relative).read_bytes()
+    # Era read ([PC-1] form, MON-291-PRE038): the head's reviewed_bytes, which projects a bridged successor's newer bytes back first.
+    return _load(HEAD, "met_perf_050_oracle_era_head").reviewed_bytes(relative)
 
 
 def _sha(data: bytes) -> str:
