@@ -1,0 +1,42 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_010_oracle.py",
+  "sha256": "75770abce8974db91a91b489308664c9c38fc0cd9297df25dfffe489696c9946"
+ },
+ "oracle": {
+  "agentId": "aa62cf6fcc4ff0677",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "ee7a6f19-64d5-4e64-98bb-f09aee981543"
+  ]
+ },
+ "briefSha256": "43eeb65f4c0983e90de94c52870a84762b3a7e2612229896046a519c9c80ac16",
+ "candidateCommit": "b41a3f71cd83c4e40deafc656829430409311bd2",
+ "launched": "2026-11-18T17:37:05+08:00",
+ "finished": "2026-11-18T18:12:38+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-292-IDENTITY-KEEP",
+  "date": "2026-11-18"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 75770abce8974db91a91b489308664c9c38fc0cd9297df25dfffe489696c9946, the table 7c03b276fd9d2e8570b4c5d7f4f2a5ab9308dd66bc217508e48f1f0cf1f7b34c and the oracle sweep's rc/wall line 8ed235bae1748baa278b92c3b153d6404fd6c5226762aa00dd7e8a9eeb9d7f49 (rc=0 wall=9s); this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "brief 43eeb65f and launch prompt df211886 (written in 291's kit form for K 2 with C18's era-read rule); the author's only inputs are CONTRACT_292 rev 4 (b6fa9c52) and the packet YAML at c2 f742d025 with closed-path strings masked, plus the operator-stated facts in contract terms (the two freeze digests, the head's line numbers and the lane monitor's ruling D3 (a))",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran only the kit's in-memory syntax check and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its first file d99441c3; its files in order d99441c3 -> 75770abc; r2 is its one revision, on the lane monitor's routing (MON-292-B1C-CLASS): blind run 1 failed one V6 case, class (a), an oracle construction slip; the relay b1291a33 passed verbatim; the case renamed outcome-statement, its mutation adds an outcome statement, nothing else changed (MON-292-C3-RELEASE); its report: 27 tests, 29 parametrized cases, 1 asserts without a cite (the author's own count); its scan: WORK/test_met_010_oracle.py: live 0, era 18, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads; its slips: r1 and r2: wc -l on both CN files and wc -c on the masked YAML (counts only, off the brief's read forms); r1 and r2: shasum + wc -l and one grep -c on its own file (counts only)",
+  "blind run 1 by the operator, R00, the pre-check form on the c3 candidate over c2 f742d025 (uncommitted; summary 5615d6e1): oracle d99441c3, rc 1, passed 46, failed 1, skipped 0, errors 0, collected 47 (stated 47); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 2 by the operator, R00, the pre-check form (the capture run, MON-292-B1C-GO) on the c3 candidate over c2 f742d025 (uncommitted; summary 244100f0): oracle d99441c3, rc 1, passed 46, failed 1, skipped 0, errors 0, collected 47 (stated 47); VERDICT FAIL (node counts only; the operator never opens the file)",
+  "blind run 3 by the operator, R00, the pre-check form on the c3 candidate over c2 f742d025 (uncommitted; summary 2db506dc): oracle 75770abc, rc 0, passed 47, failed 0, skipped 0, errors 0, collected 47 (stated 47); VERDICT PASS (node counts only; the operator never opens the file)",
+  "the oracle sweep at the candidate commit b41a3f71, the pre-check way, one file (summary a4dd12f3): rc 0, wall 9 s, failed 0, errors 0, collected 47; VERDICT PASS; the oracle has no weights row (292 refreshes no weights)",
+  "the head-test row is measured from the head-test pre-check at the candidate commit b41a3f71 (summary 02838e17): 198 of 198 passed, pytest 20.54 s -> 20.5; the table is main d144e3fc's plus that one row (213 entries)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; the lane monitor re-runs the static scan before the final-head pre-check; the ruling is PENDING; the lane monitor rules it"
+ ]
+}
