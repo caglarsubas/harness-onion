@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/first-rider-pair-authority.json"
-AUTHORITY_SHA256 = "ed387009aeb54890299be6e436899c3599738611cff0e0853353fa402cff3349"
+AUTHORITY_SHA256 = "1e71efbdc62267ac93b612f5eb5af6db6dc78e8e6fff2820ef485c8467b3b01c"
 VALIDATOR_PATH = "scripts/validate_met_010.py"
 BASE_COMMIT = "d144e3fcdefbc55053e01db982bbd990c7f552b5"
 NEW_PACKET = "MET-010"
