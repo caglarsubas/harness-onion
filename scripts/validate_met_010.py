@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/first-rider-pair-authority.json"
-AUTHORITY_SHA256 = "c04e5f25912bad5e9636fb2e13be30345702da1bab908dc2a97afaba15955824"
+AUTHORITY_SHA256 = "ed387009aeb54890299be6e436899c3599738611cff0e0853353fa402cff3349"
 VALIDATOR_PATH = "scripts/validate_met_010.py"
 BASE_COMMIT = "d144e3fcdefbc55053e01db982bbd990c7f552b5"
 NEW_PACKET = "MET-010"
@@ -356,7 +356,7 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
         require(supplied_sha == payload_sha, "changed packet payload: " + name)
 
 
-# MET-010 (rulings: CONTRACT_292 rev 4, section 2) publishes, in a K = 2 step, the first rider pair: IND-BANK-003
+# MET-010 (rulings: CONTRACT_292 section 2) publishes, in a K = 2 step, the first rider pair: IND-BANK-003
 # (R03, over IND-TRANSPORT-001A's adoption merge) and LAB-SYNC-002 (R13, over LAB-TRANSPORT-001's adoption merge)
 # at their frozen bytes. Repository bytes are read only through reviewed_bytes; an era file is refused unless
 # bound by digest on every read, a changed file by the authority's afterSha256. Each refusal is a pure check over
