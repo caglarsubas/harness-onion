@@ -2,10 +2,10 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_009_oracle.py",
-  "sha256": "f1e31eed1498e5027e20eec6b57f39498888ea01347a4a3bc3ee533c7da5f422"
+  "sha256": "212d5f58cf5314330ab138250a78bf857defa216108dcdc3a8b40a0539d4f24d"
  },
  "oracle": {
-  "agentId": "acc6c8355b7ad607b",
+  "agentId": "local_9518a6f0-65d2-4755-9789-4a6f6c2fed2d",
   "model": "claude-opus-5-5"
  },
  "operator": {
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-291-ERA-R4-KEEP",
-  "date": "2026-11-17"
+  "ref": "MON-292-D1-ERA-KEEP",
+  "date": "2026-11-18"
  },
  "disclosures": [
   "bound inputs: exactly the oracle f1e31eed1498e5027e20eec6b57f39498888ea01347a4a3bc3ee533c7da5f422, the table ed2127b886a1361b6b91cf1424777cd73a8596a117374b8b1576557da6113d16 and the oracle sweep's rc/wall line 8400ed5f0d7fcd5f4226ab3530ad9bd720b7fd22ee3e7e19824ed2a4712804ca (rc=0 wall=19s); this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
@@ -39,6 +39,8 @@
   "blind run 5 by the operator, R00, the pre-check form on a fresh clone at the c5 commit cf3150d1 (committed): oracle f1e31eed, rc 0, passed 131, failed 0, skipped 0, errors 0, collected 131 (stated 131); VERDICT PASS (node counts only; the operator never opens the file)",
   "the oracle sweep at the c5 commit cf3150d1, the pre-check way, one file: rc 0, wall 19 s, failed 0, errors 0, collected 131; VERDICT PASS; the oracle has no weights row (291 refreshes no weights)",
   "the head-test row is measured from the head-test pre-check at the c3 commit 3b3e37c6 (summary 68546cbe): 197 of 197 passed, pytest 21.90 s -> 21.9; the table is main cee2cc76's plus that one row (212 entries); the row stays at c5 (MON-291-C5-SHAPE): the head-test pre-check at c5 gives 197 of 197 passed",
-  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks, and its one allowed test lists task-packets/*.yaml; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-291-ERA-R4-KEEP)"
+  "at run time the file reads the repository files the brief names by exact path as bytes and runs the head's own checks, and its one allowed test lists task-packets/*.yaml; the author's work folder may hold a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-291-ERA-R4-KEEP)",
+  "corrected under MON-292-D1-ERA and MON-292-D1-ERA-KEEP (290's [PC-1] form, as 291 did for 290's oracle under MON-291-PRE038-KEEP) by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), on class (a) of 292's dry run d1 at c8 dbc1cb66: the file states 291-era facts but read 292's live bytes (the catalog glob, 313 against 310; the E3 reader of docs/repositories/03-mas-harness-industry-packs.md; `_read` of architecture/review-record/briefs.json for V4 and V6; the weights table, 213 entries against 212); 131 of 131 pass after it at dbc1cb66 and at the base d144e3fc, the lane monitor's runs, against 126 of 131 unfixed; seven counted swaps (seven hunks; old-side spans (121,122), (127,127), (136,136), (142,142), (636,636), (639,639), (642,642); numstat 16/6); was f1e31eed; candidateCommit, launched, finished and briefSha256 unchanged; the file member is re-bound to the corrected file; the three earlier disclosures that name f1e31eed (the bound inputs, whose table and sweep line come from runs of f1e31eed; the revision chain; blind run 5) record what was bound and run at 291's KEEP and stay as written (MON-292-C9-READ); R00 applied the monitor's script by bytes and never opened the file",
+  "the correction was produced by the lane monitor's era script (3e000c58), which refuses any input but f1e31eed and any output but the monitor's tested bytes 212d5f58"
  ]
 }
