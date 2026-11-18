@@ -830,12 +830,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "weights refresh validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 310
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS},
-            "closed 310-packet catalog retaining the 302-packet checkpoint")
+    require(len(paths) == 313
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS},
+            "closed 313-packet catalog retaining the 302-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem == successor.NEW_PACKET:
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -876,4 +876,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Weights refresh valid: 310 current specifications at slot 290; 302-packet checkpoint and exact 301-packet predecessor; contract reviewed.")
+    print("Weights refresh valid: 313 current specifications at slot 290; 302-packet checkpoint and exact 301-packet predecessor; contract reviewed.")
