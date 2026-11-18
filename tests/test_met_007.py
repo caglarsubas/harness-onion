@@ -1132,9 +1132,15 @@ REGISTRY_YAML = "architecture/repositories.yaml"
 
 
 def _chain_packets():
-    """The live packets, read as validate() reads them (each file's bytes through the layer, parsed by safe_load)."""
+    """The live packets, read as validate() reads them (each file's bytes through the layer, parsed by safe_load), less
+    the successor eras' new and product packets, which validate() leaves out with these same expressions (292: the
+    published SECTOR-D1 successor IND-BANK-003 lies outside this era's checker)."""
+    successor = profile.successor
+    newer = (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET,
+             *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET,
+             *successor.successor.successor.successor.PRODUCT_PACKETS)
     return {path.stem: profile.safe_load(profile.regular_bytes("task-packets/" + path.name))
-            for path in sorted((profile.ROOT / "task-packets").glob("*.yaml"))}
+            for path in sorted((profile.ROOT / "task-packets").glob("*.yaml")) if path.stem not in newer}
 
 
 def _sha(raw):

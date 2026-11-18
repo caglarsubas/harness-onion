@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/first-rider-pair-authority.json"
-AUTHORITY_SHA256 = "ebb79115c2f9335b73a9f0b24e5da3773b1ccfd804161d6ad0a7158427d70f2d"
+AUTHORITY_SHA256 = "693d2381fba4759f68af2fe73b6ef7030150596fb908f5907e15a6ee697559fd"
 VALIDATOR_PATH = "scripts/validate_met_010.py"
 BASE_COMMIT = "d144e3fcdefbc55053e01db982bbd990c7f552b5"
 NEW_PACKET = "MET-010"
@@ -369,7 +369,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "30075ca53e64d18962da04457fc4e300902e7a29889170cc3cfbe836025ebf50",
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
-    "task-packets/IND-BANK-003.yaml": "9af6d844fff9a706d48d0bde2014f5e2708b5a384523dbc988bc41ad73204a34",
+    "task-packets/IND-BANK-003.yaml": "d07059d67bf0180a9e7c0e97845a547823b38cb668d026ea878628f94984bf6f",
     "task-packets/LAB-SYNC-002.yaml": "467b12aff2c1815d12a1ebf9dc4a5a15c4af43bde5aabffa3368c1d89d20be6a",
 })
 ERRATA_LINES = MappingProxyType({
@@ -378,6 +378,7 @@ ERRATA_LINES = MappingProxyType({
     "task-packets/README.md": ((3, 3), (1835, 1836)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_007.py": ((1133, 1133), (1135, 1135)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"

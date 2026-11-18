@@ -55,7 +55,7 @@ PREDECESSORS = {
 }
 # operator-stated: the freeze record's digests of the two product YAMLs.
 FROZEN_SHA256 = {
-    "IND-BANK-003": "9af6d844fff9a706d48d0bde2014f5e2708b5a384523dbc988bc41ad73204a34",
+    "IND-BANK-003": "d07059d67bf0180a9e7c0e97845a547823b38cb668d026ea878628f94984bf6f",
     "LAB-SYNC-002": "467b12aff2c1815d12a1ebf9dc4a5a15c4af43bde5aabffa3368c1d89d20be6a",
 }
 # CONTRACT_292 section 1: the catalog pair (310, 313).

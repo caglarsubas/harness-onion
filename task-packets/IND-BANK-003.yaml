@@ -42,6 +42,7 @@ contracts:
   - "Framework 0.1.1, pyproject.toml, uv.lock, the dispatcher, the runner and transport files, common/ and white goods stay byte-identical."
   - "INV01, INV03 and INV18 are adopted verbatim from the enterprise blueprint's register, pack side only (MON-BLUEPRINT-R03 C-2; VIS-C15-SPLIT)."
   - "Readiness evaluator: make readiness-evaluate PACK=banking runs the shipped fixture through ci/handlers/ind_bank_003.py; tenants use harness-pack readiness-evaluate <pack_root> --input <dir> (ruled OQ-C1 (a), MON-R03-C1-RULE) (stated deviation from MON-R03-EVAL-PLACED, ruled OQ-1 (c): the dispatcher admits only PACK)."
+  - "Consumes no harness-onion provider, service or module catalog: the packet reads none of them (its integration profiles IP16-IP18 and the evaluator fixture's product-catalogue.json are pack-local synthetic data), and any later read of their banking-era bytes goes only through scripts/sector_catalog.py's effective_bytes(path) or effective_catalog(path), never the raw catalog files (MET-SECTOR-002, SECTOR-D1)."
 deliverables:
   - "Bump packs/banking/pack.yaml to 0.3.0 and add the four governance/integration questionnaires, the governance rule, the seven controls records and the 29 governance fixtures as resources."
   - "Add the seven controls record sets (outcome states in controls/outcome-states.json), the governance rule as a plain PackRule, and 29 labelled vectors (CONTRACT.md sections 4 and 5)."
