@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-010
+## Current source preparation — MET-011
+
+MET-011 (slot 293): CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite: first the C18 retro sweep of the 289-291 head tests (tests/test_met_008.py, tests/test_met_perf_050.py, tests/test_met_009.py) and 291's oracle, then the third ledger architecture/chain-checkpoint/record.json (layers 189-292, verifyReference naming slot 286) written by one full run on the final source tree, with the head's era rule as the form of every later head and the writer's exclusion at three files; a K = 0 step (314 packets at slot 293); gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the two D5a oracles, 293's and 291's swept one).
+Alpha2 OPEN; 313 accepted (the catalog at slot 292) plus MET-011 only.
+
+## Historical first rider pair source preparation — MET-010
 
 MET-010 (slot 292): the first rider pair, a K = 2 step (313 packets at slot 292): IND-BANK-003 (mas-harness-industry-packs), the banking governance-and-integration slice (pack 0.3.0) over R03's IND-TRANSPORT-001A adoption merge 9034e0f, keeping IND-TRANSPORT-001A's 12 commands in order, and LAB-SYNC-002 (mas-harness-research-lab), R13 PR 8's research sync with the two design mirror files over R13's LAB-TRANSPORT-001 adoption merge 9d9821a, keeping the six commands byte-exact; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the two D5a oracles, 292's and 291's era-corrected one).
 Alpha2 OPEN; 310 accepted (the catalog at slot 291) plus MET-010 and its two products only.
@@ -1841,3 +1846,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 311 | `MET-010` | `Harness-Engineering` | The first rider pair (K = 2, 313 packets at slot 292): publishes IND-BANK-003 and LAB-SYNC-002; gate material (the registry rider, ci/parallel_suite_weights.json and the two D5a oracles, 292's and 291's era-corrected one) |
 | 312 | `IND-BANK-003` | `mas-harness-industry-packs` | The banking governance-and-integration slice (pack 0.3.0), over IND-TRANSPORT-001A's adoption merge (product, published by MET-010) |
 | 313 | `LAB-SYNC-002` | `mas-harness-research-lab` | The research lab's second research sync (PR 8), with the two design mirror files, over LAB-TRANSPORT-001's adoption merge (product, published by MET-010) |
+| 314 | `MET-011` | `Harness-Engineering` | CHAIN-COMPACTION-002's third checkpoint (K = 0, 314 packets at slot 293): the ledger rewrite (layers 189-292) after the C18 retro sweep; gate material (the registry rider, ci/parallel_suite_weights.json and the two D5a oracles, 293's and 291's swept one) |
