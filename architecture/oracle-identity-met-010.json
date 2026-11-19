@@ -1,0 +1,43 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_010_oracle.py",
+  "sha256": "9a32f8909c141a84b6947a712042febf6a5152355028238b6fc798493be7987f"
+ },
+ "oracle": {
+  "agentId": "aa62cf6fcc4ff0677",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "ee7a6f19-64d5-4e64-98bb-f09aee981543"
+  ]
+ },
+ "briefSha256": "43eeb65f4c0983e90de94c52870a84762b3a7e2612229896046a519c9c80ac16",
+ "candidateCommit": "a37b85f2643da8865051fb3f4222e64795cf09ad",
+ "launched": "2026-11-18T17:37:05+08:00",
+ "finished": "2026-11-18T21:39:58+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-292-IDENTITY-KEEP-R3",
+  "date": "2026-11-18"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 9a32f8909c141a84b6947a712042febf6a5152355028238b6fc798493be7987f, the table 7c03b276fd9d2e8570b4c5d7f4f2a5ab9308dd66bc217508e48f1f0cf1f7b34c and the oracle's entry line 6c2173aaecc02dfaebb58969ab9fdb35fc3c63697e9cc792109a666155727624 in the final-head pre-check list (rc=0 wall=9s); this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "brief 43eeb65f and launch prompt df211886 (written in 291's kit form for K 2 with C18's era-read rule); the author's only inputs are CONTRACT_292 rev 4 (b6fa9c52) and the packet YAML at c2 f742d025 with closed-path strings masked, plus the operator-stated facts in contract terms (the two freeze digests, the head's line numbers and the lane monitor's ruling D3 (a))",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran only the kit's in-memory syntax check and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its first file d99441c3; its files in order d99441c3 -> 75770abc -> 9a32f890; r2 is its first revision, on the lane monitor's routing (MON-292-B1C-CLASS): blind run 1 failed one V6 case, class (a), an oracle construction slip; the relay b1291a33 passed verbatim; the case renamed outcome-statement, its mutation adds an outcome statement, nothing else changed (MON-292-C3-RELEASE); r3 is its second revision, on the lane monitor's routing (MON-292-C7-ORACLE-R3): IND-BANK-003 was refrozen (B1, MON-292-C7-GO) and the one operator-stated fact that changed, that packet's frozen digest at the file's one place, was replaced; the relay ec8480d2 passed verbatim; nothing else changed (the lane monitor's diff r2 -> r3: one hunk); its report: 27 tests, 29 parametrized cases, 1 asserts without a cite (the author's own count); its scan: WORK/test_met_010_oracle.py: live 0, era 18, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads; its slips: r1 to r3: wc -l on both CN files and wc -c on the masked YAML (counts only, off the brief's read forms); r1 to r3: shasum + wc -l three times and one grep -c on its own file (counts only)",
+  "blind run 1 by the operator, R00, the pre-check form on the c3 candidate over c2 f742d025 (uncommitted): oracle d99441c3, rc 1, passed 46, failed 1, skipped 0, errors 0, collected 47 (stated 47); VERDICT FAIL (summary 5615d6e1; node counts only; the operator never opens the file)",
+  "blind run 2 by the operator, R00, the pre-check form (the capture run, MON-292-B1C-GO) on the c3 candidate over c2 f742d025 (uncommitted): oracle d99441c3, rc 1, passed 46, failed 1, skipped 0, errors 0, collected 47 (stated 47); VERDICT FAIL (summary 244100f0; node counts only; the operator never opens the file)",
+  "blind run 3 by the operator, R00, the pre-check form on the c3 candidate over c2 f742d025 (uncommitted): oracle 75770abc, rc 0, passed 47, failed 0, skipped 0, errors 0, collected 47 (stated 47); VERDICT PASS (summary 2db506dc; node counts only; the operator never opens the file)",
+  "blind run 4 by the operator, R00, the pre-check form on the c7 candidate over c6 6a51d8fd (uncommitted; c7's paths and r3 placed): oracle 9a32f890, rc 0, passed 47, failed 0, skipped 0, errors 0, collected 47 (stated 47); VERDICT PASS (summary b8f92f6c; node counts only; the operator never opens the file)",
+  "the oracle's run in the final-head pre-check list at the candidate commit a37b85f2 (entry 053 of 53; list summary aad9245f, ALL 53 RUNS PASS), the pre-check way, one file: rc 0, wall 9 s, failed 0, errors 0, collected 47; VERDICT PASS; the oracle has no weights row (292 refreshes no weights)",
+  "the head-test row is measured from the head-test pre-check at c3 b41a3f71 (summary 02838e17): 198 of 198 passed, pytest 20.54 s -> 20.5; the table is main d144e3fc's plus that one row (213 entries)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; the lane monitor re-runs the static scan before the final-head pre-check; the ruling is PENDING; the lane monitor rules it"
+ ]
+}

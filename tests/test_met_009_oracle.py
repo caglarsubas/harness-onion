@@ -119,12 +119,20 @@ def _sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def _era_read(rel):
+    """Era read ([PC-1] form, MON-292-D1-ERA, Lane-Monitor as a non-author): the head's reviewed_bytes, which projects
+    a bridged successor's newer bytes back first."""
+    if "_met_009_oracle_era_head" not in sys.modules:
+        _load("_met_009_oracle_era_head", HEAD_FILE)
+    return sys.modules["_met_009_oracle_era_head"].reviewed_bytes(rel)
+
+
 def _read(rel):
     """Bytes of one fixture on the brief's fixed read list, by exact path."""
     if rel not in _FIXED_READS:
         raise RuntimeError("path outside the oracle's fixed read list")
     if rel not in _BYTES:
-        _BYTES[rel] = (ROOT / rel).read_bytes()
+        _BYTES[rel] = _era_read(rel)
     return _BYTES[rel]
 
 
@@ -133,13 +141,13 @@ def _current(changed, rel):
     if rel not in changed:
         raise RuntimeError("path is not one of the authority's changedFiles keys")
     if rel not in _CURRENT:
-        _CURRENT[rel] = (ROOT / rel).read_bytes()
+        _CURRENT[rel] = _era_read(rel)
     return _CURRENT[rel]
 
 
 def _read_brief(head):
     """Bytes of the packet brief the registry pairs with (the head's PACKET_BRIEF)."""
-    return (ROOT / head.PACKET_BRIEF).read_bytes()
+    return _era_read(head.PACKET_BRIEF)
 
 
 def _load(name, rel):
@@ -633,13 +641,15 @@ def test_historical_catalog_drops_new_packet_and_products(head):
     load = safe_yaml.safe_load if safe_yaml is not None else _safe_load(head)
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     catalog = {path.stem: load(path.read_bytes().decode("utf-8")) for path in paths}
-    count = len(catalog)
+    # Era catalog ([PC-1] form, MON-292-D1-ERA): a bridged successor's historical_catalog drops its newer packets.
+    era = head.successor.historical_catalog(catalog) if hasattr(head, "successor") else catalog
+    count = len(era)
     # MON-291-R2-RULE (operator-stated fact; CONTRACT_291 section 5's 310 packets)
     assert count == 310
-    absent = sum(1 for packet in (NEW_PACKET, *PRODUCTS) if packet not in catalog)
+    absent = sum(1 for packet in (NEW_PACKET, *PRODUCTS) if packet not in era)
     # MON-291-R2-RULE (operator-stated fact; CONTRACT_291 section 5's 310 packets)
     assert absent == 0
-    expected = set(catalog) - {NEW_PACKET, *PRODUCTS}
+    expected = set(era) - {NEW_PACKET, *PRODUCTS}
     snapshot = copy.deepcopy(catalog)
     result = head.historical_catalog(catalog)
     differing = len(set(result) ^ expected)
