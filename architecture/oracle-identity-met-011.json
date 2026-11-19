@@ -1,0 +1,39 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_011_oracle.py",
+  "sha256": "32d05f154f0fd0cd75b2a1f5db4ac196602f225b4e07131f4c341a418885c779"
+ },
+ "oracle": {
+  "agentId": "a97aa8b92aa09c330",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "ee7a6f19-64d5-4e64-98bb-f09aee981543",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "ee7a6f19-64d5-4e64-98bb-f09aee981543"
+  ]
+ },
+ "briefSha256": "9bff692f89a317f4dc76101d036f9749e2b08594f79caebfaf0506b45f594902",
+ "candidateCommit": "e08f680fe2ca13995d84e8874b2fe55c1c69048e",
+ "launched": "2026-11-19T21:23:09+08:00",
+ "finished": "2026-11-19T21:36:24+08:00",
+ "ruling": {
+  "decision": "PENDING",
+  "by": "LANE_MONITOR"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 32d05f154f0fd0cd75b2a1f5db4ac196602f225b4e07131f4c341a418885c779 and the table 3f35c3314fe6df46966b8d263790fe23a149537cb4af7053d86a2bd4de0296f2; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "brief a0b579cf at launch, 9bff692f after erratum O1 (script 9022309c, one counted replacement on the lane monitor's ruling MON-293-ORACLE-V1-RULING (a): V1's packet files join the reviewed_bytes read list by the head's PACKET_FILES, and the sentence that the head's own validate_* read whatever else they need); launch prompt dbfa3fce, in 292's kit form for K 0 with C18's era-read rule; the author's only inputs are CONTRACT_293 (11f492ac) and the packet YAML at c4 e08f680f with closed-path strings masked (08349578), plus the operator-stated facts in contract terms (the head's interface and line numbers, the table's 215 entries and the registry's 40)",
+  "the author is a fresh agent that authored nothing in c1..c4 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its files in order c756319a -> 32d05f15; its report: 33 tests, 17 parametrized cases, 0 asserts without a cite (the author's own count); its scan: WORK/test_met_011_oracle.py: live 0, era 13, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads; its slips: run 1: two greps on its own file (forbidden tokens; a count of test definitions), outside the brief; run 1: shasum on its own file, outside the brief; run 1: one rename edit by an in-place sed inside WORK; both checks ran after it; run 1: two helpers in WORK/aux: one ran once on the masked YAML (key names, counts, short values from CN), one written and never run; run 1: its context carried the memory index and a commit-attribution reminder; it used neither; run 2: none; the run 1 disclosure of V1 placeholder bytes no longer applies (erratum O1)",
+  "author run 1 (the first file): 2026-11-19T21:23:15+08:00 to 2026-11-19T21:33:53+08:00, 23 tool calls; its file after the run c756319a",
+  "author run 2 (the erratum O1 follow-up, the same agent): 2026-11-19T21:35:56+08:00 to 2026-11-19T21:36:29+08:00, 5 tool calls; its file after the run 32d05f15",
+  "no run of the oracle exists at c5: its pass on its candidate is checked at F (CONTRACT_293 section 8 step 5), by the operator, by node counts only, on the lane monitor's heavy word; before F every node that drives a head check over the live tree fails by design (section 8's red set)",
+  "the table is c4's (the head test's provisional row) plus this oracle's provisional row (215 entries); both rows are measured at F's run, and this record is re-derived then",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; the ruling is PENDING; the lane monitor rules it"
+ ]
+}
