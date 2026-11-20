@@ -2,10 +2,10 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_011_oracle.py",
-  "sha256": "32d05f154f0fd0cd75b2a1f5db4ac196602f225b4e07131f4c341a418885c779"
+  "sha256": "efe2d3efb43b146854d0e4e5f69fb82bcca90b9d8c93e8ef58163e554a4582e0"
  },
  "oracle": {
-  "agentId": "a97aa8b92aa09c330",
+  "agentId": "ab14988502e71357e",
   "model": "claude-opus-5-5"
  },
  "operator": {
@@ -18,22 +18,37 @@
    "ee7a6f19-64d5-4e64-98bb-f09aee981543"
   ]
  },
- "briefSha256": "9bff692f89a317f4dc76101d036f9749e2b08594f79caebfaf0506b45f594902",
- "candidateCommit": "e08f680fe2ca13995d84e8874b2fe55c1c69048e",
- "launched": "2026-11-19T21:23:09+08:00",
- "finished": "2026-11-19T21:36:24+08:00",
+ "briefSha256": "bbf93f63911bb530d107fe2bb4d3f045b9f67b931973812e6ca1a1ba89767ce8",
+ "candidateCommit": "3d49939fd8112829711717b8ff1290f2f19fee67",
+ "launched": "2026-11-20T02:02:08+08:00",
+ "finished": "2026-11-20T02:09:51+08:00",
  "ruling": {
-  "decision": "PENDING",
-  "by": "LANE_MONITOR"
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "MON-293-O1-KEEP-SPANS",
+  "date": "2026-11-20"
  },
  "disclosures": [
-  "bound inputs: exactly the oracle 32d05f154f0fd0cd75b2a1f5db4ac196602f225b4e07131f4c341a418885c779 and the table 3f35c3314fe6df46966b8d263790fe23a149537cb4af7053d86a2bd4de0296f2; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
-  "brief a0b579cf at launch, 9bff692f after erratum O1 (script 9022309c, one counted replacement on the lane monitor's ruling MON-293-ORACLE-V1-RULING (a): V1's packet files join the reviewed_bytes read list by the head's PACKET_FILES, and the sentence that the head's own validate_* read whatever else they need); launch prompt dbfa3fce, in 292's kit form for K 0 with C18's era-read rule; the author's only inputs are CONTRACT_293 (11f492ac) and the packet YAML at c4 e08f680f with closed-path strings masked (08349578), plus the operator-stated facts in contract terms (the head's interface and line numbers, the table's 215 entries and the registry's 40)",
-  "the author is a fresh agent that authored nothing in c1..c4 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its files in order c756319a -> 32d05f15; its report: 33 tests, 17 parametrized cases, 0 asserts without a cite (the author's own count); its scan: WORK/test_met_011_oracle.py: live 0, era 13, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads; its slips: run 1: two greps on its own file (forbidden tokens; a count of test definitions), outside the brief; run 1: shasum on its own file, outside the brief; run 1: one rename edit by an in-place sed inside WORK; both checks ran after it; run 1: two helpers in WORK/aux: one ran once on the masked YAML (key names, counts, short values from CN), one written and never run; run 1: its context carried the memory index and a commit-attribution reminder; it used neither; run 2: none; the run 1 disclosure of V1 placeholder bytes no longer applies (erratum O1)",
-  "author run 1 (the first file): 2026-11-19T21:23:15+08:00 to 2026-11-19T21:33:53+08:00, 23 tool calls; its file after the run c756319a",
-  "author run 2 (the erratum O1 follow-up, the same agent): 2026-11-19T21:35:56+08:00 to 2026-11-19T21:36:29+08:00, 5 tool calls; its file after the run 32d05f15",
-  "no run of the oracle exists at c5: its pass on its candidate is checked at F (CONTRACT_293 section 8 step 5), by the operator, by node counts only, on the lane monitor's heavy word; before F every node that drives a head check over the live tree fails by design (section 8's red set)",
-  "the table is c4's (the head test's provisional row) plus this oracle's provisional row (215 entries); both rows are measured at F's run, and this record is re-derived then",
-  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; the ruling is PENDING; the lane monitor rules it"
+  "bound inputs: exactly the oracle efe2d3efb43b146854d0e4e5f69fb82bcca90b9d8c93e8ef58163e554a4582e0 and the table 3f35c3314fe6df46966b8d263790fe23a149537cb4af7053d86a2bd4de0296f2; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "O2: this file's author is a second fresh agent, never shown c5's oracle or its brief; its file replaces c5's at the same path at c6 and this record replaces c5's identity record there (MON-293-E4B-ADOPTED-O2-KIT); its brief follows RULING-A (the era rule withdrawn: vectors 1, 2 inverted, 3a, 3b and 6; vectors 4 and 5 withdrawn)",
+  "brief bbf93f63 (filled; unchanged during the run, so the brief at launch); launch prompt a3e2b958, in c5's kit form with its counted changes; the author's only inputs are CONTRACT_293 erratum E4b (0f533b53) and the packet YAML as at c6 (the dry c6 copy with closed-path strings and 292's oracle path masked: 32a47815), plus the operator-stated facts in contract terms (the head's interface and its 39 line anchors, read from the c6b head of E4B-READY; the table's 215 entries and the registry's 40)",
+  "the author is a fresh agent that authored nothing in c1..c6 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its file efe2d3ef (it reported its final file only); its report: 27 tests, 17 parametrized cases, 0 asserts without a cite (the author's own count); its scan: WORK/test_met_011_oracle.py: live 0, era 1, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads",
+  "author disclosure 1: its context carried an auto-injected memory index with account and project context and a commit-attribution reminder; it used none of them",
+  "author disclosure 2: it read the brief at the launch prompt's path (ORACLE_BRIEF_293c6.md); the brief names itself ORACLE_BRIEF_293.md",
+  "author disclosure 3: one wc -l on the two CN files (line counts only; not a sed -n range read)",
+  "author disclosure 4: one shasum -a 256 on its own file after the last edit, a third command on that file beyond SYN and SCAN",
+  "author disclosure 5: one helper, WORK/aux/yaml_shape.py, run twice on the masked YAML (-I -B, standard library only): key names, types and sizes; the values of id, predecessors and offlineExecution; true/false membership of eight paths in allowedPaths; sortedness and uniqueness counts",
+  "author disclosure 6: it checked the contract's allowedPaths expectation against the masked YAML for consistency only; every expectation is from the contract or the operator-stated facts; no expected value only from a fixture",
+  "author disclosure 7: construction assumptions node reports may correct: vector 1's catalog passed parsed first, then as bytes, the accepted form reused; historical_catalog assumed to return the peeled mapping; the layer slot member found by a name containing slot; registry and hunk-class entry shapes detected at run time; mutated JSON written back in the form that reproduces the original bytes; the V6 record mutation uses a vocabulary member if one exists, else the member holding the rule digest; before F, C2's mutation uses a made-up inline entry (the live record.json has none yet)",
+  "author disclosure 8: the V1, E3, V4 and V6 mutation tests also assert that the unmutated inputs pass, relying on erratum E3's head probe that these checks pass before F",
+  "author disclosure 9: at run time the file reads through reviewed_bytes, as the brief allows, the ERRATA_LINES paths, the changedFiles paths and every weights-table key, oracle files included; its asserts compare counts only, so those names and bytes are never printed",
+  "author disclosure 10: the file names tests/test_met_011_oracle.py, its own table row, as the brief requires",
+  "operator note 1: the brief's line 40 names the brief ORACLE_BRIEF_293.md, a stale self-name: the kit deriver's rename rule and leftover check covered the maker only; no effect, as the author read the brief by the launch path (author disclosure 2); later kits' derivers check the brief for leftovers too (MON-293-O2-CHECKED-O1)",
+  "operator note 2: the brief carries 39 line anchors, each once (35 written as line N, 4 in lists), counted by tool; the operator's AGENT-ASK said 35 by the first form only",
+  "operator note 3: the operator re-ran the kit's syntax check and C18's live-read scan on the file and got the author's lines; privacy, handle and closed-token scans 0; the file sealed 0444 and copied by bytes into the lane's unmirrored evidence folder; never opened",
+  "author run 1 (the file): 2026-11-20T02:02:08+08:00 to 2026-11-20T02:09:51+08:00, 26 tool calls; its file after the run efe2d3ef",
+  "no run of the oracle exists at c6: its pass on its candidate is checked at F, by the operator, by node counts only, on the lane monitor's heavy word; before F every node that drives a head check over the live tree fails by design (section 8's red set); the mutation tests that also assert the unmutated inputs pass (author disclosure 8) must pass at c6 at P-W2, or join the pre-F red list by message, on the lane monitor's word only (MON-293-O2-CHECKED-O1)",
+  "the table is c5's, unchanged at c6 (215 entries: the head test's and this oracle's provisional rows); both rows are measured at F's run, and this record is re-derived then",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; ruled KEEP by the lane monitor (MON-293-O1-KEEP-SPANS)"
  ]
 }

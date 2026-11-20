@@ -119,11 +119,16 @@ from scripts.validate_policy_observation import validate_messages
 from scripts.validate_proxy_contract import validate_profile
 
 
+def current_catalog_names():
+    """The current catalog's names (C18 retro sweep, A-292-11): every bridged head takes the current catalog by
+    contract and refuses any other, so this one helper lists the names; it reads no file's bytes."""
+    return sorted(path.stem for path in (profile.ROOT / "task-packets").glob("*.yaml"))
+
+
 def packets():
-    """This era's catalog (C18): the head's authority names it; each file's bytes through the head's era reader."""
-    record = profile.authority()
+    """The current catalog: names from current_catalog_names(), each file's bytes through the head's era reader."""
     return {name: safe_load(profile.reviewed_bytes("task-packets/" + name + ".yaml"))
-            for name in [*record["baselinePackets"], profile.NEW_PACKET, *record["productPackets"]]}
+            for name in current_catalog_names()}
 
 
 def layer_packets():

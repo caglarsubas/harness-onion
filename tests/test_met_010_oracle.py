@@ -429,7 +429,16 @@ def test_catalog_names_and_base_digests(head, authority, catalog_bytes):
 
 def test_historical_catalog_is_the_base(head, authority, catalog):
     """CONTRACT_292 sections 1 and 4: historical_catalog over the whole catalog returns the 310 base ids."""
-    result = head.historical_catalog(dict(catalog))
+    # CONTRACT_293 section 5 (erratum E4): the catalog stays strict, so 292's era catalog
+    # alone (313 names) is refused; the whole catalog at 293 is those 313 plus MET-011,
+    # read through the head's era reader (C18).
+    mapping = dict(catalog)
+    # CONTRACT_292 section 1 (after 293, MET-011 alone); CONTRACT_293 section 5
+    later = "MET-011"
+    mapping[later] = head.safe_load(head.reviewed_bytes(_packet_rel(later)))
+    # CONTRACT_292 section 1 (314 after 293); CONTRACT_293 section 5 (erratum E4)
+    assert len(mapping) == CATALOG_COUNT + 1
+    result = head.historical_catalog(mapping)
     # CONTRACT_292 section 1
     assert len(result) == BASE_COUNT
     differing = len(set(result) ^ set(authority["baselinePackets"]))

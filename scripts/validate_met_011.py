@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate MET-011 (CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite at slot 293, K = 0): V1 this packet's files by digest; E3 the authored edits at their named lines; C1 the ledger; C2 its inline reverse hunks; V6a record.json's classes; V4 the registry rider; V6 the hunk-class record under v2.5; an older era's catalog is passed on unchanged."""
+"""Validate MET-011 (CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite at slot 293, K = 0): V1 this packet's files by digest; E3 the authored edits at their named lines; C1 the ledger; C2 its inline reverse hunks; V6a record.json's classes; V4 the registry rider; V6 the hunk-class record under v2.5."""
 from __future__ import annotations
 
 import ast
@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-293-authority.json"
-AUTHORITY_SHA256 = "daa075e7268a63c75157fc92f885dff228176c331cb551150f8487e4670d43dc"
+AUTHORITY_SHA256 = "11983f2804379395829817e9f8182ab79c01492b3b46efbb2317e817f1879d6b"
 VALIDATOR_PATH = "scripts/validate_met_011.py"
 BASE_COMMIT = "19b176bef5c80f0a1ebcc3fa5aa27d9d7cf56b48"
 NEW_PACKET = "MET-011"
@@ -304,13 +304,9 @@ def current_test_bytes(before: bytes) -> bytes:
 
 
 def historical_catalog(packets: dict[str, Any]) -> dict[str, Any]:
-    """Remove only this layer, leaving predecessor checks to their owners. The era rule (MET-011, CONTRACT_293
-    section 5): a catalog that holds none of this layer's own packets is an older era's and is passed on
-    unchanged; any other must be exactly this era's."""
+    """Remove only this layer, leaving predecessor checks to their owners."""
     _checked_authority_raw()
     require(type(packets) is dict, "packet mapping")
-    if NEW_PACKET not in packets:
-        return packets
     current_ids = set(_PACKET_BYTE_RULES)
     require(NEW_PACKET in current_ids and set(packets) == current_ids,
             "unexpected packet addition or loss")
@@ -349,8 +345,8 @@ def validate_packet_payloads(packets: dict[str, Any]) -> None:
 # MET-011 (CHAIN-COMPACTION-002's third checkpoint; CONTRACT_293 a1eb6910, the rulings of its section 2) records,
 # in a K = 0 step, the ledger of chain layers 189-292 over the 313-packet baseline (slot 293), written by a full
 # writing run under the owner's head-bound approval, its line-run reverse hunks inline in the authority (back to
-# slot 286's record), with the writer's one exclusion line (ledger_hunks=False: three excluded files) and the era
-# rule above, the form of every head from 293 on. Repository bytes are read only through reviewed_bytes; an era
+# slot 286's record), with the writer's one exclusion line (ledger_hunks=False: three excluded files); the catalog
+# check is 286's exact form (rule v4, clause D). Repository bytes are read only through reviewed_bytes; an era
 # file is refused unless bound by digest on every read; the ledger is bound by the authority (never an era file),
 # a changed file by the authority's afterSha256. Each refusal is a pure check over the values read. Checked here
 # (section 5, in this order): V1 the packet's two files by digest; E3 class-other hunks only at the spans the
@@ -365,21 +361,23 @@ CHECK_PAIRS = (
     (('ids', ['DIST-005', 'DIST-005A']), ('layerSlot', 279), ('pairsPath', 'architecture/dist-005a-ctrl-fix-004-publish-pairs.json'), ('type', 'supersession')),
 )
 ERA_SHA256 = MappingProxyType({
-    "architecture/chain-checkpoint/README.md": "1e964b32ee161146acd1180d0ed0afd956005556f165761a0b51069a19f5f08c",
+    "architecture/chain-checkpoint/README.md": "0586f41c2721244f41032ebe1ef3ae9bae1277ba529909160b8eec0981a50214",
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "acb03375f10646c2a432a357d3c2d7ee9b6264263744f63dd8b78480f5a8cc4e",
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
     "scripts/chain_checkpoint_writer.py": "9e3226884b818668e972f86e2c0dd7f930bd45abf35481ba45e18a4aa6a36ccf",
 })
 ERRATA_LINES = MappingProxyType({
-    "architecture/chain-checkpoint/README.md": ((251, 282),),
+    "architecture/chain-checkpoint/README.md": ((251, 281),),
     "architecture/oracle-identity-met-009.json": ((5, 5), (28, 29), (44, 46)),
+    "architecture/oracle-identity-met-010.json": ((5, 5), (28, 29), (41, 44)),
     "scripts/chain_checkpoint_writer.py": ((14, 15), (179, 179), (314, 314)),
     "tests/test_ci_performance.py": ((50, 50), (109, 109), (169, 169)),
     "tests/test_credential_lifecycle.py": ((126, 126), (362, 362)),
     "tests/test_met_008.py": ((118, 124), (137, 137), (142, 143), (280, 281), (286, 286), (1130, 1133)),
     "tests/test_met_009.py": ((120, 126), (139, 142), (280, 281), (286, 286), (1130, 1133)),
     "tests/test_met_009_oracle.py": ((127, 134), (636, 638), (642, 644)),
+    "tests/test_met_010_oracle.py": ((432, 441),),
     "tests/test_met_perf_050.py": ((119, 125), (138, 138), (142, 143), (281, 282), (287, 287), (1140, 1143)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"

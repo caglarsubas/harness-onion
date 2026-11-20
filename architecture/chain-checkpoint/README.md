@@ -250,7 +250,7 @@ tools write:
   as (CLASSES, register), and a v2.5 record has v2.4's six members and five context keys. Over 286's and 287's
   records (K = 0 contexts, where v2.5's path is v2.4's) v2.5 gives exactly their recorded classes.
 
-## MET-011 (slot 293): the third checkpoint and the era rule
+## MET-011 (slot 293): the third checkpoint
 
 **The rewrite.** The third checkpoint is written at 293 by a full G0 run and attests layers 189-292 (104 layers, one per
 slot, no gap) over the 313-packet baseline. Schema v1 is unchanged: the base's 14 members, its parameters and its two
@@ -267,12 +267,11 @@ gives 286's record byte for byte), and the slot's hunk-class record gives each o
 so no `ledger-hunks/` path exists; the writer can still build one (`check_ledger_hunks`, vectors 28-35, unchanged). No
 layer attests an excluded file.
 
-**The era rule (the form of every head from 293 on).** A head's `historical_catalog(packets)` checks its authority,
-then that `packets` is a dict ("packet mapping"). A mapping that holds none of the head's own packets (its new packet
-and its product packets) is an older era's catalog and is passed on unchanged; any other must be exactly this era's
-("unexpected packet addition or loss"), then the packet YAML and payload checks and the peel. `validate()` is not
-touched. Every mapping passed on meets the next older head's strict check after the bridge. The older heads (289-292)
-stay strict.
+**The catalog stays strict (MON-293-RULING-A).** The head's `historical_catalog(packets)` keeps the one exact form of
+every head (identity rule v4, clause D): it checks its authority, then that `packets` is a dict ("packet mapping"),
+then that it is exactly this era's ("unexpected packet addition or loss"), then the packet YAML and payload checks
+and the peel. A head test passes the current catalog's names from one helper, and its count line takes the bridge
+edit at each slot.
 
 **An era correction after the checkpoint (MON-292-C18).** It costs no ledger touch: the ledger is not edited until the
 next rewrite (303). An authored class-other edit to a file the third ledger attests demotes (neutral) every layer

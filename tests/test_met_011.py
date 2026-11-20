@@ -1,4 +1,4 @@
-"""Exact source lineage for MET-011; CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite at slot 293 (K = 0); the head keeps the full fan-in (8 own and 104 predecessor routes, every catalog walk and round trip, the full payload loop), reads this era's catalog through the head's era reader (C18), and the semantic check (V1, E3, C1, C2, V6a, V4, V6, the era rule) has a failing case for every refusal, each on plain data."""
+"""Exact source lineage for MET-011; CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite at slot 293 (K = 0); the head keeps the full fan-in (8 own and 104 predecessor routes, every catalog walk and round trip, the full payload loop), reads this era's catalog through the head's era reader (C18), and the semantic check (V1, E3, C1, C2, V6a, V4, V6, the strict catalog) has a failing case for every refusal, each on plain data."""
 import ast
 import json
 from copy import deepcopy
@@ -1092,8 +1092,8 @@ def test_every_newer_authority_is_read_exactly_once_per_route(monkeypatch, route
 
 # MET-011 (CHAIN-COMPACTION-002's third checkpoint, K = 0): this era's check, and a failing case for every check. Every
 # mutant below is applied to plain data handed to the layer's pure checks: nothing in the layer, the reader or the
-# library is patched or swapped (the era rule's vector 5 changes only the authority bytes the layer reads, as the
-# scaffold's route tests do). The ledger checks (C1, C2, V6a) run on a synthetic ledger, inline entry and classes built
+# library is patched or swapped.
+# The ledger checks (C1, C2, V6a) run on a synthetic ledger, inline entry and classes built
 # here, and on the live ones once the writing run's ledger is in the tree.
 import base64 as _b64
 
@@ -1110,7 +1110,7 @@ V_TESTS = {
     "V6a": ("test_v6a_the_ledger_classes_are_one_other_per_hunk", "test_v6a_the_ledger_is_never_reclassified"),
     "V4": ("test_v4_the_registry_differs_from_the_base_by_the_one_rider",),
     "V6": ("test_v6_the_hunk_class_record_rechecks_in_full",),
-    "ERA": ("test_era_rule_vectors",),
+    "CATALOG": ("test_strict_catalog_vectors",),
     "C12": ("test_c12_the_writer_names_three_excluded_files_at_293",),
 }
 V1_BOUND = "MET-011 reviewed bytes are bound: "
@@ -1170,7 +1170,7 @@ def _raises(message, call):
 
 def test_every_check_has_a_test_that_makes_it_fail():
     names = {name for name, value in globals().items() if name.startswith("test_") and callable(value)}
-    assert sorted(V_TESTS) == ["C1", "C12", "C2", "E3", "ERA", "V1", "V4", "V6", "V6a"]
+    assert sorted(V_TESTS) == ["C1", "C12", "C2", "CATALOG", "E3", "V1", "V4", "V6", "V6a"]
     assert all(test in names for tests in V_TESTS.values() for test in tests)
 
 
@@ -1585,37 +1585,24 @@ def test_v6_the_hunk_class_record_rechecks_in_full(change):
     _raises(message, lambda: profile.check_hunk_record(mutant, changed, afters, classify, context, rule_sha))
 
 
-@pytest.mark.parametrize("vector", ["1_full_set", "2_era_292", "3a_one_less", "3b_one_unknown", "4_era_291",
-                                    "5_authority", "5_not_a_mapping"])
-def test_era_rule_vectors(monkeypatch, vector):
-    """CONTRACT_293 section 5 (C1-5): the era rule's vectors at K = 0. The K >= 1 "some and not all of its own packets"
-    case is first exercisable at the first K >= 1 head."""
+@pytest.mark.parametrize("vector", ["1_full_set", "2_era_292_refused", "3a_one_less", "3b_one_unknown",
+                                    "5_not_a_mapping"])
+def test_strict_catalog_vectors(vector):
+    """MET-011's head is strict (MON-293-RULING-A; CONTRACT_293 erratum E4): its historical_catalog keeps every head's one
+    exact form (identity rule v4, clause D). The full set is accepted with MET-011 peeled; 292's era catalog (313 names),
+    one less, one unknown and a non-mapping are refused."""
     current = _chain_packets()
     assert len(current) == 314 and profile.NEW_PACKET in current
     era_292 = {name: payload for name, payload in current.items() if name != profile.NEW_PACKET}
     if vector == "1_full_set":
         accepted = profile.historical_catalog(current)
         assert len(accepted) == 313 and set(accepted) == set(era_292)
-    elif vector == "2_era_292":                  # tests/test_met_010.py's era packets(): 313 names
-        assert profile.historical_catalog(era_292) is era_292
+    elif vector == "2_era_292_refused":          # 292's era catalog: 313 names, refused by the strict head
+        _raises(LOSS, lambda: profile.historical_catalog(era_292))
     elif vector == "3a_one_less":
         _raises(LOSS, lambda: profile.historical_catalog({n: p for n, p in current.items() if n != "MET-001"}))
     elif vector == "3b_one_unknown":
         _raises(LOSS, lambda: profile.historical_catalog(dict(current, **{"UNKNOWN-001": {}})))
-    elif vector == "4_era_291":                  # passed on by MET-011, refused by 292's strict head
-        era_291 = {n: p for n, p in era_292.items() if n not in ("MET-010", *m010.PRODUCT_PACKETS)}
-        assert len(era_291) == 310
-        assert profile.historical_catalog(era_291) is era_291
-        _raises(LOSS, lambda: m010.historical_catalog(era_291))
-    elif vector == "5_authority":
-        original = profile.regular_bytes
-
-        def changed_reader(path):
-            raw = original(path)
-            return raw + b" " if path == profile.AUTHORITY_PATH else raw
-
-        monkeypatch.setattr(profile, "regular_bytes", changed_reader)
-        _raises("ledger rewrite history authority digest", lambda: profile.historical_catalog(era_292))
     else:
         _raises("packet mapping", lambda: profile.historical_catalog(list(era_292)))
 

@@ -2,7 +2,7 @@
 
 ## Current source preparation — MET-011
 
-MET-011 (slot 293): CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite: first the C18 retro sweep of the 289-291 head tests (tests/test_met_008.py, tests/test_met_perf_050.py, tests/test_met_009.py) and 291's oracle, then the third ledger architecture/chain-checkpoint/record.json (layers 189-292, verifyReference naming slot 286) written by one full run on the final source tree, with the head's era rule as the form of every later head and the writer's exclusion at three files; a K = 0 step (314 packets at slot 293); gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the two D5a oracles, 293's and 291's swept one).
+MET-011 (slot 293): CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite: first the C18 retro sweep of the 289-291 head tests (tests/test_met_008.py, tests/test_met_perf_050.py, tests/test_met_009.py) and 291's oracle, then the third ledger architecture/chain-checkpoint/record.json (layers 189-292, verifyReference naming slot 286) written by one full run on the final source tree, with the writer's exclusion at three files; a K = 0 step (314 packets at slot 293); gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the two D5a oracles, 293's and 291's swept one).
 Alpha2 OPEN; 313 accepted (the catalog at slot 292) plus MET-011 only.
 
 ## Historical first rider pair source preparation — MET-010
