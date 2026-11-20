@@ -616,8 +616,16 @@ def test_ledger_e2_e12_slot_baseline_and_layers():
     # CONTRACT_293 section 4 E-2 and E-12: one per slot, 189-292, no gap
     assert sorted(slots) == list(range(189, 293))
     last = layer_entries(document)[slots.index(292)]
+    # CONTRACT_293 section 1 and section 4 E-12: the last layer is the predecessor's (MET-010's) own layer
+    assert last["module"] == "validate_met_010"
+    # CONTRACT_293 section 1 and section 4 E-12: its reviewed validator is scripts/validate_met_010.py
+    assert last["validatorPath"] == "scripts/validate_met_010.py"
+    source = rb(last["validatorPath"])
+    bind = "import " + PIN_LINE[len("scripts/"):-len(".py")] + " as successor\n"
     # CONTRACT_293 section 4 E-12: the last layer binds scripts/validate_met_011.py
-    assert PIN_LINE in json.dumps(last)
+    assert source.decode("utf-8").count(bind) >= 1
+    # CONTRACT_293 section 4 E-12: the bound bytes are the last layer's reviewed validator (its pinned digest)
+    assert sha256(source) == last["validatorSha256"]
 
 
 def test_ledger_e3_parameters_and_check_pairs():
