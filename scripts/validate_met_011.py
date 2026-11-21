@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/ledger-rewrite-293-authority.json"
-AUTHORITY_SHA256 = "3cf0ee55c4ea516f488860b99a18b4f98975311e6307b1dec1737ec60f99b84b"
+AUTHORITY_SHA256 = "e5a1ec5ec9a6ba2625fa6ffea49a5c98de41aa76bcdef55a7099fe2338470240"
 VALIDATOR_PATH = "scripts/validate_met_011.py"
 BASE_COMMIT = "19b176bef5c80f0a1ebcc3fa5aa27d9d7cf56b48"
 NEW_PACKET = "MET-011"
@@ -378,6 +378,7 @@ ERRATA_LINES = MappingProxyType({
     "tests/test_met_009.py": ((120, 126), (139, 142), (280, 281), (286, 286), (1130, 1133)),
     "tests/test_met_009_oracle.py": ((127, 134), (636, 638), (642, 644)),
     "tests/test_met_010_oracle.py": ((432, 441),),
+    "tests/test_met_perf_049.py": ((134, 134), (143, 144), (1376, 1376)),
     "tests/test_met_perf_050.py": ((119, 125), (138, 138), (142, 143), (281, 282), (287, 287), (1140, 1143)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"

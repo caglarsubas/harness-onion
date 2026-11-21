@@ -1374,7 +1374,7 @@ def test_c2_the_live_entry_projects_slot_282s_record():
     if entry is None:
         return
     rule = profile._PROJECTION_RULES[profile.LEDGER_PATH]
-    raw = profile.regular_bytes(profile.LEDGER_PATH)
+    raw = profile.reviewed_bytes(profile.LEDGER_PATH)
     before = profile.historical_bytes(profile.LEDGER_PATH, raw)
     assert profile.digest(raw) == rule["afterSha256"] == entry["afterSha256"]
     assert profile.digest(before) == rule["beforeSha256"] == profile.PREVIOUS_CHECKPOINT[1]

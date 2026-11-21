@@ -1261,7 +1261,7 @@ def test_e3_authored_hunks_only_at_the_named_lines(change):
     classes = json.loads(json.dumps(classes))
     position = classes[NAMED].index("other")
     if change == "other_elsewhere":
-        path = next(p for p in sorted(classes) if p not in profile.ERRATA_LINES and classes[p])
+        path = next(p for p in sorted(classes) if p not in profile.ERRATA_LINES and classes[p] and set(classes[p]) != {"other"})
         classes[path][0] = "other"
         message = E3_ONLY
     elif change == "no_authored_hunk":
@@ -1462,7 +1462,7 @@ def test_c2_the_live_entry_projects_slot_286s_record():
     if entry is None:
         return
     rule = profile._PROJECTION_RULES[profile.LEDGER_PATH]
-    raw = profile.regular_bytes(profile.LEDGER_PATH)
+    raw = profile.reviewed_bytes(profile.LEDGER_PATH)
     before = profile.historical_bytes(profile.LEDGER_PATH, raw)
     assert profile.digest(raw) == rule["afterSha256"] == entry["afterSha256"]
     assert profile.digest(before) == rule["beforeSha256"] == profile.PREVIOUS_CHECKPOINT[1]
