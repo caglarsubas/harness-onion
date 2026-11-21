@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_011_oracle.py",
-  "sha256": "efe2d3efb43b146854d0e4e5f69fb82bcca90b9d8c93e8ef58163e554a4582e0"
+  "sha256": "4e55fd14174132c423d0dafd0cd731f6b1b599d883a4b6e562dd7aa7bd19e032"
  },
  "oracle": {
   "agentId": "ab14988502e71357e",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-293-O1-KEEP-SPANS",
-  "date": "2026-11-20"
+  "ref": "ORC-293-C8-GO",
+  "date": "2026-11-21"
  },
  "disclosures": [
   "bound inputs: exactly the oracle efe2d3efb43b146854d0e4e5f69fb82bcca90b9d8c93e8ef58163e554a4582e0 and the table 3f35c3314fe6df46966b8d263790fe23a149537cb4af7053d86a2bd4de0296f2; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
@@ -49,6 +49,8 @@
   "author run 1 (the file): 2026-11-20T02:02:08+08:00 to 2026-11-20T02:09:51+08:00, 26 tool calls; its file after the run efe2d3ef",
   "no run of the oracle exists at c6: its pass on its candidate is checked at F, by the operator, by node counts only, on the lane monitor's heavy word; before F every node that drives a head check over the live tree fails by design (section 8's red set); the mutation tests that also assert the unmutated inputs pass (author disclosure 8) must pass at c6 at P-W2, or join the pre-F red list by message, on the lane monitor's word only (MON-293-O2-CHECKED-O1)",
   "the table is c5's, unchanged at c6 (215 entries: the head test's and this oracle's provisional rows); both rows are measured at F's run, and this record is re-derived then",
-  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; ruled KEEP by the lane monitor (MON-293-O1-KEEP-SPANS)"
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; ruled KEEP by the lane monitor (MON-293-O1-KEEP-SPANS)",
+  "O2 E-12 fix, c7 and c8, under the owner's O2-fix word (ORC-293-O2-FIX, 2026-11-20, after ADJ2's verdict (A): an oracle defect in the E-12 check) and the owner's c8 word (ORC-293-C8-GO, 2026-11-21): a fresh fixer agent abc3254f062827294, which authored nothing else in slot 293, changed only the E-12 check (one hunk, 1 line removed, 9 added; 765 to 773 lines) so that it reads the slot-292 validator's reviewed bytes through the head's era reader and its exact bind string, as the head's check_walk does, then asserts the layer's pinned validatorSha256; its fix run on the F copy 39 passed, 0 failed; its binding-absent mutation 34 passed, 5 failed, the E-12 node at its own assertion; was efe2d3ef; committed at c7 18a7d80e; the oracle agent, operator, author, candidateCommit, launched, finished and briefSha256 unchanged; the file member is re-bound; the bound-inputs line and the earlier disclosures record what was bound and run at the earlier KEEP and stay as written (the 292 c9 rule); R00 placed the fixed file by bytes and never opened it",
+  "the fix was reviewed at FULL depth by a fresh, independent reviewer a258269598bd64980: PASS_WITH_FINDINGS (major 0, minor 0, note 3); its runs: the fixed O2 on the F copy 39 passed, 0 failed; an independent binding-absent mutation 34 passed, 5 failed, the E-12 node at its own binding-count assertion; its note 3 (the brief's missing contract facts section) goes to the merge record; this record was not re-issued at c7, so the review-records test refused ORACLE_DIGEST in W at c7 (W7-STOP-293), and c8 re-binds it"
  ]
 }
