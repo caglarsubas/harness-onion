@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "785321d69bb987fa04151acca2cc178caa7736e6fb6191420d7f400055281ea6"
+AUTHORITY_SHA256 = "e6be5ba72743ee9955aaad7792a8f2cdbbe727342ad09af77f11d4537be81c10"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
@@ -374,14 +374,19 @@ ERA_SHA256 = MappingProxyType({
     "task-packets/MODEL-ADOPT-PINS-001.yaml": "f99afe08d9bc6daf02407ea6247de59c5cf4a73ce2d9b7912e40eb86b661cb58",
 })
 ERRATA_LINES = MappingProxyType({
+    "architecture/language-placement.json": ((177, 178), (223, 224), (587, 588), (613, 614), (1014, 1015), (1039, 1040), (1397, 1398), (1423, 1424), (1633, 1634), (1659, 1660), (1696, 1697), (1722, 1723), (1820, 1821), (1846, 1847), (1883, 1884), (1909, 1910), (2094, 2095), (3003, 3004)),
+    "architecture/oracle-identity-language-placement.json": ((5, 5), (28, 30), (44, 44)),
     "architecture/oracle-identity-met-010.json": ((5, 5), (27, 29), (44, 44)),
     "architecture/oracle-identity-met-011.json": ((5, 5), (27, 29), (54, 54)),
+    "docs/adr/0010-language-placement.md": ((78, 78), (113, 113), (115, 115), (133, 133), (140, 140), (146, 146), (150, 151), (153, 154), (167, 167), (273, 273), (280, 280), (286, 286), (290, 291), (293, 294)),
     "docs/repositories/03-mas-harness-industry-packs.md": ((458, 459),),
     "docs/repositories/06-mas-harness-model-plane.md": ((84, 86), (164, 165)),
     "docs/repositories/08-mas-harness-execution-plane.md": ((96, 96), (170, 171)),
     "task-packets/README.md": ((3, 3), (1849, 1850)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_language_placement.py": ((1143, 1144),),
+    "tests/test_language_placement_oracle.py": ((102, 102), (108, 108), (115, 115), (121, 121), (125, 126), (128, 129), (1101, 1101), (1106, 1106)),
     "tests/test_met_010_oracle.py": ((430, 430), (432, 440)),
     "tests/test_met_011_oracle.py": ((109, 109), (113, 113), (116, 116), (350, 350), (352, 352), (354, 354), (356, 356), (413, 413), (415, 415)),
     "tests/test_plane_shell_order.py": ((87, 88),),

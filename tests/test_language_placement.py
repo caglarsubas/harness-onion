@@ -1140,8 +1140,8 @@ def _s5_58(mp):
 def _s5_59(mp):
     data = _data()
     r08 = data["h10Sources"]["r08"]
-    assert r08["lines"] == [103, 103]
-    span = _span_at(r08["path"], 102, 103, r08["evidence"])
+    assert r08["lines"] == [105, 105]  # CONTRACT_294 erratum E5: doc 08 [103, 103] -> [105, 105]
+    span = _span_at(r08["path"], 104, 105, r08["evidence"])
     assert span["section"] == r08["section"]
     data["h10Sources"]["r08"] = span
     return _ov(data)

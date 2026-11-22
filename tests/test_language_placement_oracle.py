@@ -99,34 +99,41 @@ F_R05_88 = ["FastAPI/Starlette", "Pydantic v2", "HTTPX", "psycopg 3", "cryptogra
 F_R04_102 = ["Next.js 16.3.3 Active LTS with the App Router", "React 19.2", "TypeScript 5", "Prisma 6.19.3", "PostgreSQL",
              "AJV 8.20.0", "Vitest", "Playwright"]
 
+# CONTRACT_294 erratum E5 (D2): slot 294's exact-tree lines (section 3a) moved these cited lines of docs 06 and 08;
+# no cited text or sha256 changed, only line numbers. Key: (plan, the located line the brief 267 gives: ORACLE_BRIEF,
+# the design's Appendix A and the h10 source fact); value: the same block's line in 294's tree. Used only by the seven
+# Appendix A rows below that cite doc 06 or 08 and by the h10 source fact; each keeps every other value the brief 267
+# gives and still locates its block by section, sha256 and evidence (ORACLE_BRIEF_C4).
+E5_MOVED = {(P06, 99): 102, (P08, 101): 103, (P08, 103): 105}
+
 # Appendix A: id -> (runtime, frameworks, [(plan, located line)], packaging, upstream, implementationStatus, decision)
 APPENDIX_A = {
     "bundle-verifier": (GO, F_R10_152, [(P10, 152)], OCI, None, "PLANNED", ADR10_ID),
     "otel-collector": (None, [], [], CHART, "otel/opentelemetry-collector-contrib", "UPSTREAM_MANAGED", ADR10_ID),
     "operator": (GO, F_R10_152, [(P10, 152)], CHART, None, "PLANNED", ADR10_ID),
     "policy-decision": (PY, F_R09_90 + ["OPA"], [(P09, 90), (P09, 100)], OCI, None, "PLANNED", ADR10_ID),
-    "sandbox-runner": (PY, F_R08_101, [(P08, 101)], OCI, None, "PLANNED", ADR10_ID),
+    "sandbox-runner": (PY, F_R08_101, [(P08, E5_MOVED[P08, 101])], OCI, None, "PLANNED", ADR10_ID),
     "fleet-sync-agent": (GO, F_R10_152, [(P10, 152)], OCI, None, "PLANNED", ADR10_ID),
     "guardrail-service": (PY, F_R09_90, [(P09, 90)], OCI, None, "PLANNED", ADR10_ID),
     "usage-ledger": (PY, F_R09_90, [(P09, 90)], OCI, None, "PLANNED", ADR10_ID),
     "governance-service": (PY, F_R09_90, [(P09, 90)], OCI, None, "PLANNED", ADR10_ID),
     "domain-service": (PY, F_R07_119, [(P07, 119)], OCI, None, "PLANNED", ADR10_ID),
     "registry-service": (PY, F_R09_90, [(P09, 90)], OCI, None, "PLANNED", ADR10_ID),
-    "inference-api": (PY, F_R06_99, [(P06, 99)], OCI, None, "PLANNED", ADR10_ID),
+    "inference-api": (PY, F_R06_99, [(P06, E5_MOVED[P06, 99])], OCI, None, "PLANNED", ADR10_ID),
     "connector-controller": (PY, F_R07_119, [(P07, 119)], OCI, None, "PLANNED", KN_DATA),
     "memory-service": (PY, F_R07_119, [(P07, 119)], OCI, None, "PLANNED", ADR10_ID),
     "control-web": (NODE, F_R04_102, [(P04, 102)], CHART, None, "PLANNED", ADR10_ID),
     "ingest-worker": (PY, F_R07_119, [(P07, 119)], OCI, None, "PLANNED", ADR10_ID),
     "retrieval-service": (PY, F_R07_119, [(P07, 119)], OCI, None, "PLANNED", ADR10_ID),
-    "protocol-gateway": (PY, F_R08_101, [(P08, 101)], OCI, None, "PLANNED", HOTPATH),
+    "protocol-gateway": (PY, F_R08_101, [(P08, E5_MOVED[P08, 101])], OCI, None, "PLANNED", HOTPATH),
     "evidence-service": (PY, F_R09_90, [(P09, 90)], OCI, None, "PLANNED", ADR10_ID),
     "profile-compiler-worker": (PY, ["`uv` 0.12.7"], [(P04, 103)], OCI, None, "PLANNED", ADR10_ID),
     "index-worker": (PY, F_R07_119, [(P07, 119)], OCI, None, "PLANNED", ADR10_ID),
-    "orchestration-api": (PY, F_R08_101, [(P08, 101)], OCI, None, "PLANNED", ADR11_ID),
-    "decision-service": (PY, F_R08_101, [(P08, 101)], OCI, None, "PLANNED", ADR10_ID),
+    "orchestration-api": (PY, F_R08_101, [(P08, E5_MOVED[P08, 101])], OCI, None, "PLANNED", ADR11_ID),
+    "decision-service": (PY, F_R08_101, [(P08, E5_MOVED[P08, 101])], OCI, None, "PLANNED", ADR10_ID),
     "assurance-worker": (PY, F_R09_90, [(P09, 90)], OCI, None, "PLANNED", ADR10_ID),
-    "tool-broker": (PY, F_R08_101, [(P08, 101)], OCI, None, "PLANNED", HOTPATH),
-    "orchestration-worker": (PY, F_R08_101, [(P08, 101)], OCI, None, "PLANNED", ADR11_ID),
+    "tool-broker": (PY, F_R08_101, [(P08, E5_MOVED[P08, 101])], OCI, None, "PLANNED", HOTPATH),
+    "orchestration-worker": (PY, F_R08_101, [(P08, E5_MOVED[P08, 101])], OCI, None, "PLANNED", ADR11_ID),
     "ai-gateway": (PY, F_R05_88, [(P05, 88)], OCI, None, "PLANNED", HOTPATH),
     "experience-gateway": (PY, F_R05_88, [(P05, 88), (P05, 89)], OCI, None, "PLANNED", HOTPATH),
 }
@@ -1098,12 +1105,16 @@ def test_fact_adr_amendment_and_its_captions():
 
 
 def test_fact_h10_sources():
+    """ORACLE_BRIEF (the design's fixed facts): one h10 source, R08's durable-executor block under its toolchain
+    heading, with its evidence; ORACLE_BRIEF_C4: located by section, sha256 and evidence. CONTRACT_294 erratum E5: only
+    the block's line moved."""
     data = _data()
     assert set(data["h10Sources"]) == {"r08"}
     span = data["h10Sources"]["r08"]
     assert span["evidence"] == H10_EVIDENCE
     text, line = _block_text(_root_reader, span)
-    assert (span["path"], line, span["section"]) == (P08, 103, TOOLCHAIN_HEADING)
+    # CONTRACT_294 erratum E5: doc 08 [103, 103] -> [105, 105], text and sha256 unchanged (key: the brief 267's line).
+    assert (span["path"], line, span["section"]) == (P08, E5_MOVED[P08, 103], TOOLCHAIN_HEADING)
     assert text.startswith(DURABLE)
 
 
