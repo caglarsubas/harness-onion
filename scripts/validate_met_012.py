@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "8fd31f8fe95ce27956007187ec0b00cf143659c747776af0c81363a498622e58"
+AUTHORITY_SHA256 = "b53fe7bd00dfcaf016550cb028a3dc13a57f96e10fedd8cf3b13f85606235e5d"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
@@ -369,9 +369,9 @@ ERA_SHA256 = MappingProxyType({
     "architecture/review-briefs/REVIEW_BRIEF_PACKET.md": "6dcff68d7e6b01823f1740063e94910edcc159a71a6ee803f1b66c62fd06e274",
     "architecture/review-record/briefs.json": "bef9e6755eaeabecc3f704b2dd64b9342c11f1f6c10ff963c3b1c8734ab3fb6d",
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
-    "task-packets/EXEC-TEMPORAL-PINS-001.yaml": "32a7e23c893f69d39adb39e4b033ebb9006e5a8c1a7fbc6f96f9e9db7076895d",
+    "task-packets/EXEC-TEMPORAL-PINS-001.yaml": "3015206b52c26128331794bf96796ec7fcbfc283455c58b1510f6ce0232fcba7",
     "task-packets/IND-BANK-003A.yaml": "ad10b6622b8bd3ab9aa79ef47b2855c489930ba457df66826323cc50ac9859c4",
-    "task-packets/MODEL-ADOPT-PINS-001.yaml": "572c70bffae0471664c49cba8617b32548be19d6fe52ce9a178005891b7704f2",
+    "task-packets/MODEL-ADOPT-PINS-001.yaml": "f99afe08d9bc6daf02407ea6247de59c5cf4a73ce2d9b7912e40eb86b661cb58",
 })
 ERRATA_LINES = MappingProxyType({
     "docs/repositories/03-mas-harness-industry-packs.md": ((458, 459),),

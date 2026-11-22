@@ -21,7 +21,7 @@ deliverables:
 excluded:
   - "pyproject.toml, uv.lock, the Makefile, PORTING.yaml, ci/**, src/**, services/**, deploy/**, migrations/**, providers/** (providers/temporal/ is EXEC-TEMPORAL-001's), tests/orchestration/** (EXEC-ORCH-001's), architecture/providers.yaml in harness-onion, any artifact bytes, images, databases, listeners and any network access in the run."
 prefetchCommands: []
-offlineAcceptanceCommands: [["python3", "-I", "-B", "-m", "unittest", "discover", "-s", "tests/adoption", "-p", "test_temporal_dossier.py"]]
+offlineAcceptanceCommands: [["python3", "-I", "-B", "-m", "unittest", "discover", "-s", "tests/health"], ["python3", "-I", "-B", "-m", "unittest", "discover", "-s", "tests/adoption", "-p", "test_temporal_dossier.py"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - "The head's name-status against 145d85cb730c3581dafd44918fa39f157097c2b2 is exactly the Tree contract's 4 A entries."

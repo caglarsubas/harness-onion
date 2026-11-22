@@ -20,7 +20,7 @@ deliverables:
 excluded:
   - "Any artifact byte, engine source, binary, build, adapter code, model weight, tokenizer, network access during acceptance, hosted endpoint, Makefile or ci/ change, PORTING.yaml change, and every path outside allowedPaths."
 prefetchCommands: []
-offlineAcceptanceCommands: [["python3", "-I", "-B", "-m", "unittest", "discover", "-s", "tests/adoption"]]
+offlineAcceptanceCommands: [["python3", "-I", "-B", "-m", "unittest", "discover", "-s", "tests/health"], ["python3", "-I", "-B", "-m", "unittest", "discover", "-s", "tests/adoption"]]
 offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
 expectedEvidence:
   - "The head's name-status against 2bae531427dcdc13eb8dfca1f9b294420df3d68e is exactly the Tree contract's 5 A entries; no artifact byte is committed."
