@@ -84,8 +84,11 @@ class PlaneShellOrderTests(unittest.TestCase):
         packets = catalog(without=SHELLS)
         self.assertEqual(OWNERSHIP.plane_shell_order(packets), ({}, []))
         independent = closure(packets)
-        self.assertEqual(OWNERSHIP.packet_ancestors(packets), independent)
-        self.assertEqual(OWNERSHIP.packet_ancestors(packets, {}), independent)
+        # D3 (slot 294): packet_ancestors keys every id it visits, so a packet that names a removed shell
+        # as a predecessor adds that shell's key, with no ancestors: compare over the catalog's packets.
+        for ancestors in (OWNERSHIP.packet_ancestors(packets), OWNERSHIP.packet_ancestors(packets, {})):
+            self.assertEqual({key: ancestors[key] for key in packets}, independent)
+            self.assertTrue(all(key in SHELLS and not ancestors[key] for key in set(ancestors) - set(packets)))
 
     def test_t3_one_shell_applies_its_row_alone(self) -> None:
         packets = catalog(without=SHELLS[1:])

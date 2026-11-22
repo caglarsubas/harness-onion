@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "f2e761b306c76c045dff9c1ec410ca7f9f553df379d727519ccc86b29b54d27b"
+AUTHORITY_SHA256 = "785321d69bb987fa04151acca2cc178caa7736e6fb6191420d7f400055281ea6"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
@@ -384,6 +384,7 @@ ERRATA_LINES = MappingProxyType({
     "tests/test_credential_lifecycle.py": ((362, 362),),
     "tests/test_met_010_oracle.py": ((430, 430), (432, 440)),
     "tests/test_met_011_oracle.py": ((109, 109), (113, 113), (116, 116), (350, 350), (352, 352), (354, 354), (356, 356), (413, 413), (415, 415)),
+    "tests/test_plane_shell_order.py": ((87, 88),),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"
