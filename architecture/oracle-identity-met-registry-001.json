@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_registry_001_oracle.py",
-  "sha256": "7da114202ff95ca1c9df0250cd00e59e1ee0e159ed3e6bcfcfd8bd56d2857535"
+  "sha256": "c009ee74e4de004b94d3f846e5ab515ad48d40a65e3efe932556c8dcb135e877"
  },
  "oracle": {
   "agentId": "local_e5eba7b8-6525-4b8a-b967-3749ce4fa839",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-288-O3-CLEAR",
-  "date": "2026-11-13"
+  "ref": "ORC-294-R5-KEEP",
+  "date": "2026-11-22"
  },
  "disclosures": [
   "brief 8fc7084f with its erratum 1 b89c9c16 (MON-284-D5A-RULE) and launch prompt e31ac74c (MON-284-D5A); the author's only inputs are CONTRACT_284 (e1411781) and c2's meta YAML with its 12 closed-path strings masked (da8aabf5); the author is a fresh agent that authored nothing in c1-c4 and ran py_compile only, no pytest",
@@ -34,6 +34,11 @@
   "the operator never opened the oracle, its diffs or the run logs; the lane monitor reviewed both diffs as a non-author (MON-284-D5A-RULE af5d5c71, MON-284-D5A-CLEAR 7f265a52)",
   "placed in the tree by bytes at c5 together with this identity (MON-284-D5A-CLEAR)",
   "corrected under MON-288-O3-CLEAR by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent); was db4e4e8f; candidateCommit, launched, finished and briefSha256 unchanged; R00 placed it by bytes at slot 288's c4c (CONTRACT_288 [PC-4]) and never opened it",
-  "the correction was produced by a general-purpose subagent of the monitor session and cleared by the monitor (diff 5f2506cd)"
+  "the correction was produced by a general-purpose subagent of the monitor session and cleared by the monitor (diff 5f2506cd)",
+  "R5 (slot 294 D8; ORC-294-RUN005-074 and ORC-294-R5, the owner's answer \"One more test-file round\"; ORC-294-R5-GRANT, slot A): a successor of this file by a fresh blind general-purpose agent that wrote nothing in 294 or in MET-REGISTRY-001 and had not seen round R4 (C26 category 1), launched 2026-11-22T23:08:16+08:00, finished 2026-11-22T23:15:21+08:00 (34 tool uses in one pass, no resume); brief 0e570b1c (task half 3656c454; the O1 rules 8ac49d23 with R4's 10 counted replacements and R5's 5 counted substitutions), launch prompt 2e022206; its only inputs: CONTRACT_284 rev 5 with errata 1-4 (e1411781), an extract of CONTRACT_294's C18, its errata's first line and erratum E12's D8 part (920812cf), the operator's run-005 item-074 output on c11 (7c762a24, never opened by the operator) and this file as at c11 (7da11420)",
+  "R5's scope (D8, CONTRACT_294 erratum E12): the copied repository root the file builds takes the docs folders' file bytes through the head's era reader (C18), the same reader that places the data files, where the file had copied the docs folders live from the tree; by the author's counts: 2 of the 2 failing nodes fixed, 0 other places with the same mixing fixed and 0 left; residual 1 (the docs folders' file names are still listed from the live tree while their bytes come through the era reader; accepted report-only by the lane orchestrator, ORC-294-R5-ACC); the places are named in its notes file, for the reviewer (the operator never opens it); 4 (+16/-3 lines against c11) changed line ranges; by its report, no assert loosened, no expectation changed and no node removed or renamed; the operator's SCAN: live 0 -> 0, names 0 -> 0, era 1 -> 1; 932 -> 945 lines",
+  "operator note (ORC-294-R5-GRANT): the brief 8fc7084f named above, with its erratum 1, is on disk but holds one closed-form string, so R5's kit did not export it; the kit carried CONTRACT_284 rev 5 with errata 1-4 (e1411781), the input the first disclosure names; the slot-288 correction's text (CONTRACT_288 [PC-4]) was not in the kit",
+  "R5's acceptance by the operator (R00), by totals only: the file placed by bytes on the object 05adc3cc (c11 dbb6fa85 and this file) and run as an oracle item: rc 0, passed 63, failed 0 of 63, 6.65 s",
+  "at run time the file builds its copied roots with the docs folders' file bytes and the data files through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-294-R5-KEEP)"
  ]
 }

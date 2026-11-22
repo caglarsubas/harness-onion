@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "0195a83027c6b0607fb313e0e4ad6efdc989d45192b4946358bef2b05f1657cd"
+AUTHORITY_SHA256 = "0461f7186937f46bc53294ba5e84f2e6ca446bee7aa2b56076fa568183594751"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
@@ -379,6 +379,7 @@ ERRATA_LINES = MappingProxyType({
     "architecture/oracle-identity-met-008.json": ((5, 5), (28, 29), (39, 39)),
     "architecture/oracle-identity-met-010.json": ((5, 5), (28, 29), (44, 44)),
     "architecture/oracle-identity-met-011.json": ((5, 5), (28, 29), (54, 54)),
+    "architecture/oracle-identity-met-registry-001.json": ((5, 5), (28, 29), (37, 37)),
     "architecture/release-evidence.json": ((11, 11),),
     "docs/adr/0010-language-placement.md": ((78, 78), (113, 113), (115, 115), (133, 133), (140, 140), (146, 146), (150, 151), (153, 154), (167, 167), (273, 273), (280, 280), (286, 286), (290, 291), (293, 294)),
     "docs/repositories/03-mas-harness-industry-packs.md": ((458, 459),),
@@ -392,6 +393,7 @@ ERRATA_LINES = MappingProxyType({
     "tests/test_met_008_oracle.py": ((723, 724), (1310, 1310), (1312, 1312), (1390, 1391)),
     "tests/test_met_010_oracle.py": ((430, 430), (432, 440)),
     "tests/test_met_011_oracle.py": ((1, 1), (6, 11), (109, 109), (113, 113), (116, 116), (350, 350), (352, 352), (354, 354), (356, 356), (361, 361), (373, 373), (377, 377), (413, 413), (415, 415)),
+    "tests/test_met_registry_001_oracle.py": ((20, 20), (225, 225), (701, 701), (711, 711)),
     "tests/test_plane_shell_order.py": ((87, 88),),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"

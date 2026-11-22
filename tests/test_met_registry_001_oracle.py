@@ -17,6 +17,9 @@ pytest's tmp_path; nothing is patched, shimmed or swapped. Exactly two repositor
 (scripts/repository_registration.py and scripts/safe_yaml.py), each under a new module name of this file's own, and
 exactly two repository scripts run as child processes (scripts/language_placement.py and
 scripts/check_release_lock.py), with an explicit environment of PATH and PYTHONDONTWRITEBYTECODE only.
+
+Slot 294 (CONTRACT_294 erratum E12, D8; C18): the language-placement copied roots take the docs folders' files through
+the head's era reader, as they take the data files, so a copied root's table and ADR 0010 come from one era.
 """
 
 from __future__ import annotations
@@ -222,7 +225,13 @@ def _lp_root(tmp_path: Path, name: str, *, module: bool, registry_record: bool, 
     root = tmp_path / name
     _copy(root, *LP_FILES)
     for folder in LP_FOLDERS:
-        shutil.copytree(ROOT / folder, root / folder)
+        # CONTRACT_294 erratum E12 (D8), C18: copytree walks the folder for its file names only; each file's bytes come
+        # through _copy, the head's era reader that places the data files, so the table and ADR 0010 share one era.
+        shutil.copytree(
+            ROOT / folder,
+            root / folder,
+            copy_function=lambda _src, dst: _copy(root, Path(dst).relative_to(root).as_posix()),
+        )
     if module:
         _copy(root, MODULE)
     if registry_record:
@@ -698,7 +707,9 @@ def test_composed_placement_rows_refuses_each_malformed_record(reg, live_placeme
 def test_language_placement_with_both_records_gives_the_head_summary(tmp_path):
     """E11 (VIS-284-LPORACLE-2 (a)): "both records give the head summary" at "14 repositories and 114 spans".
     Operator-stated: the command line, the copied-root set and the first line on exit 0, as brief erratum 1, E1
-    corrects it: `language placement: accepted; N repositories, ..., S spans; ...` (a comma before the span count)."""
+    corrects it: `language placement: accepted; N repositories, ..., S spans; ...` (a comma before the span count).
+    CONTRACT_294 erratum E12 (D8), C18: the copied root takes the docs folders' files through the head's era reader,
+    as it takes the data files, so the table and ADR 0010 that R8 compares come from one era."""
     root = _lp_root(tmp_path, "both-records", module=True, registry_record=True, placement_record=True)
     proc = _lp_check(root)
     rc = proc.returncode
@@ -708,7 +719,9 @@ def test_language_placement_with_both_records_gives_the_head_summary(tmp_path):
 
 def test_language_placement_with_neither_record_gives_the_datas_summary(tmp_path):
     """E11: "neither gives 13 repositories and 112 spans"; section 5: "a root copied like the oracle's from the live
-    bytes (no record, no module) is accepted with 13". Operator-stated: the command line and the summary line."""
+    bytes (no record, no module) is accepted with 13". Operator-stated: the command line and the summary line.
+    CONTRACT_294 erratum E12 (D8), C18: the copied root takes the docs folders' files through the head's era reader,
+    as it takes the data files, so the table and ADR 0010 that R8 compares come from one era."""
     root = _lp_root(tmp_path, "neither-record", module=False, registry_record=False, placement_record=False)
     proc = _lp_check(root)
     rc = proc.returncode
