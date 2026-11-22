@@ -29,5 +29,5 @@ expectedEvidence:
   - "licence_review.json (sha256 named in dossier.json) lists 11 reads, each sha256 equal to contracts[2], produced before dossier.json was written."
   - "The mirror gate passed before any record: R10's mirror-read check (mck1) reads the manifest of contracts[2] and finds every entry's bytes, size and generation equal (mirror_check.json c808e22f: ok true, 0 mismatches)."
   - "The pinned release satisfies the recorded quarantine (owner OQ-6: 7 days, security-update exemption) at the recorded pin time."
-  - "Only G1 and G2 are claimed. Source, offline unit, PR check and merge are the evidence this packet can prove; adapter, artifact release, Linux qualification, runtime and tenant acceptance stay NOT_RUN."
+  - "Only G1 and G2 are claimed. Source, offline unit, PR check and merge are the evidence this packet can prove; adapter, artifact release, Linux qualification, runtime and tenant acceptance stay not run."
 rollback: Revert the dossier commit; the mirror's write-once objects stay, unreferenced; no code, data or dependency state is involved.

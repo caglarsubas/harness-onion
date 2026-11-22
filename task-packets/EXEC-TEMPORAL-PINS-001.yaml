@@ -27,5 +27,5 @@ expectedEvidence:
   - "The head's name-status against 145d85cb730c3581dafd44918fa39f157097c2b2 is exactly the Tree contract's 4 A entries."
   - "The dossier unittest passes under the hash-pinned offline runner with all outbound network denied."
   - "Every sha256 in PROVIDER.json equals the part-2 report's computed digest and the mirror object's name."
-  - "Source, offline unit, PR check and merge are the only evidence this packet can prove (G1, G2 records); adapter, Linux profile, artifact, deployment, runtime, assurance and tenant acceptance stay NOT_RUN (G8)."
+  - "Source, offline unit, PR check and merge are the only evidence this packet can prove (G1, G2 records); adapter, Linux profile, artifact, deployment, runtime, assurance and tenant acceptance stay not run (G8)."
 rollback: Revert the dossier commit; nothing is installed, registered or selectable, so no data, task or provider state changes; the mirror's write-once objects stay.
