@@ -427,17 +427,28 @@ def test_catalog_names_and_base_digests(head, authority, catalog_bytes):
     assert mismatched == 0
 
 
-def test_historical_catalog_is_the_base(head, authority, catalog):
+# CONTRACT_294 erratum E6 (the catalog input, C18 amended 2; VIS-294-Q1, ORC-294-Q1-RULING): the
+# head module whose ROOT the one names helper lists, loaded by file path as the head fixture does.
+_NAMES_SPEC = importlib.util.spec_from_file_location("met_010_head_for_names", HEAD_FILE)
+NAMES_HEAD = importlib.util.module_from_spec(_NAMES_SPEC)
+_NAMES_SPEC.loader.exec_module(NAMES_HEAD)
+
+
+def current_catalog_names():
+    """CONTRACT_294 erratum E6 (VIS-294-Q1): the current catalog's names; lists names, reads no bytes."""
+    return sorted(path.stem for path in (NAMES_HEAD.ROOT / "task-packets").glob("*.yaml"))
+
+
+def test_historical_catalog_is_the_base(head, authority):
     """CONTRACT_292 sections 1 and 4: historical_catalog over the whole catalog returns the 310 base ids."""
-    # CONTRACT_293 section 5 (erratum E4): the catalog stays strict, so 292's era catalog
-    # alone (313 names) is refused; the whole catalog at 293 is those 313 plus MET-011,
-    # read through the head's era reader (C18).
-    mapping = dict(catalog)
-    # CONTRACT_292 section 1 (after 293, MET-011 alone); CONTRACT_293 section 5
-    later = "MET-011"
-    mapping[later] = head.safe_load(head.reviewed_bytes(_packet_rel(later)))
-    # CONTRACT_292 section 1 (314 after 293); CONTRACT_293 section 5 (erratum E4)
-    assert len(mapping) == CATALOG_COUNT + 1
+    # CONTRACT_294 erratum E6 (C18 amended 2): every head stays strict and a bridged head takes
+    # the current catalog, so no era formula stands in for it; its names come from
+    # current_catalog_names() and each packet's bytes through the head's era reader (C18).
+    # The asserts are on the chain's own peel only, never on the catalog passed in (A-292-12).
+    mapping = {
+        name: head.safe_load(head.reviewed_bytes(_packet_rel(name)))
+        for name in current_catalog_names()
+    }
     result = head.historical_catalog(mapping)
     # CONTRACT_292 section 1
     assert len(result) == BASE_COUNT

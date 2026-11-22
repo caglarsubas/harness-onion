@@ -106,14 +106,39 @@ def catalog(form):
     return dict(catalog_parsed() if form == "parsed" else catalog_bytes())
 
 
+# CONTRACT_294 erratum E6 (VIS-294-Q1): the head module that head() loads, bound once for the names helper's ROOT.
+HEAD_MODULE = head()
+
+
+def current_catalog_names():
+    """C18 amended 2 (CONTRACT_294 erratum E6): the current catalog's names, this file's own copy of the one helper."""
+    return sorted(path.stem for path in (HEAD_MODULE.ROOT / "task-packets").glob("*.yaml"))
+
+
+@lru_cache(maxsize=None)
+def current_catalog_bytes():
+    """CONTRACT_294 erratum E6: each current packet's bytes through the head's era reader (C18)."""
+    return {name: rb("task-packets/" + name + ".yaml") for name in current_catalog_names()}
+
+
+@lru_cache(maxsize=None)
+def current_catalog_parsed():
+    return {name: head().safe_load(raw) for name, raw in current_catalog_bytes().items()}
+
+
+def current_catalog(form):
+    """CONTRACT_294 erratum E6: a fresh mapping of the current catalog in one form ("parsed" or "bytes")."""
+    return dict(current_catalog_parsed() if form == "parsed" else current_catalog_bytes())
+
+
 @lru_cache(maxsize=None)
 def accepted_catalog():
     """Vector 1: the full catalog, in the parsed form first, then as bytes; returns (form, result)."""
     try:
-        return "parsed", head().historical_catalog(catalog("parsed"))
+        return "parsed", head().historical_catalog(current_catalog("parsed"))
     except ValueError as first:
         try:
-            return "bytes", head().historical_catalog(catalog("bytes"))
+            return "bytes", head().historical_catalog(current_catalog("bytes"))
         except ValueError:
             raise first
 
@@ -347,13 +372,18 @@ def test_catalog_names_are_the_pair_313_314():
 
 
 def test_strict_catalog_vector_1_full_set_peels_met_011():
-    """CONTRACT_293 section 5, vector 1: the full set is accepted and MET-011 is peeled."""
+    """CONTRACT_293 section 5, vector 1: the full set is accepted and MET-011 is peeled.
+
+    CONTRACT_294 erratum E6 (the catalog input): the full set is the current catalog, its names from the one names
+    helper and each packet's bytes through the head's era reader; the node asserts on the chain's own peel only,
+    never on the current catalog's size or members.
+    """
     _form, result = accepted_catalog()
-    # CONTRACT_293 section 5 vector 1: accepted, returning the peeled catalog
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5 vector 1): accepted, returning the peeled catalog
     assert isinstance(result, dict)
-    # CONTRACT_293 section 5 vector 1: MET-011 peeled
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5 vector 1): MET-011 peeled
     assert NEW_ID not in result
-    # CONTRACT_293 section 5 vector 1: what is left is 292's era catalog (the 313 baseline names)
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5 vector 1): 292's era catalog; CONTRACT_294 E6: the chain's peel
     assert set(result) == set(authority()["baselinePackets"])
 
 
@@ -410,9 +440,15 @@ def test_head_check_passes_on_live_inputs(name):
 
 
 def test_validate_met_011_runs_every_check_in_order():
-    """CONTRACT_293 section 5: validate_met_011(packets) runs the checks in section 5's order and passes at F."""
+    """CONTRACT_293 section 5: validate_met_011(packets) runs the checks in section 5's order and passes at F.
+
+    CONTRACT_294 erratum E6 (the catalog input; the order case): it takes the current catalog in vector 1's accepted
+    form and asserts only that 293's own checks run, in the head's own order, and pass; any step a later head inserts
+    before or around them (294's head runs first, as the successor) is outside the assertion.
+    """
     form, _result = accepted_catalog()
-    head().validate_met_011(catalog(form))
+    # ORACLE_BRIEF_293c6 item 3 (CONTRACT_293 section 5): passes at F; CONTRACT_294 erratum E6: the current catalog
+    head().validate_met_011(current_catalog(form))
 
 
 # ---------------------------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_010_oracle.py",
-  "sha256": "b8059b8a3df0c44125cbff4d1cadd6de88d0736f6a386534ed80c6c171fe8871"
+  "sha256": "d23a235799a8454f7ed88e270f45cb24e9a0c29d354744f2d14671e02f26205a"
  },
  "oracle": {
   "agentId": "aa62cf6fcc4ff0677",
@@ -24,9 +24,9 @@
  "finished": "2026-11-18T21:39:58+08:00",
  "ruling": {
   "decision": "KEEP",
-  "by": "LANE_MONITOR",
-  "ref": "MON-293-O1-KEEP-SPANS",
-  "date": "2026-11-20"
+  "by": "LANE_ORCHESTRATION",
+  "ref": "ORC-294-O1-KEEP-R1",
+  "date": "2026-11-22"
  },
  "disclosures": [
   "bound inputs: exactly the oracle 9a32f8909c141a84b6947a712042febf6a5152355028238b6fc798493be7987f, the table 7c03b276fd9d2e8570b4c5d7f4f2a5ab9308dd66bc217508e48f1f0cf1f7b34c and the oracle's entry line 6c2173aaecc02dfaebb58969ab9fdb35fc3c63697e9cc792109a666155727624 in the final-head pre-check list (rc=0 wall=9s); this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
@@ -41,6 +41,11 @@
   "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18), the catalog's names from the authority, and runs the head's own checks; the lane monitor re-runs the static scan before the final-head pre-check; the ruling is PENDING; the lane monitor rules it",
   "O1 at slot 293 c6 (MON-293-O2-CHECKED-O1): one node edited, the one whose failure under 293's c6 head carried 'unexpected packet addition or loss' (the operator's dry c6 run, 46 passed, 1 failed): the node of CONTRACT_292 sections 1 and 4 that runs historical_catalog over the whole catalog and expects the 310 base ids; why: CONTRACT_293 section 5 and erratum E4 keep the catalog strict (the era rule withdrawn), so 292's era catalog alone (313 names) is refused, and the whole catalog at 293 is those 313 plus MET-011 (CONTRACT_292 section 1: 314 after 293); the node now adds MET-011, read through the head's era reader (C18), and keeps CONTRACT_292's expectations (310 base ids, equal to the authority's baselinePackets) unchanged; one changed line range in the node's body; the rest of the file is unchanged byte for byte (file 9a32f890 -> b8059b8a)",
   "O1's author: a fresh blind agent, slot 293 c6 (MON-293-O2-CHECKED-O1), whose only inputs were CONTRACT_292 rev 11 (f910902d), the E4b extract E4B_O1.md (2e7588f9) and these two files; it read no head, test, script or other oracle, and ran only the kit's in-memory syntax check, C18's static live-read scan 96a7b89b (live 0, era 19, other 0, git 0: PASS), shasum and a standard-library parse check of this record; no test run and no py_compile",
-  "the pass at 293's c6 head is checked by the operator by totals only (acceptance: passed 47, failed 0); the author never runs the file; this record's ruling is PENDING until the lane monitor rules on it after the acceptance run"
+  "the pass at 293's c6 head is checked by the operator by totals only (acceptance: passed 47, failed 0); the author never runs the file; this record's ruling is PENDING until the lane monitor rules on it after the acceptance run",
+  "O1 at slot 294 R1 (ORC-294-R1-GRANT): one node edited, the one whose failure under 294's c7 candidate carried 'unexpected packet addition or loss' (operator-stated: scratch commit 77dc3b37, c6 + D4 r2 + its pins, 2026-11-22 13:39; collected 47, passed 46, failed 1): the node of CONTRACT_292 sections 1 and 4 that runs historical_catalog over the whole catalog; why: CONTRACT_294 erratum E6 (sections 4 and 8, D5 (ii)) keeps every head strict (A-292-11), so 294's head refuses any set but the current names, and the node's era formula (292's era catalog from the authority plus MET-011) is refused; the node now passes the current catalog into 292's head, its names from this file's own current_catalog_names() in E6's one shape (VIS-294-Q1, ORC-294-Q1-RULING) and each packet's bytes through the head's era reader reviewed_bytes (C18 amended 2), and asserts only on the chain's own peel, one side anchored in a CONTRACT_292 literal or in the authority's baselinePackets (A-292-12); its assertion on the size of the catalog it passed in is removed, its unused catalog fixture argument dropped, and CONTRACT_292's two expectations on the peel (sections 1 and 4) are kept unchanged with their cites",
+  "the helper's head module: the file loads its head only inside a fixture, so the helper reads ROOT from a second module-level load of the same head file by path (CONTRACT_294 erratum E6), used by that helper alone; no module, function, constant or environment variable is patched; the module docstring's sentence on the catalog's names is kept as written under the brief's edit rule",
+  "the rest of the file is unchanged byte for byte (file b8059b8a -> d23a2357; 758 -> 769 lines; two changed line ranges, both in or directly above that node)",
+  "O1's author: a fresh blind agent, slot 294 R1 (ORC-294-R1-GRANT, slot A 13:53:06), whose only inputs were CONTRACT_292 rev 11 (f910902d), the E6 extract E6_R1.md (4d5ae6ea) of CONTRACT_294 (7cdd7eba) and these two files; it read no head, test, script, task-packet YAML or other oracle, and ran only the kit's in-memory syntax check, C18's static live-read scan 1e33cdec (live 0, names 1, era 19, other 0, git 0: PASS), shasum and a standard-library parse check of this record; no test run and no py_compile; its context carried an auto-injected memory index and account context, of which it used none; its slips: one wc -l on the two CN files and its two WORK files (counts only, off the brief's read forms); two edits of this record sent in one message (against the one-call rule; both applied as intended)",
+  "the pass at 294's candidate is checked by the operator by totals only (acceptance: passed 47, failed 0), and again on 294's final tree; the author never runs the file; ruled KEEP by Lane-Orchestration (ORC-294-O1-KEEP-R1)"
  ]
 }

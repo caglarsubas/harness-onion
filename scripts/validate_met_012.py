@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "b53fe7bd00dfcaf016550cb028a3dc13a57f96e10fedd8cf3b13f85606235e5d"
+AUTHORITY_SHA256 = "f2e761b306c76c045dff9c1ec410ca7f9f553df379d727519ccc86b29b54d27b"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
@@ -374,12 +374,16 @@ ERA_SHA256 = MappingProxyType({
     "task-packets/MODEL-ADOPT-PINS-001.yaml": "f99afe08d9bc6daf02407ea6247de59c5cf4a73ce2d9b7912e40eb86b661cb58",
 })
 ERRATA_LINES = MappingProxyType({
+    "architecture/oracle-identity-met-010.json": ((5, 5), (27, 29), (44, 44)),
+    "architecture/oracle-identity-met-011.json": ((5, 5), (27, 29), (54, 54)),
     "docs/repositories/03-mas-harness-industry-packs.md": ((458, 459),),
     "docs/repositories/06-mas-harness-model-plane.md": ((84, 86), (164, 165)),
     "docs/repositories/08-mas-harness-execution-plane.md": ((96, 96), (170, 171)),
     "task-packets/README.md": ((3, 3), (1849, 1850)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_010_oracle.py": ((430, 430), (432, 440)),
+    "tests/test_met_011_oracle.py": ((109, 109), (113, 113), (116, 116), (350, 350), (352, 352), (354, 354), (356, 356), (413, 413), (415, 415)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"

@@ -120,11 +120,16 @@ from scripts.validate_policy_observation import validate_messages
 from scripts.validate_proxy_contract import validate_profile
 
 
+def current_catalog_names():
+    """The current catalog's names (C18 amended 2; CONTRACT_294 erratum E6): every bridged head takes the current
+    catalog and refuses any other, so this one helper lists the names; it reads no file's bytes."""
+    return sorted(path.stem for path in (profile.ROOT / "task-packets").glob("*.yaml"))
+
+
 def packets():
-    """This era's catalog (C18): the head's authority names it; each file's bytes through the head's era reader."""
-    record = profile.authority()
+    """The current catalog: names from current_catalog_names(), each file's bytes through the head's era reader."""
     return {name: safe_load(profile.reviewed_bytes("task-packets/" + name + ".yaml"))
-            for name in [*record["baselinePackets"], profile.NEW_PACKET]}
+            for name in current_catalog_names()}
 
 
 def layer_packets():
@@ -1160,11 +1165,10 @@ CALLS = ("_verified", "validate_packet_files", "validate_errata", "validate_ledg
 
 
 def _chain_packets():
-    """This era's packets (C18): the head's authority names them; each file's bytes through the head's era reader,
-    parsed by safe_load as validate() parses them."""
-    record = profile.authority()
+    """The current packets (CONTRACT_294 erratum E6): names from current_catalog_names(); each file's bytes through
+    the head's era reader, parsed by safe_load as validate() parses them."""
     return {name: profile.safe_load(profile.reviewed_bytes("task-packets/" + name + ".yaml"))
-            for name in [*record["baselinePackets"], profile.NEW_PACKET]}
+            for name in current_catalog_names()}
 
 
 def _sha(raw):
@@ -1197,7 +1201,7 @@ def test_validate_calls_every_check_in_order():
 
 
 def test_the_contract_holds_for_this_era():
-    assert VALIDATE(_chain_packets()) is None
+    assert VALIDATE(profile.successor.historical_catalog(_chain_packets())) is None
 
 
 def test_the_era_holds_the_packet_files_the_registry_and_the_reader():
@@ -1601,8 +1605,8 @@ def test_strict_catalog_vectors(vector):
     exact form (identity rule v4, clause D). The full set is accepted with MET-011 peeled; 292's era catalog (313 names),
     one less, one unknown and a non-mapping are refused."""
     current = _chain_packets()
-    assert len(current) == 314 and profile.NEW_PACKET in current
-    era_292 = {name: payload for name, payload in current.items() if name != profile.NEW_PACKET}
+    assert profile.NEW_PACKET in current
+    era_292 = {name: current[name] for name in profile.authority()["baselinePackets"]}
     if vector == "1_full_set":
         accepted = profile.historical_catalog(current)
         assert len(accepted) == 313 and set(accepted) == set(era_292)
