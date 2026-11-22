@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "e6be5ba72743ee9955aaad7792a8f2cdbbe727342ad09af77f11d4537be81c10"
+AUTHORITY_SHA256 = "a56e57c2e1ce149f24f60ef0741146db5305f6de64804bc970bc4d5cab15c271"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
@@ -388,7 +388,7 @@ ERRATA_LINES = MappingProxyType({
     "tests/test_language_placement.py": ((1143, 1144),),
     "tests/test_language_placement_oracle.py": ((102, 102), (108, 108), (115, 115), (121, 121), (125, 126), (128, 129), (1101, 1101), (1106, 1106)),
     "tests/test_met_010_oracle.py": ((430, 430), (432, 440)),
-    "tests/test_met_011_oracle.py": ((109, 109), (113, 113), (116, 116), (350, 350), (352, 352), (354, 354), (356, 356), (413, 413), (415, 415)),
+    "tests/test_met_011_oracle.py": ((1, 1), (6, 11), (109, 109), (113, 113), (116, 116), (350, 350), (352, 352), (354, 354), (356, 356), (361, 361), (373, 373), (377, 377), (413, 413), (415, 415)),
     "tests/test_plane_shell_order.py": ((87, 88),),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
