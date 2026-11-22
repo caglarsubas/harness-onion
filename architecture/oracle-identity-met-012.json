@@ -1,0 +1,58 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_012_oracle.py",
+  "sha256": "177664b7a0ad6d318f77bbef18686837a70c13edcba1126063e2b91aa8dabeef"
+ },
+ "oracle": {
+  "agentId": "a31790dd4fa3d5f7e",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "172e94dc-c17e-424d-926b-9d897553a42c",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "172e94dc-c17e-424d-926b-9d897553a42c"
+  ]
+ },
+ "briefSha256": "2c4801b14a6172e4e24119dd9905d89321cbee4cf98f82a84428b110583cfaf2",
+ "candidateCommit": "9c9817a01a7c3f766e21e89d0bcbfdae6bea4a85",
+ "launched": "2026-11-22T10:08:38+08:00",
+ "finished": "2026-11-22T10:33:16+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "ORC-294-ID-KEEP",
+  "date": "2026-11-22"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 177664b7a0ad6d318f77bbef18686837a70c13edcba1126063e2b91aa8dabeef and the table 959c944f4effd4bb00b6429188cd366676e49c55f44c099f58fc83bea68f01cc; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "D5a (CONTRACT_294 r2 section 7 step 3): this file's author is one fresh non-author agent (C26 category 1), launched once with the filled launch (ORC-294-ORACLE-GRANT) and resumed once with the lane monitor's approved relay 63f336fe (ORC-294-B1-CLASS: class (a), an oracle construction slip in one V6 case; ORC-294-RELAY-OK); its first file 41282133 is kept by bytes in the lane's unmirrored evidence folder",
+  "brief 2c4801b1 (filled; unchanged during both runs, so the brief at launch); launch prompt 80a7bb93, in 292's kit form with its counted changes; the author's only inputs are CONTRACT_294 r2 (aab3512c), its r2 errata (5d6346ff) and the packet YAML at c2 with closed-path strings masked (d1a6a226), plus the operator-stated facts in contract terms (line anchors read from c2's head 26d85910, the three product YAMLs' freeze digests, the YAML's key count)",
+  "the author is a fresh agent that authored nothing in c1..c3 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its file 41282133 -> 177664b7; its report: 22 tests, 32 parametrized cases, 0 asserts without a cite (the author's own count); its scan: WORK/test_met_012_oracle.py: live 0, era 21, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads",
+  "author disclosure 1: its context carried an auto-injected memory index and account context in both runs; it used none of it",
+  "author disclosure 2: first run: two commands beyond the two checks, shasum -a 256 on its own file and wc -l on the CN files",
+  "author disclosure 3: first run: no expected value found only in a fixture",
+  "author disclosure 4: shape assumptions made at run time: the registry is the largest object or array holding the one rider; the weights rows are the largest JSON object; mutated JSON is written back in the json.dumps form that reproduces the original bytes",
+  "author disclosure 5: first file: the V6 no-outcome-statement case blanked members whose names contain outcome or statement, reading the rule backwards (the record must hold no outcome statement); the second file gives the targeted member a non-empty value instead; only that case's mutation changed and no expectation was loosened",
+  "author disclosure 6: V6 refusals are accepted whether they come from deriving the context or from the check itself",
+  "author disclosure 7: the catalog-mapping refusals assert ValueError without matching the message",
+  "author disclosure 8: two checks rest on its own reading: one E3 path-membership check, and the before/after digest checks",
+  "author disclosure 9: the head is registered in sys.modules before it runs; nothing is patched",
+  "author disclosure 10: second run: the blanking helper the old case used is now unused and left in place, as the fix scope allowed no helper changes",
+  "author disclosure 11: second run: one more shasum -a 256 on its own file, and one Read of its own file (lines 323-344) to confirm the diff summary's line numbers",
+  "author disclosure 12: second run: no assert added; still 0 of 61 asserts without a cite",
+  "operator note 1: the operator re-ran the kit's syntax check and C18's live-read scan on both files and got the author's lines; catalog-byte, home-path, closed-form and privacy counts 0 on both; each file sealed 0444; the first file copied by bytes into the lane's unmirrored evidence folder; neither file opened",
+  "operator note 2: the change from the first file to the second, counted by the operator with numstat only: one hunk, 1 line removed and 11 added at line 330, 5 lines after the case's id line, with the count of def and decorator lines before it unchanged (17)",
+  "operator note 3: on the lane monitor's word the operator read one line of candidate run 1's log, its FAILED line (the case id and DID NOT RAISE ValueError); nothing else of any run log",
+  "operator note 4: the author ran on the operator's own model, with no model or effort override at launch (C26 category 1)",
+  "author run 1 (the first file): 2026-11-22T10:08:38+08:00 to 2026-11-22T10:21:45+08:00, 15 tool calls; its file after the run 41282133",
+  "author run 2 (the relay's one case (ORC-294-B1-CLASS)): 2026-11-22T10:31:56+08:00 to 2026-11-22T10:33:16+08:00, 5 tool calls; its file after the run 177664b7",
+  "the oracle's runs, by the operator on the lane monitor's words, node counts only: candidate run 1 on the c3 candidate with the first file: 46 passed, 1 failed of 47 (summary 18ef7801; the one V6 case, ruled class (a)); candidate run 2 on a fresh clone at c2 with this file: 47 passed of 47 (summary 83cafd74); the oracle sweep on the chain tree with this file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary 44a330a1)",
+  "the table is the candidate's with both rows measured at c3 from the sweep by 292's rule (round(S, 1), overhead 0.0): the head test 21.5 and this oracle 7.5 (217 entries)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-294-ID-KEEP)"
+ ]
+}

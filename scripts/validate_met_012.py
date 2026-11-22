@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-ready-packets-authority.json"
-AUTHORITY_SHA256 = "cb115f9dda2585e658db3237c26f99e492e4d3f9bfc5c6cf4d664fb75f2c7d07"
+AUTHORITY_SHA256 = "8dfa2ca091991321796bdd7545fa3a2c981e51709f4710a3a1f3b0370410e62d"
 VALIDATOR_PATH = "scripts/validate_met_012.py"
 BASE_COMMIT = "50785a12403a31d8bc466da8c61207d27d92cf52"
 NEW_PACKET = "MET-012"
