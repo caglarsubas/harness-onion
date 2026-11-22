@@ -1,0 +1,63 @@
+id: IND-BANK-003A
+repository: mas-harness-industry-packs
+branch: codex/ind-bank-003a-governance-integrations
+objective: "Add the banking governance-and-integration slice as pack 0.3.0, the banking successor of IND-WG-003: per-case autonomy (A1/A2/A3) bound by INV01, INV03 and INV18 on the pack side, CAP01-13 control objectives with a control class, outcome states with negative vectors, synthetic integration profiles IP16-IP18, candidate regulatory applicability, an EU AI Act deployer-duty evidence map with named gaps, the waiver rule, and the readiness evaluator CLI; data, shapes and rule tests only, with no connector, approval, legal ruling or promotion."
+predecessors: [IND-BANK-003]
+allowedPaths:
+  - packs/banking/pack.yaml
+  - packs/banking/controls/contract-binding.json
+  - packs/banking/controls/control-requirements.json
+  - packs/banking/controls/integration-declarations.json
+  - packs/banking/controls/waiver-policy.json
+  - packs/banking/controls/autonomy-policy.json
+  - packs/banking/controls/outcome-states.json
+  - packs/banking/controls/ai-act-deployer-map.json
+  - packs/banking/questions/governance/applicability.yaml
+  - packs/banking/questions/governance/autonomy.yaml
+  - packs/banking/questions/governance/waivers.yaml
+  - packs/banking/questions/integrations/declarations.yaml
+  - packs/banking/rules/governance.json
+  - packs/banking/fixtures/governance/*.json
+  - tests/fixtures/banking/evaluator/input/**
+  - tests/fixtures/banking/evaluator/expected.json
+  - docs/banking/governance.md
+  - docs/banking/business-domain.md
+  - ci/handlers/ind_bank_003.py
+  - ci/targets/ind-bank-003.json
+  - ci/handlers/ind_bank_001.py
+  - ci/handlers/ind_bank_002.py
+  - src/planeon_industry_packs/readiness.py
+  - src/planeon_industry_packs/cli.py
+  - tests/framework/test_dispatch.py
+  - tests/banking/test_banking_governance.py
+  - tests/banking/test_banking_readiness_evaluator.py
+  - tests/banking/test_banking_carried_ib2.py
+  - tests/banking/test_banking_business_domain.py
+  - tests/banking/test_banking_data_readiness.py
+warmSourceAccess: PROHIBITED_DURING_IMPLEMENTATION
+sourceReuse: []
+contracts:
+  - "Binds mas-harness-contracts commit 2146278a95344cd2a8e22596b2f315b46edffc88 (unchanged lock); ApprovalRequest v1alpha1 and its two common dependencies by exact sha256 in controls/contract-binding.json, no schema bytes copied; ControlRequirement and IntegrationDeclaration stay NOT_AVAILABLE_IN_BOUND_RELEASE (pack-local record sets)."
+  - "Predecessor-module edits (CONTRACT.md section 3): ind_bank_001.py lines 71, an insertion after 75 (DECLARED_GOVERNANCE_QUESTIONNAIRES, four triples), 147 and 317 only; ind_bank_002.py lines 35-38, an insertion after 38 (ASSESSMENT_VERSION = '0.2.0', the DataReadinessAssessment version, as READINESS_POLICY keeps 0.2.0 at 120), 144, 667 (the assessment metadata version reads ASSESSMENT_VERSION instead of PACK_VERSION) and 736-737 only; the nine readiness vectors stay byte-identical; the two banking tests' 0.2.0, count, controls and rule-id pins only. The undeclared-questionnaire refusal and its test stay unchanged."
+  - "Framework 0.1.1, pyproject.toml, uv.lock, the dispatcher, the runner and transport files, common/ and white goods stay byte-identical."
+  - "INV01, INV03 and INV18 are adopted verbatim from the enterprise blueprint's register, pack side only (MON-BLUEPRINT-R03 C-2; VIS-C15-SPLIT)."
+  - "Readiness evaluator: make readiness-evaluate PACK=banking runs the shipped fixture through ci/handlers/ind_bank_003.py; tenants use harness-pack readiness-evaluate <pack_root> --input <dir> (ruled OQ-C1 (a), MON-R03-C1-RULE) (stated deviation from MON-R03-EVAL-PLACED, ruled OQ-1 (c): the dispatcher admits only PACK)."
+  - "Consumes no harness-onion provider, service or module catalog: the packet reads none of them (its integration profiles IP16-IP18 and the evaluator fixture's product-catalogue.json are pack-local synthetic data), and any later read of their banking-era bytes goes only through scripts/sector_catalog.py's effective_bytes(path) or effective_catalog(path), never the raw catalog files (MET-SECTOR-002, SECTOR-D1)."
+deliverables:
+  - "Bump packs/banking/pack.yaml to 0.3.0 and add the four governance/integration questionnaires, the governance rule, the seven controls records and the 29 governance fixtures as resources."
+  - "Add the seven controls record sets (outcome states in controls/outcome-states.json), the governance rule as a plain PackRule, and 29 labelled vectors (CONTRACT.md sections 4 and 5)."
+  - "Add ci/handlers/ind_bank_003.py and ci/targets/ind-bank-003.json (governance-integrations and readiness-evaluate, PACK const banking) with two inventory lines in tests/framework/test_dispatch.py."
+  - "Add the readiness evaluator (src/planeon_industry_packs/readiness.py; in cli.py one add_parser and one branch before the package fall-through), failing closed on links, non-regular files and escaping paths, with its synthetic input and expected verdict under tests/fixtures/banking/evaluator/ (CONTRACT.md section 6)."
+  - "Apply the predecessor-module edits of CONTRACT.md section 3, and add the governance, evaluator and carried-IB2 tests (IB2-R1-1, IB2-R1-3, IB2-R1-4)."
+  - "Add docs/banking/governance.md with the HG-D1 deployer-duty map (candidates with named gaps) and the evaluator's two entry forms."
+excluded:
+  - "Every path not in allowedPaths: packs/white-goods/**, common/**, the Makefile, ci/run_make_target.py, ci/run_packet_argv.py and the other transport files, ci/zero_bill_scan.py, .github/**, every other ci/handlers/** and ci/targets/** file, every other src/** and tests/** file, schemas/**, pyproject.toml, uv.lock, the ontology and SourceInventory; new dependencies, network, warm sources, prefetch, verifier, bundle or host configuration; CONF-BANK-001 held-out answers."
+prefetchCommands: []
+offlineAcceptanceCommands: [["make","transport-bootstrap"],["make","pack","PACK=banking"],["make","data-readiness","PACK=banking"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_business_domain.py"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_data_readiness.py"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_business_domain.py","tests/banking/test_banking_data_readiness.py"],["make","governance-integrations","PACK=banking"],["make","readiness-evaluate","PACK=banking"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_governance.py"],["uv","run","--offline","--frozen","--no-sync","pytest","tests/banking/test_banking_readiness_evaluator.py","tests/banking/test_banking_carried_ib2.py"],["make","pack-framework-test"],["make","pack","PACK=white-goods"],["make","certification-fixtures","PACK=white-goods"],["make","ind-fix-001-regression"],["make","build-reproducible"],["make","zero-bill"]]
+offlineExecution: {"wrapperArgv":["./ci/verify-offline.sh"],"packetPathEnvironment":"HARNESS_TASK_PACKET","packetPathMode":"HASH_PINNED_READ_ONCE_NO_CHILD_PATH","commandTransport":"ARGV_ARRAY_V1","isolation":"OS_ENFORCED_DENY_ALL_OUTBOUND","sessionScope":"SINGLE_PROCESS_TREE","prefetchOutsideSession":false,"offlineEnvironment":{"UV_OFFLINE":"1","UV_FROZEN":"1","UV_NO_SYNC":"1"}}
+expectedEvidence:
+  - "The head's name-status against 9034e0f65e0756e5cf5404dff28893c62b641738 equals allowedPaths' A/M split (CONTRACT.md section 2); ind_bank_001.py and ind_bank_002.py move only on the listed lines; white goods, common/, the dispatcher, the runner, pyproject.toml and uv.lock are byte-identical."
+  - "IND-TRANSPORT-001A's 12 commands (equal to IND-TRANSPORT-001's) run unchanged and in order as items 1-6 and 11-16 of the 16 and pass; make pack PACK=banking and the business-domain tests pass with the declared governance questionnaires, and an undeclared questionnaire is still refused."
+  - "governance-integrations evaluates all 29 vectors to their labels; readiness-evaluate on the shipped fixture equals tests/fixtures/banking/evaluator/expected.json byte for byte and agrees with data-readiness on the nine readiness fixtures."
+  - "No vector, record or document carries a held-out CONF-BANK-001 answer, personal data, an endpoint or a credential value; the installed verifier accepts the head."
+rollback: "Revert the commit set: banking returns to 0.2.0 with its prior handler pins, the 003 handler, descriptor, controls, questionnaires, rule, fixtures, docs, evaluator and tests are removed, and test_dispatch.py loses its two lines; no data, schema, dependency or framework state is involved."

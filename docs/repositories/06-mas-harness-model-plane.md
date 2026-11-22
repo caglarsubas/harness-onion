@@ -82,7 +82,10 @@ mas-harness-model-plane/
 ├── fixtures/{performance,routing}/
 ├── scripts/run_benchmark.py
 ├── docs/{model-custody.md,performance.md}
+├── adoption/
+│   └── llama-cpp/{dossier.json,LICENSES.md,NOTICE.upstream,sbom.spdx.json}
 └── tests/
+    ├── adoption/test_dossier.py
     ├── airgap/
     ├── backends/{test_llama_cpp.py,test_ollama.py,test_vllm.py}
     ├── custody/
@@ -162,6 +165,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 6. `MODEL-003-telemetry-security`: tenant/request identity, usage observations, content redaction, backpressure, denial, arbitrary UID, and offline startup.
 7. `MODEL-004-performance`: reproducible local benchmark profiles and admission thresholds; performance results are evidence, not hardcoded marketing claims.
 8. `PLANE-BOOTSTRAP-R06-health-shell`: Bootstrap R06 mas-harness-model-plane as a health-only shell over its empty initial commit (owner PA-D1-R06, the KN-001 pattern): exact CPython 3.12.14, standard library only, one health module with its unittest, and harness-onion's four offline transport files at verifier bundle v9's pins; no image, database, deployment, hosted workflow, model server, Makefile, porting ledger or runtime code (published by MET-009). It precedes MODEL-001 by harness-onion's plane-shell ordering annex and is verifiable only once the owner installs verifier bundle v9.
+9. `MODEL-ADOPT-PINS-001-llama-cpp-dossier`: Record the H2 open-source baseline dossier for llama.cpp, the first engine of MODEL-ADOPT-001 (gates G1 and G2; ruling A1, PAR-D1): the exact upstream release, its source archive digest, the licences of the engine and of every vendored component, notices, and an SPDX SBOM. The dossier records digests, licences and the SBOM only; the artifacts live in the owner-held, content-addressed, write-once mirror outside the repositories (owner 2026-11-20 18:19). No engine code, adapter, build, model weights or runtime. Published by MET-012 at slot 294 (K = 3); it follows PLANE-BOOTSTRAP-R06 by harness-onion's plane-shell ordering annex.
 
 ## Testing, verification, and acceptance
 

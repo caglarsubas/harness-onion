@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-011
+## Current source preparation — MET-012
+
+MET-012 (slot 294): the three ready packets, a K = 3 step (318 packets at slot 294): MODEL-ADOPT-PINS-001 (mas-harness-model-plane), the llama.cpp open-source baseline dossier after PLANE-BOOTSTRAP-R06; IND-BANK-003A (mas-harness-industry-packs), the banking governance-and-integration slice (pack 0.3.0), IND-BANK-003's successor; and EXEC-TEMPORAL-PINS-001 (mas-harness-execution-plane), the Temporal provider dossier after PLANE-BOOTSTRAP-R08; the R06 and R08 plans' exact trees gain the adoption/ root; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracle).
+Alpha2 OPEN; 314 accepted (the catalog at slot 293) plus MET-012 and its three products only.
+
+## Historical ledger rewrite source preparation — MET-011
 
 MET-011 (slot 293): CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite: first the C18 retro sweep of the 289-291 head tests (tests/test_met_008.py, tests/test_met_perf_050.py, tests/test_met_009.py) and 291's oracle, then the third ledger architecture/chain-checkpoint/record.json (layers 189-292, verifyReference naming slot 286) written by one full run on the final source tree, with the writer's exclusion at three files; a K = 0 step (314 packets at slot 293); gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test row) and the two D5a oracles, 293's and 291's swept one).
 Alpha2 OPEN; 313 accepted (the catalog at slot 292) plus MET-011 only.
@@ -1847,3 +1852,7 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 312 | `IND-BANK-003` | `mas-harness-industry-packs` | The banking governance-and-integration slice (pack 0.3.0), over IND-TRANSPORT-001A's adoption merge (product, published by MET-010) |
 | 313 | `LAB-SYNC-002` | `mas-harness-research-lab` | The research lab's second research sync (PR 8), with the two design mirror files, over LAB-TRANSPORT-001's adoption merge (product, published by MET-010) |
 | 314 | `MET-011` | `Harness-Engineering` | CHAIN-COMPACTION-002's third checkpoint (K = 0, 314 packets at slot 293): the ledger rewrite (layers 189-292) after the C18 retro sweep; gate material (the registry rider, ci/parallel_suite_weights.json and the two D5a oracles, 293's and 291's swept one) |
+| 315 | `MET-012` | `Harness-Engineering` | The three ready packets (K = 3, 318 packets at slot 294): publishes MODEL-ADOPT-PINS-001, IND-BANK-003A and EXEC-TEMPORAL-PINS-001; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
+| 316 | `MODEL-ADOPT-PINS-001` | `mas-harness-model-plane` | The llama.cpp open-source baseline dossier (digests, licences, notices and an SPDX SBOM; no engine code), after PLANE-BOOTSTRAP-R06 (product, published by MET-012) |
+| 317 | `IND-BANK-003A` | `mas-harness-industry-packs` | The banking governance-and-integration slice (pack 0.3.0), IND-BANK-003's successor (product, published by MET-012) |
+| 318 | `EXEC-TEMPORAL-PINS-001` | `mas-harness-execution-plane` | The Temporal provider dossier (provider record, CycloneDX SBOM, licence and notice review; no runtime code), after PLANE-BOOTSTRAP-R08 (product, published by MET-012) |

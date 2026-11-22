@@ -1,6 +1,12 @@
 # Repository Plan: `Harness-Engineering`
 
-## Current source preparation — MET-011
+## Current source preparation — MET-012
+
+MET-012 (slot 294): the three ready packets, a K = 3 step. The meta packet publishes, in this order, MODEL-ADOPT-PINS-001 (mas-harness-model-plane), the llama.cpp open-source baseline dossier after PLANE-BOOTSTRAP-R06; IND-BANK-003A (mas-harness-industry-packs), the banking governance-and-integration slice (pack 0.3.0), IND-BANK-003's successor; and EXEC-TEMPORAL-PINS-001 (mas-harness-execution-plane), the Temporal provider dossier after PLANE-BOOTSTRAP-R08, the lanes' frozen bytes, and the R06 and R08 plans' exact trees gain the adoption/ root; the head test's and the oracle's rows join ci/parallel_suite_weights.json (217 entries). The packet registers its own review series, MET-012/packet, in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), ci/parallel_suite_weights.json (GATE_CI; pinned transport, so the owner's transport approval of the exact head is also due) and the D5a oracle (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12
+file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule (K = 3, 318 packets
+at slot 294), with the R13 guard of architecture/chain-inheritance/.
+
+## Historical ledger rewrite source preparation — MET-011
 
 MET-011 (slot 293): CHAIN-COMPACTION-002's third checkpoint, the ledger rewrite: first the C18 retro sweep of the 289-291 head tests (tests/test_met_008.py, tests/test_met_perf_050.py, tests/test_met_009.py) and 291's oracle, then the third ledger architecture/chain-checkpoint/record.json (layers 189-292, verifyReference naming slot 286) written by one full run on the final source tree, with the writer's exclusion at three files; a K = 0 step. The head test's row joins ci/parallel_suite_weights.json. The packet registers its own review series, MET-011/packet, in the brief registry; its gate paths are the rider in architecture/review-record/briefs.json (GATE_REVIEW_PROCESS), ci/parallel_suite_weights.json (GATE_CI; pinned transport, so the owner's transport approval of the exact head is also due) and the two D5a oracles, 293's and 291's swept one (ORACLE_TESTS), in the evolution surface record at this base, so the owner approves the exact head and the merge per PR, bound to the head. No R10 or R12
 file changes. Built under MET-PERF-042's identity rule and CHAIN-PRODUCT-PUBLISH-001's step rule (K = 0, 314 packets
@@ -1665,6 +1671,7 @@ Every packet uses branch `codex/<packet-id>`, changes only named paths, opens a 
 165. `MET-009`: the plane bootstraps and transport successors (K = 7, 310 packets at slot 291; publishes PLANE-BOOTSTRAP-R05, PLANE-BOOTSTRAP-R06, PLANE-BOOTSTRAP-R08, DIST-TRANSPORT-002A, CTRL-TRANSPORT-002A, IND-TRANSPORT-001A and LAB-TRANSPORT-001): the plane-shell ordering annex in `scripts/validate_packet_ownership.py` with `tests/test_plane_shell_order.py`; the head test's weights row; the three shells are health-only and the four successors re-copy the runner at bundle v9's pin.
 166. `MET-010`: the first rider pair (K = 2, 313 packets at slot 292; publishes IND-BANK-003 and LAB-SYNC-002): the two lanes' frozen bytes over their adoption merges (IND-BANK-003 over R03's IND-TRANSPORT-001A merge, LAB-SYNC-002 as R13 PR 8 over R13's LAB-TRANSPORT-001 merge); the head test's weights row; no product code in harness-onion.
 167. `MET-011`: CHAIN-COMPACTION-002's third checkpoint (K = 0, 314 packets at slot 293): the C18 retro sweep of the 289-291 head tests and 291's oracle, then the third ledger (layers 189-292) from one full run on the final source tree; the head test's weights row; no reader or class-rule edit.
+168. `MET-012`: the three ready packets (K = 3, 318 packets at slot 294; publishes MODEL-ADOPT-PINS-001, IND-BANK-003A and EXEC-TEMPORAL-PINS-001): the three lanes' frozen bytes (two plane dossiers after their shells R06 and R08, and IND-BANK-003's successor), with the adoption/ root in the R06 and R08 exact trees; the head test's and the oracle's weights rows; no product code in harness-onion.
 
 ## Testing, verification, and acceptance
 
