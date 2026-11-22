@@ -720,8 +720,11 @@ GUARD_CASES = [
 
 
 def test_live_record_passes_the_checker():
-    """Sections 3 to 5: validate(<the record parsed from RECORD_PATH>, disk_reader(ROOT)) returns []."""
-    result = checker().validate(_record(), checker().disk_reader(ROOT))
+    """Sections 3 to 5: validate(<the record parsed from RECORD_PATH>, <the head's era reader>) returns []: the record
+    and its basis files through one reader, the head's era reader."""
+    # CONTRACT_294 erratum E11 (D7) and C18: the record and its basis files through one reader, the head's era
+    # reader (reviewed_bytes), never the live tree; CONTRACT_289 sections 3.1 and 5 (the bytes the reader gives)
+    result = checker().validate(_record(), _reader())
     # CONTRACT_289 section 5 ([] accepts)
     assert result == []
 
@@ -1307,9 +1310,12 @@ def test_schema_rejects_a_changed_record(mutate):
 
 
 def test_projection_reproduces_the_record():
-    """Section 5: serialize(project(disk_reader(ROOT))) equals the record's bytes."""
+    """Section 5: serialize(project(<the head's era reader>)) equals the record's bytes: the record and its basis
+    files through one reader, the head's era reader."""
     raw = _disk(RECORD)
-    projected = projection().project(checker().disk_reader(ROOT))
+    # CONTRACT_294 erratum E11 (D7) and C18: the record and its basis files through one reader, the head's era
+    # reader (reviewed_bytes), never the live tree; CONTRACT_289 sections 3.1 and 5 (the bytes the reader gives)
+    projected = projection().project(_reader())
     # CONTRACT_289 section 5 (project returns the record)
     assert projected == json.loads(raw)
     # CONTRACT_289 section 5 (canonical bytes)
@@ -1387,8 +1393,11 @@ def test_codes_constant():
 
 
 def test_re_profile_passes_on_the_live_tree():
-    """Section 5 (RE_PROFILE): the registered checker runs over the live tree, which passes."""
-    result = checker().validate(_record(), checker().disk_reader(ROOT))
+    """Section 5 (RE_PROFILE): the registered checker passes, with the record and its basis files through one
+    reader, the head's era reader."""
+    # CONTRACT_294 erratum E11 (D7) and C18: the record and its basis files through one reader, the head's era
+    # reader (reviewed_bytes), never the live tree; CONTRACT_289 sections 3.1 and 5 (the bytes the reader gives)
+    result = checker().validate(_record(), _reader())
     # CONTRACT_289 section 5 (RE_PROFILE)
     assert "RE_PROFILE" not in result
 
