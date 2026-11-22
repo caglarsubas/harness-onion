@@ -777,12 +777,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "release evidence validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 313
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS},
-            "closed 313-packet catalog retaining the 301-packet checkpoint")
+    require(len(paths) == 314
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET},
+            "closed 314-packet catalog retaining the 301-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -821,4 +821,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Release evidence valid: 313 current specifications at slot 289; 301-packet checkpoint and exact 300-packet predecessor; contract reviewed.")
+    print("Release evidence valid: 314 current specifications at slot 289; 301-packet checkpoint and exact 300-packet predecessor; contract reviewed.")

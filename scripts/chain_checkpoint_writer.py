@@ -11,8 +11,8 @@ the WORKERS that ci/parallel_suite.py sets. An outcome that differs between this
 attributed to these two first.
 
 MET-PERF-049 (slot 286, CONTRACT_286 r3), generalised once so that every later rewrite reuses it: the head layer's
-validator names the step's authority (its AUTHORITY_PATH); a rewrite's exclusion adds the ledger hunk side record
-(architecture/chain-checkpoint/ledger-hunks/<slot>.json, built here and checked by check_ledger_hunks: vectors 28-35);
+validator names the step's authority (its AUTHORITY_PATH); from 293 a rewrite's exclusion is its three products and
+its authority holds the ledger's hunks (286's side record ledger-hunks/<slot>.json stays checkable: vectors 28-35);
 writingRun.verifyReference names the previous checkpoint and its record's sha256; parameters.workers and the stated
 difference come from ci/parallel_suite.py's WORKERS (refused when it does not parse); and the writer refuses while the
 G1 signal file is present under HOME (P-048-4, condition (i)).
@@ -176,7 +176,7 @@ def check_pairs_of(lslot, pairs_path, document):
 
 def exclusion_for(slot, head_validator, authority=AUTHORITY_PATH, ledger_hunks=False):
     """MON-282-W2-RULED: the closed exclusion of the step at slot: its own products, never a layer's input. A rewrite
-    (286 3.6) passes its head's authority and adds its ledger hunk side record."""
+    (286 3.6) passes its head's authority; from 293 assemble names no ledger hunk side record (ledger_hunks=False)."""
     files = [authority, "%s/%d.json" % (HUNK_CLASSES_DIR, slot), RECORD_PATH]
     if ledger_hunks:
         files.append("%s/%d.json" % (LEDGER_HUNKS_DIR, slot))
@@ -311,7 +311,7 @@ def assemble(worktree, out_dir, slot, argv_run, size_bound=None, measure_only=Fa
     authority = json.loads((worktree / head_authority).read_bytes())
     previous = (worktree / RECORD_PATH).read_bytes() if (worktree / RECORD_PATH).is_file() else None
     workers = workers_of(worktree)
-    excl = exclusion_for(slot, heads[0], head_authority, ledger_hunks=previous is not None)
+    excl = exclusion_for(slot, heads[0], head_authority, ledger_hunks=False)
     normalise = _pin_normaliser(worktree)
     layers, pairs = [], []
     for lslot, module in chain:

@@ -117,9 +117,16 @@ from scripts.validate_policy_observation import validate_messages
 from scripts.validate_proxy_contract import validate_profile
 
 
+def current_catalog_names():
+    """The current catalog's names (C18 retro sweep, A-292-11): every bridged head takes the current catalog by
+    contract and refuses any other, so this one helper lists the names; it reads no file's bytes."""
+    return sorted(path.stem for path in (profile.ROOT / "task-packets").glob("*.yaml"))
+
+
 def packets():
-    return {path.stem: safe_load(path.read_bytes())
-            for path in (profile.ROOT / "task-packets").glob("*.yaml")}
+    """The current catalog: names from current_catalog_names(), each file's bytes through the head's era reader."""
+    return {name: safe_load(profile.reviewed_bytes("task-packets/" + name + ".yaml"))
+            for name in current_catalog_names()}
 
 
 def layer_packets():
@@ -135,11 +142,12 @@ def test_exact_current_source_and_complete_history_chain():
     assert profile.validate() is None
     current = packets()
     accepted = profile.historical_catalog(current)
-    assert len(current) == 313 and len(accepted) == 301
+    assert len(current) == 314 and len(accepted) == 301
     assert set(accepted) == set(current) - {profile.NEW_PACKET, profile.successor.NEW_PACKET,
                                             *profile.successor.PRODUCT_PACKETS,
                                             profile.successor.successor.NEW_PACKET,
-                                            *profile.successor.successor.PRODUCT_PACKETS}
+                                            *profile.successor.successor.PRODUCT_PACKETS,
+                                            profile.successor.successor.successor.NEW_PACKET}
     assert len(m008.historical_catalog(current)) == 300
     assert len(m007.historical_catalog(current)) == 298
     assert len(m006.historical_catalog(current)) == 297
@@ -278,13 +286,14 @@ def test_every_predecessor_payload_is_checked_without_a_verdict_cache():
         with pytest.raises(ValueError, match="changed packet payload"):
             profile.validate_packet_payloads(current)
         current[name] = original
-    # MET-PERF-042 (C2): this layer's payload table against digests this test computes from the disk YAML.
+    # MET-PERF-042 (C2): this layer's payload table against digests this test computes from the YAML bytes the
+    # head's era reader returns (C18 retro sweep, A-292-11).
     import hashlib
     import json
     table = profile._packet_rules()
     assert set(table) == set(profile.authority()["baselinePackets"]) | {profile.NEW_PACKET}
     for name in sorted(table):
-        raw = (profile.ROOT / "task-packets" / (name + ".yaml")).read_bytes()
+        raw = profile.reviewed_bytes("task-packets/" + name + ".yaml")
         payload = json.dumps(safe_load(raw), sort_keys=True, ensure_ascii=False, separators=(",", ":"),
                              allow_nan=False).encode("utf-8")
         assert table[name] == (hashlib.sha256(raw).hexdigest(), hashlib.sha256(payload).hexdigest()), name
@@ -1137,9 +1146,10 @@ REGISTRY_YAML = "ci/parallel_suite.py"
 
 
 def _chain_packets():
-    """The live packets, read as validate() reads them (each file's bytes through the layer, parsed by safe_load)."""
-    return {path.stem: profile.safe_load(profile.regular_bytes("task-packets/" + path.name))
-            for path in sorted((profile.ROOT / "task-packets").glob("*.yaml"))}
+    """The current packets, parsed by safe_load as validate() parses them: names from current_catalog_names(),
+    each file's bytes through the head's era reader (C18 retro sweep, A-292-11)."""
+    return {name: profile.safe_load(profile.reviewed_bytes("task-packets/" + name + ".yaml"))
+            for name in current_catalog_names()}
 
 
 def _sha(raw):

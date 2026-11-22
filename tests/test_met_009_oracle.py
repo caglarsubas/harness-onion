@@ -127,6 +127,13 @@ def _era_read(rel):
     return sys.modules["_met_009_oracle_era_head"].reviewed_bytes(rel)
 
 
+def current_catalog_names():
+    """The current catalog's names (C18 retro sweep, A-292-11; Lane-Monitor as a non-author): every bridged head
+    takes the current catalog by contract and refuses any other, so this one helper lists the names; it reads no
+    file's bytes."""
+    return sorted(path.stem for path in (ROOT / "task-packets").glob("*.yaml"))
+
+
 def _read(rel):
     """Bytes of one fixture on the brief's fixed read list, by exact path."""
     if rel not in _FIXED_READS:
@@ -633,14 +640,16 @@ def test_historical_catalog_drops_new_packet_and_products(head):
     task-packets YAMLs, historical_catalog returns it minus NEW_PACKET and the seven products and leaves its input
     unchanged.
 
-    This is the file's one listing call, under MON-291-R2-RULE's allowance for this test only: a sorted glob of
-    task-packets/*.yaml, file stems as ids, each file parsed with scripts/safe_yaml.safe_load (reached through the
+    This test makes the file's one listing, under MON-291-R2-RULE's allowance for this test only, through
+    current_catalog_names() (C18 retro sweep, A-292-11): a sorted glob of task-packets/*.yaml, file stems as ids;
+    each file's bytes through the head's era reader, parsed with scripts/safe_yaml.safe_load (reached through the
     head's own import). Every failure below prints only a count or a boolean, never an id or a packet.
     """
     safe_yaml = getattr(head, "safe_yaml", None)
     load = safe_yaml.safe_load if safe_yaml is not None else _safe_load(head)
-    paths = sorted((ROOT / "task-packets").glob("*.yaml"))
-    catalog = {path.stem: load(path.read_bytes().decode("utf-8")) for path in paths}
+    # C18 retro sweep (A-292-11): names from current_catalog_names(), each file's bytes through the era reader.
+    catalog = {name: load(_era_read("task-packets/" + name + ".yaml").decode("utf-8"))
+               for name in current_catalog_names()}
     # Era catalog ([PC-1] form, MON-292-D1-ERA): a bridged successor's historical_catalog drops its newer packets.
     era = head.successor.historical_catalog(catalog) if hasattr(head, "successor") else catalog
     count = len(era)

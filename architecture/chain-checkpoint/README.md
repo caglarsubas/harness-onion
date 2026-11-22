@@ -249,3 +249,33 @@ tools write:
   a chosen file name never picks its own era. Records 282 to 287 keep the rule they carry. `RULES_BY_SHA` holds v2.5
   as (CLASSES, register), and a v2.5 record has v2.4's six members and five context keys. Over 286's and 287's
   records (K = 0 contexts, where v2.5's path is v2.4's) v2.5 gives exactly their recorded classes.
+
+## MET-011 (slot 293): the third checkpoint
+
+**The rewrite.** The third checkpoint is written at 293 by a full G0 run and attests layers 189-292 (104 layers, one per
+slot, no gap) over the 313-packet baseline. Schema v1 is unchanged: the base's 14 members, its parameters and its two
+check pairs (both on layer 279, supersession). The full-run proof has every collected node executed (deselected 0,
+attested 0); the writing run has its six members, its verify reference naming slot 286 and its record; sizeBytes is the
+file's length, within sizeBound (the measured size x 1.2183), within 16 MiB; normalisedRecordClass is true. The
+authority (`architecture/ledger-rewrite-293-authority.json`) names `record.json` in `changedFiles` in the plain
+three-key form over slot 286's record, with the writer's line-run reverse hunks inline (1 to 4,096; one ascending replay
+gives 286's record byte for byte), and the slot's hunk-class record gives each of those hunks the class "other" (V6a).
+286's head still reads its own ledger: its reviewed bytes are the live bytes projected back through these hunks.
+
+**The exclusion.** Files: the authority, `hunk-classes/293.json` and `record.json`; pin line:
+`scripts/validate_met_011.py`. From 293 the writer's assemble names no ledger hunk side record (`ledger_hunks=False`),
+so no `ledger-hunks/` path exists; the writer can still build one (`check_ledger_hunks`, vectors 28-35, unchanged). No
+layer attests an excluded file.
+
+**The catalog stays strict (MON-293-RULING-A).** The head's `historical_catalog(packets)` keeps the one exact form of
+every head (identity rule v4, clause D): it checks its authority, then that `packets` is a dict ("packet mapping"),
+then that it is exactly this era's ("unexpected packet addition or loss"), then the packet YAML and payload checks
+and the peel. A head test passes the current catalog's names from one helper, and its count line takes the bridge
+edit at each slot.
+
+**An era correction after the checkpoint (MON-292-C18).** It costs no ledger touch: the ledger is not edited until the
+next rewrite (303). An authored class-other edit to a file the third ledger attests demotes (neutral) every layer
+attesting that path, which then runs live until the next rewrite; a changed outcome of a demoted layer is
+"demoted-outcome-explained" (pending isolation) only with a matching outcomeStatements entry, otherwise class A.
+Normalised classes (bridge, cascade, record, register) demote nothing. So the C18 sweep of the 289-291 head tests landed
+before the writing run, and the third ledger attests their swept form.
