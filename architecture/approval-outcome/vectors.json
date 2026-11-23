@@ -1,0 +1,4171 @@
+{
+  "schemaVersion": "harness.planeon.ai/approval-outcome-vectors/v1",
+  "cases": [
+    {
+      "id": "AO-O-L1",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "APPROVED permits the effect once, for the bound subject only",
+      "refs": [
+        "O1",
+        "O2"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "effect",
+            "t": 15,
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 4,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            }
+          },
+          {
+            "op": "effect",
+            "t": 20,
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            }
+          },
+          {
+            "op": "effect",
+            "t": 22,
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED",
+          "effects": [
+            false,
+            true,
+            false
+          ],
+          "asked": 1,
+          "decided": 1
+        }
+      }
+    },
+    {
+      "id": "AO-O-L2",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "REJECTED by an eligible reviewer, with a reason code",
+      "refs": [
+        "O1"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "REJECT",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            },
+            "reasonCode": "INSUFFICIENT_EVIDENCE"
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REJECTED",
+          "reason": "INSUFFICIENT_EVIDENCE",
+          "decided": 1
+        }
+      }
+    },
+    {
+      "id": "AO-O-L3",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "EXPIRED is projected on read; the read writes nothing",
+      "refs": [
+        "O3"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "read",
+            "t": 50
+          },
+          {
+            "op": "read",
+            "t": 150
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REQUESTED",
+          "reads": [
+            "REQUESTED",
+            "EXPIRED"
+          ],
+          "decided": 0
+        }
+      }
+    },
+    {
+      "id": "AO-O-L4",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "CANCELLED: the requester withdraws the open request",
+      "refs": [
+        "O1"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "cancel",
+            "t": 20,
+            "by": "REQUESTER"
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "CANCELLED",
+          "decided": 1
+        }
+      }
+    },
+    {
+      "id": "AO-O-L5",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "source 1: the port cannot be read at the ask; UNAVAILABLE is recorded at once with its asked and decided records",
+      "refs": [
+        "O4",
+        "S5",
+        "UNAVAILABLE-SOURCES"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "UNAVAILABLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "UNAVAILABLE",
+          "reason": "PORT_UNAVAILABLE_AT_ASK",
+          "asked": 1,
+          "decided": 1,
+          "portAsked": 1
+        }
+      }
+    },
+    {
+      "id": "AO-O-L6",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "source 2 (N1's second half): the port cannot be read at the decision; UNAVAILABLE is recorded and terminal",
+      "refs": [
+        "O4",
+        "N1",
+        "UNAVAILABLE-SOURCES"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "UNAVAILABLE",
+              "eligible": []
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "decide",
+            "t": 20,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "UNAVAILABLE",
+          "reason": "PORT_UNAVAILABLE_AT_DECISION",
+          "refusals": [
+            "NOT_OPEN"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-O-L7",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "Q-TLA-2: NOT_ELIGIBLE and DENIED asks are refused with typed reasons; nothing is written and a read for the subject finds no APPROVED",
+      "refs": [
+        "Q-TLA-2"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "NOT_ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "ask",
+            "t": 1,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "DENIED",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "read",
+            "t": 2
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": null,
+          "refusals": [
+            "NOT_ELIGIBLE",
+            "DENIED"
+          ],
+          "asked": 0,
+          "decided": 0,
+          "reads": [
+            "NONE"
+          ],
+          "portAsked": 2
+        }
+      }
+    },
+    {
+      "id": "AO-O-L8",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "N1: a decision attempt refused because the reviewer is not eligible leaves the request REQUESTED; an eligible decision then approves it",
+      "refs": [
+        "N1",
+        "R2-N1"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "NOT_ELIGIBLE",
+              "eligible": []
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "read",
+            "t": 11
+          },
+          {
+            "op": "decide",
+            "t": 20,
+            "reviewer": {
+              "id": "rev-2",
+              "type": "HUMAN",
+              "idDigest": "sha256:be8bd3365e42246a36025cb3d2aec4f647d3f4d4eda9cb6e0259a0ec1d4a2f02"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED",
+          "refusals": [
+            "NOT_ELIGIBLE"
+          ],
+          "reads": [
+            "REQUESTED"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-O-L9",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "N1: after the refused attempt the request stays REQUESTED until it expires; the sweep writes EXPIRED",
+      "refs": [
+        "N1",
+        "A5"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "NOT_ELIGIBLE",
+              "eligible": []
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "sweep",
+            "t": 150
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "EXPIRED",
+          "refusals": [
+            "NOT_ELIGIBLE"
+          ],
+          "occurredAt": 100
+        }
+      }
+    },
+    {
+      "id": "AO-O-L10",
+      "family": "O",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "N1: after the refused attempt the request stays REQUESTED until it is cancelled",
+      "refs": [
+        "N1"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "NOT_ELIGIBLE",
+              "eligible": []
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "cancel",
+            "t": 30,
+            "by": "REQUESTER"
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "CANCELLED",
+          "refusals": [
+            "NOT_ELIGIBLE"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-O-H1",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "an APPROVED row with the named fields and its closed audit pair: one event name each, the kind a field, written in the state change's transaction, granted from the row",
+      "refs": [
+        "O5",
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED"
+        }
+      }
+    },
+    {
+      "id": "AO-O-H2",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "the BLUEPRINT-D1 fields, when an adopting packet fills them, are members of the closed record",
+      "refs": [
+        "O5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          },
+          "businessIntentId": "intent-0001",
+          "payloadHash": "sha256:2d7c09188d414c888f37b661e27aecdd54231e027ea2c8ad9c1e313aab34c5d9",
+          "evidenceVersions": [
+            "ev-3"
+          ],
+          "preconditions": [
+            "kyc"
+          ],
+          "compartment": "payments",
+          "limits": {
+            "amountMinor": 500000
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED"
+        }
+      }
+    },
+    {
+      "id": "AO-O-H3",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a row without its mandate or scope",
+      "refs": [
+        "O5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_SHAPE"
+      }
+    },
+    {
+      "id": "AO-O-H4",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a stored value outside the six",
+      "refs": [
+        "O1"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "AUTO_APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-H5",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a NOT_ELIGIBLE ask that wrote a request",
+      "refs": [
+        "Q-TLA-2"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "NOT_ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 0,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-H6",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "UNAVAILABLE returned only as a status code, with no record",
+      "refs": [
+        "O4"
+      ],
+      "input": {
+        "row": null,
+        "audit": [],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 0,
+        "sweepInterval": 300,
+        "httpUnavailable": true
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-H7",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a NOT_ELIGIBLE answer at the decision recorded as UNAVAILABLE (it is a refusal; UNAVAILABLE at the decision is an unreadable port only)",
+      "refs": [
+        "N1",
+        "UNAVAILABLE-SOURCES"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "UNAVAILABLE",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "SYSTEM"
+          },
+          "reasonCode": "PORT_UNAVAILABLE_AT_DECISION",
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "UNAVAILABLE"
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 10,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-H8",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "the effect ran twice on one approval",
+      "refs": [
+        "O2"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          },
+          {
+            "at": 25
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-R1",
+      "family": "O",
+      "check": "READ",
+      "polarity": "POSITIVE",
+      "title": "an overdue request reads EXPIRED, does not permit, and the read writes nothing",
+      "refs": [
+        "O3",
+        "N-6"
+      ],
+      "input": {
+        "row": {
+          "state": "REQUESTED",
+          "expiresAt": 100
+        },
+        "now": 150,
+        "consumer": {
+          "reads": "EXPIRED",
+          "permits": false,
+          "writes": false
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "projection": "EXPIRED",
+          "permits": false
+        }
+      }
+    },
+    {
+      "id": "AO-O-R2",
+      "family": "O",
+      "check": "READ",
+      "polarity": "POSITIVE",
+      "title": "a stored value outside the six is read as not approved and refused",
+      "refs": [
+        "O1",
+        "N-5"
+      ],
+      "input": {
+        "row": {
+          "state": "AUTO_APPROVED",
+          "expiresAt": 100
+        },
+        "now": 10,
+        "consumer": {
+          "reads": "REFUSED_UNKNOWN",
+          "permits": false,
+          "writes": false
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "projection": "REFUSED_UNKNOWN",
+          "permits": false
+        }
+      }
+    },
+    {
+      "id": "AO-O-R3",
+      "family": "O",
+      "check": "READ",
+      "polarity": "POSITIVE",
+      "title": "an APPROVED row permits",
+      "refs": [
+        "O2"
+      ],
+      "input": {
+        "row": {
+          "state": "APPROVED",
+          "expiresAt": 100
+        },
+        "now": 150,
+        "consumer": {
+          "reads": "APPROVED",
+          "permits": true,
+          "writes": false
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "permits": true
+        }
+      }
+    },
+    {
+      "id": "AO-O-R4",
+      "family": "O",
+      "check": "READ",
+      "polarity": "NEGATIVE",
+      "title": "N-5: an unknown outcome value read as approved",
+      "refs": [
+        "N-5",
+        "O1"
+      ],
+      "input": {
+        "row": {
+          "state": "AUTO_APPROVED",
+          "expiresAt": 100
+        },
+        "now": 10,
+        "consumer": {
+          "reads": "APPROVED",
+          "permits": true,
+          "writes": false
+        }
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-R5",
+      "family": "O",
+      "check": "READ",
+      "polarity": "NEGATIVE",
+      "title": "N-6: an overdue request read as open",
+      "refs": [
+        "N-6",
+        "O3"
+      ],
+      "input": {
+        "row": {
+          "state": "REQUESTED",
+          "expiresAt": 100
+        },
+        "now": 150,
+        "consumer": {
+          "reads": "REQUESTED",
+          "permits": false,
+          "writes": false
+        }
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-O-R6",
+      "family": "O",
+      "check": "READ",
+      "polarity": "NEGATIVE",
+      "title": "a read that writes the EXPIRED record",
+      "refs": [
+        "O3"
+      ],
+      "input": {
+        "row": {
+          "state": "REQUESTED",
+          "expiresAt": 100
+        },
+        "now": 150,
+        "consumer": {
+          "reads": "EXPIRED",
+          "permits": false,
+          "writes": true
+        }
+      },
+      "expect": {
+        "refuse": "AO_OUTCOME"
+      }
+    },
+    {
+      "id": "AO-A-L1",
+      "family": "A",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "votes before quorum are vote records; the pair closes with one decided record",
+      "refs": [
+        "A2"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 2,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "decide",
+            "t": 11,
+            "reviewer": {
+              "id": "rev-2",
+              "type": "HUMAN",
+              "idDigest": "sha256:be8bd3365e42246a36025cb3d2aec4f647d3f4d4eda9cb6e0259a0ec1d4a2f02"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED",
+          "votes": 2,
+          "asked": 1,
+          "decided": 1
+        }
+      }
+    },
+    {
+      "id": "AO-A-L2",
+      "family": "A",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "the first mutation after the expiry writes EXPIRED with occurredAt = expiresAt",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 150,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "EXPIRED",
+          "refusals": [
+            "EXPIRED"
+          ],
+          "occurredAt": 100,
+          "decided": 1
+        }
+      }
+    },
+    {
+      "id": "AO-A-H1",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "an open request within expiresAt plus the store owner's sweep interval",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 399,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REQUESTED"
+        }
+      }
+    },
+    {
+      "id": "AO-A-H2",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "EXPIRED written by the sweep: occurredAt = expiresAt, recordedAt later",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "EXPIRED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 100
+          },
+          "decidedBy": {
+            "type": "SYSTEM"
+          },
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 100,
+            "recordedAt": 180,
+            "sameTransaction": true,
+            "outcome": "EXPIRED"
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 180,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "EXPIRED"
+        }
+      }
+    },
+    {
+      "id": "AO-A-H3",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "N-11: an asked record past expiresAt plus one sweep interval with no decided record",
+      "refs": [
+        "N-11",
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 400,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-H4",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "N-12: the EXPIRED decided record carries the write time as occurredAt",
+      "refs": [
+        "N-12",
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "EXPIRED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 180
+          },
+          "decidedBy": {
+            "type": "SYSTEM"
+          },
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 180,
+            "recordedAt": 180,
+            "sameTransaction": true,
+            "outcome": "EXPIRED"
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 180,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-H5",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a decided event name that carries the kind",
+      "refs": [
+        "A1"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "profile.approval.decision.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-H6",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "two decided records for one request",
+      "refs": [
+        "A2"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-H7",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "an approval granted by reading the audit log",
+      "refs": [
+        "A3"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300,
+        "grantSource": "AUDIT_LOG"
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-H8",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "an audit record written outside the state change's transaction",
+      "refs": [
+        "A4"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": false,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-P1",
+      "family": "A",
+      "check": "PROFILE",
+      "polarity": "POSITIVE",
+      "title": "one sweep interval per store owner, each from 1 to 3,600 s, and no auto-approve setting or environment variable",
+      "refs": [
+        "A5",
+        "H2"
+      ],
+      "input": {
+        "sweepIntervals": {
+          "demand": 300,
+          "profile": 300,
+          "governance": 600
+        },
+        "settings": {
+          "quorum": 1
+        },
+        "env": {
+          "APPROVAL_STORE": "postgres"
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "owners": [
+            "demand",
+            "governance",
+            "profile"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-A-P2",
+      "family": "A",
+      "check": "PROFILE",
+      "polarity": "NEGATIVE",
+      "title": "a sweep interval of 0 s",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "sweepIntervals": {
+          "demand": 0,
+          "profile": 300,
+          "governance": 600
+        },
+        "settings": {
+          "quorum": 1
+        },
+        "env": {
+          "APPROVAL_STORE": "postgres"
+        }
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-P3",
+      "family": "A",
+      "check": "PROFILE",
+      "polarity": "NEGATIVE",
+      "title": "a sweep interval of 3,601 s",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "sweepIntervals": {
+          "demand": 300,
+          "profile": 3601,
+          "governance": 600
+        },
+        "settings": {
+          "quorum": 1
+        },
+        "env": {
+          "APPROVAL_STORE": "postgres"
+        }
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-P4",
+      "family": "A",
+      "check": "PROFILE",
+      "polarity": "NEGATIVE",
+      "title": "one interval for all store owners (governance's expiry worker has none)",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "sweepIntervals": {
+          "demand": 300,
+          "profile": 300
+        },
+        "settings": {
+          "quorum": 1
+        },
+        "env": {
+          "APPROVAL_STORE": "postgres"
+        }
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-S-S1",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "POSITIVE",
+      "title": "the organisation's ASK overrides the pack's ALLOW and is named",
+      "refs": [
+        "S1",
+        "S4"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "pack-1",
+            "version": "1",
+            "layer": "PACK",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ASK"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "decision": "ASK",
+          "statement": {
+            "id": "org-1",
+            "version": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "AO-S-S2",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "POSITIVE",
+      "title": "within the floor, the organisation's ALLOW is final for ask and allow",
+      "refs": [
+        "S1"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          },
+          {
+            "id": "floor-1",
+            "version": "1",
+            "layer": "FLOOR",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ASK"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "decision": "ALLOW",
+          "statement": {
+            "id": "org-1",
+            "version": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "AO-S-S3",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "POSITIVE",
+      "title": "the floor's DENY stays: a later ALLOW never lifts it",
+      "refs": [
+        "S2",
+        "S4"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "floor-9",
+            "version": "1",
+            "layer": "FLOOR",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "DENY"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "decision": "DENY",
+          "statement": {
+            "id": "floor-9",
+            "version": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "AO-S-S4",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "POSITIVE",
+      "title": "a tool-use statement requires asking",
+      "refs": [
+        "S3"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "pack-1",
+            "version": "1",
+            "layer": "PACK",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          },
+          {
+            "id": "tool-1",
+            "version": "1",
+            "layer": "PROFILE",
+            "scope": "TOOL",
+            "match": "*",
+            "effect": "ASK"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "decision": "ASK",
+          "statement": {
+            "id": "tool-1",
+            "version": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "AO-S-S5",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "POSITIVE",
+      "title": "a missing layer gives UNAVAILABLE",
+      "refs": [
+        "S5"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "MISSING",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "decision": "UNAVAILABLE",
+          "statement": null
+        }
+      }
+    },
+    {
+      "id": "AO-S-N1",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "NEGATIVE",
+      "title": "a result that keeps the pack's ASK over the organisation's later ALLOW",
+      "refs": [
+        "S1"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "pack-1",
+            "version": "1",
+            "layer": "PACK",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ASK"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release",
+        "claimed": {
+          "decision": "ASK",
+          "statement": {
+            "id": "pack-1",
+            "version": "1"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "AO_STATEMENT"
+      }
+    },
+    {
+      "id": "AO-S-N8",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "NEGATIVE",
+      "title": "N-8: a later statement lifts an earlier deny",
+      "refs": [
+        "N-8",
+        "S2"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "floor-9",
+            "version": "1",
+            "layer": "FLOOR",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "DENY"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release",
+        "claimed": {
+          "decision": "ALLOW",
+          "statement": {
+            "id": "org-1",
+            "version": "1"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "AO_STATEMENT"
+      }
+    },
+    {
+      "id": "AO-S-N9",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "NEGATIVE",
+      "title": "N-9: policy unavailable (an evaluation error in a layer) yields admitted",
+      "refs": [
+        "N-9",
+        "S5"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          }
+        ],
+        "layers": {
+          "FLOOR": "ERROR",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release",
+        "claimed": {
+          "decision": "ALLOW",
+          "statement": {
+            "id": "org-1",
+            "version": "1"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "AO_STATEMENT"
+      }
+    },
+    {
+      "id": "AO-S-N3",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "NEGATIVE",
+      "title": "a tool-use statement that allows",
+      "refs": [
+        "S3"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "tool-1",
+            "version": "1",
+            "layer": "PROFILE",
+            "scope": "TOOL",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "refuse": "AO_STATEMENT"
+      }
+    },
+    {
+      "id": "AO-S-N4",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "NEGATIVE",
+      "title": "a result that does not name its deciding statement",
+      "refs": [
+        "S4"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "pack-1",
+            "version": "1",
+            "layer": "PACK",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ALLOW"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.release",
+            "effect": "ASK"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release",
+        "claimed": {
+          "decision": "ASK",
+          "statement": null
+        }
+      },
+      "expect": {
+        "refuse": "AO_STATEMENT"
+      }
+    },
+    {
+      "id": "AO-H-L1",
+      "family": "H",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "source 3: a headless context (a workload with no certified trigger gate) gets UNAVAILABLE at once, recorded, decided before the port is asked",
+      "refs": [
+        "H1b",
+        "O4",
+        "UNAVAILABLE-SOURCES"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "WORKLOAD",
+              "workloadDigest": "sha256:4a0da2efe32572d4d32e4c489362f8477a6488b52693e6d09fedb28f9ff62f07"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "UNAVAILABLE",
+          "reason": "NO_CERTIFIED_GATE",
+          "portAsked": 0,
+          "asked": 1,
+          "decided": 1
+        }
+      }
+    },
+    {
+      "id": "AO-H-L2",
+      "family": "H",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "a workload asking through a gate of its certified trigger definition opens the request, which records the workload; it cannot decide",
+      "refs": [
+        "H1b",
+        "H1a"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "WORKLOAD",
+              "workloadDigest": "sha256:4a0da2efe32572d4d32e4c489362f8477a6488b52693e6d09fedb28f9ff62f07",
+              "gate": {
+                "certified": true,
+                "validAtRevalidation": true,
+                "inGates": true,
+                "admitted": true,
+                "lookup": "OK",
+                "definitionId": "trg-0001",
+                "definitionVersion": "4",
+                "definitionDigest": "sha256:68a060f883be27f1b1766d03e05c63c96fc72732c9268edc21725331bc11f171",
+                "admissionRecordId": "adm-0001"
+              }
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "wl-1",
+              "type": "WORKLOAD",
+              "idDigest": "sha256:1ad1b7e04649f53c2e0c7967a7995901cf04984045d320a9b8604a375c85836e"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REQUESTED",
+          "asker": "WORKLOAD",
+          "refusals": [
+            "NOT_A_DECIDER"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-H-L3",
+      "family": "H",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "R2-N1: a reviewer eligible only by a platform role, absent from the port's answer, is refused",
+      "refs": [
+        "R2-N1"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "ops-admin",
+              "type": "HUMAN",
+              "idDigest": "sha256:883cfbee5e4f464951b0efd3141993d3e8aac9ebe252c8e6abe86f206b043646",
+              "platformRole": "PLATFORM_ADMIN"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REQUESTED",
+          "refusals": [
+            "NOT_ELIGIBLE"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-H-L4",
+      "family": "H",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "an effect before the decision is not permitted; after APPROVED it is",
+      "refs": [
+        "H4"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "effect",
+            "t": 5,
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            }
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "effect",
+            "t": 20,
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED",
+          "effects": [
+            false,
+            true
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-H-L5",
+      "family": "H",
+      "check": "LIFECYCLE",
+      "polarity": "POSITIVE",
+      "title": "a trigger, a model and the requester cannot decide",
+      "refs": [
+        "H1a"
+      ],
+      "input": {
+        "kind": "demand",
+        "quorum": 1,
+        "sweepInterval": 300,
+        "events": [
+          {
+            "op": "ask",
+            "t": 0,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "port": "ELIGIBLE",
+            "subject": {
+              "requestId": "apr-0001",
+              "subjectId": "dem-0001",
+              "revision": 3,
+              "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+              "policyRef": "policy/org-0001",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+              "ruleVersion": "2026-11-23.1",
+              "mandate": "mandate/payments-ops"
+            },
+            "expiresAt": 100
+          },
+          {
+            "op": "decide",
+            "t": 10,
+            "reviewer": {
+              "id": "trg-run",
+              "type": "TRIGGER",
+              "idDigest": "sha256:43ca48050e0133755119a916c43043b5b5f3046d0b1319a3f1aee266d8847450"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "decide",
+            "t": 11,
+            "reviewer": {
+              "id": "model-1",
+              "type": "MODEL",
+              "idDigest": "sha256:3b65ca8e41d4837f6494421b60906ea0552a823b39edd5a9dae595620d94d18c"
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          {
+            "op": "decide",
+            "t": 12,
+            "reviewer": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c",
+              "isRequester": true
+            },
+            "port": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1",
+                "rev-2"
+              ]
+            },
+            "vote": "APPROVE",
+            "statement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REQUESTED",
+          "refusals": [
+            "NOT_A_DECIDER",
+            "NOT_A_DECIDER",
+            "NOT_A_DECIDER"
+          ]
+        }
+      }
+    },
+    {
+      "id": "AO-H-H1",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "a headless UNAVAILABLE recorded at once",
+      "refs": [
+        "H1b",
+        "O4"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "UNAVAILABLE",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "WORKLOAD",
+            "workloadDigest": "sha256:4a0da2efe32572d4d32e4c489362f8477a6488b52693e6d09fedb28f9ff62f07"
+          },
+          "askPort": "NOT_ASKED",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 0
+          },
+          "decidedBy": {
+            "type": "SYSTEM"
+          },
+          "reasonCode": "NO_CERTIFIED_GATE",
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true,
+            "outcome": "UNAVAILABLE"
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 0,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "UNAVAILABLE"
+        }
+      }
+    },
+    {
+      "id": "AO-H-H7",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "a request a workload opened through its gate records the trigger definition id, version and digest and the admissionRecordId",
+      "refs": [
+        "H1b"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "WORKLOAD",
+            "workloadDigest": "sha256:4a0da2efe32572d4d32e4c489362f8477a6488b52693e6d09fedb28f9ff62f07",
+            "definitionId": "trg-0001",
+            "definitionVersion": "4",
+            "definitionDigest": "sha256:68a060f883be27f1b1766d03e05c63c96fc72732c9268edc21725331bc11f171",
+            "admissionRecordId": "adm-0001"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 0,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "REQUESTED"
+        }
+      }
+    },
+    {
+      "id": "AO-H-H8",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a workload's request that does not record its trigger definition and admission",
+      "refs": [
+        "H1b"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "WORKLOAD",
+            "workloadDigest": "sha256:4a0da2efe32572d4d32e4c489362f8477a6488b52693e6d09fedb28f9ff62f07",
+            "definitionId": "trg-0001",
+            "definitionVersion": "4"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 0,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-H9",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "a gate named in the trigger definition and a decision recorded from an eligible reviewer",
+      "refs": [
+        "H3"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [
+          {
+            "location": "TRIGGER_DEFINITION"
+          }
+        ],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED"
+        }
+      }
+    },
+    {
+      "id": "AO-H-H2",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "N-2: an approval inferred from a command string",
+      "refs": [
+        "N-2",
+        "H3"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "STRING_HEURISTIC",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-H3",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "N-3: a gate present only in a prompt",
+      "refs": [
+        "N-3",
+        "H3"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [
+          {
+            "location": "PROMPT"
+          }
+        ],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-H4",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "N-4: a decision after the effect",
+      "refs": [
+        "N-4",
+        "H4"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 5
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-H5",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "N-10: a workload records the APPROVED outcome",
+      "refs": [
+        "N-10",
+        "H1a"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "WORKLOAD"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "WORKLOAD",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-H6",
+      "family": "H",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "R2-N1: APPROVED by a reviewer absent from the port's answer",
+      "refs": [
+        "R2-N1",
+        "H1a"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "ops-admin",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-P1",
+      "family": "H",
+      "check": "PROFILE",
+      "polarity": "NEGATIVE",
+      "title": "N-1: an auto-approve flag set",
+      "refs": [
+        "N-1",
+        "H2"
+      ],
+      "input": {
+        "sweepIntervals": {
+          "demand": 300,
+          "profile": 300,
+          "governance": 600
+        },
+        "settings": {
+          "quorum": 1,
+          "autoApprove": true
+        },
+        "env": {
+          "APPROVAL_STORE": "postgres"
+        }
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-H-P2",
+      "family": "H",
+      "check": "PROFILE",
+      "polarity": "NEGATIVE",
+      "title": "an auto-approve environment variable",
+      "refs": [
+        "H2"
+      ],
+      "input": {
+        "sweepIntervals": {
+          "demand": 300,
+          "profile": 300,
+          "governance": 600
+        },
+        "settings": {
+          "quorum": 1
+        },
+        "env": {
+          "APPROVAL_AUTO_APPROVE": "1"
+        }
+      },
+      "expect": {
+        "refuse": "AO_HEADLESS"
+      }
+    },
+    {
+      "id": "AO-N-H1",
+      "family": "N",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "a staff approval of R05's trust kind is an approval row",
+      "refs": [
+        "N1-SCOPE"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "trust",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "trust",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "trust",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [],
+        "now": 10,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "APPROVED"
+        }
+      }
+    },
+    {
+      "id": "AO-N-H2",
+      "family": "N",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a customer confirmation stored as an approval row",
+      "refs": [
+        "N1-SCOPE"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "customer-confirmation",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "ELIGIBLE",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 10
+          },
+          "decidedBy": {
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": null,
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "customer-confirmation",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "customer-confirmation",
+            "requestId": "apr-0001",
+            "occurredAt": 10,
+            "recordedAt": 10,
+            "sameTransaction": true,
+            "outcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "deciderType": "HUMAN",
+            "deciderId": "rev-1",
+            "source": "REVIEWER",
+            "portEligible": [
+              "rev-1",
+              "rev-2"
+            ],
+            "vote": "APPROVE",
+            "at": 10
+          }
+        ],
+        "gates": [],
+        "effects": [
+          {
+            "at": 20
+          }
+        ],
+        "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_SCOPE"
+      }
+    }
+  ]
+}

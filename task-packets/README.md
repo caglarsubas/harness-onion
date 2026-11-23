@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-012
+## Current source preparation — MET-013
+
+MET-013 (slot 295): the three HR contracts, a K = 0 step (319 packets at slot 295): HR-COMPACTION-GOV-001, the loop contract's compaction amendment (MAS-RA-008's successor record, R08's note); HR-REPLAY-FIXTURES-001, the replay-fixture contract over MAS-RA-002's run manifest (R12's draft); and HR-APPROVAL-OUTCOME-001, the approval outcome contract (R04's note), each in DATA-CORRECTNESS-001's form: a record holding its clauses as rule families, a closed JSON schema, its vectors, a reference model, a checker and a test; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracle).
+Alpha2 OPEN; 318 accepted (the catalog at slot 294) plus MET-013 only.
+
+## Historical three ready packets source preparation — MET-012
 
 MET-012 (slot 294): the three ready packets, a K = 3 step (318 packets at slot 294): MODEL-ADOPT-PINS-001 (mas-harness-model-plane), the llama.cpp open-source baseline dossier after PLANE-BOOTSTRAP-R06; IND-BANK-003A (mas-harness-industry-packs), the banking governance-and-integration slice (pack 0.3.0), IND-BANK-003's successor; and EXEC-TEMPORAL-PINS-001 (mas-harness-execution-plane), the Temporal provider dossier after PLANE-BOOTSTRAP-R08; the R06 and R08 plans' exact trees gain the adoption/ root; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracle).
 Alpha2 OPEN; 314 accepted (the catalog at slot 293) plus MET-012 and its three products only.
@@ -1856,3 +1861,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 316 | `MODEL-ADOPT-PINS-001` | `mas-harness-model-plane` | The llama.cpp open-source baseline dossier (digests, licences, notices and an SPDX SBOM; no engine code), after PLANE-BOOTSTRAP-R06 (product, published by MET-012) |
 | 317 | `IND-BANK-003A` | `mas-harness-industry-packs` | The banking governance-and-integration slice (pack 0.3.0), IND-BANK-003's successor (product, published by MET-012) |
 | 318 | `EXEC-TEMPORAL-PINS-001` | `mas-harness-execution-plane` | The Temporal provider dossier (provider record, CycloneDX SBOM, licence and notice review; no runtime code), after PLANE-BOOTSTRAP-R08 (product, published by MET-012) |
+| 319 | `MET-013` | `Harness-Engineering` | The three HR contracts (K = 0, 319 packets at slot 295): HR-COMPACTION-GOV-001, HR-REPLAY-FIXTURES-001 and HR-APPROVAL-OUTCOME-001, in-repo records with their schemas, vectors, models, checkers and tests; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |

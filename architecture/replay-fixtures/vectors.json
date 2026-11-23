@@ -1,0 +1,3964 @@
+{
+  "schemaVersion": "harness.planeon.ai/replay-fixtures-vectors/v1",
+  "stores": {
+    "blobs": {
+      "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005": "{\"content\": \"#!/bin/sh\\necho ok\\n\", \"mode\": \"EXECUTABLE\", \"path\": \"bin/check.sh\", \"tool\": \"write_file\"}\n",
+      "sha256:579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3": "TASK fx-dev-0001: change greeting.txt from hello to hello, world.\nWORKSPACE greeting.txt\n",
+      "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a": "{\"content\": \"hello, world\\n\", \"path\": \"greeting.txt\", \"tool\": \"write_file\"}\n",
+      "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655": "{\"done\":true}\n",
+      "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591": "TASK fx-dev-0002: add an executable bin/check.sh that prints ok; leave greeting.txt as it is.\nWORKSPACE greeting.txt\n",
+      "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa": "TOOL RESULT {\"ok\":true}\n",
+      "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726": "{\"ok\":true}\n"
+    },
+    "splits": {
+      "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4": {
+        "schemaVersion": "planeon.internal.split-declaration/v1",
+        "splitId": "fx-dev",
+        "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+        "declaredAt": "2026-11-23T08:00:00Z",
+        "partitions": {
+          "DEVELOPMENT": [
+            {
+              "taskId": "fx-dev-0001",
+              "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2"
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "taskDigest": "sha256:84fd07b38c1c8077c6ad61468b4257a1d949cb8d7bf98d5a373ffff42ce62724"
+            }
+          ],
+          "HELD_OUT": [
+            {
+              "taskId": "fx-held-0001",
+              "taskDigest": "sha256:8d3ed9304cd25bc5fd8da60b67c443feaa2d4801091d22c0f3bf9facb722cff8"
+            }
+          ]
+        }
+      }
+    },
+    "manifests": {
+      "sha256:1f5ba5f8cdce858ec5f10731130d35062286224f6190da9df8a6278489d977a3": {
+        "schemaVersion": "planeon.internal.run-manifest/v1",
+        "runId": "fx-dev-rec-1",
+        "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+        "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+        "configuration": {
+          "model": {
+            "id": "fx-scripted-model",
+            "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+          },
+          "harness": {
+            "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+            "dirty": false
+          },
+          "budget": {
+            "tokensPerTask": 4096,
+            "costMicrosPerTask": 0,
+            "wallClockSecondsPerTask": 600
+          },
+          "agentCount": 1
+        },
+        "locks": {
+          "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+          "promptDigests": [
+            "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+          ],
+          "toolSchemaDigests": [
+            "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+          ],
+          "imageDigests": [
+            "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+          ],
+          "dependencyLockDigests": [
+            "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+          ],
+          "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+          "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+          "evaluator": {
+            "id": "fx-tree-evaluator",
+            "version": "1",
+            "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+          },
+          "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+        },
+        "seed": {
+          "mode": "FIXED",
+          "value": 1
+        },
+        "execution": {
+          "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+          "parallelism": 1
+        },
+        "split": {
+          "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+          "partition": "DEVELOPMENT"
+        },
+        "repetition": 1,
+        "writtenAt": "2026-11-23T09:00:00Z",
+        "startedAt": "2026-11-23T09:00:00Z",
+        "ledgerDigest": null
+      },
+      "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b": {
+        "schemaVersion": "planeon.internal.run-manifest/v1",
+        "runId": "fx-dev-run-1",
+        "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+        "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+        "configuration": {
+          "model": {
+            "id": "fx-scripted-model",
+            "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+          },
+          "harness": {
+            "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+            "dirty": false
+          },
+          "budget": {
+            "tokensPerTask": 4096,
+            "costMicrosPerTask": 0,
+            "wallClockSecondsPerTask": 600
+          },
+          "agentCount": 1
+        },
+        "locks": {
+          "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+          "promptDigests": [
+            "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+          ],
+          "toolSchemaDigests": [
+            "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+          ],
+          "imageDigests": [
+            "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+          ],
+          "dependencyLockDigests": [
+            "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+          ],
+          "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+          "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+          "evaluator": {
+            "id": "fx-tree-evaluator",
+            "version": "1",
+            "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+          },
+          "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+        },
+        "seed": {
+          "mode": "FIXED",
+          "value": 2
+        },
+        "execution": {
+          "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+          "parallelism": 1
+        },
+        "split": {
+          "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+          "partition": "DEVELOPMENT"
+        },
+        "repetition": 1,
+        "writtenAt": "2026-11-23T09:00:00Z",
+        "startedAt": "2026-11-23T09:00:00Z",
+        "ledgerDigest": null
+      }
+    },
+    "fixtures": {
+      "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6": {
+        "schemaVersion": "planeon.internal.replay-fixture/v1",
+        "fixtureId": "fx-dev-0001.v1",
+        "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+        "taskId": "fx-dev-0001",
+        "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+        "split": {
+          "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+          "partition": "DEVELOPMENT"
+        },
+        "workspaceBefore": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+            }
+          ]
+        },
+        "expectedAfter": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+            }
+          ]
+        },
+        "ignoredPaths": [],
+        "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+        "requestMatch": "DIGEST",
+        "generator": {
+          "id": "fixture-builder",
+          "version": "1",
+          "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+        }
+      },
+      "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d": {
+        "schemaVersion": "planeon.internal.replay-fixture/v1",
+        "fixtureId": "fx-dev-0002.v1",
+        "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+        "taskId": "fx-dev-0002",
+        "taskDigest": "sha256:84fd07b38c1c8077c6ad61468b4257a1d949cb8d7bf98d5a373ffff42ce62724",
+        "split": {
+          "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+          "partition": "DEVELOPMENT"
+        },
+        "workspaceBefore": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+            }
+          ]
+        },
+        "expectedAfter": {
+          "entries": [
+            {
+              "path": "bin/check.sh",
+              "kind": "EXECUTABLE",
+              "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+            },
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+            }
+          ]
+        },
+        "ignoredPaths": [],
+        "trajectoryDigest": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+        "requestMatch": "DIGEST",
+        "generator": {
+          "id": "fixture-builder",
+          "version": "1",
+          "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+        }
+      }
+    },
+    "trajectories": {
+      "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a": {
+        "schemaVersion": "planeon.internal.replay-trajectory/v1",
+        "trajectoryId": "fx-dev-0001.t1",
+        "taskId": "fx-dev-0001",
+        "manifest": {
+          "schemaVersion": "planeon.internal.run-manifest/v1",
+          "runId": "fx-dev-rec-1",
+          "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          },
+          "seed": {
+            "mode": "FIXED",
+            "value": 1
+          },
+          "execution": {
+            "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+            "parallelism": 1
+          },
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "repetition": 1,
+          "writtenAt": "2026-11-23T09:00:00Z",
+          "startedAt": "2026-11-23T09:00:00Z",
+          "ledgerDigest": null
+        },
+        "steps": [
+          {
+            "index": 1,
+            "actor": "MODEL",
+            "requestDigest": "sha256:579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3",
+            "responseDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a"
+          },
+          {
+            "index": 2,
+            "actor": "TOOL",
+            "requestDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a",
+            "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+          },
+          {
+            "index": 3,
+            "actor": "MODEL",
+            "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+            "responseDigest": "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+          }
+        ],
+        "exit": {
+          "status": "COMPLETED",
+          "code": "DONE"
+        }
+      },
+      "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06": {
+        "schemaVersion": "planeon.internal.replay-trajectory/v1",
+        "trajectoryId": "fx-dev-0002.t1",
+        "taskId": "fx-dev-0002",
+        "manifest": {
+          "schemaVersion": "planeon.internal.run-manifest/v1",
+          "runId": "fx-dev-rec-1",
+          "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          },
+          "seed": {
+            "mode": "FIXED",
+            "value": 1
+          },
+          "execution": {
+            "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+            "parallelism": 1
+          },
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "repetition": 1,
+          "writtenAt": "2026-11-23T09:00:00Z",
+          "startedAt": "2026-11-23T09:00:00Z",
+          "ledgerDigest": null
+        },
+        "steps": [
+          {
+            "index": 1,
+            "actor": "MODEL",
+            "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+            "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+          },
+          {
+            "index": 2,
+            "actor": "TOOL",
+            "requestDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005",
+            "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+          },
+          {
+            "index": 3,
+            "actor": "MODEL",
+            "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+            "responseDigest": "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+          }
+        ],
+        "exit": {
+          "status": "COMPLETED",
+          "code": "DONE"
+        }
+      },
+      "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23": {
+        "schemaVersion": "planeon.internal.replay-trajectory/v1",
+        "trajectoryId": "fx-dev-0001.r1",
+        "taskId": "fx-dev-0001",
+        "manifest": {
+          "schemaVersion": "planeon.internal.run-manifest/v1",
+          "runId": "fx-dev-run-1",
+          "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          },
+          "seed": {
+            "mode": "FIXED",
+            "value": 2
+          },
+          "execution": {
+            "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+            "parallelism": 1
+          },
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "repetition": 1,
+          "writtenAt": "2026-11-23T09:00:00Z",
+          "startedAt": "2026-11-23T09:00:00Z",
+          "ledgerDigest": null
+        },
+        "steps": [
+          {
+            "index": 1,
+            "actor": "MODEL",
+            "requestDigest": "sha256:579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3",
+            "responseDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a"
+          },
+          {
+            "index": 2,
+            "actor": "TOOL",
+            "requestDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a",
+            "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+          },
+          {
+            "index": 3,
+            "actor": "MODEL",
+            "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+            "responseDigest": "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+          }
+        ],
+        "exit": {
+          "status": "COMPLETED",
+          "code": "DONE"
+        }
+      },
+      "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098": {
+        "schemaVersion": "planeon.internal.replay-trajectory/v1",
+        "trajectoryId": "fx-dev-0002.r1",
+        "taskId": "fx-dev-0002",
+        "manifest": {
+          "schemaVersion": "planeon.internal.run-manifest/v1",
+          "runId": "fx-dev-run-1",
+          "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          },
+          "seed": {
+            "mode": "FIXED",
+            "value": 2
+          },
+          "execution": {
+            "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+            "parallelism": 1
+          },
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "repetition": 1,
+          "writtenAt": "2026-11-23T09:00:00Z",
+          "startedAt": "2026-11-23T09:00:00Z",
+          "ledgerDigest": null
+        },
+        "steps": [
+          {
+            "index": 1,
+            "actor": "MODEL",
+            "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+            "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+          }
+        ],
+        "exit": {
+          "status": "BUDGET_EXCEEDED",
+          "code": "BUDGET_TOKENS"
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "RF-FX-P1",
+      "family": "FIXTURE",
+      "check": "FIXTURE",
+      "polarity": "POSITIVE",
+      "title": "fx-dev-0001.v1, built from its recorded trajectory t1, is accepted",
+      "input": {
+        "fixture": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "digest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "partition": "DEVELOPMENT"
+        }
+      }
+    },
+    {
+      "id": "RF-FX-P2",
+      "family": "FIXTURE",
+      "check": "FIXTURE",
+      "polarity": "POSITIVE",
+      "title": "fx-dev-0002.v1 (an EXECUTABLE entry) is accepted",
+      "input": {
+        "fixture": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "digest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        }
+      }
+    },
+    {
+      "id": "RF-FX-N1",
+      "family": "FIXTURE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "a fixture without its generator is refused by shape (MAS-RA-002's SHAPE)",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST"
+        }
+      },
+      "expect": {
+        "refuse": "SHAPE"
+      }
+    },
+    {
+      "id": "RF-PL-N1",
+      "family": "PLACEMENT",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "a HELD_OUT fixture document in a public store, built in memory from a DEVELOPMENT fixture (none is stored)",
+      "input": {
+        "fixture": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "inMemoryPartition": "HELD_OUT"
+      },
+      "expect": {
+        "refuse": "HELD_OUT_PUBLIC"
+      }
+    },
+    {
+      "id": "RF-PL-P1",
+      "family": "PLACEMENT",
+      "check": "FIXTURE",
+      "polarity": "POSITIVE",
+      "title": "a DEVELOPMENT fixture in the public store is accepted: fx-dev-0002.v1, as stored",
+      "input": {
+        "fixture": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "partition": "DEVELOPMENT"
+        }
+      }
+    },
+    {
+      "id": "RF-TR-N1",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "an absolute path in the expected tree",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "/etc/greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-TR-N2",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "two paths equal after ASCII case folding",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "Greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              },
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-TR-N3",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "one entry's path is a directory prefix of another's",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0002.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0002",
+          "taskDigest": "sha256:84fd07b38c1c8077c6ad61468b4257a1d949cb8d7bf98d5a373ffff42ce62724",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "bin",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              },
+              {
+                "path": "bin/check.sh",
+                "kind": "EXECUTABLE",
+                "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+              },
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-TR-N4",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "a SYMLINK whose target leaves the tree",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              },
+              {
+                "path": "link",
+                "kind": "SYMLINK",
+                "digest": "sha256:c3df92a4954c2880e429fa586dc098d93cea8d503221cec3ca72c809f29741fc"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        },
+        "blobs": {
+          "sha256:c3df92a4954c2880e429fa586dc098d93cea8d503221cec3ca72c809f29741fc": "../outside.txt"
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-TR-N5",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "(b) a SYMLINK whose target is not in the blob store",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              },
+              {
+                "path": "link",
+                "kind": "SYMLINK",
+                "digest": "sha256:e539c04ee47518557748853cfbb301885bc4d636fda99164686708d5bab35f20"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-TR-P1",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "POSITIVE",
+      "title": "(b) a SYMLINK to a FILE entry of the same tree, its target read from the blobs",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              },
+              {
+                "path": "link",
+                "kind": "SYMLINK",
+                "digest": "sha256:e539c04ee47518557748853cfbb301885bc4d636fda99164686708d5bab35f20"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        },
+        "blobs": {
+          "sha256:e539c04ee47518557748853cfbb301885bc4d636fda99164686708d5bab35f20": "greeting.txt"
+        }
+      },
+      "expect": {
+        "accept": true
+      }
+    },
+    {
+      "id": "RF-TR-N6",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "an ignored path with a '..' segment",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [
+            {
+              "path": "logs/../x",
+              "reason": "noise"
+            }
+          ],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-TR-N7",
+      "family": "TREE",
+      "check": "FIXTURE",
+      "polarity": "NEGATIVE",
+      "title": "tree entries out of UTF-8 byte order",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0002.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0002",
+          "taskDigest": "sha256:84fd07b38c1c8077c6ad61468b4257a1d949cb8d7bf98d5a373ffff42ce62724",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              },
+              {
+                "path": "bin/check.sh",
+                "kind": "EXECUTABLE",
+                "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "TREE_ORDER"
+      }
+    },
+    {
+      "id": "RF-TJ-P1",
+      "family": "TRAJECTORY",
+      "check": "TRAJECTORY",
+      "polarity": "POSITIVE",
+      "title": "the recorded trajectory fx-dev-0001.t1 embeds M0 and is accepted",
+      "input": {
+        "trajectory": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "manifestDigest": "sha256:1f5ba5f8cdce858ec5f10731130d35062286224f6190da9df8a6278489d977a3",
+          "exit": "COMPLETED"
+        }
+      }
+    },
+    {
+      "id": "RF-TJ-P2",
+      "family": "TRAJECTORY",
+      "check": "TRAJECTORY",
+      "polarity": "POSITIVE",
+      "title": "the scored run's fx-dev-0002.r1 (BUDGET_EXCEEDED, BUDGET_TOKENS) embeds M1",
+      "input": {
+        "trajectory": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "exit": "BUDGET_EXCEEDED"
+        }
+      }
+    },
+    {
+      "id": "RF-TJ-N1",
+      "family": "TRAJECTORY",
+      "check": "TRAJECTORY",
+      "polarity": "NEGATIVE",
+      "title": "F2: a trajectory whose exit.code is EVALUATOR_ERROR is refused by the closed list (a grader fails after the run)",
+      "input": {
+        "trajectory": {
+          "schemaVersion": "planeon.internal.replay-trajectory/v1",
+          "trajectoryId": "fx-dev-0002.r1b",
+          "taskId": "fx-dev-0002",
+          "manifest": {
+            "schemaVersion": "planeon.internal.run-manifest/v1",
+            "runId": "fx-dev-run-1",
+            "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+            "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+            "configuration": {
+              "model": {
+                "id": "fx-scripted-model",
+                "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+              },
+              "harness": {
+                "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                "dirty": false
+              },
+              "budget": {
+                "tokensPerTask": 4096,
+                "costMicrosPerTask": 0,
+                "wallClockSecondsPerTask": 600
+              },
+              "agentCount": 1
+            },
+            "locks": {
+              "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+              "promptDigests": [
+                "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+              ],
+              "toolSchemaDigests": [
+                "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+              ],
+              "imageDigests": [
+                "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+              ],
+              "dependencyLockDigests": [
+                "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+              ],
+              "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+              "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+              "evaluator": {
+                "id": "fx-tree-evaluator",
+                "version": "1",
+                "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+              },
+              "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+            },
+            "seed": {
+              "mode": "FIXED",
+              "value": 2
+            },
+            "execution": {
+              "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+              "parallelism": 1
+            },
+            "split": {
+              "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+              "partition": "DEVELOPMENT"
+            },
+            "repetition": 1,
+            "writtenAt": "2026-11-23T09:00:00Z",
+            "startedAt": "2026-11-23T09:00:00Z",
+            "ledgerDigest": null
+          },
+          "steps": [
+            {
+              "index": 1,
+              "actor": "MODEL",
+              "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+              "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+            }
+          ],
+          "exit": {
+            "status": "BLOCKED",
+            "code": "EVALUATOR_ERROR"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "SHAPE"
+      }
+    },
+    {
+      "id": "RF-TJ-N2",
+      "family": "TRAJECTORY",
+      "check": "TRAJECTORY",
+      "polarity": "NEGATIVE",
+      "title": "the embedded manifest was written before its split was declared (MAS-RA-002's own code)",
+      "input": {
+        "trajectory": {
+          "schemaVersion": "planeon.internal.replay-trajectory/v1",
+          "trajectoryId": "fx-dev-0001.t1",
+          "taskId": "fx-dev-0001",
+          "manifest": {
+            "schemaVersion": "planeon.internal.run-manifest/v1",
+            "runId": "fx-dev-rec-1",
+            "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+            "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+            "configuration": {
+              "model": {
+                "id": "fx-scripted-model",
+                "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+              },
+              "harness": {
+                "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                "dirty": false
+              },
+              "budget": {
+                "tokensPerTask": 4096,
+                "costMicrosPerTask": 0,
+                "wallClockSecondsPerTask": 600
+              },
+              "agentCount": 1
+            },
+            "locks": {
+              "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+              "promptDigests": [
+                "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+              ],
+              "toolSchemaDigests": [
+                "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+              ],
+              "imageDigests": [
+                "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+              ],
+              "dependencyLockDigests": [
+                "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+              ],
+              "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+              "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+              "evaluator": {
+                "id": "fx-tree-evaluator",
+                "version": "1",
+                "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+              },
+              "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+            },
+            "seed": {
+              "mode": "FIXED",
+              "value": 1
+            },
+            "execution": {
+              "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+              "parallelism": 1
+            },
+            "split": {
+              "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+              "partition": "DEVELOPMENT"
+            },
+            "repetition": 1,
+            "writtenAt": "2026-11-23T07:00:00Z",
+            "startedAt": "2026-11-23T07:00:00Z",
+            "ledgerDigest": null
+          },
+          "steps": [
+            {
+              "index": 1,
+              "actor": "MODEL",
+              "requestDigest": "sha256:579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3",
+              "responseDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a"
+            },
+            {
+              "index": 2,
+              "actor": "TOOL",
+              "requestDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a",
+              "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+            },
+            {
+              "index": 3,
+              "actor": "MODEL",
+              "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+              "responseDigest": "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+            }
+          ],
+          "exit": {
+            "status": "COMPLETED",
+            "code": "DONE"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "SPLIT_AFTER_RUN"
+      }
+    },
+    {
+      "id": "RF-TJ-N3",
+      "family": "TRAJECTORY",
+      "check": "TRAJECTORY",
+      "polarity": "NEGATIVE",
+      "title": "a step's response blob is not in the store",
+      "input": {
+        "trajectory": {
+          "schemaVersion": "planeon.internal.replay-trajectory/v1",
+          "trajectoryId": "fx-dev-0001.t1",
+          "taskId": "fx-dev-0001",
+          "manifest": {
+            "schemaVersion": "planeon.internal.run-manifest/v1",
+            "runId": "fx-dev-rec-1",
+            "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+            "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+            "configuration": {
+              "model": {
+                "id": "fx-scripted-model",
+                "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+              },
+              "harness": {
+                "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                "dirty": false
+              },
+              "budget": {
+                "tokensPerTask": 4096,
+                "costMicrosPerTask": 0,
+                "wallClockSecondsPerTask": 600
+              },
+              "agentCount": 1
+            },
+            "locks": {
+              "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+              "promptDigests": [
+                "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+              ],
+              "toolSchemaDigests": [
+                "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+              ],
+              "imageDigests": [
+                "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+              ],
+              "dependencyLockDigests": [
+                "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+              ],
+              "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+              "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+              "evaluator": {
+                "id": "fx-tree-evaluator",
+                "version": "1",
+                "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+              },
+              "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+            },
+            "seed": {
+              "mode": "FIXED",
+              "value": 1
+            },
+            "execution": {
+              "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+              "parallelism": 1
+            },
+            "split": {
+              "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+              "partition": "DEVELOPMENT"
+            },
+            "repetition": 1,
+            "writtenAt": "2026-11-23T09:00:00Z",
+            "startedAt": "2026-11-23T09:00:00Z",
+            "ledgerDigest": null
+          },
+          "steps": [
+            {
+              "index": 1,
+              "actor": "MODEL",
+              "requestDigest": "sha256:579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3",
+              "responseDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a"
+            },
+            {
+              "index": 2,
+              "actor": "TOOL",
+              "requestDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a",
+              "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+            },
+            {
+              "index": 3,
+              "actor": "MODEL",
+              "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+              "responseDigest": "sha256:141dec488241cac2170371b353444e1be1cba46363be033c5491e56c756cbaa2"
+            }
+          ],
+          "exit": {
+            "status": "COMPLETED",
+            "code": "DONE"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "UNKNOWN_REFERENCE"
+      }
+    },
+    {
+      "id": "RF-TJ-N4",
+      "family": "TRAJECTORY",
+      "check": "TRAJECTORY",
+      "polarity": "NEGATIVE",
+      "title": "step indexes with a gap",
+      "input": {
+        "trajectory": {
+          "schemaVersion": "planeon.internal.replay-trajectory/v1",
+          "trajectoryId": "fx-dev-0001.t1",
+          "taskId": "fx-dev-0001",
+          "manifest": {
+            "schemaVersion": "planeon.internal.run-manifest/v1",
+            "runId": "fx-dev-rec-1",
+            "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+            "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+            "configuration": {
+              "model": {
+                "id": "fx-scripted-model",
+                "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+              },
+              "harness": {
+                "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                "dirty": false
+              },
+              "budget": {
+                "tokensPerTask": 4096,
+                "costMicrosPerTask": 0,
+                "wallClockSecondsPerTask": 600
+              },
+              "agentCount": 1
+            },
+            "locks": {
+              "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+              "promptDigests": [
+                "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+              ],
+              "toolSchemaDigests": [
+                "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+              ],
+              "imageDigests": [
+                "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+              ],
+              "dependencyLockDigests": [
+                "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+              ],
+              "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+              "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+              "evaluator": {
+                "id": "fx-tree-evaluator",
+                "version": "1",
+                "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+              },
+              "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+            },
+            "seed": {
+              "mode": "FIXED",
+              "value": 1
+            },
+            "execution": {
+              "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+              "parallelism": 1
+            },
+            "split": {
+              "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+              "partition": "DEVELOPMENT"
+            },
+            "repetition": 1,
+            "writtenAt": "2026-11-23T09:00:00Z",
+            "startedAt": "2026-11-23T09:00:00Z",
+            "ledgerDigest": null
+          },
+          "steps": [
+            {
+              "index": 1,
+              "actor": "MODEL",
+              "requestDigest": "sha256:579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3",
+              "responseDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a"
+            },
+            {
+              "index": 2,
+              "actor": "TOOL",
+              "requestDigest": "sha256:5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a",
+              "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+            },
+            {
+              "index": 4,
+              "actor": "MODEL",
+              "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+              "responseDigest": "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+            }
+          ],
+          "exit": {
+            "status": "COMPLETED",
+            "code": "DONE"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "SHAPE"
+      }
+    },
+    {
+      "id": "RF-RP-P1",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "POSITIVE",
+      "title": "U1: fx-dev-0001 replays t1 and ends with the expected tree",
+      "input": {
+        "fixture": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "trajectory": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+        "sent": [
+          "TASK fx-dev-0001: change greeting.txt from hello to hello, world.\nWORKSPACE greeting.txt\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "REPLAY_MATCH",
+          "afterTreeDigest": "sha256:d7576fd3af287dd8a0b0baa07d79775dc34c39ed5813207481fe1f59326e3daa"
+        }
+      }
+    },
+    {
+      "id": "RF-RP-P2",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "POSITIVE",
+      "title": "U1: fx-dev-0002 replays t1 and ends with the expected tree",
+      "input": {
+        "fixture": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+        "trajectory": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+        "sent": [
+          "TASK fx-dev-0002: add an executable bin/check.sh that prints ok; leave greeting.txt as it is.\nWORKSPACE greeting.txt\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "bin/check.sh",
+              "kind": "EXECUTABLE",
+              "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+            },
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "REPLAY_MATCH",
+          "afterTreeDigest": "sha256:9dd73ea9c265d67e888d64cedb2ab69808623fcf114c33e37bfeb3b0710972ac"
+        }
+      }
+    },
+    {
+      "id": "RF-RP-P3",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "POSITIVE",
+      "title": "mutant 1: greeting.txt written with a trailing space gives TREE_MISMATCH",
+      "input": {
+        "fixture": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "trajectory": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+        "sent": [
+          "TASK fx-dev-0001: change greeting.txt from hello to hello, world.\nWORKSPACE greeting.txt\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:3c32ed4810e09d7917ad78a2f44d544af66559a1ce0ca68cb4306064f7d1074f"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "TREE_MISMATCH"
+        }
+      }
+    },
+    {
+      "id": "RF-RP-P4",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "POSITIVE",
+      "title": "mutant 2: the executable bit dropped gives TREE_MISMATCH (the kind differs)",
+      "input": {
+        "fixture": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+        "trajectory": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+        "sent": [
+          "TASK fx-dev-0002: add an executable bin/check.sh that prints ok; leave greeting.txt as it is.\nWORKSPACE greeting.txt\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "bin/check.sh",
+              "kind": "FILE",
+              "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+            },
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "TREE_MISMATCH"
+        }
+      }
+    },
+    {
+      "id": "RF-RP-P5",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "POSITIVE",
+      "title": "mutant 3: a different first prompt gives REPLAY_DIVERGED at step 1",
+      "input": {
+        "fixture": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "trajectory": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+        "sent": [
+          "TASK fx-dev-0001: please change greeting.txt.\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "REPLAY_DIVERGED",
+          "divergedAtStep": 1,
+          "afterTreeDigest": null
+        }
+      }
+    },
+    {
+      "id": "RF-RP-P6",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "POSITIVE",
+      "title": "under INDEX a different request is answered by index; only the tree check remains and the verdict reports INDEX",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "INDEX",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          },
+          "requestMatchReason": "the prompt carries a time the fixture does not pin"
+        },
+        "trajectory": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+        "sent": [
+          "TASK fx-dev-0001 at 09:00: change greeting.txt.\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "REPLAY_MATCH",
+          "requestMatch": "INDEX"
+        }
+      }
+    },
+    {
+      "id": "RF-RP-N1",
+      "family": "REPLAY",
+      "check": "REPLAY",
+      "polarity": "NEGATIVE",
+      "title": "the path mutant: an expected entry ../escape.sh is refused before anything is materialised",
+      "input": {
+        "fixture": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0002.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0002",
+          "taskDigest": "sha256:84fd07b38c1c8077c6ad61468b4257a1d949cb8d7bf98d5a373ffff42ce62724",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "../escape.sh",
+                "kind": "EXECUTABLE",
+                "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+              },
+              {
+                "path": "bin/check.sh",
+                "kind": "EXECUTABLE",
+                "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+              },
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        },
+        "trajectory": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+        "sent": [
+          "TASK fx-dev-0002: add an executable bin/check.sh that prints ok; leave greeting.txt as it is.\nWORKSPACE greeting.txt\n",
+          "TOOL RESULT {\"ok\":true}\n"
+        ],
+        "after": {
+          "entries": [
+            {
+              "path": "bin/check.sh",
+              "kind": "EXECUTABLE",
+              "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+            },
+            {
+              "path": "greeting.txt",
+              "kind": "FILE",
+              "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refuse": "TREE_PATH"
+      }
+    },
+    {
+      "id": "RF-VD-P1",
+      "family": "VERDICT",
+      "check": "VERDICT",
+      "polarity": "POSITIVE",
+      "title": "a REPLAY_MATCH verdict record names the after-tree's digest",
+      "input": {
+        "verdict": {
+          "schemaVersion": "planeon.internal.replay-verdict/v1",
+          "verdictId": "fx-dev-0001.u1",
+          "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "harnessCommit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+          "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488",
+          "requestMatch": "DIGEST",
+          "verdict": "REPLAY_MATCH",
+          "divergedAtStep": null,
+          "afterTreeDigest": "sha256:d7576fd3af287dd8a0b0baa07d79775dc34c39ed5813207481fe1f59326e3daa"
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "REPLAY_MATCH"
+        }
+      }
+    },
+    {
+      "id": "RF-VD-P2",
+      "family": "VERDICT",
+      "check": "VERDICT",
+      "polarity": "POSITIVE",
+      "title": "a REPLAY_DIVERGED verdict record names its step and no after-tree",
+      "input": {
+        "verdict": {
+          "schemaVersion": "planeon.internal.replay-verdict/v1",
+          "verdictId": "fx-dev-0001.u1",
+          "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "harnessCommit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+          "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488",
+          "requestMatch": "DIGEST",
+          "verdict": "REPLAY_DIVERGED",
+          "divergedAtStep": 1,
+          "afterTreeDigest": null
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "verdict": "REPLAY_DIVERGED"
+        }
+      }
+    },
+    {
+      "id": "RF-VD-N1",
+      "family": "VERDICT",
+      "check": "VERDICT",
+      "polarity": "NEGATIVE",
+      "title": "a REPLAY_DIVERGED verdict record with an after-tree digest",
+      "input": {
+        "verdict": {
+          "schemaVersion": "planeon.internal.replay-verdict/v1",
+          "verdictId": "fx-dev-0001.u1",
+          "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "harnessCommit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+          "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488",
+          "requestMatch": "DIGEST",
+          "verdict": "REPLAY_DIVERGED",
+          "divergedAtStep": 1,
+          "afterTreeDigest": "sha256:d7576fd3af287dd8a0b0baa07d79775dc34c39ed5813207481fe1f59326e3daa"
+        }
+      },
+      "expect": {
+        "refuse": "SHAPE"
+      }
+    },
+    {
+      "id": "RF-SC-P1",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "POSITIVE",
+      "title": "U2: M1's scoring record, fx-dev-0001.r1 PASSED 1,000,000 and fx-dev-0002.r1 (BUDGET_EXCEEDED) ERRORED 0",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "enters": true,
+          "scores": {
+            "fx-dev-0001": 1000000,
+            "fx-dev-0002": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "RF-SC-P2",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "POSITIVE",
+      "title": "a COMPLETED run whose tree differs scores FAILED with the evaluator's partial score",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:3c32ed4810e09d7917ad78a2f44d544af66559a1ce0ca68cb4306064f7d1074f"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "FAILED",
+              "score": 400000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "scores": {
+            "fx-dev-0001": 400000,
+            "fx-dev-0002": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "RF-SC-N1",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "a score taken from the agent's own report",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "AGENT_REPORT"
+        }
+      },
+      "expect": {
+        "refuse": "SELF_REPORTED_SCORE"
+      }
+    },
+    {
+      "id": "RF-SC-N2",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "a BUDGET_EXCEEDED task scored PASSED",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "OUTCOME_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-SC-N3",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "a tree that differs scored at 1,000,000 (only a matching tree passes)",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:3c32ed4810e09d7917ad78a2f44d544af66559a1ce0ca68cb4306064f7d1074f"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "FAILED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "OUTCOME_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-SC-N4",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "an exit status that is not the trajectory's",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "ERRORED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "OUTCOME_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-SC-N5",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "a scoring record that misses a partition task (MAS-RA-002's TASK_SET)",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "TASK_SET"
+      }
+    },
+    {
+      "id": "RF-SC-N6",
+      "family": "SCORE",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "D1: a result naming the recording run's t1 (it embeds M0, not M1)",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "CONFIGURATION_MIXED"
+      }
+    },
+    {
+      "id": "RF-BD-P1",
+      "family": "BINDING",
+      "check": "SCORE",
+      "polarity": "POSITIVE",
+      "title": "F, the sorted digests of both fixtures, is M1's fixtureDigest lock, and each result names its own task's fixture",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "enters": true
+        }
+      }
+    },
+    {
+      "id": "RF-BD-N1",
+      "family": "BINDING",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "F holds one fixture, so digest(F) is not M1's fixtureDigest lock",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "FIXTURE_BINDING"
+      }
+    },
+    {
+      "id": "RF-BD-N2",
+      "family": "BINDING",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "a result names the other task's fixture",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        }
+      },
+      "expect": {
+        "refuse": "FIXTURE_BINDING"
+      }
+    },
+    {
+      "id": "RF-BL-P1",
+      "family": "BLOCKED",
+      "check": "SCORE",
+      "polarity": "POSITIVE",
+      "title": "F2's row: a COMPLETED trajectory whose GRADE record is in envelope ERROR gives BLOCKED, 0, EVALUATOR_ERROR and that record's digest; the run stays out of the evaluation record",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "BLOCKED",
+              "score": 0,
+              "blockerCode": "EVALUATOR_ERROR",
+              "evidenceDigest": "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f"
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        },
+        "gradeRecords": {
+          "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f": {
+            "envelope": "ERROR"
+          }
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "enters": false
+        }
+      }
+    },
+    {
+      "id": "RF-BL-P2",
+      "family": "BLOCKED",
+      "check": "SCORE",
+      "polarity": "POSITIVE",
+      "title": "the BLOCKED variant of fx-dev-0002 (SANDBOX_UNAVAILABLE, with evidence) keeps M1's run out of the evaluation record",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "trajectories": {
+          "sha256:8fa1438f2cfafb22a434829d9131b9c0efc29eff1146e458c1b4da779aba803c": {
+            "schemaVersion": "planeon.internal.replay-trajectory/v1",
+            "trajectoryId": "fx-dev-0002.r1b",
+            "taskId": "fx-dev-0002",
+            "manifest": {
+              "schemaVersion": "planeon.internal.run-manifest/v1",
+              "runId": "fx-dev-run-1",
+              "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+              "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+              "configuration": {
+                "model": {
+                  "id": "fx-scripted-model",
+                  "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+                },
+                "harness": {
+                  "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                  "dirty": false
+                },
+                "budget": {
+                  "tokensPerTask": 4096,
+                  "costMicrosPerTask": 0,
+                  "wallClockSecondsPerTask": 600
+                },
+                "agentCount": 1
+              },
+              "locks": {
+                "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+                "promptDigests": [
+                  "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+                ],
+                "toolSchemaDigests": [
+                  "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+                ],
+                "imageDigests": [
+                  "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+                ],
+                "dependencyLockDigests": [
+                  "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+                ],
+                "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+                "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+                "evaluator": {
+                  "id": "fx-tree-evaluator",
+                  "version": "1",
+                  "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+                },
+                "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+              },
+              "seed": {
+                "mode": "FIXED",
+                "value": 2
+              },
+              "execution": {
+                "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+                "parallelism": 1
+              },
+              "split": {
+                "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+                "partition": "DEVELOPMENT"
+              },
+              "repetition": 1,
+              "writtenAt": "2026-11-23T09:00:00Z",
+              "startedAt": "2026-11-23T09:00:00Z",
+              "ledgerDigest": null
+            },
+            "steps": [
+              {
+                "index": 1,
+                "actor": "MODEL",
+                "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+                "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+              }
+            ],
+            "exit": {
+              "status": "BLOCKED",
+              "code": "SANDBOX_UNAVAILABLE"
+            }
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:8fa1438f2cfafb22a434829d9131b9c0efc29eff1146e458c1b4da779aba803c",
+              "exitStatus": "BLOCKED",
+              "outcome": "BLOCKED",
+              "score": 0,
+              "blockerCode": "SANDBOX_UNAVAILABLE",
+              "evidenceDigest": "sha256:5eb6f57dc28a1bd1bb02c6f849504641ce3a80f7f4440521f1c7644325cb18fb"
+            }
+          ],
+          "scoredFrom": "TRACE"
+        },
+        "environmentEvidence": [
+          "sha256:5eb6f57dc28a1bd1bb02c6f849504641ce3a80f7f4440521f1c7644325cb18fb"
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "enters": false
+        }
+      }
+    },
+    {
+      "id": "RF-BL-N1",
+      "family": "BLOCKED",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "a BLOCKED result whose environment evidence is not recorded",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "trajectories": {
+          "sha256:8fa1438f2cfafb22a434829d9131b9c0efc29eff1146e458c1b4da779aba803c": {
+            "schemaVersion": "planeon.internal.replay-trajectory/v1",
+            "trajectoryId": "fx-dev-0002.r1b",
+            "taskId": "fx-dev-0002",
+            "manifest": {
+              "schemaVersion": "planeon.internal.run-manifest/v1",
+              "runId": "fx-dev-run-1",
+              "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+              "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+              "configuration": {
+                "model": {
+                  "id": "fx-scripted-model",
+                  "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+                },
+                "harness": {
+                  "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                  "dirty": false
+                },
+                "budget": {
+                  "tokensPerTask": 4096,
+                  "costMicrosPerTask": 0,
+                  "wallClockSecondsPerTask": 600
+                },
+                "agentCount": 1
+              },
+              "locks": {
+                "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+                "promptDigests": [
+                  "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+                ],
+                "toolSchemaDigests": [
+                  "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+                ],
+                "imageDigests": [
+                  "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+                ],
+                "dependencyLockDigests": [
+                  "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+                ],
+                "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+                "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+                "evaluator": {
+                  "id": "fx-tree-evaluator",
+                  "version": "1",
+                  "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+                },
+                "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+              },
+              "seed": {
+                "mode": "FIXED",
+                "value": 2
+              },
+              "execution": {
+                "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+                "parallelism": 1
+              },
+              "split": {
+                "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+                "partition": "DEVELOPMENT"
+              },
+              "repetition": 1,
+              "writtenAt": "2026-11-23T09:00:00Z",
+              "startedAt": "2026-11-23T09:00:00Z",
+              "ledgerDigest": null
+            },
+            "steps": [
+              {
+                "index": 1,
+                "actor": "MODEL",
+                "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+                "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+              }
+            ],
+            "exit": {
+              "status": "BLOCKED",
+              "code": "SANDBOX_UNAVAILABLE"
+            }
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:8fa1438f2cfafb22a434829d9131b9c0efc29eff1146e458c1b4da779aba803c",
+              "exitStatus": "BLOCKED",
+              "outcome": "BLOCKED",
+              "score": 0,
+              "blockerCode": "SANDBOX_UNAVAILABLE",
+              "evidenceDigest": "sha256:5eb6f57dc28a1bd1bb02c6f849504641ce3a80f7f4440521f1c7644325cb18fb"
+            }
+          ],
+          "scoredFrom": "TRACE"
+        },
+        "environmentEvidence": []
+      },
+      "expect": {
+        "refuse": "BLOCKER_UNEVIDENCED"
+      }
+    },
+    {
+      "id": "RF-BL-N2",
+      "family": "BLOCKED",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "EVALUATOR_ERROR whose GRADE record is not in envelope ERROR",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "BLOCKED",
+              "score": 0,
+              "blockerCode": "EVALUATOR_ERROR",
+              "evidenceDigest": "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f"
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:081e18822c2600ef8fe64ed80c8010a5a21208cdf8742564aad514db11fa1098",
+              "exitStatus": "BUDGET_EXCEEDED",
+              "outcome": "ERRORED",
+              "score": 0,
+              "blockerCode": null,
+              "evidenceDigest": null
+            }
+          ],
+          "scoredFrom": "TRACE"
+        },
+        "gradeRecords": {
+          "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f": {
+            "envelope": "OK"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "BLOCKER_UNEVIDENCED"
+      }
+    },
+    {
+      "id": "RF-BL-N3",
+      "family": "BLOCKED",
+      "check": "SCORE",
+      "polarity": "NEGATIVE",
+      "title": "EVALUATOR_ERROR on a trajectory BLOCKED by its environment",
+      "input": {
+        "fixtureSet": [
+          "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+          "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d"
+        ],
+        "afterTrees": {
+          "fx-dev-0001": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          }
+        },
+        "trajectories": {
+          "sha256:8fa1438f2cfafb22a434829d9131b9c0efc29eff1146e458c1b4da779aba803c": {
+            "schemaVersion": "planeon.internal.replay-trajectory/v1",
+            "trajectoryId": "fx-dev-0002.r1b",
+            "taskId": "fx-dev-0002",
+            "manifest": {
+              "schemaVersion": "planeon.internal.run-manifest/v1",
+              "runId": "fx-dev-run-1",
+              "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+              "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+              "configuration": {
+                "model": {
+                  "id": "fx-scripted-model",
+                  "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+                },
+                "harness": {
+                  "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+                  "dirty": false
+                },
+                "budget": {
+                  "tokensPerTask": 4096,
+                  "costMicrosPerTask": 0,
+                  "wallClockSecondsPerTask": 600
+                },
+                "agentCount": 1
+              },
+              "locks": {
+                "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+                "promptDigests": [
+                  "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+                ],
+                "toolSchemaDigests": [
+                  "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+                ],
+                "imageDigests": [
+                  "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+                ],
+                "dependencyLockDigests": [
+                  "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+                ],
+                "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+                "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+                "evaluator": {
+                  "id": "fx-tree-evaluator",
+                  "version": "1",
+                  "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+                },
+                "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+              },
+              "seed": {
+                "mode": "FIXED",
+                "value": 2
+              },
+              "execution": {
+                "cacheKeyDigest": "sha256:b5c390e8539f730eef5355a74837338d609bf46f5475a2a7052befe4aaf28709",
+                "parallelism": 1
+              },
+              "split": {
+                "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+                "partition": "DEVELOPMENT"
+              },
+              "repetition": 1,
+              "writtenAt": "2026-11-23T09:00:00Z",
+              "startedAt": "2026-11-23T09:00:00Z",
+              "ledgerDigest": null
+            },
+            "steps": [
+              {
+                "index": 1,
+                "actor": "MODEL",
+                "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+                "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+              }
+            ],
+            "exit": {
+              "status": "BLOCKED",
+              "code": "SANDBOX_UNAVAILABLE"
+            }
+          }
+        },
+        "score": {
+          "schemaVersion": "planeon.internal.replay-score/v1",
+          "scoreId": "fx-dev-run-1.score",
+          "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+          "results": [
+            {
+              "taskId": "fx-dev-0001",
+              "fixtureDigest": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+              "trajectoryDigest": "sha256:5e9f5f606fdc4f09147f568eb7cba40e9213516efe08b09e3baf59b75aaada23",
+              "exitStatus": "COMPLETED",
+              "outcome": "PASSED",
+              "score": 1000000,
+              "blockerCode": null,
+              "evidenceDigest": null
+            },
+            {
+              "taskId": "fx-dev-0002",
+              "fixtureDigest": "sha256:922086824d0171ccfaba12a260f3a0ccc7f8b767440df3c29720187e2936c13d",
+              "trajectoryDigest": "sha256:8fa1438f2cfafb22a434829d9131b9c0efc29eff1146e458c1b4da779aba803c",
+              "exitStatus": "BLOCKED",
+              "outcome": "BLOCKED",
+              "score": 0,
+              "blockerCode": "EVALUATOR_ERROR",
+              "evidenceDigest": "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f"
+            }
+          ],
+          "scoredFrom": "TRACE"
+        },
+        "gradeRecords": {
+          "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f": {
+            "envelope": "ERROR"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "OUTCOME_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-RG-P1",
+      "family": "REGENERATION",
+      "check": "REGENERATION",
+      "polarity": "POSITIVE",
+      "title": "a byte-equal rebuild by the pinned generator keeps the fixture id",
+      "input": {
+        "stored": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "rebuilt": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          }
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "keptId": true
+        }
+      }
+    },
+    {
+      "id": "RF-RG-P2",
+      "family": "REGENERATION",
+      "check": "REGENERATION",
+      "polarity": "POSITIVE",
+      "title": "a rebuild that differs takes a new fixture id",
+      "input": {
+        "stored": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "rebuilt": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v2",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "INDEX",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          },
+          "requestMatchReason": "the prompt carries a time the fixture does not pin"
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "keptId": false,
+          "newId": "fx-dev-0001.v2"
+        }
+      }
+    },
+    {
+      "id": "RF-RG-N1",
+      "family": "REGENERATION",
+      "check": "REGENERATION",
+      "polarity": "NEGATIVE",
+      "title": "a rebuild that differs but keeps the id",
+      "input": {
+        "stored": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "rebuilt": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "INDEX",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+          },
+          "requestMatchReason": "the prompt carries a time the fixture does not pin"
+        }
+      },
+      "expect": {
+        "refuse": "REGENERATION_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-RG-N2",
+      "family": "REGENERATION",
+      "check": "REGENERATION",
+      "polarity": "NEGATIVE",
+      "title": "a rebuild by another generator",
+      "input": {
+        "stored": "sha256:547277ed40e5d1c329c597c2e24beae900794e84b381edc08139b695b2be62f6",
+        "rebuilt": {
+          "schemaVersion": "planeon.internal.replay-fixture/v1",
+          "fixtureId": "fx-dev-0001.v1",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "taskId": "fx-dev-0001",
+          "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "workspaceBefore": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+              }
+            ]
+          },
+          "expectedAfter": {
+            "entries": [
+              {
+                "path": "greeting.txt",
+                "kind": "FILE",
+                "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+              }
+            ]
+          },
+          "ignoredPaths": [],
+          "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+          "requestMatch": "DIGEST",
+          "generator": {
+            "id": "fixture-builder",
+            "version": "1",
+            "digest": "sha256:522038cc428f243e68eb95bdbc0f2a38fdebe2d6dd1e5e801599e11b3440897d"
+          }
+        }
+      },
+      "expect": {
+        "refuse": "REGENERATION_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-AP-P1",
+      "family": "ARMS",
+      "check": "ARM_PAIR",
+      "polarity": "POSITIVE",
+      "title": "the arms differ in the named variable only; the pair carries the gate's state",
+      "input": {
+        "pair": {
+          "schemaVersion": "planeon.internal.arm-pair/v1",
+          "pairId": "fx-dev-pair-1",
+          "comparisonDigest": "sha256:772c6672a2253c02956a5bb5a191fd1647a0c32d7a385812860ac8cf0f0475ac",
+          "variable": "model",
+          "blockedTasks": 0,
+          "state": "PASS"
+        },
+        "baseline": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "candidate": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model-b",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "gateState": "PASS",
+        "blocked": 0
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "differs": [
+            "model"
+          ],
+          "state": "PASS"
+        }
+      }
+    },
+    {
+      "id": "RF-AP-P2",
+      "family": "ARMS",
+      "check": "ARM_PAIR",
+      "polarity": "POSITIVE",
+      "title": "C-BLOCKED: a blocked task in either arm withholds the lift (UNRESOLVED)",
+      "input": {
+        "pair": {
+          "schemaVersion": "planeon.internal.arm-pair/v1",
+          "pairId": "fx-dev-pair-1",
+          "comparisonDigest": "sha256:772c6672a2253c02956a5bb5a191fd1647a0c32d7a385812860ac8cf0f0475ac",
+          "variable": "model",
+          "blockedTasks": 2,
+          "state": "UNRESOLVED"
+        },
+        "baseline": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "candidate": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model-b",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "gateState": "PASS",
+        "blocked": 2
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "UNRESOLVED"
+        }
+      }
+    },
+    {
+      "id": "RF-AP-N1",
+      "family": "ARMS",
+      "check": "ARM_PAIR",
+      "polarity": "NEGATIVE",
+      "title": "nothing differs between the arms",
+      "input": {
+        "pair": {
+          "schemaVersion": "planeon.internal.arm-pair/v1",
+          "pairId": "fx-dev-pair-1",
+          "comparisonDigest": "sha256:772c6672a2253c02956a5bb5a191fd1647a0c32d7a385812860ac8cf0f0475ac",
+          "variable": "model",
+          "blockedTasks": 0,
+          "state": "PASS"
+        },
+        "baseline": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "candidate": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "gateState": "PASS",
+        "blocked": 0
+      },
+      "expect": {
+        "refuse": "ARMS_IDENTICAL"
+      }
+    },
+    {
+      "id": "RF-AP-N2",
+      "family": "ARMS",
+      "check": "ARM_PAIR",
+      "polarity": "NEGATIVE",
+      "title": "the arms differ in the model and in the budget",
+      "input": {
+        "pair": {
+          "schemaVersion": "planeon.internal.arm-pair/v1",
+          "pairId": "fx-dev-pair-1",
+          "comparisonDigest": "sha256:772c6672a2253c02956a5bb5a191fd1647a0c32d7a385812860ac8cf0f0475ac",
+          "variable": "model",
+          "blockedTasks": 0,
+          "state": "PASS"
+        },
+        "baseline": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "candidate": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model-b",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 8192,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "gateState": "PASS",
+        "blocked": 0
+      },
+      "expect": {
+        "refuse": "ARMS_NOT_ONE_VARIABLE"
+      }
+    },
+    {
+      "id": "RF-AP-N3",
+      "family": "ARMS",
+      "check": "ARM_PAIR",
+      "polarity": "NEGATIVE",
+      "title": "(a) a pair with a blocked task that still carries the gate's state",
+      "input": {
+        "pair": {
+          "schemaVersion": "planeon.internal.arm-pair/v1",
+          "pairId": "fx-dev-pair-1",
+          "comparisonDigest": "sha256:772c6672a2253c02956a5bb5a191fd1647a0c32d7a385812860ac8cf0f0475ac",
+          "variable": "model",
+          "blockedTasks": 1,
+          "state": "PASS"
+        },
+        "baseline": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "candidate": {
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model-b",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "locks": {
+            "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+            "promptDigests": [
+              "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+            ],
+            "toolSchemaDigests": [
+              "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+            ],
+            "imageDigests": [
+              "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+            ],
+            "dependencyLockDigests": [
+              "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+            ],
+            "fixtureDigest": "sha256:51fd4a7b1336de1c86b8ce68c850587d54433dd08f5e9a82b37733d3af59105e",
+            "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+            "evaluator": {
+              "id": "fx-tree-evaluator",
+              "version": "1",
+              "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+            },
+            "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+          }
+        },
+        "gateState": "PASS",
+        "blocked": 1
+      },
+      "expect": {
+        "refuse": "DECISION_MISMATCH"
+      }
+    },
+    {
+      "id": "RF-EV-P1",
+      "family": "DENOM",
+      "check": "EVALUATION",
+      "polarity": "POSITIVE",
+      "title": "C-DENOM: M1's run in a MAS-RA-002 evaluation record (one of three declared repetitions, so incomplete); the ERRORED task counts as 0 and the mean is 500,000",
+      "input": {
+        "record": {
+          "schemaVersion": "planeon.internal.evaluation-record/v1",
+          "recordId": "fx-dev-eval-1",
+          "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "repetitionsDeclared": 3,
+          "runs": [
+            {
+              "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+              "repetition": 1,
+              "results": [
+                {
+                  "taskId": "fx-dev-0001",
+                  "score": 1000000,
+                  "tokensTotal": 300,
+                  "cacheReadTokens": 0,
+                  "costMicros": 0
+                },
+                {
+                  "taskId": "fx-dev-0002",
+                  "score": 0,
+                  "tokensTotal": 4097,
+                  "cacheReadTokens": 0,
+                  "costMicros": 0
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "complete": false,
+          "meanPpm": 500000
+        }
+      }
+    },
+    {
+      "id": "RF-EV-N1",
+      "family": "DENOM",
+      "check": "EVALUATION",
+      "polarity": "NEGATIVE",
+      "title": "C-DENOM: the ERRORED task dropped from the run, so the mean would be taken over one task (MAS-RA-002's TASK_SET)",
+      "input": {
+        "record": {
+          "schemaVersion": "planeon.internal.evaluation-record/v1",
+          "recordId": "fx-dev-eval-1",
+          "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+          "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+          "configuration": {
+            "model": {
+              "id": "fx-scripted-model",
+              "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+            },
+            "harness": {
+              "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+              "dirty": false
+            },
+            "budget": {
+              "tokensPerTask": 4096,
+              "costMicrosPerTask": 0,
+              "wallClockSecondsPerTask": 600
+            },
+            "agentCount": 1
+          },
+          "split": {
+            "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+            "partition": "DEVELOPMENT"
+          },
+          "repetitionsDeclared": 3,
+          "runs": [
+            {
+              "manifestDigest": "sha256:794a210ab469861b52ee3caffbc9e97a3d6652f117b8c2a0d7eefa51a3f2ca3b",
+              "repetition": 1,
+              "results": [
+                {
+                  "taskId": "fx-dev-0001",
+                  "score": 1000000,
+                  "tokensTotal": 300,
+                  "cacheReadTokens": 0,
+                  "costMicros": 0
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refuse": "TASK_SET"
+      }
+    }
+  ]
+}

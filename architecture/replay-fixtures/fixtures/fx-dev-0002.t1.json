@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "planeon.internal.replay-trajectory/v1",
+  "trajectoryId": "fx-dev-0002.t1",
+  "taskId": "fx-dev-0002",
+  "manifest": {
+    "schemaVersion": "planeon.internal.run-manifest/v1",
+    "runId": "fx-dev-rec-1",
+    "scopeDigest": "sha256:196b9343016d8b82a5b4630b040c51bebec49f12b6980e5f3bf8b00cf395e34a",
+    "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+    "configuration": {
+      "model": {
+        "id": "fx-scripted-model",
+        "configurationDigest": "sha256:de45cf15f527032c53e2abee2bd3e29a3d2ab88ea4f5a32106d0d82a25a06363"
+      },
+      "harness": {
+        "commit": "6437de35186c458e671a4b659390d2b5f3909c8d",
+        "dirty": false
+      },
+      "budget": {
+        "tokensPerTask": 4096,
+        "costMicrosPerTask": 0,
+        "wallClockSecondsPerTask": 600
+      },
+      "agentCount": 1
+    },
+    "locks": {
+      "specsDigest": "sha256:16b78620e9c5a1b86a99b27ad9a219d2e1b760b4dd8593f13dcf3fa2728eb4f1",
+      "promptDigests": [
+        "sha256:7604e27e5331a95f9c03026ee52ad766e2e7c0d87d144e6bd6f1af995d163a99"
+      ],
+      "toolSchemaDigests": [
+        "sha256:831e49426b5ddd8b0bcbef37b3759822385264ea56644b30e3c7458db2669711"
+      ],
+      "imageDigests": [
+        "sha256:bbf3f73e138206cc0c1299e9d84386ba05afa4cfeb8b1066671ddf17b5cad6e0"
+      ],
+      "dependencyLockDigests": [
+        "sha256:d861bf819b675f37ae543c8476a7c8aeb070e51b4ccc3a2de42f3fd4f53ed44c"
+      ],
+      "fixtureDigest": "sha256:cb131dd25651c63946398685c66e3820dcc5f728a913294c4419dbcbfc078e86",
+      "datasetDigest": "sha256:c4c3ca51e6085ceea3f92d592643c5b5809518d93c365002f501a645b95a0f36",
+      "evaluator": {
+        "id": "fx-tree-evaluator",
+        "version": "1",
+        "digest": "sha256:3b836b5ab168e1f1fb03d2f301708393449776c2f3026f77fd6f1abf2cc0b2c2"
+      },
+      "environmentDigest": "sha256:a3cd1bc234ff9d6eea371c4ddeb045ea7ba54e959a2703a7a12e066b8227d488"
+    },
+    "seed": {
+      "mode": "FIXED",
+      "value": 1
+    },
+    "execution": {
+      "cacheKeyDigest": "sha256:3176334a62861ccbe4d512b5a3a2dbeae36b5b52a3ebb5dc8603ee9395965130",
+      "parallelism": 1
+    },
+    "split": {
+      "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+      "partition": "DEVELOPMENT"
+    },
+    "repetition": 1,
+    "writtenAt": "2026-11-23T09:00:00Z",
+    "startedAt": "2026-11-23T09:00:00Z",
+    "ledgerDigest": null
+  },
+  "steps": [
+    {
+      "index": 1,
+      "actor": "MODEL",
+      "requestDigest": "sha256:acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+      "responseDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+    },
+    {
+      "index": 2,
+      "actor": "TOOL",
+      "requestDigest": "sha256:1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005",
+      "responseDigest": "sha256:e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+    },
+    {
+      "index": 3,
+      "actor": "MODEL",
+      "requestDigest": "sha256:af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+      "responseDigest": "sha256:747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+    }
+  ],
+  "exit": {
+    "status": "COMPLETED",
+    "code": "DONE"
+  }
+}

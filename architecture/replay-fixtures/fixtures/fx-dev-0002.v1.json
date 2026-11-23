@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "planeon.internal.replay-fixture/v1",
+  "fixtureId": "fx-dev-0002.v1",
+  "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+  "taskId": "fx-dev-0002",
+  "taskDigest": "sha256:84fd07b38c1c8077c6ad61468b4257a1d949cb8d7bf98d5a373ffff42ce62724",
+  "split": {
+    "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+    "partition": "DEVELOPMENT"
+  },
+  "workspaceBefore": {
+    "entries": [
+      {
+        "path": "greeting.txt",
+        "kind": "FILE",
+        "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+      }
+    ]
+  },
+  "expectedAfter": {
+    "entries": [
+      {
+        "path": "bin/check.sh",
+        "kind": "EXECUTABLE",
+        "digest": "sha256:b4d644d4279594903f1a9911956432d9473041f2984fc6014c14d7402c7d126c"
+      },
+      {
+        "path": "greeting.txt",
+        "kind": "FILE",
+        "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+      }
+    ]
+  },
+  "ignoredPaths": [],
+  "trajectoryDigest": "sha256:3b0e44a22e289e60fd8217d9cdc03d5be9284c6cd50c93b9ea18a47dbbe2aa06",
+  "requestMatch": "DIGEST",
+  "generator": {
+    "id": "fixture-builder",
+    "version": "1",
+    "digest": "sha256:0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+  }
+}

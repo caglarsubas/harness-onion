@@ -1,0 +1,425 @@
+{
+  "schemaVersion": "harness.planeon.ai/approval-outcome/v1",
+  "item": "HR-APPROVAL-OUTCOME-001",
+  "packet": "MET-013",
+  "status": "CONTRACT_CANDIDATE",
+  "schema": {
+    "path": "architecture/approval-outcome/schema.json",
+    "sha256": "9761fea64edd60d94f2a334c71124dbac4a064094c8092cc40a05bf9368b89e6"
+  },
+  "vectors": {
+    "path": "architecture/approval-outcome/vectors.json",
+    "sha256": "7a8e14c955d83037d4a0948e3b655d94f98ef7c9f7c2a4df149711e8eb656a1b"
+  },
+  "model": {
+    "path": "scripts/approval_outcome.py",
+    "sha256": "b9b7835b578c106e2b3470e33f60f9955fcf89d5e7a03c32716c92e0bbce6b37"
+  },
+  "sources": [
+    {
+      "name": "R04 design note, rev 3",
+      "sha256Prefix": "fff1a993"
+    },
+    {
+      "name": "Build-R00-Next intake round 2 on the note (PASS, R2-N1, R2-N2)",
+      "sha256Prefix": "553d0566"
+    },
+    {
+      "name": "R04's TLA+ model r2 of the approval lifecycle (read as a cross-check, never imported)",
+      "sha256Prefix": "e474fad4"
+    }
+  ],
+  "openState": "REQUESTED",
+  "outcomes": [
+    "APPROVED",
+    "REJECTED",
+    "EXPIRED",
+    "CANCELLED",
+    "UNAVAILABLE"
+  ],
+  "events": {
+    "asked": "approval.requested.v1",
+    "decided": "approval.decision-recorded.v1"
+  },
+  "kinds": [
+    "demand",
+    "profile",
+    "trust"
+  ],
+  "askAnswers": [
+    "ELIGIBLE",
+    "NOT_ELIGIBLE",
+    "DENIED",
+    "UNAVAILABLE"
+  ],
+  "decideAnswers": [
+    "ELIGIBLE",
+    "NOT_ELIGIBLE",
+    "UNAVAILABLE"
+  ],
+  "unavailableReasons": [
+    "PORT_UNAVAILABLE_AT_ASK",
+    "PORT_UNAVAILABLE_AT_DECISION",
+    "NO_CERTIFIED_GATE"
+  ],
+  "rowFields": {
+    "required": [
+      "requestId",
+      "kind",
+      "state",
+      "subjectId",
+      "revision",
+      "subjectDigest",
+      "policyRef",
+      "policyBindingDigest",
+      "ruleVersion",
+      "mandate",
+      "expiresAt",
+      "asker",
+      "askPort",
+      "decidePort",
+      "decisionRef",
+      "decidedBy",
+      "reasonCode",
+      "decidingStatement"
+    ],
+    "optional": [
+      "businessIntentId",
+      "payloadHash",
+      "evidenceVersions",
+      "preconditions",
+      "compartment",
+      "limits"
+    ]
+  },
+  "sweep": {
+    "owners": [
+      "demand",
+      "profile",
+      "governance"
+    ],
+    "minSeconds": 1,
+    "maxSeconds": 3600,
+    "defaultSeconds": 300
+  },
+  "statementLayers": [
+    "FLOOR",
+    "PACK",
+    "PROFILE",
+    "ORGANISATION"
+  ],
+  "clauses": [
+    {
+      "id": "O1",
+      "family": "O",
+      "text": "Closed set: an approval request ends in exactly one terminal outcome (APPROVED, REJECTED, EXPIRED, CANCELLED, UNAVAILABLE), with one open state, REQUESTED. A consumer that reads a value outside these six treats it as not approved and refuses; no default branch maps to APPROVED."
+    },
+    {
+      "id": "O2",
+      "family": "O",
+      "text": "Only APPROVED permits the effect, allowed once, for the bound subject only (kind, subject id, revision, subject digest, policy binding digest); a new revision needs a new approval. EXPIRED, CANCELLED, UNAVAILABLE and REJECTED are all \"no\"; they differ only in the reason shown and in whether a new request may be made."
+    },
+    {
+      "id": "O3",
+      "family": "O",
+      "text": "Expiry is evaluated on read as well as on decide: an open request past its expiry is reported EXPIRED. A read projects it and never writes; the EXPIRED outcome and its decided record are written as A5 says, so the projection and the record never disagree on the outcome, only on when it was recorded."
+    },
+    {
+      "id": "O4",
+      "family": "O",
+      "text": "UNAVAILABLE is recorded as an outcome when a request cannot be opened or decided because policy or the decision context is unavailable, not only returned as a status code."
+    },
+    {
+      "id": "O5",
+      "family": "O",
+      "text": "The record carries the fields the notes name (DUX-PD-1, BNK-UC-1, BLUEPRINT-D1): kind, bound revision, subject digest, policy and rule versions, mandate or scope, expiry, decision reference, verified decision maker; with what H1b, S4 and R2-N1 make it keep (the asker, the deciding statement, the port's answers) and the reason code. R00's field list: these are required; the BLUEPRINT-D1 fields R04 lacks (business intent id, payload hash, evidence versions, preconditions, compartment, limits) are optional members of the closed record, so the adopting packet decides when to fill them."
+    },
+    {
+      "id": "Q-TLA-1",
+      "family": "O",
+      "text": "Revocation is not an outcome: O1's set is unchanged; a withdrawal before the decision is CANCELLED; after APPROVED, a revoked mandate or scope is the authority map's (AUTHORITY-MAP-001), named by reference, and an effect-time recheck is a later packet's."
+    },
+    {
+      "id": "Q-TLA-2",
+      "family": "O",
+      "text": "A port answer of NOT_ELIGIBLE or DENIED at the ask opens no request: the ask is refused with a typed reason, and nothing enters the approval rows or the audit pair; UNAVAILABLE is recorded only when the port cannot be read (O4, S5), or when a workload asks without a certified trigger gate (H1b), which is decided before the port is asked."
+    },
+    {
+      "id": "UNAVAILABLE-SOURCES",
+      "family": "O",
+      "text": "UNAVAILABLE has three sources: the port cannot be read at the ask (O4, S5); the port cannot be read at the decision (O4, terminal); a workload asks without a certified trigger gate (H1b), which is decided before the port is asked. NOT_ELIGIBLE at the ask or at the decision is a refusal, never UNAVAILABLE."
+    },
+    {
+      "id": "A1",
+      "family": "A",
+      "text": "One asked event name and one decided event name for every approval kind; the kind is a field, not part of the event name. R00's names: approval.requested.v1 and approval.decision-recorded.v1."
+    },
+    {
+      "id": "A2",
+      "family": "A",
+      "text": "\"decided\" covers every terminal outcome (APPROVED, REJECTED, EXPIRED, CANCELLED, UNAVAILABLE) with the outcome as a field, so the pair is always closed: every asked has exactly one decided. Per-reviewer votes before quorum are separate vote records, not a second \"decided\"."
+    },
+    {
+      "id": "A3",
+      "family": "A",
+      "text": "Log-only: no code path reads the audit pair to grant, extend or replay an approval."
+    },
+    {
+      "id": "A4",
+      "family": "A",
+      "text": "The pair is written in the same transaction as the state change; a failed audit write fails the change."
+    },
+    {
+      "id": "A5",
+      "family": "A",
+      "text": "The \"decided\" record for EXPIRED is written by the first of: (a) any mutation on the request or its subject after the expiry; (b) the owning store's expiry sweep, which writes every open request past its expiry at least once per sweep interval. The record carries occurredAt = the request's expiresAt and recordedAt = the write time. So no pair stays open longer than expiresAt plus one sweep interval. The interval has one value per store owner (R04's demand store, R04's profile store, governance's expiry worker); R00's values: each an integer from 1 to 3,600 s, profile default 300 s. Until the record is written, a consumer reading the audit log treats an asked record whose expiresAt has passed and that has no decided record as EXPIRED (O1, O2: never as open or approved)."
+    },
+    {
+      "id": "S1",
+      "family": "S",
+      "text": "Statements are evaluated in a fixed order: the platform floor, then pack and profile statements, then organisation statements, appended last. Later statements override earlier ones for ask/allow choices, so the organisation's word is final within the floor."
+    },
+    {
+      "id": "S2",
+      "family": "S",
+      "text": "Any DENY is final: a later statement cannot lift a deny from an earlier one (the floor's denies are permanent)."
+    },
+    {
+      "id": "S3",
+      "family": "S",
+      "text": "Tool-use statements can only deny or require asking; they can never allow on their own."
+    },
+    {
+      "id": "S4",
+      "family": "S",
+      "text": "The evaluation result names the statement that decided it (statement id and version); the record keeps it (O5)."
+    },
+    {
+      "id": "S5",
+      "family": "S",
+      "text": "An evaluation error, a missing layer or an unparseable statement yields UNAVAILABLE, never ADMITTED."
+    },
+    {
+      "id": "N1-SCOPE",
+      "family": "N",
+      "text": "R04's approval rows are staff approvals (R05 r4 section 8's staff-approval kind: quorum, eligible reviewers, SoD, expiry). A customer confirmation (customer-confirmation) is R05's input request to the subject customer, decided by that customer with no quorum or SoD; it is never an R04 approval row, and H1a, SoD and N-10 do not apply to it."
+    },
+    {
+      "id": "H1a",
+      "family": "H",
+      "text": "Deciding always needs an authenticated, eligible person (an interactive session held by an eligible reviewer, not the requester). No workload, schedule or trigger can record a vote or an outcome other than EXPIRED (A5 sweep) and UNAVAILABLE."
+    },
+    {
+      "id": "R2-N1",
+      "family": "H",
+      "text": "The eligible-reviewer source is the policy port: the tenant authority's answer, never a platform role, asked at the ask and again at the decision."
+    },
+    {
+      "id": "N1",
+      "family": "H",
+      "text": "A decision attempt refused because the reviewer is not eligible leaves the request REQUESTED until an eligible decision, EXPIRED or CANCELLED; an unreadable port at the decision records UNAVAILABLE (O4)."
+    },
+    {
+      "id": "H1b",
+      "family": "H",
+      "text": "Asking needs either an interactive human session or a workload. A workload (a caller with no interactive session, such as a triggered run's runPrincipal) may ask only through a gate named in the run's certified trigger definition, and only when all three of R05 r4 section 8's conditions hold, in its words: (i) the definition must be CERTIFIED at admission and still valid at revalidation; (ii) the gate must be in its ordered gates; (iii) the run must be admitted under that definition. EVENT-TRIGGER-001's contract owns what \"certified\", \"revalidation\" and \"admitted\" mean and the definition's shape. The request records which kind of asker it was: the human requester, or the workload identity plus the trigger definition id, version and digest and the trigger's admissionRecordId. Anywhere else, a workload's ask gets UNAVAILABLE at once. The workload does not wait: the request stays open until an eligible person decides it or it expires (A5). The trigger packet that adds the gate names the lookup from admissionRecordId to the admitted definition and its current status as a port, and an unavailable lookup fails closed to UNAVAILABLE (R2-N2)."
+    },
+    {
+      "id": "H2",
+      "family": "H",
+      "text": "No auto-approve flag, setting or environment variable exists in the contract; a request to add one fails review."
+    },
+    {
+      "id": "H3",
+      "family": "H",
+      "text": "No approval from a string heuristic (command text, tool name match) and no gate that lives only in a prompt."
+    },
+    {
+      "id": "H4",
+      "family": "H",
+      "text": "An approval answered after the effect is not an approval: the effect waits for APPROVED; a decision recorded after the effect is logged as a finding, not as permission."
+    }
+  ],
+  "ruleFamilies": [
+    {
+      "id": "O",
+      "name": "The closed outcome set (part 1)",
+      "codes": [
+        "AO_OUTCOME",
+        "AO_SHAPE"
+      ],
+      "clauses": [
+        "O1",
+        "O2",
+        "O3",
+        "O4",
+        "O5",
+        "Q-TLA-1",
+        "Q-TLA-2",
+        "UNAVAILABLE-SOURCES"
+      ],
+      "vectors": [
+        "AO-O-L1",
+        "AO-O-L2",
+        "AO-O-L3",
+        "AO-O-L4",
+        "AO-O-L5",
+        "AO-O-L6",
+        "AO-O-L7",
+        "AO-O-L8",
+        "AO-O-L9",
+        "AO-O-L10",
+        "AO-O-H1",
+        "AO-O-H2",
+        "AO-O-H3",
+        "AO-O-H4",
+        "AO-O-H5",
+        "AO-O-H6",
+        "AO-O-H7",
+        "AO-O-H8",
+        "AO-O-R1",
+        "AO-O-R2",
+        "AO-O-R3",
+        "AO-O-R4",
+        "AO-O-R5",
+        "AO-O-R6"
+      ]
+    },
+    {
+      "id": "A",
+      "name": "The audit pair, log-only (part 2)",
+      "codes": [
+        "AO_AUDIT"
+      ],
+      "clauses": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5"
+      ],
+      "vectors": [
+        "AO-A-L1",
+        "AO-A-L2",
+        "AO-A-H1",
+        "AO-A-H2",
+        "AO-A-H3",
+        "AO-A-H4",
+        "AO-A-H5",
+        "AO-A-H6",
+        "AO-A-H7",
+        "AO-A-H8",
+        "AO-A-P1",
+        "AO-A-P2",
+        "AO-A-P3",
+        "AO-A-P4"
+      ]
+    },
+    {
+      "id": "S",
+      "name": "The statement order (part 3)",
+      "codes": [
+        "AO_STATEMENT"
+      ],
+      "clauses": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5"
+      ],
+      "vectors": [
+        "AO-S-S1",
+        "AO-S-S2",
+        "AO-S-S3",
+        "AO-S-S4",
+        "AO-S-S5",
+        "AO-S-N1",
+        "AO-S-N8",
+        "AO-S-N9",
+        "AO-S-N3",
+        "AO-S-N4"
+      ]
+    },
+    {
+      "id": "H",
+      "name": "The refusal rule for headless contexts (part 4)",
+      "codes": [
+        "AO_HEADLESS"
+      ],
+      "clauses": [
+        "H1a",
+        "R2-N1",
+        "N1",
+        "H1b",
+        "H2",
+        "H3",
+        "H4"
+      ],
+      "vectors": [
+        "AO-H-L1",
+        "AO-H-L2",
+        "AO-H-L3",
+        "AO-H-L4",
+        "AO-H-L5",
+        "AO-H-H1",
+        "AO-H-H7",
+        "AO-H-H8",
+        "AO-H-H9",
+        "AO-H-H2",
+        "AO-H-H3",
+        "AO-H-H4",
+        "AO-H-H5",
+        "AO-H-H6",
+        "AO-H-P1",
+        "AO-H-P2"
+      ]
+    },
+    {
+      "id": "N",
+      "name": "Scope: staff approvals only (part 4, N1 scope)",
+      "codes": [
+        "AO_SCOPE"
+      ],
+      "clauses": [
+        "N1-SCOPE"
+      ],
+      "vectors": [
+        "AO-N-H1",
+        "AO-N-H2"
+      ]
+    }
+  ],
+  "settlements": [
+    {
+      "id": "OPEN-STATE",
+      "text": "The published open state is REQUESTED (CTRL-INTEGRATE-002's TypeScript name); R04's stored PENDING is the adopting packet's mapping."
+    },
+    {
+      "id": "EVENT-NAMES",
+      "text": "R00's call for A1: R04's demand names, approval.requested.v1 and approval.decision-recorded.v1; aligning the profile names is R04's later packet."
+    },
+    {
+      "id": "STATEMENT-DEFAULT",
+      "text": "R00's call for S5: when no statement decides, the result is UNAVAILABLE (fail closed), never an implied allow."
+    },
+    {
+      "id": "R2-N2",
+      "text": "Text only (H1b's last sentence); its vector comes with N-7 and N-13 in the trigger packet that adds the gate."
+    },
+    {
+      "id": "OUT-N7-N13",
+      "text": "N-7 and N-13 are out (ORC-295-READ-OK (1)): they wait for the trigger packet's gate."
+    },
+    {
+      "id": "TLA-CROSS-CHECK",
+      "text": "R04's TLA+ model r2 (the owner's pilot) was read as a cross-check: each of its invariants (NoEffectWithoutLiveApproval, DenyNeverLifted, ModelNeverDecides, UnavailableNeverApproved, ExpiredOrRevokedNeverAuthorizes for expiry, EffectAtMostOnce, AuditPairClosed, SweepBound) has a vector here; nothing is imported from it (C30 is not retroactive to 295)."
+    }
+  ],
+  "outOfScope": [
+    "The statement evaluator itself (H13, R09's side); this record fixes the order and the result shape.",
+    "R04's code changes (part 6): the adopting packet's.",
+    "N-7, N-13 and R2-N2's vector: the trigger packet's.",
+    "Revocation after APPROVED: the authority map's (AUTHORITY-MAP-001, Q-TLA-1)."
+  ]
+}

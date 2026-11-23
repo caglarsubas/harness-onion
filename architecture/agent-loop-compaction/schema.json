@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "harness.planeon.ai/agent-loop-compaction/v1",
+  "$defs": {
+    "pin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "family": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "property",
+        "source",
+        "refusal",
+        "vectors"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "C1",
+            "C2",
+            "C3",
+            "C4",
+            "C5",
+            "C6",
+            "C7",
+            "C8",
+            "C9"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "property": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "refusal": {
+          "enum": [
+            "CG_LOCK",
+            "CG_RANGE",
+            "CG_CHECKPOINT",
+            "CG_LADDER",
+            "CG_EPOCH",
+            "CG_PROMPT",
+            "CG_TRUST",
+            "CG_RETENTION",
+            "CG_GATE"
+          ]
+        },
+        "vectors": {
+          "$ref": "#/$defs/strings"
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "polarity",
+        "title",
+        "input",
+        "expect"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "enum": [
+            "C1",
+            "C2",
+            "C3",
+            "C4",
+            "C5",
+            "C6",
+            "C7",
+            "C8",
+            "C9"
+          ]
+        },
+        "polarity": {
+          "enum": [
+            "POSITIVE",
+            "NEGATIVE"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input": {
+          "type": "object"
+        },
+        "expect": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "accept"
+              ],
+              "properties": {
+                "accept": {
+                  "const": true
+                },
+                "result": {
+                  "type": "object"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "refuse"
+              ],
+              "properties": {
+                "refuse": {
+                  "enum": [
+                    "CG_LOCK",
+                    "CG_RANGE",
+                    "CG_CHECKPOINT",
+                    "CG_LADDER",
+                    "CG_EPOCH",
+                    "CG_PROMPT",
+                    "CG_TRUST",
+                    "CG_RETENTION",
+                    "CG_GATE"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "vectorsFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "cases"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "harness.planeon.ai/agent-loop-compaction-vectors/v1"
+        },
+        "cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/case"
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "item",
+    "packet",
+    "status",
+    "successorOf",
+    "schema",
+    "vectors",
+    "model",
+    "basis",
+    "baseVocabulary",
+    "stepKinds",
+    "compactDetail",
+    "profileDefaults",
+    "ruleFamilies",
+    "settlements",
+    "outOfScope"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "harness.planeon.ai/agent-loop-compaction/v1"
+    },
+    "item": {
+      "const": "HR-COMPACTION-GOV-001"
+    },
+    "packet": {
+      "const": "MET-013"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "successorOf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item",
+        "status"
+      ],
+      "properties": {
+        "item": {
+          "const": "MAS-RA-008"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "schema": {
+      "$ref": "#/$defs/pin"
+    },
+    "vectors": {
+      "$ref": "#/$defs/pin"
+    },
+    "model": {
+      "$ref": "#/$defs/pin"
+    },
+    "basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readme",
+        "profileSchema",
+        "traceSchema",
+        "status",
+        "model"
+      ],
+      "properties": {
+        "readme": {
+          "$ref": "#/$defs/pin"
+        },
+        "profileSchema": {
+          "$ref": "#/$defs/pin"
+        },
+        "traceSchema": {
+          "$ref": "#/$defs/pin"
+        },
+        "status": {
+          "$ref": "#/$defs/pin"
+        },
+        "model": {
+          "$ref": "#/$defs/pin"
+        }
+      }
+    },
+    "baseVocabulary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stepKinds",
+        "hookEvents",
+        "trustLabels",
+        "terminalStatuses"
+      ],
+      "properties": {
+        "stepKinds": {
+          "$ref": "#/$defs/strings"
+        },
+        "hookEvents": {
+          "$ref": "#/$defs/strings"
+        },
+        "trustLabels": {
+          "$ref": "#/$defs/strings"
+        },
+        "terminalStatuses": {
+          "$ref": "#/$defs/strings"
+        }
+      }
+    },
+    "stepKinds": {
+      "$ref": "#/$defs/strings"
+    },
+    "compactDetail": {
+      "$ref": "#/$defs/strings"
+    },
+    "profileDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cooldownSeconds"
+      ],
+      "properties": {
+        "cooldownSeconds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "ruleFamilies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/family"
+      }
+    },
+    "settlements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "outOfScope": {
+      "$ref": "#/$defs/strings"
+    }
+  }
+}
