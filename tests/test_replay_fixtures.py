@@ -112,6 +112,18 @@ def test_every_vector_replays_and_every_code_and_verdict_is_reached():
     assert verdicts == set(MODEL.VERDICTS)
 
 
+def test_replay_vectors_is_replay_case_per_vector():
+    """The head's per-vector entry point (ORC-295-C2-Q2 (a)): replay_case's verdict for each vector, in order; one
+    changed expectation makes exactly one False."""
+    cases = VECTORS["cases"]
+    got = MODEL.replay_vectors(cases, STORES, RM)
+    assert got == [MODEL.replay_case(case, STORES, RM)[0] for case in cases] and len(got) == len(cases) > 0
+    assert all(ok is True for ok in got)
+    changed = copy.deepcopy(cases)
+    next(case for case in changed if case["polarity"] == "NEGATIVE")["expect"] = {"refuse": "NOT_A_CODE"}
+    assert MODEL.replay_vectors(changed, STORES, RM).count(False) == 1
+
+
 def test_the_drafts_content_digests_are_the_bytes_digests():
     want = {b"hello\n": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03",
             b"hello, world\n": "853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020",

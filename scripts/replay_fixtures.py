@@ -522,3 +522,9 @@ def replay_case(case: dict, stores: dict, rm):
         return code == expect["refuse"], code
     ok = code is None and all(result.get(k) == v for k, v in expect.get("result", {}).items())
     return ok, code if code else result
+
+
+def replay_vectors(cases, stores: dict, rm) -> list:
+    """Each case's replay_case verdict, in order: the per-vector entry point under a name the chain identity rule
+    allows a head layer to call (MET-013's head replays every vector through it; ORC-295-C2-Q2 (a))."""
+    return [replay_case(case, stores, rm)[0] for case in cases]
