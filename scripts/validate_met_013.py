@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-hr-contracts-authority.json"
-AUTHORITY_SHA256 = "6d7973875de0b84b54c82acb8119f5c268cd5b8336b2c9a5e89248ba7987106a"
+AUTHORITY_SHA256 = "f93234dc7a78a6b3cb3a2d7a78e7c6c21221f80719001fcfc6148018cd1c9048"
 VALIDATOR_PATH = "scripts/validate_met_013.py"
 BASE_COMMIT = "6437de35186c458e671a4b659390d2b5f3909c8d"
 NEW_PACKET = "MET-013"
@@ -695,8 +695,10 @@ ERA_SHA256 = MappingProxyType({
     "tests/test_replay_fixtures.py": "56afb1042fa17ee6642f35d35f817b395f62f633fb92c12b566cedab3cff8e29",
 })
 ERRATA_LINES = MappingProxyType({
+    "architecture/oracle-identity-met-012.json": ((5, 5), (28, 29), (74, 74)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_012_oracle.py": ((498, 501), (504, 504), (508, 510), (516, 516), (519, 520)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"

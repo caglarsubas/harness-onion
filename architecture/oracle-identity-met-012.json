@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_012_oracle.py",
-  "sha256": "37c5a3a66dbdc360feeb42a29153b75c3a6d3debe616b0aecae1a1902aad2f88"
+  "sha256": "d648dfae30cb95c2f351db353b3b858771219e4f7b96f281d7aa3a7c57477cc9"
  },
  "oracle": {
   "agentId": "a31790dd4fa3d5f7e",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "ORC-294-ID-KEEP-C10",
-  "date": "2026-11-22"
+  "ref": "ORC-295-O1-KEEP",
+  "date": "2026-11-23"
  },
  "disclosures": [
   "bound inputs: exactly the oracle 37c5a3a66dbdc360feeb42a29153b75c3a6d3debe616b0aecae1a1902aad2f88 and the table cf4264aed28093d465972597ee942eecd672733377d3a212ebd37247b3ecc3e7; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
@@ -71,6 +71,12 @@
   "author run 4 (the relay's two freeze digests and two byte sizes (ORC-294-REFREEZE2-OK)): 2026-11-22T12:11:44+08:00 to 2026-11-22T12:12:12+08:00, 7 tool calls; its file after the run 37c5a3a6",
   "the oracle's runs, by the operator on the lane monitor's words, node counts only: candidate run 1 on the c3 candidate with the first file: 46 passed, 1 failed of 47 (summary 18ef7801; the one V6 case, ruled class (a)); candidate run 2 on a fresh clone at c2 with the second file: 47 passed of 47 (summary 83cafd74); the c3 sweep on the chain tree with the second file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary 44a330a1); candidate run 3 on a fresh clone at c4 with the third file: 47 passed of 47 (summary 495ae44e); the c5 sweep on the chain tree at c4 with the third file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary bc749901); the c10 sweep on the c10 tree (c9a with the c10 paths) with this file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary 83a149a2)",
   "the table is c9a's (c5's) with both rows re-measured at c10 from the c10 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 21.8 and this oracle 7.4 (217 entries; c5 measured 21.6 and 7.4, c3 21.5 and 7.5)",
-  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-294-ID-KEEP-C10)"
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-294-ID-KEEP-C10)",
+  "slot 295 R1 (ORC-295-E6-RULINGS), nodes edited: two, the historical-catalog returns node and the six-case historical-catalog refusal node; each now passes the current catalog into the head (its names from the file's own current_catalog_names helper over the head's ROOT, each YAML read through the era reader reviewed_bytes and parsed with the head's safe_load), as CONTRACT_294 erratum E6 (C18 amended 2) requires",
+  "slot 295 R1, why: both nodes took the shared fixtures' names, the authority's baselinePackets plus MET-012 plus its productPackets (318 names), a formula CONTRACT_294 erratum E6 withdraws as a catalog input; at 295's head the current catalog also holds MET-013, so the returns node failed with unexpected packet addition or loss, and the refusal cases passed only because the newest head refuses every mapping that is not the current catalog",
+  "slot 295 R1, what each node still checks: the returns node asserts the chain's own peel, exactly the 314 base ids of the authority's baselinePackets, with each returned value equal to its input (ORACLE_BRIEF_294 item 1; CONTRACT_294 sections 1 and 4; erratum E6); the refusal node keeps its six cases (lacks each product, lacks MET-012, lacks the first base id, adds one id), built from the current catalog, and asserts the refusal with E6's message, never which head refuses (CONTRACT_294 section 4; erratum E6)",
+  "slot 295 R1, the rest of the file is unchanged: new module-level lines used only by the two nodes (the refusal message constant, a module-level binding of the head loaded by the file's own loader as a second fresh module object for the helper's ROOT, the helper, and a module fixture of the current catalog); the shared catalog and parsed_catalog fixtures, every other node, the imports, the helpers and their order are as they were",
+  "slot 295 R1, author: a fresh blind agent, slot 295 R1, ORC-295-E6-RULINGS; its inputs only ORACLE_BRIEF_294 (2c4801b1), the E6 extract E6_295.md (fdf16594), this oracle and this record; it ran only the in-memory syntax check (syntax OK: 731 lines), C18's live-read scan 1e33cdec (live 0, names 1, era 22, other 0, git 0: PASS), shasum and its own identity helper; no pytest, no py_compile; 0 asserts without a cite in the edited nodes; its context carried a memory index and account context, unused",
+  "slot 295 R1, the pass at 295's head (passed 47, failed 0) is checked by the operator, by totals only; the author never ran the oracle"
  ]
 }
