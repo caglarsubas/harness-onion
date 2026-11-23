@@ -7,8 +7,13 @@ broker handoff v2 inputs (architecture/broker-handoff-inputs-v2/) and the transc
 refusals as (code, message) pairs, in the order the codes run: edge record v12's V1-V5 pattern for a member, then the
 row check and the hunk checks.
 - EV_V1: the files: each file below reads through the reader and parses; the base files are the pinned ones (edge
-  record v12, the v1 schema and vectors, and the v1 model scripts/validate_broker_handoff.py, each by the sha256 of its
-  bytes at main); every JSON file is in the repository's form (indent 2, a final newline).
+  record v12, the v1 schema and vectors, each by the sha256 of its bytes at main); every JSON file is in the
+  repository's form (indent 2, a final newline). ERR-5 (ORC-296-Q-C2-1 (a)): the chain cascade rewrites two lines of
+  each of the v1 model scripts/validate_broker_handoff.py and scripts/validate_proxy_contract.py every step, so they
+  are pinned by the source segments the models execute (v1's validate_transcript, ZERO, COMMON, require and _shape;
+  the proxy contract's canonical, digest, parse and _bounded), each by its sha256 at main; and their hunks are
+  cascade-only: every other line is main's, the cascade lines hold main's packet names then the appended ones and
+  the count main's plus the appended, the same packets appended in both.
 - EV_V2: the model accepts the contract: under the v13 schema the v2 model accepts the three positives and refuses K (a
   receipt chunk, then a size-0 FAILED TERMINAL, the chain redone), L (the no-receipt vector without its TERMINAL) and M
   (the no-receipt vector with TERMINAL COMPLETED); it accepts M under the v13 schema less its if/then (N: the refusal is
@@ -39,6 +44,7 @@ import ast
 import copy
 import hashlib
 import json
+import re
 import stat
 import sys
 from pathlib import Path
@@ -61,11 +67,50 @@ MODEL_PATH = "scripts/broker_handoff_transcript_v2.py"
 SCHEMA_V1_PATH = "architecture/broker-handoff-inputs/channel.schema.json"
 VECTORS_V1_PATH = "architecture/broker-handoff-inputs/vectors.json"
 MODEL_V1_PATH = "scripts/validate_broker_handoff.py"
+PROXY_PATH = "scripts/validate_proxy_contract.py"
 PINS = {
     V12_PATH: "3587488b040f1c23f95f847dd3f1e15b97fa6ca705b6dca429d1cc6d64f3a5c7",
     SCHEMA_V1_PATH: "e7e9558fb50b7ba804222065734d1d4fb4694327bb2427a34ef8dffc945d56f9",
     VECTORS_V1_PATH: "80d8da953c41ef544ecf0cd4a0f62b98316b018bfbdc39c550c320f68ab603c4",
-    MODEL_V1_PATH: "e206376f0d75ad1ef4fe43c80b4bd342018be8f304a3e379f7aa50cd01926d6a",
+}
+SEGMENT_PINS = {   # ERR-5 (ORC-296-Q-C2-1 (a)): the source segments the models execute, by sha256 at main 4b1386e0
+    MODEL_V1_PATH: {
+        "ZERO": "dad1e3856fbb3ee00bf0b3da4d5f8668d3049b7386fbb44e23dc2a51cc0c0d51",
+        "COMMON": "27be8495de62c7f129535c75da9dc7f4c0f0bcab25cc593e2ee9d76bce34ce58",
+        "require": "570ace48effbcffbb325b4bdc4424b575500114187d28c59c86b8870081e9f76",
+        "_shape": "f6f7bf31029a1e75b91a59867e3f66b13695dcbf11b8a58536171a69b5679c48",
+        "validate_transcript": "47a5e09f1f8efcfee19bfc6aa7b6763f9c4e553cf90c5c6418e729ef5ef54ccc",
+    },
+    PROXY_PATH: {
+        "canonical": "4f3300703d43af01bca3800a439ddd4a5caa70ebb88eb50909af5690ea3403b2",
+        "digest": "aa0210ace4fdb541410909814713738e8261645d1f9f4e166eecc1083c4c42ed",
+        "parse": "e43729d8a4875fb836793d87da15d1a89c5d23868790e899b947744e4591a272",
+        "_bounded": "308ab2135b84ca0a32cd85633199f905cb21a6b0c1c53a4dc9e6fcca321cab21",
+    },
+}
+CASCADE = {   # ERR-5: the chain cascade's two lines per base script, by form (the catalog's packet names,
+    # then the count); every other line is main's (the rest's sha256), main's names lead (their number and
+    # sha256), and the count is main's plus the appended names
+    MODEL_V1_PATH: (
+        (
+            r'        require\(len\(old\) == 142 and len\(packets\) == (?P<count>\d+) and set\(packets'
+            r'\) == old \| \{(?P<names>"[^"]+"(?:, "[^"]+")*)\}, "exact catalog"\)',
+            r'        print\("Broker handoff valid: (?P<count>\d+) packets; 127/327 checkpoint; DATA_C'
+            r'HECK_ONLY; product/native NOT_RUN\."\)',
+        ),
+        "ab3bdae20093d9f25bae5fa2e755016977dd5ec77768691810bc47e2d2b4e7cd",
+        319, 177, "807000f512bb4ce1b427fb0d82c75adf36d6d1ac7f4110086bfd2770a07defc8",
+    ),
+    PROXY_PATH: (
+        (
+            r'        if len\(old_ids\) != 134 or len\(record\["protectedFiles"\]\) != 176 or set\(pac'
+            r'kets\) != old_ids \| set\(ADDITIONS\) \| \{(?P<names>"[^"]+"(?:, "[^"]+")*)\}:',
+            r'        print\("Proxy prerequisite valid: (?P<count>\d+) packets; 176 immutable authorit'
+            r'y files; 127-file/279-ID source checkpoint; product/native NOT_RUN\."\)',
+        ),
+        "a69344299a9b8e6ec4d70f4c3262c4d829d65b7aa98b13e487b464f78dca2db8",
+        319, 131, "fbe03a80406d855d98712c1ea102d83af028fc8ce90f48abbc97659ff60e19b6",
+    ),
 }
 V12_PACKET = "MET-ENFORCE-043"
 PACKET = "MET-014"
@@ -202,7 +247,7 @@ def check(read):
     refusals = []
     try:
         raw = {path: read(path) for path in (RECORD_PATH, README_PATH, SCHEMA_PATH, VECTORS_PATH, MODEL_PATH, V12_PATH,
-                                             SCHEMA_V1_PATH, VECTORS_V1_PATH, MODEL_V1_PATH)}
+                                             SCHEMA_V1_PATH, VECTORS_V1_PATH, MODEL_V1_PATH, PROXY_PATH)}
         record, v12 = parse_json(raw[RECORD_PATH]), parse_json(raw[V12_PATH])
         schema, schema_v1 = parse_json(raw[SCHEMA_PATH]), parse_json(raw[SCHEMA_V1_PATH])
         vectors, vectors_v1 = parse_json(raw[VECTORS_PATH]), parse_json(raw[VECTORS_V1_PATH])
@@ -218,6 +263,26 @@ def check(read):
     def v1_files():
         for path, pin in PINS.items():
             need(sha(raw[path]) == pin, "%s is the pinned base file" % path)
+        for path, pins in SEGMENT_PINS.items():   # ERR-5: the executed helpers are main's, by source segment
+            text = raw[path].decode("utf-8")
+            nodes = top_level(ast.parse(text))
+            for name, pin in pins.items():
+                need(name in nodes and sha(ast.get_source_segment(text, nodes[name]).encode("utf-8")) == pin,
+                     "%s: %s is main's source segment" % (path, name))
+        appended = []
+        for path, (forms, rest_pin, count, names_n, names_pin) in CASCADE.items():   # ERR-5: cascade-only hunks
+            lines = raw[path].decode("utf-8").splitlines(keepends=True)
+            hits = [[m for m in (re.fullmatch(form, line.rstrip("\n")) for line in lines) if m] for form in forms]
+            need(all(len(h) == 1 for h in hits), "%s: each cascade line once" % path)
+            rest = "".join(line for line in lines if not any(re.fullmatch(f, line.rstrip("\n")) for f in forms))
+            need(sha(rest.encode("utf-8")) == rest_pin, "%s: every line but the cascade's is main's" % path)
+            names = re.findall(r'"([^"]+)"', hits[0][0]["names"])
+            counts = {int(h[0]["count"]) for h in hits if "count" in h[0].groupdict()}
+            need(len(names) >= names_n and sha(json.dumps(names[:names_n]).encode("utf-8")) == names_pin
+                 and counts == {count + len(names) - names_n},
+                 "%s: the cascade lines hold main's packets, then the appended ones, and their count" % path)
+            appended.append(names[names_n:])
+        need(appended[0] == appended[1], "the two base scripts append the same packets")
         for path, indent in ((RECORD_PATH, RECORD_INDENT), (V12_PATH, RECORD_INDENT), (SCHEMA_PATH, 2),
                              (VECTORS_PATH, 2)):
             need(raw[path] == dump(parse_json(raw[path]), indent), "%s is in the repository's JSON form" % path)

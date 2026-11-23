@@ -10,6 +10,7 @@ import ast
 import copy
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 import jsonschema
@@ -142,6 +143,48 @@ def test_ev_v1_refuses_a_missing_file():
 
 def test_ev_v1_refuses_another_v12():
     assert _codes({EV.V12_PATH: READ(EV.V12_PATH) + b" "}) == ["EV_V1"]
+
+
+def _one_more_step(path, name="MET-999"):
+    """path's bytes one chain step on, as the cascade leaves them (ERR-5): its catalog names gain one packet and its
+    count one more; every other line unchanged."""
+    out = []
+    for line in READ(path).decode("utf-8").splitlines(keepends=True):
+        body = line.rstrip("\n")
+        if any(re.fullmatch(form, body) for form in EV.CASCADE[path][0]):
+            body = re.sub(r"len\(packets\) == (\d+)", lambda m: "len(packets) == %d" % (int(m[1]) + 1), body)
+            body = re.sub(r"valid: (\d+) packets", lambda m: "valid: %d packets" % (int(m[1]) + 1), body)
+            body = re.sub(r'"\}(, "exact catalog"\)|:)$', lambda m: '", "%s"}%s' % (name, m[1]), body)
+            line = body + "\n"
+        out.append(line)
+    return "".join(out).encode("utf-8")
+
+
+def _touched(path, name):
+    """path's bytes with one pinned source segment touched, its syntax tree unchanged."""
+    text = READ(path).decode("utf-8")
+    segment = ast.get_source_segment(text, EV.top_level(ast.parse(text))[name])
+    touched = segment.replace("(", "( ", 1) if segment.startswith("def ") else segment.replace(" = ", " =  ", 1)
+    assert touched != segment and text.count(segment) == 1
+    return text.replace(segment, touched).encode("utf-8")
+
+
+def test_ev_v1_accepts_the_next_cascade_step():
+    assert _codes({path: _one_more_step(path) for path in EV.CASCADE}) == []
+
+
+def test_ev_v1_refuses_a_cascade_step_on_one_base_script_alone():
+    assert _codes({EV.MODEL_V1_PATH: _one_more_step(EV.MODEL_V1_PATH)}) == ["EV_V1"]
+
+
+@pytest.mark.parametrize("path,name", [(p, n) for p in EV.SEGMENT_PINS for n in EV.SEGMENT_PINS[p]])
+def test_ev_v1_refuses_a_touched_executed_segment(path, name):
+    refusals = EV.check(lambda p: _touched(path, name) if p == path else READ(p))
+    assert [code for code, _ in refusals] == ["EV_V1"] and "%s is main's source segment" % name in refusals[0][1]
+
+
+def test_ev_v1_refuses_any_other_line_of_a_base_script():
+    assert _codes({EV.PROXY_PATH: READ(EV.PROXY_PATH) + b"# touched\n"}) == ["EV_V1"]
 
 
 def test_ev_v2_refuses_a_model_that_accepts_everything(monkeypatch):
