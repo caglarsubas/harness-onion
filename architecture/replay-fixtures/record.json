@@ -1,0 +1,445 @@
+{
+  "schemaVersion": "harness.planeon.ai/replay-fixtures/v1",
+  "item": "HR-REPLAY-FIXTURES-001",
+  "packet": "MET-013",
+  "status": "CONTRACT_CANDIDATE",
+  "schema": {
+    "path": "architecture/replay-fixtures/schema.json",
+    "sha256": "dd8242f5965f3d89a801005b8de92d923fb7ba621532d637b4b50669113d1f19"
+  },
+  "vectors": {
+    "path": "architecture/replay-fixtures/vectors.json",
+    "sha256": "da29179b1ef8d6b439659a696a077ba4d7be835cf9db764c04f746088ad59f1e"
+  },
+  "model": {
+    "path": "scripts/replay_fixtures.py",
+    "sha256": "4e3f0157c43d14e46c53cd0617cc935d8b61df3f782fb00cd5b9d8b9c74c9e3e"
+  },
+  "basis": {
+    "readme": {
+      "path": "architecture/run-manifest/README.md",
+      "sha256": "279d374e5ddd1b6305611f3565a7af14046b305e59cf9634a88bd358818ce826"
+    },
+    "manifestSchema": {
+      "path": "architecture/run-manifest/run-manifest.schema.json",
+      "sha256": "ec62c1322179c44df40220a21806e1a0d17d25cc437a9a7e252cd4b1cf9d9636"
+    },
+    "recordSchema": {
+      "path": "architecture/run-manifest/evaluation-record.schema.json",
+      "sha256": "8b34740168f5a96f0186b69f9a1a43c544fdd971ed052f8e723c14dda1c3e625"
+    },
+    "status": {
+      "path": "architecture/run-manifest/status.json",
+      "sha256": "eb3ddd45e43ab6b2dc8c1272e338c49cf15bbe91794e22ddb47026ac1b28b5b7"
+    },
+    "model": {
+      "path": "scripts/run_manifest.py",
+      "sha256": "f2861b4c23ad51fc5b8cdd9910124b23d2c114bd61786e58d93b20f42f3f423e"
+    }
+  },
+  "shapes": [
+    "planeon.internal.replay-fixture/v1",
+    "planeon.internal.replay-trajectory/v1",
+    "planeon.internal.replay-score/v1",
+    "planeon.internal.replay-verdict/v1",
+    "planeon.internal.arm-pair/v1"
+  ],
+  "refusalOrder": [
+    "MAS-RA-002",
+    "TREE_PATH",
+    "TREE_ORDER",
+    "HELD_OUT_PUBLIC",
+    "FIXTURE_BINDING",
+    "SELF_REPORTED_SCORE",
+    "OUTCOME_MISMATCH",
+    "BLOCKER_UNEVIDENCED",
+    "REGENERATION_MISMATCH",
+    "ARMS_IDENTICAL",
+    "ARMS_NOT_ONE_VARIABLE",
+    "DECISION_MISMATCH"
+  ],
+  "verdicts": [
+    "REPLAY_MATCH",
+    "REPLAY_DIVERGED",
+    "TREE_MISMATCH"
+  ],
+  "exitCodes": {
+    "COMPLETED": [
+      "DONE"
+    ],
+    "ERRORED": [
+      "AGENT_ERROR",
+      "TOOL_ERROR",
+      "HARNESS_ERROR"
+    ],
+    "BUDGET_EXCEEDED": [
+      "BUDGET_TOKENS",
+      "BUDGET_COST",
+      "BUDGET_WALL_CLOCK",
+      "BUDGET_ITERATIONS"
+    ],
+    "BLOCKED": [
+      "PROVIDER_UNAVAILABLE",
+      "SANDBOX_UNAVAILABLE",
+      "RESOURCE_UNAVAILABLE",
+      "FIXTURE_UNAVAILABLE"
+    ]
+  },
+  "blockerCodes": [
+    "PROVIDER_UNAVAILABLE",
+    "SANDBOX_UNAVAILABLE",
+    "RESOURCE_UNAVAILABLE",
+    "FIXTURE_UNAVAILABLE",
+    "EVALUATOR_ERROR"
+  ],
+  "outcomeMap": [
+    {
+      "exitStatus": "COMPLETED",
+      "condition": "the after-tree equals expectedAfter outside ignoredPaths",
+      "outcome": "PASSED",
+      "score": "1000000"
+    },
+    {
+      "exitStatus": "COMPLETED",
+      "condition": "the trees differ",
+      "outcome": "FAILED",
+      "score": "0 to 999999, the locked evaluator's partial score or 0"
+    },
+    {
+      "exitStatus": "COMPLETED",
+      "condition": "the locked evaluator's GRADE decision record is in envelope ERROR (F2; GR-DECISION-RECORD-001): blockerCode EVALUATOR_ERROR, evidenceDigest that record's digest",
+      "outcome": "BLOCKED",
+      "score": "0"
+    },
+    {
+      "exitStatus": "ERRORED",
+      "condition": "always",
+      "outcome": "ERRORED",
+      "score": "0"
+    },
+    {
+      "exitStatus": "BUDGET_EXCEEDED",
+      "condition": "always; exitStatus keeps the cause",
+      "outcome": "ERRORED",
+      "score": "0"
+    },
+    {
+      "exitStatus": "BLOCKED",
+      "condition": "an environment cause with its evidence; never entered into an evaluation record",
+      "outcome": "BLOCKED",
+      "score": "0"
+    }
+  ],
+  "fixtureLockRule": "A run that is not fixture-backed (a recording run) sets locks.fixtureDigest to the RFC 8785 digest of the sorted array of its tasks' workspaceBefore tree digests, one per task (ORC-295-D1-ERRATUM); a fixture-backed run sets digest(F) (draft 3.4).",
+  "store": {
+    "split": {
+      "path": "architecture/replay-fixtures/fixtures/split-fx-dev.json",
+      "sha256": "4d41d4b3831364c1b11432f12652590ce3b20c4923f2eced5a67a4cc12821251"
+    },
+    "fixtures": [
+      {
+        "path": "architecture/replay-fixtures/fixtures/fx-dev-0001.v1.json",
+        "sha256": "694eca20522587acee03495c0a026b74f529988f819c1836dc11a750793bb225"
+      },
+      {
+        "path": "architecture/replay-fixtures/fixtures/fx-dev-0002.v1.json",
+        "sha256": "83e07494c62c0651ea6c7ca6e85fdb83cba18cddfa2d29a02a251f2c1fb59904"
+      }
+    ],
+    "trajectories": [
+      {
+        "path": "architecture/replay-fixtures/fixtures/fx-dev-0001.t1.json",
+        "sha256": "7270f3af455f87e6cb1160b8f15bfe6e00c7602178c52bef6ec7ba1d37a3cdca"
+      },
+      {
+        "path": "architecture/replay-fixtures/fixtures/fx-dev-0002.t1.json",
+        "sha256": "081a2f36d05dc04aaa70921ac7a73beef6814937761b8601ed0b65ddee56ca10"
+      }
+    ],
+    "blobs": [
+      {
+        "path": "architecture/replay-fixtures/blobs/1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005",
+        "sha256": "1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005"
+      },
+      {
+        "path": "architecture/replay-fixtures/blobs/579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3",
+        "sha256": "579a20ff1a7d66537d3dcfebb9bb4737af33b958fb035d3e4f1bf4c8b06577d3"
+      },
+      {
+        "path": "architecture/replay-fixtures/blobs/5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a",
+        "sha256": "5a199d83be3aa60ee4d49a525404f9645731bc2d8a3aeb509b0ec6f7d6e2e19a"
+      },
+      {
+        "path": "architecture/replay-fixtures/blobs/747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655",
+        "sha256": "747cdabd6bf031f659e13d3e82220675c2d4efefa870565345c1aedb32e24655"
+      },
+      {
+        "path": "architecture/replay-fixtures/blobs/acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591",
+        "sha256": "acc5ae84d03f6482f941175e523f5ea0be8ad8b9fd9c90e78264ec051af6c591"
+      },
+      {
+        "path": "architecture/replay-fixtures/blobs/af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa",
+        "sha256": "af07c72fda48892f71f1742b49448e25711e971752223620d32a74631f48aaaa"
+      },
+      {
+        "path": "architecture/replay-fixtures/blobs/e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726",
+        "sha256": "e5f1eb4d806641698a35efe20e098efd20d7d57a9b90ee69079d5bb650920726"
+      }
+    ]
+  },
+  "ruleFamilies": [
+    {
+      "id": "TREE",
+      "name": "Trees and the path grammar (draft 3.1)",
+      "property": "A tree is {entries: [{path, kind FILE|EXECUTABLE|SYMLINK, digest}]}, sorted by UTF-8 bytes; a path is relative, without empty, '.' or '..' segments, backslash or control characters, at most 4,096 UTF-8 bytes; no case-fold collision and no directory prefix; a SYMLINK target, read from the blob store by its digest, resolves lexically inside the tree to a FILE or EXECUTABLE entry.",
+      "source": "R12 draft r4 b29de4be section 3.1; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "TREE_PATH",
+        "TREE_ORDER"
+      ],
+      "vectors": [
+        "RF-TR-N1",
+        "RF-TR-N2",
+        "RF-TR-N3",
+        "RF-TR-N4",
+        "RF-TR-N5",
+        "RF-TR-P1",
+        "RF-TR-N6",
+        "RF-TR-N7"
+      ]
+    },
+    {
+      "id": "FIXTURE",
+      "name": "The fixture shape (draft 3.1)",
+      "property": "replay-fixture/v1 is closed; requestMatch DIGEST, or INDEX with requestMatchReason; the generator is {id, version, digest}.",
+      "source": "R12 draft r4 b29de4be section 3.1; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "SHAPE"
+      ],
+      "vectors": [
+        "RF-FX-P1",
+        "RF-FX-P2",
+        "RF-FX-N1"
+      ]
+    },
+    {
+      "id": "PLACEMENT",
+      "name": "Placement (draft 4.5, N5)",
+      "property": "Fixtures in public files are DEVELOPMENT only; a HELD_OUT fixture document in a public store is refused. No HELD_OUT fixture is stored: the vector builds its document in memory.",
+      "source": "R12 draft r4 b29de4be section 4.5; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "HELD_OUT_PUBLIC"
+      ],
+      "vectors": [
+        "RF-PL-N1",
+        "RF-PL-P1"
+      ]
+    },
+    {
+      "id": "TRAJECTORY",
+      "name": "The trajectory (draft 3.2; R00's exit list)",
+      "property": "replay-trajectory/v1 embeds the whole run manifest, checked by MAS-RA-002's model; steps 1..n, MODEL or TOOL, their bodies in the blob store under their bytesDigest; exit.code from the closed list of its status (EVALUATOR_ERROR is never a trajectory's).",
+      "source": "R12 draft r4 b29de4be section 3.2; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "SHAPE",
+        "SPLIT_AFTER_RUN",
+        "UNKNOWN_REFERENCE"
+      ],
+      "vectors": [
+        "RF-TJ-P1",
+        "RF-TJ-P2",
+        "RF-TJ-N1",
+        "RF-TJ-N2",
+        "RF-TJ-N3",
+        "RF-TJ-N4"
+      ]
+    },
+    {
+      "id": "REPLAY",
+      "name": "Keyless replay (U1, draft 3.2)",
+      "property": "MODEL steps are answered from the record; under DIGEST the first MODEL request that differs is REPLAY_DIVERGED and the replay stops, under INDEX only the tree check remains; TOOL steps are never compared; the trees pass the path grammar before anything is materialised.",
+      "source": "R12 draft r4 b29de4be section 3.2 and 6; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "TREE_PATH"
+      ],
+      "vectors": [
+        "RF-RP-P1",
+        "RF-RP-P2",
+        "RF-RP-P3",
+        "RF-RP-P4",
+        "RF-RP-P5",
+        "RF-RP-P6",
+        "RF-RP-N1"
+      ]
+    },
+    {
+      "id": "VERDICT",
+      "name": "replay-verdict/v1 (Q-HRF-2 (a), draft 3.6)",
+      "property": "verdict REPLAY_MATCH, REPLAY_DIVERGED or TREE_MISMATCH; divergedAtStep only for REPLAY_DIVERGED, and afterTreeDigest null exactly then.",
+      "source": "R12 draft r4 b29de4be section 3.6; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "SHAPE"
+      ],
+      "vectors": [
+        "RF-VD-P1",
+        "RF-VD-P2",
+        "RF-VD-N1"
+      ]
+    },
+    {
+      "id": "SCORE",
+      "name": "The scoring record (draft 3.3)",
+      "property": "One replay-score/v1 per run: exactly the partition's tasks, each with its own fixture and trajectory, every trajectory embedding the scored manifest; scoredFrom TRACE; outcome and score by the exit-to-outcome map.",
+      "source": "R12 draft r4 b29de4be section 3.3; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "SELF_REPORTED_SCORE",
+        "OUTCOME_MISMATCH",
+        "TASK_SET",
+        "CONFIGURATION_MIXED"
+      ],
+      "vectors": [
+        "RF-SC-P1",
+        "RF-SC-P2",
+        "RF-SC-N1",
+        "RF-SC-N2",
+        "RF-SC-N3",
+        "RF-SC-N4",
+        "RF-SC-N5",
+        "RF-SC-N6"
+      ]
+    },
+    {
+      "id": "BINDING",
+      "name": "Run lock binding (draft 3.4)",
+      "property": "For a fixture-backed run, locks.fixtureDigest is digest(F), F the sorted unique per-task fixture digests, one per partition task; each result's fixture is in F and is its task's.",
+      "source": "R12 draft r4 b29de4be section 3.4; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "FIXTURE_BINDING"
+      ],
+      "vectors": [
+        "RF-BD-P1",
+        "RF-BD-N1",
+        "RF-BD-N2"
+      ]
+    },
+    {
+      "id": "BLOCKED",
+      "name": "Blocked results (draft 3.5, 4.3; F2's row)",
+      "property": "BLOCKED is the environment's (one of four causes, with its evidence) or, after a COMPLETED run, the grader's (EVALUATOR_ERROR, its evidence the GRADE record in envelope ERROR); a run with a BLOCKED result never enters a MAS-RA-002 evaluation record.",
+      "source": "R12 draft r4 b29de4be section 3.5 and 4.3; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "BLOCKER_UNEVIDENCED",
+        "OUTCOME_MISMATCH"
+      ],
+      "vectors": [
+        "RF-BL-P1",
+        "RF-BL-P2",
+        "RF-BL-N1",
+        "RF-BL-N2",
+        "RF-BL-N3"
+      ]
+    },
+    {
+      "id": "REGENERATION",
+      "name": "Regeneration (draft 4.4)",
+      "property": "A fixture is rebuilt only by its pinned generator from its pinned trajectory and before-tree; a byte-equal rebuild keeps the id, any other is a new id that inherits nothing.",
+      "source": "R12 draft r4 b29de4be section 4.4; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "REGENERATION_MISMATCH"
+      ],
+      "vectors": [
+        "RF-RG-P1",
+        "RF-RG-P2",
+        "RF-RG-N1",
+        "RF-RG-N2"
+      ]
+    },
+    {
+      "id": "ARMS",
+      "name": "Arm pairs (draft 4.2, 4.3; Q-HRF-3 (a))",
+      "property": "arm-pair/v1 names its variable; the configuration tuple and the locks differ in exactly that field; a blocked task in either arm makes the state UNRESOLVED (WARN).",
+      "source": "R12 draft r4 b29de4be section 4.2 and 4.3; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "ARMS_IDENTICAL",
+        "ARMS_NOT_ONE_VARIABLE",
+        "DECISION_MISMATCH"
+      ],
+      "vectors": [
+        "RF-AP-P1",
+        "RF-AP-P2",
+        "RF-AP-N1",
+        "RF-AP-N2",
+        "RF-AP-N3"
+      ]
+    },
+    {
+      "id": "DENOM",
+      "name": "The denominator (draft 4.1, C-DENOM)",
+      "property": "Every partition task counts in every run; ERRORED (with BUDGET_EXCEEDED) scores 0; a dropped repetition leaves MAS-RA-002's record incomplete.",
+      "source": "R12 draft r4 b29de4be section 4.1; CONTRACT_295 r4 section 3b",
+      "codes": [
+        "TASK_SET"
+      ],
+      "vectors": [
+        "RF-EV-P1",
+        "RF-EV-N1"
+      ]
+    }
+  ],
+  "settlements": [
+    {
+      "id": "D1",
+      "text": "The worked example has two runs (ORC-295-D1; R12's erratum 303b3941): the recording run M0 writes fx-dev-000N.t1, the fixtures are built from them, and the scored run M1 (locks.fixtureDigest = digest(F)) writes fx-dev-000N.r1, which its scoring record names. Draft r4's one-run binding had a digest cycle; no rule changes."
+    },
+    {
+      "id": "F2",
+      "text": "The exit-to-outcome map gains the grader-error row (COMPLETED, GRADE record in envelope ERROR: BLOCKED, 0, EVALUATOR_ERROR); a trajectory never carries EVALUATOR_ERROR."
+    },
+    {
+      "id": "N1",
+      "text": "REGENERATION_MISMATCH is a record refusal decided from the fixture, its trajectory and its before-tree; REPLAY_DIVERGED and TREE_MISMATCH are replay verdicts, never record refusals."
+    },
+    {
+      "id": "EXIT-CODES",
+      "text": "R00 sets the exit.code lists: COMPLETED DONE; ERRORED AGENT_ERROR, TOOL_ERROR, HARNESS_ERROR; BUDGET_EXCEEDED one per MAS-RA-002 budget field plus BUDGET_ITERATIONS (MAS-RA-008's loop bound); BLOCKED the four environment causes."
+    },
+    {
+      "id": "Q-HRF-1",
+      "text": "(a) home architecture/replay-fixtures/, an internal candidate beside run-manifest/."
+    },
+    {
+      "id": "Q-HRF-2",
+      "text": "(a) replay-verdict/v1; MAS-RA-002 unchanged."
+    },
+    {
+      "id": "Q-HRF-3",
+      "text": "(a) arm-pair/v1 over a distribution-gate comparison."
+    },
+    {
+      "id": "Q-HRF-4",
+      "text": "(a) withhold: a pair is UNRESOLVED (WARN); a single record leaves the blocked run out."
+    },
+    {
+      "id": "R00-A",
+      "text": "(a) C-BLOCKED's pair rule has no named code: a pair whose blockedTasks or state does not follow it is MAS-RA-002's DECISION_MISMATCH (flagged for the c1 review). It is met last, after ARMS_NOT_ONE_VARIABLE, in the model's RECORD_CODES and in refusalOrder (the c1 review's F1; a c1 settlement against CONTRACT_295 r4 section 3b's order line, not a contract erratum)."
+    },
+    {
+      "id": "R00-B",
+      "text": "(b) A SYMLINK target is read from the blob store by the entry's digest; a target that is missing is TREE_PATH (flagged for the c1 review). A symlink to a symlink is refused (the target must be a FILE or EXECUTABLE entry), and a target whose bytes do not match its digest is TREE_PATH, by design."
+    },
+    {
+      "id": "R00-STORE",
+      "text": "A step blob missing from the store is MAS-RA-002's UNKNOWN_REFERENCE, a blob whose bytes are not its digest SHAPE; the pinned generator is fixture-builder 1, the model's build_fixture, and a fixture's generator digest is the model file's bytesDigest."
+    },
+    {
+      "id": "SPLIT",
+      "text": "The worked split declares one synthetic HELD_OUT task by id and digest (MAS-RA-002 needs both partitions); no HELD_OUT fixture exists anywhere in public files."
+    }
+  ],
+  "outOfScope": [
+    "Running a harness: the model replays against a recorded list of sent requests and a given after-tree.",
+    "aider's well-formed-edit share, pass-at-k beyond k >= 3, per-profile session counts (draft section 8).",
+    "A fixture format for multi-agent message logs; step-by-step comparison of TOOL responses.",
+    "Any change to MAS-RA-002's files: they are read by digest, unchanged."
+  ]
+}

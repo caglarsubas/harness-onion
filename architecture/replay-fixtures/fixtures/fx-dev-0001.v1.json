@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "planeon.internal.replay-fixture/v1",
+  "fixtureId": "fx-dev-0001.v1",
+  "suiteDigest": "sha256:53920efe659d11d82af2a1a0748545b0e75b67037778801afbacdadaafaab4c0",
+  "taskId": "fx-dev-0001",
+  "taskDigest": "sha256:bed5dc11bd5324e975d671f88d98b554e627ddc6ea41b60a465d71f26d5af5f2",
+  "split": {
+    "declarationDigest": "sha256:c879b19a717414d815a6bfb8092e3dd4fb334e147c351e140a2877495b830ae4",
+    "partition": "DEVELOPMENT"
+  },
+  "workspaceBefore": {
+    "entries": [
+      {
+        "path": "greeting.txt",
+        "kind": "FILE",
+        "digest": "sha256:5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+      }
+    ]
+  },
+  "expectedAfter": {
+    "entries": [
+      {
+        "path": "greeting.txt",
+        "kind": "FILE",
+        "digest": "sha256:853ff93762a06ddbf722c4ebe9ddd66d8f63ddaea97f521c3ecc20da7c976020"
+      }
+    ]
+  },
+  "ignoredPaths": [],
+  "trajectoryDigest": "sha256:99477baa1ec8295b3858298b68582454451041bac57e73f92178b7e9d9af681a",
+  "requestMatch": "DIGEST",
+  "generator": {
+    "id": "fixture-builder",
+    "version": "1",
+    "digest": "sha256:4e3f0157c43d14e46c53cd0617cc935d8b61df3f782fb00cd5b9d8b9c74c9e3e"
+  }
+}

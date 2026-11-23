@@ -1,0 +1,1007 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "harness.planeon.ai/replay-fixtures/v1",
+  "$defs": {
+    "pin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "tree": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entries"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "kind",
+              "digest"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "FILE",
+                  "EXECUTABLE",
+                  "SYMLINK"
+                ]
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "fixtureId",
+        "suiteDigest",
+        "taskId",
+        "taskDigest",
+        "split",
+        "workspaceBefore",
+        "expectedAfter",
+        "ignoredPaths",
+        "trajectoryDigest",
+        "requestMatch",
+        "generator"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "planeon.internal.replay-fixture/v1"
+        },
+        "fixtureId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "suiteDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "taskId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "taskDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "split": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "declarationDigest",
+            "partition"
+          ],
+          "properties": {
+            "declarationDigest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "partition": {
+              "enum": [
+                "DEVELOPMENT",
+                "HELD_OUT"
+              ]
+            }
+          }
+        },
+        "workspaceBefore": {
+          "$ref": "#/$defs/tree"
+        },
+        "expectedAfter": {
+          "$ref": "#/$defs/tree"
+        },
+        "ignoredPaths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "reason"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "trajectoryDigest": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "requestMatch": {
+          "enum": [
+            "DIGEST",
+            "INDEX"
+          ]
+        },
+        "requestMatchReason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "version",
+            "digest"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "trajectory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "trajectoryId",
+        "taskId",
+        "manifest",
+        "steps",
+        "exit"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "planeon.internal.replay-trajectory/v1"
+        },
+        "trajectoryId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "taskId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "manifest": {
+          "type": "object"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "index",
+              "actor",
+              "requestDigest",
+              "responseDigest"
+            ],
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "actor": {
+                "enum": [
+                  "MODEL",
+                  "TOOL"
+                ]
+              },
+              "requestDigest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "responseDigest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        "exit": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "code"
+              ],
+              "properties": {
+                "status": {
+                  "const": "COMPLETED"
+                },
+                "code": {
+                  "enum": [
+                    "DONE"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "code"
+              ],
+              "properties": {
+                "status": {
+                  "const": "ERRORED"
+                },
+                "code": {
+                  "enum": [
+                    "AGENT_ERROR",
+                    "TOOL_ERROR",
+                    "HARNESS_ERROR"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "code"
+              ],
+              "properties": {
+                "status": {
+                  "const": "BUDGET_EXCEEDED"
+                },
+                "code": {
+                  "enum": [
+                    "BUDGET_TOKENS",
+                    "BUDGET_COST",
+                    "BUDGET_WALL_CLOCK",
+                    "BUDGET_ITERATIONS"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "code"
+              ],
+              "properties": {
+                "status": {
+                  "const": "BLOCKED"
+                },
+                "code": {
+                  "enum": [
+                    "PROVIDER_UNAVAILABLE",
+                    "SANDBOX_UNAVAILABLE",
+                    "RESOURCE_UNAVAILABLE",
+                    "FIXTURE_UNAVAILABLE"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "scoreId",
+        "manifestDigest",
+        "results",
+        "scoredFrom"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "planeon.internal.replay-score/v1"
+        },
+        "scoreId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "manifestDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "taskId",
+              "fixtureDigest",
+              "trajectoryDigest",
+              "exitStatus",
+              "outcome",
+              "score",
+              "blockerCode",
+              "evidenceDigest"
+            ],
+            "properties": {
+              "taskId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+              },
+              "fixtureDigest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "trajectoryDigest": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "exitStatus": {
+                "enum": [
+                  "COMPLETED",
+                  "ERRORED",
+                  "BUDGET_EXCEEDED",
+                  "BLOCKED"
+                ]
+              },
+              "outcome": {
+                "enum": [
+                  "PASSED",
+                  "FAILED",
+                  "ERRORED",
+                  "BLOCKED"
+                ]
+              },
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "blockerCode": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "enum": [
+                      "PROVIDER_UNAVAILABLE",
+                      "SANDBOX_UNAVAILABLE",
+                      "RESOURCE_UNAVAILABLE",
+                      "FIXTURE_UNAVAILABLE",
+                      "EVALUATOR_ERROR"
+                    ]
+                  }
+                ]
+              },
+              "evidenceDigest": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "scoredFrom": {
+          "const": "TRACE"
+        }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "verdictId",
+        "fixtureDigest",
+        "harnessCommit",
+        "environmentDigest",
+        "requestMatch",
+        "verdict",
+        "divergedAtStep",
+        "afterTreeDigest"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "planeon.internal.replay-verdict/v1"
+        },
+        "verdictId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "fixtureDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "harnessCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "environmentDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "requestMatch": {
+          "enum": [
+            "DIGEST",
+            "INDEX"
+          ]
+        },
+        "verdict": {
+          "enum": [
+            "REPLAY_MATCH",
+            "REPLAY_DIVERGED",
+            "TREE_MISMATCH"
+          ]
+        },
+        "divergedAtStep": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "afterTreeDigest": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          ]
+        }
+      }
+    },
+    "armPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "pairId",
+        "comparisonDigest",
+        "variable",
+        "blockedTasks",
+        "state"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "planeon.internal.arm-pair/v1"
+        },
+        "pairId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "comparisonDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "variable": {
+          "enum": [
+            "model",
+            "harness.commit",
+            "budget",
+            "agentCount",
+            "locks.specsDigest",
+            "locks.promptDigests",
+            "locks.toolSchemaDigests",
+            "locks.imageDigests",
+            "locks.dependencyLockDigests",
+            "locks.fixtureDigest",
+            "locks.datasetDigest",
+            "locks.evaluator",
+            "locks.environmentDigest"
+          ]
+        },
+        "blockedTasks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state": {
+          "enum": [
+            "PASS",
+            "WARN",
+            "FAIL",
+            "UNRESOLVED"
+          ]
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "check",
+        "polarity",
+        "title",
+        "input",
+        "expect"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family": {
+          "enum": [
+            "TREE",
+            "FIXTURE",
+            "PLACEMENT",
+            "TRAJECTORY",
+            "REPLAY",
+            "VERDICT",
+            "SCORE",
+            "BINDING",
+            "BLOCKED",
+            "REGENERATION",
+            "ARMS",
+            "DENOM"
+          ]
+        },
+        "check": {
+          "enum": [
+            "FIXTURE",
+            "TRAJECTORY",
+            "SCORE",
+            "REGENERATION",
+            "REPLAY",
+            "VERDICT",
+            "ARM_PAIR",
+            "EVALUATION"
+          ]
+        },
+        "polarity": {
+          "enum": [
+            "POSITIVE",
+            "NEGATIVE"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input": {
+          "type": "object"
+        },
+        "expect": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "accept"
+              ],
+              "properties": {
+                "accept": {
+                  "const": true
+                },
+                "result": {
+                  "type": "object"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "refuse"
+              ],
+              "properties": {
+                "refuse": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "vectorsFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "stores",
+        "cases"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "harness.planeon.ai/replay-fixtures-vectors/v1"
+        },
+        "stores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "blobs",
+            "splits",
+            "manifests",
+            "fixtures",
+            "trajectories"
+          ],
+          "properties": {
+            "blobs": {
+              "type": "object"
+            },
+            "splits": {
+              "type": "object"
+            },
+            "manifests": {
+              "type": "object"
+            },
+            "fixtures": {
+              "type": "object"
+            },
+            "trajectories": {
+              "type": "object"
+            }
+          }
+        },
+        "cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/case"
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "item",
+    "packet",
+    "status",
+    "schema",
+    "vectors",
+    "model",
+    "basis",
+    "shapes",
+    "refusalOrder",
+    "verdicts",
+    "exitCodes",
+    "blockerCodes",
+    "outcomeMap",
+    "fixtureLockRule",
+    "store",
+    "ruleFamilies",
+    "settlements",
+    "outOfScope"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "harness.planeon.ai/replay-fixtures/v1"
+    },
+    "item": {
+      "const": "HR-REPLAY-FIXTURES-001"
+    },
+    "packet": {
+      "const": "MET-013"
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema": {
+      "$ref": "#/$defs/pin"
+    },
+    "vectors": {
+      "$ref": "#/$defs/pin"
+    },
+    "model": {
+      "$ref": "#/$defs/pin"
+    },
+    "basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "readme",
+        "manifestSchema",
+        "recordSchema",
+        "status",
+        "model"
+      ],
+      "properties": {
+        "readme": {
+          "$ref": "#/$defs/pin"
+        },
+        "manifestSchema": {
+          "$ref": "#/$defs/pin"
+        },
+        "recordSchema": {
+          "$ref": "#/$defs/pin"
+        },
+        "status": {
+          "$ref": "#/$defs/pin"
+        },
+        "model": {
+          "$ref": "#/$defs/pin"
+        }
+      }
+    },
+    "shapes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "refusalOrder": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "verdicts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "exitCodes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "COMPLETED",
+        "ERRORED",
+        "BUDGET_EXCEEDED",
+        "BLOCKED"
+      ],
+      "properties": {
+        "COMPLETED": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ERRORED": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "BUDGET_EXCEEDED": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "BLOCKED": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "blockerCodes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "outcomeMap": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "exitStatus",
+          "condition",
+          "outcome",
+          "score"
+        ],
+        "properties": {
+          "exitStatus": {
+            "type": "string",
+            "minLength": 1
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outcome": {
+            "type": "string",
+            "minLength": 1
+          },
+          "score": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "fixtureLockRule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "store": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "split",
+        "fixtures",
+        "trajectories",
+        "blobs"
+      ],
+      "properties": {
+        "split": {
+          "$ref": "#/$defs/pin"
+        },
+        "fixtures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pin"
+          }
+        },
+        "trajectories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pin"
+          }
+        },
+        "blobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pin"
+          }
+        }
+      }
+    },
+    "ruleFamilies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "property",
+          "source",
+          "codes",
+          "vectors"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "TREE",
+              "FIXTURE",
+              "PLACEMENT",
+              "TRAJECTORY",
+              "REPLAY",
+              "VERDICT",
+              "SCORE",
+              "BINDING",
+              "BLOCKED",
+              "REGENERATION",
+              "ARMS",
+              "DENOM"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "property": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "vectors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "settlements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "outOfScope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

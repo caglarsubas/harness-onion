@@ -1,0 +1,288 @@
+{
+  "schemaVersion": "harness.planeon.ai/agent-loop-compaction/v1",
+  "item": "HR-COMPACTION-GOV-001",
+  "packet": "MET-013",
+  "status": "CONTRACT_CANDIDATE",
+  "successorOf": {
+    "item": "MAS-RA-008",
+    "status": "ADOPTED_CONTRACT_CANDIDATE"
+  },
+  "schema": {
+    "path": "architecture/agent-loop-compaction/schema.json",
+    "sha256": "7c417668a36a8a825aa157909b51794980b2c57f7d94892f973d612e844e78d9"
+  },
+  "vectors": {
+    "path": "architecture/agent-loop-compaction/vectors.json",
+    "sha256": "5bcbb7e86e2c940bb3bfc800f1d39c054a6af2c0f5e7be17075ac9684534d5c5"
+  },
+  "model": {
+    "path": "scripts/agent_loop_compaction.py",
+    "sha256": "1439a9de9ba391d25e4031a9f361a98edfe1925d75fdf15e3da147d5b4c7a65a"
+  },
+  "basis": {
+    "readme": {
+      "path": "architecture/agent-loop/README.md",
+      "sha256": "666c4221d3edbdd5187c17db9c43c122b1f7900a9fa0b3ddc430db3bee2b8e5a"
+    },
+    "profileSchema": {
+      "path": "architecture/agent-loop/loop-profile.schema.json",
+      "sha256": "d75a5b943929f7678c8e8c8cacf2e937312bcc06caf15018de73ae9b9abac0bb"
+    },
+    "traceSchema": {
+      "path": "architecture/agent-loop/loop-trace.schema.json",
+      "sha256": "3be32ceee16c2bbbeaf945ee8231a16e4a74fc2ddce46ebafdf7bee9d7868b6e"
+    },
+    "status": {
+      "path": "architecture/agent-loop/status.json",
+      "sha256": "0410907c3f6b9ac6907fcadc7767678b01c65c24593b0d5ae84a95ca63c581ad"
+    },
+    "model": {
+      "path": "scripts/agent_loop.py",
+      "sha256": "f9a1fb1441a39efa6e566b26474f25f30106e4bbf6be4919d31ac69dddc48e68"
+    }
+  },
+  "baseVocabulary": {
+    "stepKinds": [
+      "MODEL",
+      "TOOL",
+      "GATE",
+      "HOOK",
+      "HANDOFF",
+      "DELEGATE"
+    ],
+    "hookEvents": [
+      "INVOKE_START",
+      "INVOKE_END",
+      "MODEL_QUERY_BEFORE",
+      "MODEL_QUERY_AFTER",
+      "TOOL_CALL_BEFORE",
+      "TOOL_RESULT_AFTER",
+      "EXEC_BEFORE",
+      "EXEC_AFTER",
+      "BUDGET_WARNING",
+      "BUDGET_EXHAUSTED",
+      "STEP_ERROR",
+      "STEP_RETRY",
+      "HANDOFF"
+    ],
+    "trustLabels": [
+      "TRUSTED_TOOL_OUTPUT",
+      "UNTRUSTED_TOOL_OUTPUT"
+    ],
+    "terminalStatuses": [
+      "COMPLETED",
+      "FAILED",
+      "HANDED_OFF",
+      "ABORTED"
+    ]
+  },
+  "stepKinds": [
+    "MODEL",
+    "TOOL",
+    "GATE",
+    "HOOK",
+    "HANDOFF",
+    "DELEGATE",
+    "COMPACT"
+  ],
+  "compactDetail": [
+    "lockId",
+    "rangeFirstSeq",
+    "rangeLastSeq",
+    "checkpointDigest",
+    "summaryDigest",
+    "summaryKind",
+    "summaryTrust",
+    "summaryRoute",
+    "epoch",
+    "systemPromptDigest"
+  ],
+  "profileDefaults": {
+    "cooldownSeconds": [
+      60,
+      300,
+      900
+    ]
+  },
+  "ruleFamilies": [
+    {
+      "id": "C1",
+      "name": "LOCK_BRACKET",
+      "property": "One lock per run; inside it only the compaction's own HOOK, COMPACT and GATE steps, never a HANDOFF; an orphan lock found on open is discarded, the context restored from the archive and one orphan event recorded. C1's bracket holds one or two COMPACT steps (R2-F1).",
+      "source": "R08 note r3 0bbbbedd, section 3, C1",
+      "refusal": "CG_LOCK",
+      "vectors": [
+        "CG-C1-P1",
+        "CG-C1-P2",
+        "CG-C1-N1",
+        "CG-C1-N2",
+        "CG-C1-N3"
+      ]
+    },
+    {
+      "id": "C2",
+      "name": "BALANCED_RANGE",
+      "property": "A contiguous range that splits no tool exchange and holds no unsettled DELEGATE; later steps reference the summary forward only and no earlier record changes; every digest the summary names lies inside the range (R2-F2, the COMPACT step's own refusal).",
+      "source": "R08 note r3 0bbbbedd, section 3, C2",
+      "refusal": "CG_RANGE",
+      "vectors": [
+        "CG-C2-P1",
+        "CG-C2-N1",
+        "CG-C2-N2",
+        "CG-C2-N3",
+        "CG-C2-N4"
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "CHECKPOINT_GATE",
+      "property": "The full range is archived under its digest before anything is dropped; fail closed; the same archive written twice is one record.",
+      "source": "R08 note r3 0bbbbedd, section 3, C3",
+      "refusal": "CG_CHECKPOINT",
+      "vectors": [
+        "CG-C3-P1",
+        "CG-C3-P2",
+        "CG-C3-N1",
+        "CG-C3-N2"
+      ]
+    },
+    {
+      "id": "C4",
+      "name": "FAILURE_LADDER",
+      "property": "A failed MODEL summary (a gate FAIL included) falls back to a FALLBACK summary that carries artefact digests, step ids and trust labels only; cooldowns rise and persist across a restart (profile defaults 60, 300 and 900 s, Q-CG-4); a typed overflow hands off to CONTEXT-HANDOFF-001, never truncates; a COMPACT counts no iteration but its tokens and time count (Q-CG-3); telemetry is content-free. After a gate FAIL the same bracket appends a FALLBACK COMPACT over the same range, and later steps reference it (R2-F1).",
+      "source": "R08 note r3 0bbbbedd, section 3, C4",
+      "refusal": "CG_LADDER",
+      "vectors": [
+        "CG-C4-P1",
+        "CG-C4-P2",
+        "CG-C4-P3",
+        "CG-C4-P4",
+        "CG-C4-P5",
+        "CG-C4-N1",
+        "CG-C4-N2",
+        "CG-C4-N3",
+        "CG-C4-N4",
+        "CG-C4-N5",
+        "CG-C4-N6",
+        "CG-C4-N7",
+        "CG-C4-N8"
+      ]
+    },
+    {
+      "id": "C5",
+      "name": "INSTRUCTION_EPOCHS",
+      "property": "A mid-run instruction change is a recorded delta and raises the epoch; a compaction resets the epoch to 0 and the full set is re-hashed.",
+      "source": "R08 note r3 0bbbbedd, section 3, C5",
+      "refusal": "CG_EPOCH",
+      "vectors": [
+        "CG-C5-P1",
+        "CG-C5-P2",
+        "CG-C5-N1"
+      ]
+    },
+    {
+      "id": "C6",
+      "name": "STABLE_PROMPT",
+      "property": "The system prompt's digest is equal on every MODEL step, except on the first MODEL step after a COMPACT step.",
+      "source": "R08 note r3 0bbbbedd, section 3, C6",
+      "refusal": "CG_PROMPT",
+      "vectors": [
+        "CG-C6-P1",
+        "CG-C6-P2",
+        "CG-C6-N1"
+      ]
+    },
+    {
+      "id": "C7",
+      "name": "SUMMARY_TRUST",
+      "property": "The summary's trust is computed from the range (UNTRUSTED when a step in it holds or consumed an untrusted tool output) and the summary enters as data, never with instruction authority; a byte-identical summary reused over another range is checked by the COMPACT step against that range (R2-F2).",
+      "source": "R08 note r3 0bbbbedd, section 3, C7",
+      "refusal": "CG_TRUST",
+      "vectors": [
+        "CG-C7-P1",
+        "CG-C7-P2",
+        "CG-C7-P3",
+        "CG-C7-N1",
+        "CG-C7-N2",
+        "CG-C7-N3",
+        "CG-C7-N4",
+        "CG-C7-N5"
+      ]
+    },
+    {
+      "id": "C8",
+      "name": "ARCHIVE_RETENTION",
+      "property": "The archive's retention is no longer than its trace's; a tenant deletion removes it and leaves a deletion record; a restore from a deleted archive fails typed, never silently.",
+      "source": "R08 note r3 0bbbbedd, section 3, C8",
+      "refusal": "CG_RETENTION",
+      "vectors": [
+        "CG-C8-P1",
+        "CG-C8-P2",
+        "CG-C8-N1",
+        "CG-C8-N2"
+      ]
+    },
+    {
+      "id": "C9",
+      "name": "GOVERNED_SUMMARY",
+      "property": "A MODEL summary (one a before-model-query hook supplies included, R2-N2) passes both model-query hooks, uses the profile's declared route and passes a deterministic A3 GATE on its bytes before any consumer reads it (R2-N1); a gate FAIL is never overridden and goes to C4; FALLBACK is not a model artefact.",
+      "source": "R08 note r3 0bbbbedd, section 3, C9",
+      "refusal": "CG_GATE",
+      "vectors": [
+        "CG-C9-P1",
+        "CG-C9-P2",
+        "CG-C9-P3",
+        "CG-C9-P4",
+        "CG-C9-N1",
+        "CG-C9-N2",
+        "CG-C9-N3",
+        "CG-C9-N4",
+        "CG-C9-N5"
+      ]
+    }
+  ],
+  "settlements": [
+    {
+      "id": "PLACEMENT",
+      "text": "The record sits beside MAS-RA-008's contract, never inside architecture/agent-loop/ (frozen); it is a successor candidate to that contract, which stays unchanged, and the model imports nothing from scripts/agent_loop.py."
+    },
+    {
+      "id": "Q-CG-1",
+      "text": "The compaction state (archive, lock, ladder) is H10's runtime state; this record fixes its shape only."
+    },
+    {
+      "id": "Q-CG-2",
+      "text": "The step-kind set gains COMPACT; the 13 hook events, the trust labels and the terminal statuses are unchanged; A3 gains one subject, the summary."
+    },
+    {
+      "id": "Q-CG-3",
+      "text": "A COMPACT step counts no iteration; its tokens and time count against the budgets."
+    },
+    {
+      "id": "Q-CG-4",
+      "text": "The profile's cooldown defaults are 60, 300 and 900 s; the vectors test the shape (rising, persisted)."
+    },
+    {
+      "id": "R2-F1",
+      "text": "After a gate FAIL the same bracket appends a second COMPACT step, summaryKind FALLBACK, with the same range and checkpointDigest; later steps reference the bracket's last COMPACT step and the MODEL one stays as a failed summary (vector CG-C4-P2 pins the order; CG-C4-N8 refuses another range)."
+    },
+    {
+      "id": "R2-F2",
+      "text": "The range checks (summaryTrust equal to the label computed from the range; every digest the summary names inside the range) are the COMPACT step's own refusals, beside C2's and C7's; the A3 GATE stays keyed on the summary bytes alone (vectors CG-C7-N5 and CG-C2-N4)."
+    },
+    {
+      "id": "R2-N1",
+      "text": "The gate passes before any A3 consumer reads the summary: a MODEL step, a write tool, a delegation, the delivery and a handoff that carries the summary (vector CG-C9-P2)."
+    },
+    {
+      "id": "R2-N2",
+      "text": "A summary a before-model-query hook supplies (SUPPLY_OUTPUT) is still a MODEL summary for C9's gate and C4's ladder (vectors CG-C9-P3 and CG-C9-N4)."
+    }
+  ],
+  "outOfScope": [
+    "The runtime that holds the lock, the archive and the ladder (H10's state); this record fixes shapes and rules only.",
+    "The handoff payload itself (CONTEXT-HANDOFF-001); C4 names only the typed overflow that starts it.",
+    "Any change to architecture/agent-loop/ or scripts/agent_loop.py: MAS-RA-008's contract is read by digest, unchanged.",
+    "Enforcement: the checker checks data only."
+  ]
+}

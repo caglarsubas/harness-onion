@@ -495,29 +495,46 @@ def test_catalog_names_and_base_bytes(auth, catalog):
         assert _sha(raws[name]) == auth["baselinePackets"][name]
 
 
-def test_historical_catalog_returns_base(head, auth, parsed_catalog):
-    """CONTRACT_294 sections 1 and 4: historical_catalog over the whole catalog returns exactly the 314 base ids."""
-    result = dict(head.historical_catalog(dict(parsed_catalog)))
-    # CONTRACT_294 sections 1 and 4 (without NEW_PACKET and the three: the 314 base ids)
+# CONTRACT_294 erratum E6 (a strict head refuses any other set with this message)
+CATALOG_REFUSAL = "unexpected packet addition or loss"
+# Construction only (CONTRACT_294 erratum E6, C18 amended 2): the head module whose ROOT the names helper uses.
+CATALOG_HEAD = _load_head()
+
+
+def current_catalog_names():
+    """The current catalog's names (CONTRACT_294 erratum E6): the sorted stems of the packet YAML names."""
+    return sorted(path.stem for path in (CATALOG_HEAD.ROOT / "task-packets").glob("*.yaml"))
+
+
+@pytest.fixture(scope="module")
+def current_catalog(head):
+    """CONTRACT_294 erratum E6: the current catalog, each YAML read through the era reader and parsed as now."""
+    return {name: head.safe_load(head.reviewed_bytes(_packet_path(name))) for name in current_catalog_names()}
+
+
+def test_historical_catalog_returns_base(head, auth, current_catalog):
+    """CONTRACT_294 sections 1 and 4, erratum E6: the current catalog peels to exactly the 314 base ids."""
+    result = dict(head.historical_catalog(dict(current_catalog)))
+    # CONTRACT_294 sections 1 and 4, erratum E6 (the chain's own peel: the 314 base ids of the authority)
     assert sorted(result) == sorted(auth["baselinePackets"]) and len(result) == BASE_COUNT
     # operator-stated (the mapping without NEW_PACKET and the three)
-    assert all(result[name] == parsed_catalog[name] for name in result)
+    assert all(result[name] == current_catalog[name] for name in result)
 
 
 @pytest.mark.parametrize(("case", "name"), CATALOG_CASES, ids=[case + "-" + name for case, name in CATALOG_CASES])
-def test_historical_catalog_refuses(head, auth, parsed_catalog, case, name):
-    """CONTRACT_294 section 4: historical_catalog refuses a mapping that lacks a product (or any id) or adds one."""
-    packets = dict(parsed_catalog)
+def test_historical_catalog_refuses(head, auth, current_catalog, case, name):
+    """CONTRACT_294 section 4, erratum E6: the current catalog lacking a product (or any id) or adding one is refused."""
+    packets = dict(current_catalog)
     if case == "lacks":
         del packets[name]
     elif case == "lacks-base":
         del packets[next(iter(auth["baselinePackets"]))]
     else:
-        extra = copy.deepcopy(parsed_catalog[NEW_PACKET])
+        extra = copy.deepcopy(current_catalog[NEW_PACKET])
         extra["id"] = name
         packets[name] = extra
-    # operator-stated (historical_catalog refuses a mapping that lacks or adds an id)
-    with pytest.raises(ValueError):
+    # operator-stated (historical_catalog refuses a mapping that lacks or adds an id); CONTRACT_294 erratum E6
+    with pytest.raises(ValueError, match=CATALOG_REFUSAL):
         head.historical_catalog(packets)
 
 
