@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-013
+## Current source preparation — MET-014
+
+MET-014 (slot 296): the decision record, the regulatory alignment record and edge record v13, a K = 0 step (320 packets at slot 296): GR-DECISION-RECORD-001, the decision record and its fail-closed envelope (R12's draft with its E1); REG-ALIGN-001, the regulatory alignment record, published (R03's draft r4); and EDGE-V13, operator edge record v13, the no-receipt TERMINAL amendment of the broker handoff inputs (R10's draft), each in 295's member form: a record, a checker scripts/validate_<name>.py whose check(reader) returns its refusals and a test, with a vectors file and a reference model where the member has vectors; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracle).
+Alpha2 OPEN; 319 accepted (the catalog at slot 295) plus MET-014 only.
+
+## Historical three HR contracts source preparation — MET-013
 
 MET-013 (slot 295): the three HR contracts, a K = 0 step (319 packets at slot 295): HR-COMPACTION-GOV-001, the loop contract's compaction amendment (MAS-RA-008's successor record, R08's note); HR-REPLAY-FIXTURES-001, the replay-fixture contract over MAS-RA-002's run manifest (R12's draft); and HR-APPROVAL-OUTCOME-001, the approval outcome contract (R04's note), each in DATA-CORRECTNESS-001's form: a record holding its clauses as rule families, a closed JSON schema, its vectors, a reference model, a checker and a test; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracle).
 Alpha2 OPEN; 318 accepted (the catalog at slot 294) plus MET-013 only.
@@ -1862,3 +1867,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 317 | `IND-BANK-003A` | `mas-harness-industry-packs` | The banking governance-and-integration slice (pack 0.3.0), IND-BANK-003's successor (product, published by MET-012) |
 | 318 | `EXEC-TEMPORAL-PINS-001` | `mas-harness-execution-plane` | The Temporal provider dossier (provider record, CycloneDX SBOM, licence and notice review; no runtime code), after PLANE-BOOTSTRAP-R08 (product, published by MET-012) |
 | 319 | `MET-013` | `Harness-Engineering` | The three HR contracts (K = 0, 319 packets at slot 295): HR-COMPACTION-GOV-001, HR-REPLAY-FIXTURES-001 and HR-APPROVAL-OUTCOME-001, in-repo records with their schemas, vectors, models, checkers and tests; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
+| 320 | `MET-014` | `Harness-Engineering` | The decision record, the regulatory alignment record and edge record v13 (K = 0, 320 packets at slot 296): GR-DECISION-RECORD-001, REG-ALIGN-001 and EDGE-V13, in-repo records with their checkers and tests, and vectors and models where a member has them; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |

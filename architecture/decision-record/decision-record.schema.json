@@ -1,0 +1,511 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "planeon.internal.decision-record/v1",
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopeDigest",
+        "subjectKind",
+        "subjectDigest",
+        "revision"
+      ],
+      "properties": {
+        "scopeDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "subjectKind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subjectDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "detail"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "ERR_MALFORMED_INPUT",
+            "ERR_RULE_NOT_SELECTED",
+            "ERR_EVALUATOR_UNAVAILABLE",
+            "ERR_TIMEOUT",
+            "ERR_INTERNAL"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "decision",
+        "effectiveDecision",
+        "error"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "DECIDED",
+            "ERROR"
+          ]
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "ALLOW",
+                "APPROVED",
+                "CANCELLED",
+                "DENY",
+                "ESCALATE",
+                "EXPIRED",
+                "FAIL",
+                "PASS",
+                "REJECTED",
+                "TRANSFORM",
+                "UNAVAILABLE",
+                "UNGRADED"
+              ]
+            }
+          ]
+        },
+        "effectiveDecision": {
+          "enum": [
+            "ALLOW",
+            "APPROVED",
+            "CANCELLED",
+            "DENY",
+            "ESCALATE",
+            "EXPIRED",
+            "FAIL",
+            "PASS",
+            "REJECTED",
+            "TRANSFORM",
+            "UNAVAILABLE",
+            "UNGRADED"
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/error"
+            }
+          ]
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleId",
+        "ruleVersion",
+        "policyVersion",
+        "policyBindingDigest"
+      ],
+      "properties": {
+        "ruleId": {
+          "type": "string"
+        },
+        "ruleVersion": {
+          "type": "string"
+        },
+        "policyVersion": {
+          "type": "string"
+        },
+        "policyBindingDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "contentDigest",
+        "locations",
+        "matchFingerprint"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "POLICY_RESULT",
+            "TRACE",
+            "ARTIFACT"
+          ]
+        },
+        "contentDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "locations": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/location"
+              }
+            }
+          ]
+        },
+        "matchFingerprint": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ]
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelId",
+        "configurationDigest",
+        "promptDigest",
+        "tokensIn",
+        "tokensOut"
+      ],
+      "properties": {
+        "modelId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configurationDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "promptDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "tokensIn": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tokensOut": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "ruleId",
+        "ruleVersion",
+        "model",
+        "decision",
+        "score"
+      ],
+      "properties": {
+        "source": {
+          "enum": [
+            "DETERMINISTIC",
+            "MODEL"
+          ]
+        },
+        "ruleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ruleVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/model"
+            }
+          ]
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "enum": [
+                "ALLOW",
+                "APPROVED",
+                "CANCELLED",
+                "DENY",
+                "ESCALATE",
+                "EXPIRED",
+                "FAIL",
+                "PASS",
+                "REJECTED",
+                "TRANSFORM",
+                "UNAVAILABLE",
+                "UNGRADED"
+              ]
+            }
+          ]
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            }
+          ]
+        }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "valueBeforeDigest",
+        "valueAfterDigest"
+      ],
+      "properties": {
+        "valueBeforeDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "valueAfterDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "required": [
+        "requestId",
+        "kind",
+        "state",
+        "subjectId",
+        "revision",
+        "subjectDigest",
+        "policyRef",
+        "policyBindingDigest",
+        "ruleVersion",
+        "mandate",
+        "expiresAt",
+        "asker",
+        "askPort",
+        "decidePort",
+        "decisionRef",
+        "decidedBy",
+        "reasonCode",
+        "decidingStatement"
+      ],
+      "propertyNames": {
+        "enum": [
+          "requestId",
+          "kind",
+          "state",
+          "subjectId",
+          "revision",
+          "subjectDigest",
+          "policyRef",
+          "policyBindingDigest",
+          "ruleVersion",
+          "mandate",
+          "expiresAt",
+          "asker",
+          "askPort",
+          "decidePort",
+          "decisionRef",
+          "decidedBy",
+          "reasonCode",
+          "decidingStatement",
+          "businessIntentId",
+          "payloadHash",
+          "evidenceVersions",
+          "preconditions",
+          "compartment",
+          "limits"
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "decisionId",
+    "kind",
+    "subject",
+    "envelope",
+    "reasonCode",
+    "rule",
+    "evidence",
+    "contributions",
+    "transform",
+    "escalationRef",
+    "approval",
+    "decidedAt",
+    "supersedes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "planeon.internal.decision-record/v1"
+    },
+    "decisionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "enum": [
+        "GUARDRAIL",
+        "ADMISSION_SCAN",
+        "GRADE",
+        "APPROVAL"
+      ]
+    },
+    "subject": {
+      "$ref": "#/$defs/subject"
+    },
+    "envelope": {
+      "$ref": "#/$defs/envelope"
+    },
+    "reasonCode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rule": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/rule"
+        }
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "contributions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contribution"
+      }
+    },
+    "transform": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/transform"
+        }
+      ]
+    },
+    "escalationRef": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      ]
+    },
+    "approval": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/approval"
+        }
+      ]
+    },
+    "decidedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      ]
+    }
+  }
+}
