@@ -9,11 +9,11 @@
   },
   "vectors": {
     "path": "architecture/replay-fixtures/vectors.json",
-    "sha256": "a7ab25b8a1c802780c7f120739d57954eed2a50dbfa24fd49c3f158c4fdcaf5a"
+    "sha256": "a5a4015f8f4059f092556c15874086b5c7c0437bd697726b3bdebbdbfc543904"
   },
   "model": {
     "path": "scripts/replay_fixtures.py",
-    "sha256": "0ebe3661840f27f90932b553c3102fc6ffd595d6b13fb9c04f81545ed517f095"
+    "sha256": "166b2a84b8876af0f4a010cfc95aaa39b0b9a5f1f9b4ca52763a1d0a49880858"
   },
   "basis": {
     "readme": {
@@ -55,7 +55,8 @@
     "BLOCKER_UNEVIDENCED",
     "REGENERATION_MISMATCH",
     "ARMS_IDENTICAL",
-    "ARMS_NOT_ONE_VARIABLE"
+    "ARMS_NOT_ONE_VARIABLE",
+    "DECISION_MISMATCH"
   ],
   "verdicts": [
     "REPLAY_MATCH",
@@ -138,11 +139,11 @@
     "fixtures": [
       {
         "path": "architecture/replay-fixtures/fixtures/fx-dev-0001.v1.json",
-        "sha256": "470e591ea567f3cbd78e2793a74208a52b78ac2530f4145bb9c743a95da1cf9d"
+        "sha256": "b7727b7152501ab87416e5a1d4b9f1ff870c13724171c8ce9f0ee73f41de43b2"
       },
       {
         "path": "architecture/replay-fixtures/fixtures/fx-dev-0002.v1.json",
-        "sha256": "b0caa58c4789664cd9e4d38515c2cc7124f1341f337769a502f447195e77553f"
+        "sha256": "fc4da5c9acbff573b318fb6c251700d539d62b7f158993b23cf04162ece1e72a"
       }
     ],
     "trajectories": [
@@ -420,11 +421,11 @@
     },
     {
       "id": "R00-A",
-      "text": "(a) C-BLOCKED's pair rule has no named code: a pair whose blockedTasks or state does not follow it is MAS-RA-002's DECISION_MISMATCH (flagged for the c1 review)."
+      "text": "(a) C-BLOCKED's pair rule has no named code: a pair whose blockedTasks or state does not follow it is MAS-RA-002's DECISION_MISMATCH (flagged for the c1 review). It is met last, after ARMS_NOT_ONE_VARIABLE, in the model's RECORD_CODES and in refusalOrder (the c1 review's F1; a c1 settlement against CONTRACT_295 r4 section 3b's order line, not a contract erratum)."
     },
     {
       "id": "R00-B",
-      "text": "(b) A SYMLINK target is read from the blob store by the entry's digest; a target that is missing is TREE_PATH (flagged for the c1 review)."
+      "text": "(b) A SYMLINK target is read from the blob store by the entry's digest; a target that is missing is TREE_PATH (flagged for the c1 review). A symlink to a symlink is refused (the target must be a FILE or EXECUTABLE entry), and a target whose bytes do not match its digest is TREE_PATH, by design."
     },
     {
       "id": "R00-STORE",

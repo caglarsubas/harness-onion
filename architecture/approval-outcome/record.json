@@ -9,7 +9,7 @@
   },
   "vectors": {
     "path": "architecture/approval-outcome/vectors.json",
-    "sha256": "7a8e14c955d83037d4a0948e3b655d94f98ef7c9f7c2a4df149711e8eb656a1b"
+    "sha256": "7be26fb683f82cdff1a306a1f3a4cdc13be1eb9eebb29578bc4ff6365523472a"
   },
   "model": {
     "path": "scripts/approval_outcome.py",
@@ -334,11 +334,13 @@
         "AO-S-S3",
         "AO-S-S4",
         "AO-S-S5",
+        "AO-S-S6",
         "AO-S-N1",
         "AO-S-N8",
         "AO-S-N9",
         "AO-S-N3",
-        "AO-S-N4"
+        "AO-S-N4",
+        "AO-S-N5"
       ]
     },
     {
@@ -401,7 +403,7 @@
     },
     {
       "id": "STATEMENT-DEFAULT",
-      "text": "R00's call for S5: when no statement decides, the result is UNAVAILABLE (fail closed), never an implied allow."
+      "text": "R00's call for S5: when no statement decides, the result is UNAVAILABLE (fail closed), never an implied allow; it reaches a request as the port's UNAVAILABLE answer, so r4's \"the port cannot be read\" includes \"no authoritative answer\"."
     },
     {
       "id": "R2-N2",
@@ -413,7 +415,7 @@
     },
     {
       "id": "TLA-CROSS-CHECK",
-      "text": "R04's TLA+ model r2 (the owner's pilot) was read as a cross-check: each of its invariants (NoEffectWithoutLiveApproval, DenyNeverLifted, ModelNeverDecides, UnavailableNeverApproved, ExpiredOrRevokedNeverAuthorizes for expiry, EffectAtMostOnce, AuditPairClosed, SweepBound) has a vector here; nothing is imported from it (C30 is not retroactive to 295)."
+      "text": "R04's TLA+ model r2 (the owner's pilot; spec ApprovalLifecycle.tla e474fad4) was read as a cross-check: each of its invariants (NoEffectWithoutLiveApproval, DenyNeverLifted, ModelNeverDecides, UnavailableNeverApproved, ExpiredOrRevokedNeverAuthorizes for expiry, EffectAtMostOnce, AuditPairClosed, SweepBound) has a vector here; nothing is imported from it (C30 is not retroactive to 295)."
     }
   ],
   "outOfScope": [

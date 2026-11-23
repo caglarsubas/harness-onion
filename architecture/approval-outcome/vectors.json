@@ -2602,6 +2602,50 @@
       }
     },
     {
+      "id": "AO-S-S6",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "POSITIVE",
+      "title": "STATEMENT-DEFAULT: every layer present and no statement matches the action gives UNAVAILABLE, statement none",
+      "refs": [
+        "S5"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "pack-1",
+            "version": "1",
+            "layer": "PACK",
+            "scope": "ACTION",
+            "match": "payments.refund",
+            "effect": "ALLOW"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.refund",
+            "effect": "ASK"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release"
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "decision": "UNAVAILABLE",
+          "statement": null
+        }
+      }
+    },
+    {
       "id": "AO-S-N1",
       "family": "S",
       "check": "STATEMENTS",
@@ -2805,6 +2849,50 @@
         "action": "payments.release",
         "claimed": {
           "decision": "ASK",
+          "statement": null
+        }
+      },
+      "expect": {
+        "refuse": "AO_STATEMENT"
+      }
+    },
+    {
+      "id": "AO-S-N5",
+      "family": "S",
+      "check": "STATEMENTS",
+      "polarity": "NEGATIVE",
+      "title": "STATEMENT-DEFAULT: AO-S-S6's input (no statement matches the action) read as ALLOW",
+      "refs": [
+        "S5"
+      ],
+      "input": {
+        "statements": [
+          {
+            "id": "pack-1",
+            "version": "1",
+            "layer": "PACK",
+            "scope": "ACTION",
+            "match": "payments.refund",
+            "effect": "ALLOW"
+          },
+          {
+            "id": "org-1",
+            "version": "1",
+            "layer": "ORGANISATION",
+            "scope": "ACTION",
+            "match": "payments.refund",
+            "effect": "ASK"
+          }
+        ],
+        "layers": {
+          "FLOOR": "LOADED",
+          "PACK": "LOADED",
+          "PROFILE": "LOADED",
+          "ORGANISATION": "LOADED"
+        },
+        "action": "payments.release",
+        "claimed": {
+          "decision": "ALLOW",
           "statement": null
         }
       },

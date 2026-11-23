@@ -10,7 +10,8 @@ refusal codes (SHAPE, UNKNOWN_REFERENCE, TASK_SET, ...) come first. This model i
 Five shapes: replay-fixture/v1, replay-trajectory/v1, replay-score/v1, replay-verdict/v1 and arm-pair/v1. Record
 refusals, first met first: MAS-RA-002's codes; TREE_PATH; TREE_ORDER; HELD_OUT_PUBLIC; FIXTURE_BINDING;
 SELF_REPORTED_SCORE; OUTCOME_MISMATCH; BLOCKER_UNEVIDENCED; REGENERATION_MISMATCH; ARMS_IDENTICAL;
-ARMS_NOT_ONE_VARIABLE. REPLAY_MATCH, REPLAY_DIVERGED and TREE_MISMATCH are replay verdicts, never refusals.
+ARMS_NOT_ONE_VARIABLE; DECISION_MISMATCH (MAS-RA-002's code, met last: an arm pair's blocked count or state).
+REPLAY_MATCH, REPLAY_DIVERGED and TREE_MISMATCH are replay verdicts, never refusals.
 `build_fixture` is the pinned generator (fixture-builder 1): it builds a fixture from its recorded trajectory and
 before-tree; a fixture's generator digest is this file's bytesDigest.
 """
@@ -40,7 +41,7 @@ OUTCOMES = ("PASSED", "FAILED", "ERRORED", "BLOCKED")
 VERDICTS = ("REPLAY_MATCH", "REPLAY_DIVERGED", "TREE_MISMATCH")
 RECORD_CODES = ("TREE_PATH", "TREE_ORDER", "HELD_OUT_PUBLIC", "FIXTURE_BINDING", "SELF_REPORTED_SCORE",
                 "OUTCOME_MISMATCH", "BLOCKER_UNEVIDENCED", "REGENERATION_MISMATCH", "ARMS_IDENTICAL",
-                "ARMS_NOT_ONE_VARIABLE")
+                "ARMS_NOT_ONE_VARIABLE", "DECISION_MISMATCH")
 LOCK_NAMES = ("specsDigest", "promptDigests", "toolSchemaDigests", "imageDigests", "dependencyLockDigests",
               "fixtureDigest", "datasetDigest", "evaluator", "environmentDigest")   # MAS-RA-002's LOCK_KEYS
 VARIABLES = ("model", "harness.commit", "budget", "agentCount") + tuple("locks." + k for k in LOCK_NAMES)
