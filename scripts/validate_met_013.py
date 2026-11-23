@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/three-hr-contracts-authority.json"
-AUTHORITY_SHA256 = "44fa1f441b92a8dab63cea40742b0fea558eaefc6db00ceb3eb21510971f0db3"
+AUTHORITY_SHA256 = "6d7973875de0b84b54c82acb8119f5c268cd5b8336b2c9a5e89248ba7987106a"
 VALIDATOR_PATH = "scripts/validate_met_013.py"
 BASE_COMMIT = "6437de35186c458e671a4b659390d2b5f3909c8d"
 NEW_PACKET = "MET-013"
@@ -570,9 +570,9 @@ BASE_SHA256 = MappingProxyType({
     "scripts/run_manifest.py": "f2861b4c23ad51fc5b8cdd9910124b23d2c114bd61786e58d93b20f42f3f423e",
 })
 ERA_SHA256 = MappingProxyType({
-    "architecture/agent-loop-compaction/record.json": "ecb642d36078aa72bab4affce486af963296d0de688bd1f76417a7610dcb1a2b",
+    "architecture/agent-loop-compaction/record.json": "750a78f7627d4c3e5e7340b2d42e0d2311dd7f6ca5664553e1b3bd7ab49e18df",
     "architecture/agent-loop-compaction/schema.json": "7c417668a36a8a825aa157909b51794980b2c57f7d94892f973d612e844e78d9",
-    "architecture/agent-loop-compaction/vectors.json": "e3f144fe37258e95cd152fb799706a3ee66380708f63031f488d420113e7c3a4",
+    "architecture/agent-loop-compaction/vectors.json": "5bcbb7e86e2c940bb3bfc800f1d39c054a6af2c0f5e7be17075ac9684534d5c5",
     "architecture/agent-loop/README.md": "666c4221d3edbdd5187c17db9c43c122b1f7900a9fa0b3ddc430db3bee2b8e5a",
     "architecture/agent-loop/loop-profile.schema.json": "d75a5b943929f7678c8e8c8cacf2e937312bcc06caf15018de73ae9b9abac0bb",
     "architecture/agent-loop/loop-trace.schema.json": "3be32ceee16c2bbbeaf945ee8231a16e4a74fc2ddce46ebafdf7bee9d7868b6e",
@@ -683,7 +683,7 @@ ERA_SHA256 = MappingProxyType({
     "architecture/run-manifest/vectors.json": "43bcd436efdfe4270677b7a8d04cca30859c41e6d8de1f6ff5413dc9770d44b3",
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
     "scripts/agent_loop.py": "f9a1fb1441a39efa6e566b26474f25f30106e4bbf6be4919d31ac69dddc48e68",
-    "scripts/agent_loop_compaction.py": "0bc4f4c2566152c67769a25fe110dc2c60ef7ada9897a689091034d38c641887",
+    "scripts/agent_loop_compaction.py": "1439a9de9ba391d25e4031a9f361a98edfe1925d75fdf15e3da147d5b4c7a65a",
     "scripts/approval_outcome.py": "b9b7835b578c106e2b3470e33f60f9955fcf89d5e7a03c32716c92e0bbce6b37",
     "scripts/replay_fixtures.py": "4e3f0157c43d14e46c53cd0617cc935d8b61df3f782fb00cd5b9d8b9c74c9e3e",
     "scripts/run_manifest.py": "f2861b4c23ad51fc5b8cdd9910124b23d2c114bd61786e58d93b20f42f3f423e",

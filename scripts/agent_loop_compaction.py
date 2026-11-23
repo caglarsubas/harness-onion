@@ -90,7 +90,7 @@ def lock_bracket(data: dict) -> dict:
 def balanced_range(data: dict) -> dict:
     """A contiguous range that splits no tool exchange and holds no unsettled DELEGATE; later steps reference the
     summary forward only; no earlier record changes; every artefact digest the summary names is inside the range."""
-    first, last = data["range"]
+    first, last = data["compact"]["rangeFirstSeq"], data["compact"]["rangeLastSeq"]   # COMPACT's own detail
     steps = {s["seq"]: s for s in data["steps"]}
     inside = lambda seq: first <= seq <= last
     _need(first <= last and all(seq in steps for seq in range(first, last + 1)), "C2", "the range is not contiguous")
