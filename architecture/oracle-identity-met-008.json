@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_008_oracle.py",
-  "sha256": "bf277c9e614669a99fda9a7a4b35ed0dcf497efc2445be301911a10037934e93"
+  "sha256": "946179495fb4244780aa6b9beee20bde11ed7c89041e1924dab412c21b82e35d"
  },
  "oracle": {
   "agentId": "local_e5eba7b8-6525-4b8a-b967-3749ce4fa839",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-290-PC1-BYTES",
-  "date": "2026-11-15"
+  "ref": "ORC-294-R4-KEEP",
+  "date": "2026-11-22"
  },
  "disclosures": [
   "brief c113a406 (template 985b2091, 288's form with the CR2/C1R no-listing and counts-only rules and the catalog-bytes rule) and launch prompt 6071477e (template 694bb925); the author's only inputs are CONTRACT_289 rev 3 with errata [E-1] and [E-2] (2b4c83b3), the release-evidence record (c725fafa) and schema (681f86fc), the three basis files (the profile 2997bff1, the deployable record with 4 closed-path strings masked 97eae6f0, the lock 6067ca5e) and the meta YAML with 9 closed-path strings masked (80bd4751); the operator-stated facts are the projection's, the checker's, the head's and c-B's reader's signatures with line numbers computed from commit B's blobs",
@@ -36,6 +36,11 @@
   "blind run 2, the cited file on the rebuilt commit B f768a842 with the test runner in-process, cap 300 s (MON-289-C3-RULE 3): rc 0, tests 272, failures 0, errors 0, skipped 0; asserts 206, 0 without a cite; wall 107.7 s (junit 76a170a8, log 15f0889d); VERDICT PASS",
   "at run time the file reads the bytes of every changed file with reverse hunks by the authority's keys and E3's before bytes of the seven named files, as the head's own checks do; the author's work folder holds a bytecode cache from py_compile; ruled KEEP by the lane monitor (MON-289-C3-RULE2)",
   "corrected under MON-290-DRY-CLASS and MON-290-PC1-BYTES ([PC-1], F8) by the non-author lane monitor (LANE_MONITOR, its session id recorded as the oracle agent), on class (a) of 290's dry run (10 of its 272 tests failed on live reads at 290's final head; 272 of 272 pass after it, at the head and at the base); one hunk in the `_disk` helper: the bytes come from head().reviewed_bytes(text), with a [PC-1] comment line; the path check and the FileNotFoundError stay; no assert removed or widened; was 49fc6800; candidateCommit, launched, finished and briefSha256 unchanged; R00 placed it by bytes and never opened it",
-  "the correction was produced by a general-purpose subagent of the monitor session and cleared by the monitor (diff abb16de9)"
+  "the correction was produced by a general-purpose subagent of the monitor session and cleared by the monitor (diff abb16de9)",
+  "R4 (slot 294 D7; ORC-294-C11-STOP-RULING, the owner's answer: one more oracle round; ORC-294-R4-GRANT, slot A): a successor of this file by a fresh blind general-purpose agent that wrote nothing in 294 or in MET-008 (C26 category 1), launched 2026-11-22T17:46:03+08:00, finished 2026-11-22T17:55:10+08:00 (48 tool uses: 40 in the first pass, 8 in its one allowed resume (relay R4-1, approved by the lane orchestrator: the three edited nodes' docstrings only)); brief 1ebd5747 (task half b15836b5; the O1 rules 8ac49d23 with R4's 10 counted replacements), launch prompt 6868c71e; its only inputs: CONTRACT_289 rev 3 with errata [E-1] and [E-2] (2b4c83b3), an extract of CONTRACT_294's C18 and its errata's E10 c11 bullet (4bbf1199), the operator's run-003 output at the c11 candidate (1c8c6249, never opened by the operator) and this file as at c10 (bf277c9e)",
+  "R4's scope (D7, CONTRACT_294 erratum E11): the checks that compare MET-008's record with its basis inputs read both sides through the head's era reader (C18), where the file had read the two sides through different readers; by the author's counts: 2 of the 2 failing nodes fixed, 1 other places with the same mixing fixed and 0 (two more places judged not the same mixing, out of scope on the lane orchestrator's read) left; the places are named in its notes file, for the reviewer (the operator never opens it); 4 (+15/-6 lines against c10) changed line ranges; by its report, no assert loosened, no expectation changed and no node removed or renamed; the operator's SCAN: live 0 -> 0, names 0 -> 0, era 1 -> 1; 2137 -> 2146 lines",
+  "operator note (ORC-294-R4-GRANT point 1): the brief c113a406 named above is not on disk at slot 294; R4's kit carried CONTRACT_289 rev 3 with errata [E-1] and [E-2] (2b4c83b3), the input the first disclosure names",
+  "R4's acceptance by the operator (R00), by totals only: the file placed by bytes on the c11 candidate object 8a62c86b (c10, MET-008's record re-projected (D6) and this file) and run as an oracle item: rc 0, passed 272, failed 0 of 272, 126.12 s",
+  "at run time the file reads MET-008's record and its basis files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-294-R4-KEEP)"
  ]
 }

@@ -720,12 +720,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "plane bootstraps validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 314
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET} | set(PRODUCT_PACKETS),
-            "closed 314-packet catalog retaining the 310-packet checkpoint")
+    require(len(paths) == 318
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
+            "closed 318-packet catalog retaining the 310-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -768,4 +768,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Plane bootstraps valid: 314 current specifications at slot 291; 310-packet checkpoint and exact 302-packet predecessor; contract reviewed.")
+    print("Plane bootstraps valid: 318 current specifications at slot 291; 310-packet checkpoint and exact 302-packet predecessor; contract reviewed.")

@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_language_placement_oracle.py",
-  "sha256": "e29d48ec9dfc9b05b6be45786636d2fa2eb674dbb14e6167622e554ae849e0c9"
+  "sha256": "6d007d64e9f8544e5c64301eb7d00da7798f0edf6c96e44c7043468f3cf16ae2"
  },
  "oracle": {
   "agentId": "a773580b6b3d27546",
@@ -26,8 +26,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "MON-269-C4",
-  "date": "2026-10-28"
+  "ref": "ORC-294-O1-KEEP-R3",
+  "date": "2026-11-22"
  },
  "disclosures": [
   "re-issued for MET-GOV-005 under MON-TT-C1 from the brief ORACLE_BRIEF.md (sha256 e9ddd3afd44bf1e57fd43243981c0a1d61d1121fca99cb287c5b0bcc000876af, the c3 identity's briefSha256) and the design revision 3 only; it replaces the MET-GOV-004 oracle, which its author never read",
@@ -41,6 +41,13 @@
   "the c4 fix was made by a fresh oracle agent (oracle.agentId above); the original oracle agent ad42c3739196bfa0a, which wrote every other byte, could not be resumed from the operator's new session, and MON-269-B2-1 allowed the change; neither is a candidate author, and neither read the candidate's checker, data, tests or ADR",
   "c4 runs: on the c3 export 136 passed, 0 failed; on c3 with the slot-269 mechanics' edited docs/repositories/00-harness-engineering.md in place, 136 passed, 0 failed; scripts link count 1 before and after; the E2-2 tests (a wrong sha256, section 5 rows 12-17 as R5, row 18 accepted) are byte-identical and pass",
   "c4 slips (procedural): one two-call message (two edits of a scratch helper); a heading listing of an allowed plan file printed heading lines that name other packets, withheld from then on; one read-only digest command ran twice",
-  "the c4 agent's launch context carried an auto-injected memory index and an account context; it used neither"
+  "the c4 agent's launch context carried an auto-injected memory index and an account context; it used neither",
+  "O1 successor, slot 294 round R3 (D2), from the brief 267 (ORACLE_BRIEF_C4.md, briefSha256 above, with ORACLE_BRIEF.md e9ddd3af) and CONTRACT_294 erratum E5 (CONTRACT_294_r2_ERRATA.md 7cdd7eba; CONTRACT_294.md aab3512c section 3a): 8 nodes edited, the seven test_appendix_a_row nodes whose frameworks source cites doc 06 or 08 (inference-api; sandbox-runner, protocol-gateway, orchestration-api, decision-service, tool-broker, orchestration-worker) and test_fact_h10_sources; why: section 3a's exact-tree lines moved those cited lines (E5: doc 06 [99, 99] -> [102, 102]; doc 08 [101, 101] -> [103, 103] and [103, 103] -> [105, 105]) while each span keeps its text and sha256; each node keeps every other expectation the brief 267 gives, still locates its block by section, sha256 and evidence (ORACLE_BRIEF_C4), and takes its located line through one new module-level map, E5_MOVED, keyed by the brief 267's line",
+  "the rest of the file is unchanged: the R3 edit is the seven Appendix A entry lines that only those nodes read, the h10 test's new docstring, one comment and one assert line, and the new E5_MOVED map with its comment, which only those eight nodes use; every other node, import and helper, the shared test_appendix_a_row body and the order are the c6 module's (e29d48ec) bytes",
+  "author: a fresh blind agent, slot 294 R3, ORC-294-R3-GRANT, slot A 14:05:11; it read only its brief, the three CN files (ORACLE_BRIEF_C4.md, ORACLE_BRIEF.md, E5_R3.md) and its two WORK files, and never read the candidate's checker, data, ADR, plan docs or any test",
+  "the pass at 294's candidate is checked by the operator, by totals only (acceptance: passed 136, failed 0), and again on 294's final tree; the author ran no pytest and no py_compile, only the brief's syntax check, live-read scan, shasum and identity helper",
+  "the live-read scan on the edited file prints live 8, names 0, era 0, other 2, git 0 (FAIL); the R3 edit adds no file read or listing, so these counts come from c6's unchanged lines (an inference: the scan was not run on c6), which the R3 rules forbid it to change",
+  "R3 slips (procedural): one message carried four Edit calls (the E5_MOVED insertion and three entry edits); one grep -n of the oracle and one wc -l of E5_R3.md and the two WORK files ran outside the brief's command list; one Read-tool range read of each WORK file, outside the wrapper, preceded its first edit",
+  "the R3 author's launch context carried an auto-injected memory index and an account context; it used neither"
  ]
 }

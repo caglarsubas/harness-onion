@@ -1,0 +1,76 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_012_oracle.py",
+  "sha256": "37c5a3a66dbdc360feeb42a29153b75c3a6d3debe616b0aecae1a1902aad2f88"
+ },
+ "oracle": {
+  "agentId": "a31790dd4fa3d5f7e",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "172e94dc-c17e-424d-926b-9d897553a42c",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "172e94dc-c17e-424d-926b-9d897553a42c"
+  ]
+ },
+ "briefSha256": "2c4801b14a6172e4e24119dd9905d89321cbee4cf98f82a84428b110583cfaf2",
+ "candidateCommit": "0ace3a4d26755f108f435a5394c2f3a9aff5ab7d",
+ "launched": "2026-11-22T10:08:38+08:00",
+ "finished": "2026-11-22T12:12:12+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "ORC-294-ID-KEEP-C10",
+  "date": "2026-11-22"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 37c5a3a66dbdc360feeb42a29153b75c3a6d3debe616b0aecae1a1902aad2f88 and the table cf4264aed28093d465972597ee942eecd672733377d3a212ebd37247b3ecc3e7; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "D5a (CONTRACT_294 r2 section 7 step 3): this file's author is one fresh non-author agent (C26 category 1), launched once with the filled launch (ORC-294-ORACLE-GRANT) and resumed three times, each time with a lane monitor's approved relay: 63f336fe (ORC-294-B1-CLASS: class (a), an oracle construction slip in one V6 case; ORC-294-RELAY-OK), f6877ee0 (ORC-294-REFREEZE-RULE: two product packets re-frozen by erratum E3 76a6ea57, so two operator-stated freeze digests old -> new; ORC-294-E3-RELAY-OK) and e999806f (ORC-294-REFREEZE2-OK: the same two packets re-frozen again by erratum E4 b6dd22ca, so the two freeze digests and the two byte sizes old -> new); its first, second and third files 41282133, 177664b7 and af6ee45c are kept by bytes in the lane's unmirrored evidence folder",
+  "brief 2c4801b1 (filled; unchanged during all four runs, so the brief at launch); launch prompt 80a7bb93, in 292's kit form with its counted changes; the author's only inputs are CONTRACT_294 r2 (aab3512c), its r2 errata (5d6346ff) and the packet YAML at c2 with closed-path strings masked (d1a6a226), plus the operator-stated facts in contract terms (line anchors read from c2's head 26d85910, the three product YAMLs' freeze digests, two of them re-stated by the second relay under E3 and by the third under E4, the YAML's key count)",
+  "the author is a fresh agent that authored nothing in c1..c9a and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its file 41282133 -> 177664b7 -> af6ee45c -> 37c5a3a6; its report: 22 tests, 32 parametrized cases, 0 asserts without a cite (the author's own count); its scan: WORK/test_met_012_oracle.py: live 0, era 21, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads",
+  "author disclosure 1: its context carried an auto-injected memory index and account context in all four runs; it used none of it",
+  "author disclosure 2: first run: two commands beyond the two checks, shasum -a 256 on its own file and wc -l on the CN files",
+  "author disclosure 3: first run: no expected value found only in a fixture",
+  "author disclosure 4: shape assumptions made at run time: the registry is the largest object or array holding the one rider; the weights rows are the largest JSON object; mutated JSON is written back in the json.dumps form that reproduces the original bytes",
+  "author disclosure 5: first file: the V6 no-outcome-statement case blanked members whose names contain outcome or statement, reading the rule backwards (the record must hold no outcome statement); the second file gives the targeted member a non-empty value instead; only that case's mutation changed and no expectation was loosened",
+  "author disclosure 6: V6 refusals are accepted whether they come from deriving the context or from the check itself",
+  "author disclosure 7: the catalog-mapping refusals assert ValueError without matching the message",
+  "author disclosure 8: two checks rest on its own reading: one E3 path-membership check, and the before/after digest checks",
+  "author disclosure 9: the head is registered in sys.modules before it runs; nothing is patched",
+  "author disclosure 10: second run: the blanking helper the old case used is now unused and left in place, as the fix scope allowed no helper changes",
+  "author disclosure 11: second run: one more shasum -a 256 on its own file, and one Read of its own file (lines 323-344) to confirm the diff summary's line numbers",
+  "author disclosure 12: second run: no assert added; still 0 of 61 asserts without a cite",
+  "author disclosure 13: third run: the change conflicts with the sealed section 3 table its brief gave; it raised this as the lane monitor's call",
+  "author disclosure 14: third run: a cite comment and the digest assert's cite still say the values equal section 3's table; both left in place, as the scope allowed no other change",
+  "author disclosure 15: third run: its byte-size check against section 3's Bytes column may fail if the sizes changed",
+  "author disclosure 16: third run: on the contracts line it checks only the accepted-base sentence and binds no product digest",
+  "author disclosure 17: third run: one more shasum -a 256 on its own file, and one Read of its own file (lines 41-50)",
+  "author disclosure 18: third run: no assert added; still 0 of 61 asserts without a cite; no fixture-only expectation",
+  "author disclosure 19: fourth run: the three edits went in one message, against the one-call rule; all three applied as intended, and every call after that went one per message",
+  "author disclosure 20: fourth run: after two re-freezes, two of the three products' digests and byte sizes no longer match CONTRACT_294 r2 section 3's sealed table; it made the changes on the relay as operator-stated facts and raised whether an erratum or ruling is needed (erratum E4 covers it)",
+  "author disclosure 21: fourth run: the cite comment above the digest table, the digest assert's cite and the cite above the size line still name section 3's table; left unchanged, as the scope allowed only the bound values",
+  "author disclosure 22: fourth run: one more shasum -a 256 on its own file, and one Read of its own lines 43-50",
+  "author disclosure 23: fourth run: the packet YAML's contracts line binds no product digest in its file, so that change needed nothing",
+  "author disclosure 24: fourth run: no assert added; still 0 of 61 asserts without a cite; no fixture-only expectation",
+  "operator note 1: the operator re-ran the kit's syntax check and C18's live-read scan on all four files and got the author's lines; catalog-byte, home-path, closed-form and privacy counts 0 on each; each file sealed 0444; the first and second files copied by bytes into the lane's unmirrored evidence folder; no file opened",
+  "operator note 2: the change from the first file to the second, counted by the operator with numstat only: one hunk, 1 line removed and 11 added at line 330, 5 lines after the case's id line, with the count of def and decorator lines before it unchanged (17)",
+  "operator note 3: on the lane monitor's word the operator read one line of candidate run 1's log, its FAILED line (the case id and DID NOT RAISE ValueError); nothing else of any run log",
+  "operator note 4: the author ran on the operator's own model, with no model or effort override at launch (C26 category 1)",
+  "operator note 5: the change from the second file to the third, counted by the operator with numstat only: two hunks, 1 line removed and 1 added at each of lines 45 and 47; the third file equals the second with exactly the two full freeze digests substituted (compared by substitution and cmp, nothing printed)",
+  "operator note 6: the lane monitor ruled the third file's two stale cites (a comment and an assert's cite naming section 3's table, whose two re-frozen values erratum E3 states) stale-sweep items carried in PACKET r1; the file is not edited",
+  "operator note 7: the change from the third file to the fourth, counted by the operator with numstat only: three hunks, 1 line removed and 1 added at each of lines 45, 47 and 50; the fourth file equals the third with exactly the two freeze digests and the two byte sizes old -> new (ORC-294-REFREEZE2-OK; erratum E4)",
+  "operator note 8: the fourth file's new stale cite (above the size line) is of the same kind as the third file's two; it was reported to the lane orchestrator at the fourth file's return (12:13), with no separate ruling",
+  "author run 1 (the first file): 2026-11-22T10:08:38+08:00 to 2026-11-22T10:21:45+08:00, 15 tool calls; its file after the run 41282133",
+  "author run 2 (the relay's one case (ORC-294-B1-CLASS)): 2026-11-22T10:31:56+08:00 to 2026-11-22T10:33:16+08:00, 5 tool calls; its file after the run 177664b7",
+  "author run 3 (the relay's two freeze digests (ORC-294-REFREEZE-RULE)): 2026-11-22T11:06:28+08:00 to 2026-11-22T11:07:13+08:00, 6 tool calls; its file after the run af6ee45c",
+  "author run 4 (the relay's two freeze digests and two byte sizes (ORC-294-REFREEZE2-OK)): 2026-11-22T12:11:44+08:00 to 2026-11-22T12:12:12+08:00, 7 tool calls; its file after the run 37c5a3a6",
+  "the oracle's runs, by the operator on the lane monitor's words, node counts only: candidate run 1 on the c3 candidate with the first file: 46 passed, 1 failed of 47 (summary 18ef7801; the one V6 case, ruled class (a)); candidate run 2 on a fresh clone at c2 with the second file: 47 passed of 47 (summary 83cafd74); the c3 sweep on the chain tree with the second file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary 44a330a1); candidate run 3 on a fresh clone at c4 with the third file: 47 passed of 47 (summary 495ae44e); the c5 sweep on the chain tree at c4 with the third file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary bc749901); the c10 sweep on the c10 tree (c9a with the c10 paths) with this file: 47 passed of 47, then the head test's pre-check: 200 passed of 200 (summary 83a149a2)",
+  "the table is c9a's (c5's) with both rows re-measured at c10 from the c10 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 21.8 and this oracle 7.4 (217 entries; c5 measured 21.6 and 7.4, c3 21.5 and 7.5)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-294-ID-KEEP-C10)"
+ ]
+}

@@ -1,14 +1,21 @@
-"""D5a oracle tests for MET-011, the third checkpoint's head layer (slot 293, K = 0).
+"""D5a oracle tests for MET-011, the third checkpoint's head layer (slot 293, K = 0), as slot 294's successor.
 
 Owner decision D5a: these black-box tests are written outside the candidate by a non-author. Every expected
 value comes from CONTRACT_293 (r2 with errata E1-E4 and E4's revision b, the export CONTRACT_293_e4b.md) or from
 the facts the operator states about the c6 head; each assert cites its source on its own line or the line above.
+Slot 294's successor (CONTRACT_294 erratum E6; O1 rounds R2 and R2b) changes the strict catalog's input only.
 
-C18 (the era-read rule): every repository file is read only through the head's era reader
-`head.reviewed_bytes(path)`; the catalog's names come from the head's authority (`baselinePackets`) plus
-`head.NEW_PACKET`, never from a directory listing. JSON is parsed with `json`, YAML only through `head.safe_load`.
-The head is the one repository module loaded, by file path, into a fresh module object. Nothing is patched;
-every negative case is built from plain data (copies, bytes, mappings passed to the head's `check_*`).
+C18 (the era-read rule, amended 2): every repository file is read only through the head's era reader
+`head.reviewed_bytes(path)`, with one listing of names: the current catalog's names come from this file's own
+`current_catalog_names()` (the sorted stems of the `*.yaml` names in `task-packets/` under the head's `ROOT`), and
+each packet's bytes come through the era reader. The strict catalog's vector 1 and its refused vectors 2, 3a and 3b
+pass that current catalog into the head, in vector 1's accepted form; vector 1's peel is checked against the
+authority's `baselinePackets` (292's era catalog), never against the current catalog's size or members. Two nodes
+still build the era formula (the authority's `baselinePackets` plus `head.NEW_PACKET`): the catalog-pair count,
+which passes nothing into a head, and vector 6, which passes it to the head as a list. JSON is parsed with `json`,
+YAML only through `head.safe_load`. The head is the one repository module loaded, by file path, into a fresh
+module object, once, at import. Nothing is patched; every negative case is built from plain data (copies, bytes,
+mappings passed to the head's `check_*`).
 
 Before F every test that drives a head check over the live tree fails by design (CONTRACT_293 section 8, the red
 set); the mutation tests do not depend on which ledger is on disk. No digest of the weights table, the head, the
@@ -106,14 +113,39 @@ def catalog(form):
     return dict(catalog_parsed() if form == "parsed" else catalog_bytes())
 
 
+# CONTRACT_294 erratum E6 (VIS-294-Q1): the head module that head() loads, bound once for the names helper's ROOT.
+HEAD_MODULE = head()
+
+
+def current_catalog_names():
+    """C18 amended 2 (CONTRACT_294 erratum E6): the current catalog's names, this file's own copy of the one helper."""
+    return sorted(path.stem for path in (HEAD_MODULE.ROOT / "task-packets").glob("*.yaml"))
+
+
+@lru_cache(maxsize=None)
+def current_catalog_bytes():
+    """CONTRACT_294 erratum E6: each current packet's bytes through the head's era reader (C18)."""
+    return {name: rb("task-packets/" + name + ".yaml") for name in current_catalog_names()}
+
+
+@lru_cache(maxsize=None)
+def current_catalog_parsed():
+    return {name: head().safe_load(raw) for name, raw in current_catalog_bytes().items()}
+
+
+def current_catalog(form):
+    """CONTRACT_294 erratum E6: a fresh mapping of the current catalog in one form ("parsed" or "bytes")."""
+    return dict(current_catalog_parsed() if form == "parsed" else current_catalog_bytes())
+
+
 @lru_cache(maxsize=None)
 def accepted_catalog():
     """Vector 1: the full catalog, in the parsed form first, then as bytes; returns (form, result)."""
     try:
-        return "parsed", head().historical_catalog(catalog("parsed"))
+        return "parsed", head().historical_catalog(current_catalog("parsed"))
     except ValueError as first:
         try:
-            return "bytes", head().historical_catalog(catalog("bytes"))
+            return "bytes", head().historical_catalog(current_catalog("bytes"))
         except ValueError:
             raise first
 
@@ -347,18 +379,25 @@ def test_catalog_names_are_the_pair_313_314():
 
 
 def test_strict_catalog_vector_1_full_set_peels_met_011():
-    """CONTRACT_293 section 5, vector 1: the full set is accepted and MET-011 is peeled."""
+    """CONTRACT_293 section 5, vector 1: the full set is accepted and MET-011 is peeled.
+
+    CONTRACT_294 erratum E6 (the catalog input): the full set is the current catalog, its names from the one names
+    helper and each packet's bytes through the head's era reader; the node asserts on the chain's own peel only,
+    never on the current catalog's size or members.
+    """
     _form, result = accepted_catalog()
-    # CONTRACT_293 section 5 vector 1: accepted, returning the peeled catalog
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5 vector 1): accepted, returning the peeled catalog
     assert isinstance(result, dict)
-    # CONTRACT_293 section 5 vector 1: MET-011 peeled
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5 vector 1): MET-011 peeled
     assert NEW_ID not in result
-    # CONTRACT_293 section 5 vector 1: what is left is 292's era catalog (the 313 baseline names)
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5 vector 1): 292's era catalog; CONTRACT_294 E6: the chain's peel
     assert set(result) == set(authority()["baselinePackets"])
 
 
 def strict_vector(name):
-    packets = catalog("parsed")
+    """CONTRACT_294 erratum E6 (the catalog input): the current catalog, in vector 1's accepted form, with one change."""
+    form, _result = accepted_catalog()
+    packets = current_catalog(form)
     if name == "2-without-met-011":
         packets.pop(head().NEW_PACKET)
     elif name == "3a-minus-one-older":
@@ -370,11 +409,16 @@ def strict_vector(name):
 
 @pytest.mark.parametrize("vector", ["2-without-met-011", "3a-minus-one-older", "3b-plus-unknown"])
 def test_strict_catalog_refusals(vector):
-    """CONTRACT_293 section 5 (erratum E4), vectors 2, 3a and 3b: refused with the strict check's existing text."""
+    """CONTRACT_293 section 5 (erratum E4), vectors 2, 3a and 3b: refused with the strict check's existing text.
+
+    CONTRACT_294 erratum E6 (the catalog input): each vector is the current catalog, in vector 1's accepted form,
+    with its one change: MET-011 removed (2), one older packet of the authority's baseline removed (3a), or one
+    unknown packet added (3b); no era formula.
+    """
     packets = strict_vector(vector)
     with pytest.raises(ValueError) as caught:
         head().historical_catalog(packets)
-    # CONTRACT_293 section 5: "unexpected packet addition or loss" (vector 2 inverts; 3a and 3b the existing text)
+    # ORACLE_BRIEF_293c6 item 2 (CONTRACT_293 section 5): "unexpected packet addition or loss" (vectors 2, 3a, 3b)
     assert STRICT_TEXT in str(caught.value)
 
 
@@ -410,9 +454,14 @@ def test_head_check_passes_on_live_inputs(name):
 
 
 def test_validate_met_011_runs_every_check_in_order():
-    """CONTRACT_293 section 5: validate_met_011(packets) runs the checks in section 5's order and passes at F."""
+    """CONTRACT_293 section 5: 293's head runs its own validate_met_011(packets) and passes at F.
+
+    CONTRACT_294 erratum E6 (the catalog input): packets is the current catalog, in vector 1's accepted form. The node
+    asserts only that this call returns without refusing.
+    """
     form, _result = accepted_catalog()
-    head().validate_met_011(catalog(form))
+    # ORACLE_BRIEF_293c6 item 3 (CONTRACT_293 section 5): passes at F; CONTRACT_294 erratum E6: the current catalog
+    head().validate_met_011(current_catalog(form))
 
 
 # ---------------------------------------------------------------------------------------------------------------

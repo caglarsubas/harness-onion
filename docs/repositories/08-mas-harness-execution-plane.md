@@ -93,7 +93,9 @@ mas-harness-execution-plane/
 ├── docs/
 │   ├── native-sandbox.md
 │   └── runbooks/
-└── tests/{airgap,common,decision,orchestration,protocol,resilience,sandbox,sandbox-native,security,tools}/
+├── adoption/
+│   └── temporal/{PROVIDER.json,SBOM.cdx.json,NOTICE.md}
+└── tests/{adoption,airgap,common,decision,orchestration,protocol,resilience,sandbox,sandbox-native,security,tools}/
 ```
 
 ## Deployables and toolchain
@@ -168,6 +170,7 @@ Public source provenance is recorded only in `architecture/reuse-map.yaml`, `arc
 7. `EXEC-ML-001`: scikit-learn/ONNX/OR-Tools adapters, signed artifact/provenance input, deterministic result, and evidence.
 8. `EXEC-002-resilience`: duplicate/out-of-order events, crashes around commits/receipts, dependency outages, multi-tenant isolation, and air-gap campaign.
 9. `PLANE-BOOTSTRAP-R08-health-shell`: Bootstrap R08 mas-harness-execution-plane as a health-only shell over its empty initial commit (owner PA-D1 (D1a), the KN-001 pattern): exact CPython 3.12.14, standard library only, one health module with its unittest, and harness-onion's four offline transport files at verifier bundle v9's pins; no image, database, deployment, hosted workflow, model server, Makefile, porting ledger or runtime code (published by MET-009). It precedes EXEC-001 by harness-onion's plane-shell ordering annex and is verifiable only once the owner installs verifier bundle v9.
+10. `EXEC-TEMPORAL-PINS-001-provider-dossier`: G1 and G2 for H10's optional Temporal provider (ADR 0011 decision 2): an upstream dossier (provider record, CycloneDX SBOM of the pinned Linux AMD64 closure, licence and notice review) for the upstream server release binary (owner OQ-3) and the Python SDK closure for CPython 3.12 on manylinux x86_64 (abi3 wheels built for cp311 and cp310, and pure-Python wheels), with a stdlib consistency test. No runtime code, no dependency in pyproject.toml, no provider module and nothing selectable; the PostgreSQL executor stays H10's baseline and single side-effect authority. Published by MET-012 at slot 294 (K = 3); it follows PLANE-BOOTSTRAP-R08 by harness-onion's plane-shell ordering annex.
 
 ## Testing, verification, and acceptance
 

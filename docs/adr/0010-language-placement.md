@@ -75,7 +75,7 @@ baseline the rows are taken at.
 Adopted upstreams keep their own language, for example Java for Trino. The OTel Collector (`otel-collector`) is an
 upstream pinned image (`docs/repositories/09-mas-harness-trust-plane.md:100`), recorded as UPSTREAM_OWN with no
 language claimed for it. The model backend images (`model-backends`) are adopted upstreams too
-(`docs/repositories/06-mas-harness-model-plane.md:100`, and the planned OSS implementations in
+(`docs/repositories/06-mas-harness-model-plane.md:103`, and the planned OSS implementations in
 `docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md:32-35`). No backend language is claimed, because neither span states one.
 
 ### Contracts stay language-neutral (LANG-D2 (g))
@@ -110,9 +110,9 @@ Repositories, rendered from `architecture/language-placement.json` by `scripts/l
 | R03 | `mas-harness-industry-packs` | `industry-packs` | PYTHON | Python 3.12.14 | `docs/repositories/03-mas-harness-industry-packs.md:100-105` |
 | R04 | `mas-harness-control-plane` | `control-plane` | PYTHON, TYPESCRIPT | Node 24.20.0 LTS | `docs/repositories/04-mas-harness-control-plane.md:102-103` |
 | R05 | `mas-harness-runtime-plane` | `runtime-plane` | PYTHON, TYPESCRIPT | Python 3.12.14 | `docs/repositories/05-mas-harness-runtime-plane.md:88-93` |
-| R06 | `mas-harness-model-plane` | `model-plane` | PYTHON | Python 3.12.14 | `docs/repositories/06-mas-harness-model-plane.md:99` |
+| R06 | `mas-harness-model-plane` | `model-plane` | PYTHON | Python 3.12.14 | `docs/repositories/06-mas-harness-model-plane.md:102` |
 | R07 | `mas-harness-knowledge-plane` | `knowledge-plane` | PYTHON | Python 3.12.14 | `docs/repositories/07-mas-harness-knowledge-plane.md:118` |
-| R08 | `mas-harness-execution-plane` | `execution-plane` | PYTHON | Python 3.12.14 | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| R08 | `mas-harness-execution-plane` | `execution-plane` | PYTHON | Python 3.12.14 | `docs/repositories/08-mas-harness-execution-plane.md:103` |
 | R09 | `mas-harness-trust-plane` | `trust-plane` | PYTHON | Python 3.12.14 | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
 | R10 | `mas-harness-operator` | `operator` | GO, RUST | Go 1.26.7 | `docs/repositories/10-mas-harness-operator.md:152`; `docs/alpha-2/W01_AMENDMENT_W02D.md:24` |
 | R11 | `mas-harness-distribution` | `distribution` | PYTHON | Python 3.12.14 | `docs/repositories/11-mas-harness-distribution.md:163` |
@@ -130,28 +130,28 @@ Deployables (architecture/services.yaml), rendered from `architecture/language-p
 | `otel-collector` | `mas-harness-trust-plane` | collector | UPSTREAM_OWN | upstream pinned images/config modules | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/09-mas-harness-trust-plane.md:100` |
 | `operator` | `mas-harness-operator` | controller | GO | Go 1.26.7 | CONTROL | OWNER_LANG_D2 | AS_PLANNED | `docs/repositories/10-mas-harness-operator.md:152-153` |
 | `policy-decision` | `mas-harness-trust-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
-| `sandbox-runner` | `mas-harness-execution-plane` | job | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/08-mas-harness-execution-plane.md:101-102` |
+| `sandbox-runner` | `mas-harness-execution-plane` | job | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/08-mas-harness-execution-plane.md:103-104` |
 | `fleet-sync-agent` | `mas-harness-operator` | agent | GO | Go 1.26.7 | CONTROL | KIND_RULE | AS_PLANNED | `docs/repositories/10-mas-harness-operator.md:152-155` |
 | `guardrail-service` | `mas-harness-trust-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
 | `usage-ledger` | `mas-harness-trust-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
 | `governance-service` | `mas-harness-trust-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
 | `domain-service` | `mas-harness-knowledge-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/07-mas-harness-knowledge-plane.md:117-118` |
 | `registry-service` | `mas-harness-trust-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
-| `inference-api` | `mas-harness-model-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/06-mas-harness-model-plane.md:99` |
+| `inference-api` | `mas-harness-model-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/06-mas-harness-model-plane.md:102` |
 | `connector-controller` | `mas-harness-knowledge-plane` | controller | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | CONTROL_LOOP_TO_BE_CONFIRMED | `docs/repositories/07-mas-harness-knowledge-plane.md:117-118` |
 | `memory-service` | `mas-harness-knowledge-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/07-mas-harness-knowledge-plane.md:117-118` |
 | `control-web` | `mas-harness-control-plane` | web-api | TYPESCRIPT | Node 24.20.0 LTS | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/04-mas-harness-control-plane.md:102` |
 | `ingest-worker` | `mas-harness-knowledge-plane` | worker | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/07-mas-harness-knowledge-plane.md:117-118` |
 | `retrieval-service` | `mas-harness-knowledge-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/07-mas-harness-knowledge-plane.md:117-118` |
-| `protocol-gateway` | `mas-harness-execution-plane` | gateway | PYTHON | Python 3.12.14 | DATA | KIND_RULE | PENDING_HOTPATH_DECISION | `docs/repositories/08-mas-harness-execution-plane.md:101-102` |
+| `protocol-gateway` | `mas-harness-execution-plane` | gateway | PYTHON | Python 3.12.14 | DATA | KIND_RULE | PENDING_HOTPATH_DECISION | `docs/repositories/08-mas-harness-execution-plane.md:103-104` |
 | `evidence-service` | `mas-harness-trust-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
 | `profile-compiler-worker` | `mas-harness-control-plane` | worker | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | NO_STATED_DEFAULT | `docs/repositories/04-mas-harness-control-plane.md:103` |
 | `index-worker` | `mas-harness-knowledge-plane` | worker | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/07-mas-harness-knowledge-plane.md:117-118` |
-| `orchestration-api` | `mas-harness-execution-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/08-mas-harness-execution-plane.md:101-102` |
-| `decision-service` | `mas-harness-execution-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/08-mas-harness-execution-plane.md:101-102` |
+| `orchestration-api` | `mas-harness-execution-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/08-mas-harness-execution-plane.md:103-104` |
+| `decision-service` | `mas-harness-execution-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/08-mas-harness-execution-plane.md:103-104` |
 | `assurance-worker` | `mas-harness-trust-plane` | worker | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/09-mas-harness-trust-plane.md:90-100` |
-| `tool-broker` | `mas-harness-execution-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | PENDING_HOTPATH_DECISION | `docs/repositories/08-mas-harness-execution-plane.md:101-102` |
-| `orchestration-worker` | `mas-harness-execution-plane` | worker | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/08-mas-harness-execution-plane.md:101-102` |
+| `tool-broker` | `mas-harness-execution-plane` | api | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | PENDING_HOTPATH_DECISION | `docs/repositories/08-mas-harness-execution-plane.md:103-104` |
+| `orchestration-worker` | `mas-harness-execution-plane` | worker | PYTHON | Python 3.12.14 | UNSTATED | NOT_STATED | AS_PLANNED | `docs/repositories/08-mas-harness-execution-plane.md:103-104` |
 | `ai-gateway` | `mas-harness-runtime-plane` | gateway | PYTHON | Python 3.12.14 | DATA | KIND_RULE | PENDING_HOTPATH_DECISION | `docs/repositories/05-mas-harness-runtime-plane.md:88` |
 | `experience-gateway` | `mas-harness-runtime-plane` | gateway | PYTHON | Python 3.12.14 | DATA | KIND_RULE | PENDING_HOTPATH_DECISION | `docs/repositories/05-mas-harness-runtime-plane.md:88-89` |
 <!-- language-placement:deployables:end -->
@@ -164,7 +164,7 @@ Outside the catalogue, rendered from `architecture/language-placement.json` by `
 | Row | Owner repository | Planned language | Sources |
 |---|---|---|---|
 | `reference-channel-ui` | `mas-harness-runtime-plane` | TYPESCRIPT | `docs/repositories/05-mas-harness-runtime-plane.md:90-93` |
-| `model-backends` | `mas-harness-model-plane` | UPSTREAM_OWN | `docs/repositories/06-mas-harness-model-plane.md:100`; `docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md:32-35` |
+| `model-backends` | `mas-harness-model-plane` | UPSTREAM_OWN | `docs/repositories/06-mas-harness-model-plane.md:103`; `docs/alpha-2/HARNESS_PAPER_REPOSITORY_MAP.md:32-35` |
 | `native-host-enforcement-roles` | `mas-harness-operator` | RUST | `docs/alpha-2/W01_AMENDMENT_W02D.md:24` |
 | `r12-native-probes` | `mas-harness-conformance-labs` | RUST | `docs/alpha-2/ENFORCEMENT_TEST_PLAN.md:12-13` |
 | `typescript-sdk` | `mas-harness-sdks` | TYPESCRIPT | `docs/repositories/02-mas-harness-sdks.md:94` |
@@ -270,28 +270,28 @@ Technology (amendment 1), rendered from `architecture/language-placement.json` (
 | `otel-collector` | null | none | HELM_CHART, OCI_IMAGE | otel/opentelemetry-collector-contrib | UPSTREAM_MANAGED | docs/adr/0010-language-placement.md | none |
 | `operator` | Go 1.26.7 | controller-runtime, Kubebuilder/envtest, Helm 4.2.0, Cosign 3.1.3, Kustomize 5.8.1 | HELM_CHART, OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/10-mas-harness-operator.md:152` |
 | `policy-decision` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest, OPA | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92`; `docs/repositories/09-mas-harness-trust-plane.md:100` |
-| `sandbox-runner` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `sandbox-runner` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/08-mas-harness-execution-plane.md:103` |
 | `fleet-sync-agent` | Go 1.26.7 | controller-runtime, Kubebuilder/envtest, Helm 4.2.0, Cosign 3.1.3, Kustomize 5.8.1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/10-mas-harness-operator.md:152` |
 | `guardrail-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
 | `usage-ledger` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
 | `governance-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
 | `domain-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
 | `registry-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
-| `inference-api` | Python 3.12.14 | FastAPI, Pydantic v2, Uvicorn, HTTPX, cryptography, structlog, SSE, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/06-mas-harness-model-plane.md:99` |
+| `inference-api` | Python 3.12.14 | FastAPI, Pydantic v2, Uvicorn, HTTPX, cryptography, structlog, SSE, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/06-mas-harness-model-plane.md:102` |
 | `connector-controller` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | KN-DATA-001 | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
 | `memory-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
 | `control-web` | Node 24.20.0 LTS | Next.js 16.3.3 Active LTS with the App Router, React 19.2, TypeScript 5, Prisma 6.19.3, PostgreSQL, AJV 8.20.0, Vitest, Playwright | HELM_CHART, OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/04-mas-harness-control-plane.md:102` |
 | `ingest-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
 | `retrieval-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
-| `protocol-gateway` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `protocol-gateway` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/08-mas-harness-execution-plane.md:103` |
 | `evidence-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
 | `profile-compiler-worker` | Python 3.12.14 | `uv` 0.12.7 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/04-mas-harness-control-plane.md:103` |
 | `index-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, PostgreSQL/pgvector, RDFLib, pySHACL, jsonschema, HTTPX, cryptography, OpenTelemetry | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/07-mas-harness-knowledge-plane.md:119` |
-| `orchestration-api` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0011-h10-execution-authority.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
-| `decision-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `orchestration-api` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0011-h10-execution-authority.md | `docs/repositories/08-mas-harness-execution-plane.md:103` |
+| `decision-service` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/08-mas-harness-execution-plane.md:103` |
 | `assurance-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, cryptography, HTTPX, OpenTelemetry, jsonschema, pytest | OCI_IMAGE | null | PLANNED | docs/adr/0010-language-placement.md | `docs/repositories/09-mas-harness-trust-plane.md:90-92` |
-| `tool-broker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/08-mas-harness-execution-plane.md:101` |
-| `orchestration-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0011-h10-execution-authority.md | `docs/repositories/08-mas-harness-execution-plane.md:101` |
+| `tool-broker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/08-mas-harness-execution-plane.md:103` |
+| `orchestration-worker` | Python 3.12.14 | FastAPI, Pydantic v2, psycopg 3, jsonschema, cryptography, HTTPX, OpenTelemetry, MCP SDK compatible with 2026-07-28 plus 2025-11-25, A2A v1 | OCI_IMAGE | null | PLANNED | docs/adr/0011-h10-execution-authority.md | `docs/repositories/08-mas-harness-execution-plane.md:103` |
 | `ai-gateway` | Python 3.12.14 | FastAPI/Starlette, Pydantic v2, HTTPX, psycopg 3, cryptography, OpenTelemetry, SSE support | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/05-mas-harness-runtime-plane.md:88` |
 | `experience-gateway` | Python 3.12.14 | FastAPI/Starlette, Pydantic v2, HTTPX, psycopg 3, cryptography, OpenTelemetry, SSE support | OCI_IMAGE | null | PLANNED | LANG-HOTPATH-DECISION-001 | `docs/repositories/05-mas-harness-runtime-plane.md:88`; `docs/repositories/05-mas-harness-runtime-plane.md:89` |
 <!-- technology-table:end -->
