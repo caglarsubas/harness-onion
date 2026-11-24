@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/grdec-regalign-edgev13-authority.json"
-AUTHORITY_SHA256 = "dd2c0dfe4f6f401beeb4071c905f5ba35c5e6af9fb4d690896e23063b3d89e41"
+AUTHORITY_SHA256 = "cb233e146666db6bb7a4b080569b510a0759b0441fbcf7d1921408876ce5a682"
 VALIDATOR_PATH = "scripts/validate_met_014.py"
 BASE_COMMIT = "4b1386e0bf22e5d33c052ed27befc014614ac820"
 NEW_PACKET = "MET-014"
@@ -475,9 +475,9 @@ ERA_SHA256 = MappingProxyType({
     "architecture/broker-handoff-inputs/vectors.json": "80d8da953c41ef544ecf0cd4a0f62b98316b018bfbdc39c550c320f68ab603c4",
     "architecture/decision-record/README.md": "0ff769568fe284f437d781aec649cf3ba1bdbd8efa4b7511481b56607e5d4233",
     "architecture/decision-record/decision-record.schema.json": "56e9694bfb93c04c66e058eeda412b6e8ca187c9d66285baec717112f659bad6",
-    "architecture/decision-record/reason-codes.json": "40b0606fc1b2980e526363585847643c851bd8d9c5be3f5aaae3f15400db71b2",
+    "architecture/decision-record/reason-codes.json": "86b72e8a3737004914a1a0a4c92927a107ad406ed0c09a37a09ba00083e2fa53",
     "architecture/decision-record/status.json": "fe54c9b78f133c63e339316730090263469def180d298180aeb9dffea63474d2",
-    "architecture/decision-record/vectors.json": "660435bb552a57719435c09dbbc44cba8ad2512de3df724a8f39d7884e4f890f",
+    "architecture/decision-record/vectors.json": "a2183e019321f6a7b1f721d56ce76953670a584af99013c1828f1016f102cb62",
     "architecture/regulatory-alignment-README.md": "5fce1c75110b0222f603ea0fed3a2af705ec4e0dc06f3c68b9ec8c24f69de733",
     "architecture/regulatory-alignment.json": "98532820261fa1a51a67998fff1126586329a5b5ef7fe09e0e026501b24e95e1",
     "architecture/replay-fixtures/blobs/1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005": "1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005",
@@ -500,14 +500,14 @@ ERA_SHA256 = MappingProxyType({
     "ci/chain_checkpoint.py": "8c8789073698f4e7441b6fda6e7fae8675ad9e8cdd3b30c1a4471809fdc874a0",
     "scripts/approval_outcome.py": "b9b7835b578c106e2b3470e33f60f9955fcf89d5e7a03c32716c92e0bbce6b37",
     "scripts/broker_handoff_transcript_v2.py": "6344e54d229ef46efa3698e2068b05ff247257750307ad749ddc2bbad06e94f9",
-    "scripts/decision_record.py": "4fdbdf76baf5e878e6621f104a605d888d9890ea011c7d6968f1bcf494b1e64e",
+    "scripts/decision_record.py": "af6bb14bb7b779f9764b5a8c7a116012837bbeacae9e7aee25ea54f1e6d39b6f",
     "scripts/safe_yaml.py": "99c673560e65e58cdc1abe86e53472feaf93e546dd76cb9f3ba051beef5c49d7",
     "scripts/validate_broker_handoff.py": "e7484442e8116c4fd9760c187c862ce3f5f12ac7795841635225d1983ab4aee6",
     "scripts/validate_decision_record.py": "49a9f0cac29ea11e68085c73e3eeddecdcba0cbe8b69905fec92572bb4cd5a84",
     "scripts/validate_edge_record_v13.py": "f3d3eb218e709d81b6ca110e1d3e1df268097c48888acbbf9e7b8f799690d2e4",
     "scripts/validate_proxy_contract.py": "45cb0a20b530d60a832a9ae1d78ae88ae5f1a22863332c5733f82fe3363e7b69",
     "scripts/validate_regulatory_alignment.py": "4814b82e3ffafe976f80e3adb755dca531a4fc76b5df43fc15f8627936ad926b",
-    "tests/test_decision_record.py": "49fe1747f321960a2d17b13f2300b78524516ea51e847c393d4e1060ee78805a",
+    "tests/test_decision_record.py": "1b3f7163ec1022927e6b71aa8db1f40205410b8bb2edc21196404ca1d4a5b452",
     "tests/test_edge_record_v13.py": "e5593e6fc2ce2127e937ec40b5956b60843cdb22d1a82ee32b60572ac8bb1eb9",
     "tests/test_regulatory_alignment.py": "fd54dc2ef2a28881717f605af9da58a26b0087cdc1658e2ad10f249868323913",
 })

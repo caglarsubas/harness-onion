@@ -98,7 +98,8 @@ def test_fail_closed_never_permits():
     assert MODEL.effective(unknown) == "DENY"
     grade_error = CASES["GR-N9"]["input"]
     assert MODEL.grade_count(grade_error) == "UNGRADED"
-    assert MODEL.replay_score(grade_error) == {"status": "BLOCKED", "blockerCode": "EVALUATOR_ERROR"}
+    assert MODEL.replay_score(grade_error) == {"status": "BLOCKED", "blockerCode": "EVALUATOR_ERROR",
+                                               "evidenceDigest": MODEL.digest(grade_error)}
 
 
 def test_lift_refused_after_a_lift_n7f():

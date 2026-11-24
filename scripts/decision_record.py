@@ -244,9 +244,10 @@ def grade_count(record) -> str:
 
 
 def replay_score(record):
-    """r2 section 7 point 4: a GRADE ERROR maps to replay-score BLOCKED with blockerCode EVALUATOR_ERROR."""
+    """r2 section 7 point 4: a GRADE ERROR maps to replay-score BLOCKED with blockerCode EVALUATOR_ERROR and the
+    record as evidenceDigest, its digest (BUILD_PLAN_296 ERR-7)."""
     if grade_count(record) == "UNGRADED":
-        return dict(REPLAY_BLOCKED)
+        return dict(REPLAY_BLOCKED, evidenceDigest=digest(record))
     return {"status": "SCORED", "blockerCode": None}
 
 
