@@ -1,0 +1,403 @@
+{
+  "schemaVersion": "harness.planeon.ai/decision-record-reason-codes/v1",
+  "item": "GR-DECISION-RECORD-001",
+  "packet": "MET-014",
+  "status": "PUBLISHED",
+  "recordSchema": "planeon.internal.decision-record/v1",
+  "schema": {
+    "path": "architecture/decision-record/decision-record.schema.json",
+    "sha256": "56e9694bfb93c04c66e058eeda412b6e8ca187c9d66285baec717112f659bad6"
+  },
+  "vectors": {
+    "path": "architecture/decision-record/vectors.json",
+    "sha256": "a2183e019321f6a7b1f721d56ce76953670a584af99013c1828f1016f102cb62"
+  },
+  "statusRecord": {
+    "path": "architecture/decision-record/status.json",
+    "sha256": "fe54c9b78f133c63e339316730090263469def180d298180aeb9dffea63474d2"
+  },
+  "model": {
+    "path": "scripts/decision_record.py",
+    "sha256": "af6bb14bb7b779f9764b5a8c7a116012837bbeacae9e7aee25ea54f1e6d39b6f"
+  },
+  "approvalOutcome": {
+    "path": "architecture/approval-outcome/record.json",
+    "sha256": "88e83285ecb02b654c6cdece8f88e1712a935bdc8e287ba5929ed237edfdec1e"
+  },
+  "sources": [
+    {
+      "name": "GR-DECISION-RECORD-001 draft r2 (R12)",
+      "sha256Prefix": "81289178"
+    },
+    {
+      "name": "its erratum E1 (R12)",
+      "sha256Prefix": "ff187830"
+    },
+    {
+      "name": "tla-grdec r2 GrdecRelift.tla (R12)",
+      "sha256Prefix": "c055ccf0"
+    },
+    {
+      "name": "tla-grdec COVERAGE.md (R12)",
+      "sha256Prefix": "064d80a2"
+    },
+    {
+      "name": "R04's approval pilot (TLA+)",
+      "sha256Prefix": "e474fad4"
+    },
+    {
+      "name": "CONTRACT_296 r2 (R00)",
+      "sha256Prefix": "ce4aae00"
+    }
+  ],
+  "kinds": [
+    "GUARDRAIL",
+    "ADMISSION_SCAN",
+    "GRADE",
+    "APPROVAL"
+  ],
+  "decisions": {
+    "GUARDRAIL": [
+      "DENY",
+      "ESCALATE",
+      "TRANSFORM",
+      "ALLOW"
+    ],
+    "ADMISSION_SCAN": [
+      "DENY",
+      "ESCALATE",
+      "ALLOW"
+    ],
+    "GRADE": [
+      "FAIL",
+      "PASS"
+    ],
+    "APPROVAL": [
+      "REJECTED",
+      "EXPIRED",
+      "CANCELLED",
+      "UNAVAILABLE",
+      "APPROVED"
+    ]
+  },
+  "unorderedKinds": [
+    "APPROVAL"
+  ],
+  "failClosed": {
+    "GUARDRAIL": "DENY",
+    "ADMISSION_SCAN": "DENY",
+    "GRADE": "UNGRADED",
+    "APPROVAL": "UNAVAILABLE"
+  },
+  "errorCodes": {
+    "beforeSelection": [
+      "ERR_MALFORMED_INPUT",
+      "ERR_RULE_NOT_SELECTED"
+    ],
+    "duringEvaluation": [
+      "ERR_EVALUATOR_UNAVAILABLE",
+      "ERR_TIMEOUT",
+      "ERR_INTERNAL"
+    ]
+  },
+  "reasonCodes": {
+    "GUARDRAIL": [
+      "GUARDRAIL_DENY",
+      "GUARDRAIL_ESCALATE",
+      "GUARDRAIL_TRANSFORM",
+      "GUARDRAIL_ALLOW"
+    ],
+    "ADMISSION_SCAN": [
+      "ADMISSION_SCAN_DENY",
+      "ADMISSION_SCAN_ESCALATE",
+      "ADMISSION_SCAN_ALLOW"
+    ],
+    "GRADE": [
+      "GRADE_FAIL",
+      "GRADE_PASS"
+    ],
+    "APPROVAL": [
+      "APPROVAL_REJECTED",
+      "APPROVAL_EXPIRED",
+      "APPROVAL_CANCELLED",
+      "APPROVAL_UNAVAILABLE",
+      "APPROVAL_APPROVED"
+    ]
+  },
+  "approvalFields": {
+    "required": [
+      "requestId",
+      "kind",
+      "state",
+      "subjectId",
+      "revision",
+      "subjectDigest",
+      "policyRef",
+      "policyBindingDigest",
+      "ruleVersion",
+      "mandate",
+      "expiresAt",
+      "asker",
+      "askPort",
+      "decidePort",
+      "decisionRef",
+      "decidedBy",
+      "reasonCode",
+      "decidingStatement"
+    ],
+    "optional": [
+      "businessIntentId",
+      "payloadHash",
+      "evidenceVersions",
+      "preconditions",
+      "compartment",
+      "limits"
+    ]
+  },
+  "checkOrder": [
+    "ENVELOPE_MIXED",
+    "EFFECTIVE_MISMATCH",
+    "ERROR_AS_DECISION",
+    "RULE_VERSION_MISSING",
+    "MODEL_APPROVAL",
+    "MODEL_LOWERED",
+    "TRANSFORM_CONFLICT",
+    "TRANSFORM_MISMATCH"
+  ],
+  "consumerRule": "LIFT_REFUSED",
+  "clauses": [
+    {
+      "id": "E1",
+      "family": "E",
+      "text": "Two statuses: a DECIDED record carries a decision from its kind's set and a null error; an ERROR record a null decision and an error from the five reserved codes (before selection: ERR_MALFORMED_INPUT, ERR_RULE_NOT_SELECTED; during evaluation: ERR_EVALUATOR_UNAVAILABLE, ERR_TIMEOUT, ERR_INTERNAL). Both or neither is ENVELOPE_MIXED."
+    },
+    {
+      "id": "E2",
+      "family": "E",
+      "text": "Fail closed: effectiveDecision is the decision on DECIDED and the kind's fail-closed value on ERROR, stored and recomputed, otherwise EFFECTIVE_MISMATCH; never ALLOW, PASS or APPROVED on an ERROR record."
+    },
+    {
+      "id": "E3",
+      "family": "E",
+      "text": "Absence is not allow: a decision point that gets no record within its deadline writes an ERROR record with ERR_TIMEOUT and acts on the fail-closed value; an outage never surfaces as ALLOW."
+    },
+    {
+      "id": "E4",
+      "family": "E",
+      "text": "Error reasons stay apart: an ERR_ reason code on a DECIDED record, or a policy reason code on an ERROR record, is ERROR_AS_DECISION."
+    },
+    {
+      "id": "E5",
+      "family": "E",
+      "text": "Version pins: a DECIDED record names its rule and version; an ERROR record may carry a null rule only with the two codes raised before selection; otherwise RULE_VERSION_MISSING."
+    },
+    {
+      "id": "E6",
+      "family": "E",
+      "text": "A model never lowers and never approves: on APPROVAL the verified decision maker decides alone and a model-only APPROVED or a model-only lift is MODEL_APPROVAL (E6a); on the other kinds the decision is the most restrictive deterministic contribution and a lower one is MODEL_LOWERED (E6b); two TRANSFORM contributions with TRANSFORM as the decision are TRANSFORM_CONFLICT (E6c)."
+    },
+    {
+      "id": "E7",
+      "family": "E",
+      "text": "Closed values: a kind or decision outside the closed sets is read as the kind's fail-closed value; no default branch maps to ALLOW, PASS or APPROVED."
+    },
+    {
+      "id": "X3",
+      "family": "E",
+      "text": "transform is non-null exactly when effectiveDecision is TRANSFORM, otherwise TRANSFORM_MISMATCH."
+    },
+    {
+      "id": "L1",
+      "family": "L",
+      "text": "The APPROVAL record's decision is APPROVED, made by the verified decision maker (E6a)."
+    },
+    {
+      "id": "L2",
+      "family": "L",
+      "text": "It is unexpired at the time of the effect, under HR-APPROVAL's expiry rules (its O3)."
+    },
+    {
+      "id": "L3",
+      "family": "L",
+      "text": "Its subject's scopeDigest, subjectDigest and revision equal the ESCALATE record's."
+    },
+    {
+      "id": "L4",
+      "family": "L",
+      "text": "Its escalationRef equals digest(the ESCALATE record): an approval of one escalation cannot lift a later one on the same action."
+    },
+    {
+      "id": "L5",
+      "family": "L",
+      "text": "The ESCALATE record has not been lifted before: an ESCALATE record is lifted at most once, and a second approval naming a lifted escalation is LIFT_REFUSED. A lift is recorded by the effect it permits, in the same commit as the effect (H14's same-commit order); a crash before that commit leaves it unlifted (E1, folded)."
+    }
+  ],
+  "ruleFamilies": [
+    {
+      "id": "E",
+      "name": "The fail-closed envelope",
+      "codes": [
+        "ENVELOPE_MIXED",
+        "EFFECTIVE_MISMATCH",
+        "ERROR_AS_DECISION",
+        "RULE_VERSION_MISSING",
+        "MODEL_APPROVAL",
+        "MODEL_LOWERED",
+        "TRANSFORM_CONFLICT",
+        "TRANSFORM_MISMATCH"
+      ],
+      "clauses": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6",
+        "E7",
+        "X3"
+      ],
+      "vectors": [
+        "GR-P1",
+        "GR-P2",
+        "GR-P3",
+        "GR-P4",
+        "GR-P5",
+        "GR-P7",
+        "GR-P8a",
+        "GR-P8b",
+        "GR-N1",
+        "GR-N2",
+        "GR-N3",
+        "GR-N4",
+        "GR-N5",
+        "GR-N6",
+        "GR-N8",
+        "GR-N9",
+        "GR-N10",
+        "GR-N11a",
+        "GR-N11b",
+        "GR-N12",
+        "GR-N13a",
+        "GR-N13b",
+        "GR-N14"
+      ]
+    },
+    {
+      "id": "L",
+      "name": "The lift rule (a consumer rule over two records)",
+      "codes": [
+        "LIFT_REFUSED"
+      ],
+      "clauses": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "vectors": [
+        "GR-P6",
+        "GR-N7a",
+        "GR-N7b",
+        "GR-N7c",
+        "GR-N7d",
+        "GR-N7e",
+        "GR-N7f"
+      ]
+    }
+  ],
+  "vectorPerCode": {
+    "ENVELOPE_MIXED": [
+      "GR-N5"
+    ],
+    "EFFECTIVE_MISMATCH": [
+      "GR-N6"
+    ],
+    "ERROR_AS_DECISION": [
+      "GR-N2"
+    ],
+    "RULE_VERSION_MISSING": [
+      "GR-N3",
+      "GR-N14"
+    ],
+    "MODEL_APPROVAL": [
+      "GR-N11a",
+      "GR-N11b"
+    ],
+    "MODEL_LOWERED": [
+      "GR-N4"
+    ],
+    "TRANSFORM_CONFLICT": [
+      "GR-N12"
+    ],
+    "TRANSFORM_MISMATCH": [
+      "GR-N13a",
+      "GR-N13b"
+    ],
+    "LIFT_REFUSED": [
+      "GR-N7a",
+      "GR-N7b",
+      "GR-N7c",
+      "GR-N7d",
+      "GR-N7e",
+      "GR-N7f"
+    ]
+  },
+  "r2Results": {
+    "GR-N1": "E3 through E2",
+    "GR-N8": "E7",
+    "GR-N9": "the GRADE ERROR count",
+    "GR-N10": "HR-APPROVAL's closed set"
+  },
+  "chainedPair": [
+    "GR-P8a",
+    "GR-P8b"
+  ],
+  "c30Tests": {
+    "file": "tests/test_decision_record.py",
+    "cases": [
+      "case_escalate_between_check_and_act",
+      "case_crash_before_act",
+      "case_approval_for_superseded_escalation",
+      "case_effect_repeated_delivery",
+      "case_new_revision_after_approval",
+      "case_approval_expires_before_effect",
+      "case_second_approval_after_lift"
+    ],
+    "listedWithoutCase": [
+      "Revoke"
+    ]
+  },
+  "settlements": [
+    {
+      "id": "SCHEMA-NAME",
+      "text": "The schema name rides on each record as schemaVersion (MAS-RA-001's form)."
+    },
+    {
+      "id": "REASON-CODES",
+      "text": "R00's registry: one policy reason code per kind and decision value (KIND_DECISION); the ERR_ prefix is reserved for the five error codes (E4)."
+    },
+    {
+      "id": "CHECK-ORDER",
+      "text": "R00 fixes the check order of the eight single-record codes and one vector per code (r2 section 6's last line); LIFT_REFUSED is the consumer rule's result over two records."
+    },
+    {
+      "id": "P8",
+      "text": "P8's two chained records are two RECORD cases, P8a and P8b; the checker binds P8b's supersedes and valueBeforeDigest to P8a's."
+    },
+    {
+      "id": "VERIFIED-DECIDER",
+      "text": "APPROVAL's verified decision maker is HR-APPROVAL's decidedBy, a HUMAN reviewer with an id digest."
+    },
+    {
+      "id": "C30",
+      "text": "The TLA+ models' crash, race and repeat actions are the seven test cases in tests/test_decision_record.py, through the model's Consumer seam; Revoke is listed with no case (HR-APPROVAL's later effect-time recheck packet owns it)."
+    }
+  ],
+  "outOfScope": [
+    "ACCESS_REVIEW (a v2 kind with an attestation outcome, r2 section 3).",
+    "That a decision point runs the rule its record names (H16, H13).",
+    "That a point without a deadline writes ERR_TIMEOUT.",
+    "Any H14 ledger write; the record is bound to it by the same-commit order only."
+  ]
+}

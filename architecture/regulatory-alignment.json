@@ -1,0 +1,1336 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "REG-ALIGN-001",
+  "status": "PUBLISHED",
+  "basis": {
+    "harnessOnionCommit": "19b176be",
+    "harnessModel": "roadmap model.harnesses (H1-H16)",
+    "modules": "architecture/release-profile.json modules[] at 19b176be",
+    "evidenceColumns": "architecture/release-evidence.json columns[] at 19b176be",
+    "claimDomains": "architecture/release-evidence.json claimDomains[] at 19b176be"
+  },
+  "nonClaims": [
+    "Nothing here says the platform or a tenant complies with any regulator text. The two sources are supervisory good practice and sound practice, not law.",
+    "Each row names a candidate carrier at harness and module level. carrierCheck NOT_CHECKED means no contract field or schema was read for this draft; R00 confirms or corrects each carrier before publication.",
+    "No evidence state is claimed. Every release-evidence cell at 19b176be is BLOCKED, NOT_RUN or NOT_SELECTED (0 QUALIFIED).",
+    "Practices are paraphrased, not quoted. Locators point to the held texts.",
+    "Gap kind TENANT_OBLIGATION names who implements a practice, never who bears the legal duty. Article 50(1) and 50(2) are written as duties on providers.",
+    "Whether any EU duty applies to the product today is not settled here: nothing is deployed and no jurisdiction is named."
+  ],
+  "sources": [
+    {
+      "id": "FSB-SP-2026",
+      "title": "FSB, Sound Practices for Responsible Adoption of Artificial Intelligence (AI): Final report",
+      "date": "2026-10-15",
+      "nature": "SOUND_PRACTICE",
+      "sha256": "4e3ea6d2f52439f8aef6a27fc316a20eecacecd50b03dfca4e89f9f1de0ca6de",
+      "bytes": 940160,
+      "heldAs": "roadmap/research/papers/fsb-sound-practices-ai-final-report-2026-10-15-4e3ea6d2.pdf",
+      "locatorForm": "pdfPage (printed page = pdfPage - 4)"
+    },
+    {
+      "id": "FCA-GP-2026",
+      "title": "FCA, AI in financial services: good practice and areas for improvement",
+      "date": "2026-10-19",
+      "nature": "GOOD_PRACTICE",
+      "sha256": "df1e275b9f94bf4ccfb409f54d3f0d54bc9291fb749eec6a17ab6103d4f1cc96",
+      "bytes": 282299,
+      "heldAs": "roadmap/research/papers/fca-ai-good-poor-practice-2026-10-19-df1e275b.html",
+      "locatorForm": "section number"
+    },
+    {
+      "id": "BENCH-EU-DATES",
+      "title": "Amended EU AI Act dates, from a secondary law-firm note (27 May 2026) on a political agreement, carried by the deep-research bench (RS-MEMO-DEEPBENCH section 6 row 13) and roadmap item REG-ALIGN-001",
+      "nature": "EXTRACTED_CLAIM",
+      "sha256": null,
+      "heldAs": null,
+      "note": "Secondary and unverified. The amending act is not held and its number is not known here; confirming these dates needs that act (identifying it is a search, its own owner approval)."
+    },
+    {
+      "id": "EU-AIA-2024-1689",
+      "title": "Regulation (EU) 2024/1689 (Artificial Intelligence Act), Official Journal L series, 12.7.2024, English, as enacted",
+      "date": "2024-06-13",
+      "nature": "LAW_AS_ENACTED",
+      "sha256": "bba630444b3278e881066774002a1d7824308934f49ccfa203e65be43692f55e",
+      "bytes": 2583319,
+      "heldAs": "TOOLS:roadmap-sync/steward/sources/EU.REG.2024.1689.OJ-L.EN.pdf",
+      "locatorForm": "Article and paragraph, pdfPage (pdfPage = printed page)",
+      "note": "Held on the owner's approval of one fetch (2026-11-22). No later amending act is held."
+    }
+  ],
+  "enums": {
+    "state": [
+      "MAPPED",
+      "PARTIAL",
+      "GAP"
+    ],
+    "gapKind": [
+      "PRODUCT_GAP",
+      "TENANT_OBLIGATION",
+      "CARRIER_UNCONFIRMED"
+    ],
+    "carrierCheck": [
+      "NOT_CHECKED",
+      "CONFIRMED",
+      "CORRECTED"
+    ],
+    "confirmation": [
+      "HELD_SOURCE",
+      "UNCONFIRMED"
+    ],
+    "candidateState": [
+      "MAPPED"
+    ],
+    "noCarryingItem": [
+      "no carrying item (weekly lock decides)"
+    ],
+    "addressee": [
+      "PROVIDER",
+      "DEPLOYER",
+      "NOT_RECORDED"
+    ]
+  },
+  "rows": [
+    {
+      "id": "FSB-SP01",
+      "source": "FSB-SP-2026",
+      "locator": "SP1, pdfPage 24; annex pdfPage 69",
+      "practice": "Board and senior management align AI adoption and governance with business model, risk appetite and strategy.",
+      "carriedBy": {
+        "harness": [],
+        "modules": []
+      },
+      "evidence": {
+        "columns": [
+          "tenantAcceptance"
+        ],
+        "claimDomains": [
+          "customerAcceptance"
+        ]
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "A board duty. The product can only supply records the tenant's board reads; the tenantAcceptance column is where the tenant records it."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP02",
+      "source": "FSB-SP-2026",
+      "locator": "SP2, pdfPage 26",
+      "practice": "Clear roles and responsibilities and an appropriate governance framework for AI adoption.",
+      "carriedBy": {
+        "harness": [
+          "H14"
+        ],
+        "modules": [
+          "module.trust.governance.governance-service",
+          "module.trust.governance.registry-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "tenantAcceptance",
+          "independentAssurance"
+        ],
+        "claimDomains": [
+          "applicationAuthorization"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "H14 can hold an accountable owner per agent and approval routes; naming the people and their roles stays with the tenant."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP03",
+      "source": "FSB-SP-2026",
+      "locator": "SP3, pdfPage 28",
+      "practice": "Risk management frameworks that address AI risks, including documentation of AI use and materiality and risk assessment.",
+      "carriedBy": {
+        "harness": [
+          "H14"
+        ],
+        "modules": [
+          "module.trust.governance.registry-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "qualificationBundle"
+        ],
+        "claimDomains": []
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "The registry documents AI use; the risk framework itself is the tenant's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP04",
+      "source": "FSB-SP-2026",
+      "locator": "SP4, pdfPage 31",
+      "practice": "Learn, adapt and adjust oversight, governance, risk practices and capabilities as AI evolves.",
+      "carriedBy": {
+        "harness": [],
+        "modules": []
+      },
+      "evidence": {
+        "columns": [],
+        "claimDomains": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "An organisational capability. No product contract carries it."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP05",
+      "source": "FSB-SP-2026",
+      "locator": "SP5, pdfPage 35",
+      "practice": "A systematic way to assess the materiality and risk of each AI use case at inception and afterwards.",
+      "carriedBy": {
+        "harness": [
+          "H14"
+        ],
+        "modules": [
+          "module.trust.governance.governance-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "qualificationBundle",
+          "tenantAcceptance"
+        ],
+        "claimDomains": []
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Not checked: whether a published H14 contract carries a materiality or risk tier per use case, and a re-assessment trigger."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP06",
+      "source": "FSB-SP-2026",
+      "locator": "SP6, pdfPage 37",
+      "practice": "Select AI models or systems against business objectives, operational and technical needs, and use-case materiality and risk.",
+      "carriedBy": {
+        "harness": [
+          "H2",
+          "H14"
+        ],
+        "modules": [
+          "module.runtime.model-inference.inference-api",
+          "provider.planeon.llamacpp",
+          "module.trust.governance.registry-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "deploymentProfile"
+        ],
+        "claimDomains": []
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "The release profile pins the provider set; the selection decision and its rationale are the tenant's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP07",
+      "source": "FSB-SP-2026",
+      "locator": "SP7, pdfPage 39",
+      "practice": "Data governance that keeps data fit for purpose (accurate, complete, consistent, reliable, secure) for training, testing and use.",
+      "carriedBy": {
+        "harness": [
+          "H5",
+          "H6"
+        ],
+        "modules": [
+          "module.knowledge.data-integration.connector-controller",
+          "module.knowledge.data-integration.ingest-worker",
+          "module.knowledge.domain-semantic.domain-service",
+          "artifact.platform.industry-pack"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "qualificationBundle"
+        ],
+        "claimDomains": [
+          "retrievalQuality"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "The banking pack's data-readiness assessment (IND-BANK-002) checks declared data classes and readiness; the banking pack is not in the release set yet (release-profile nonClaims), so the industry-pack row is the white-goods pack."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP08",
+      "source": "FSB-SP-2026",
+      "locator": "SP8, pdfPage 42",
+      "practice": "Understand explainability differences, prefer more explainable AI or add compensating controls, and give transparency fitted to each stakeholder.",
+      "carriedBy": {
+        "harness": [
+          "H4",
+          "H7",
+          "H15"
+        ],
+        "modules": [
+          "module.runtime.experience.experience-gateway",
+          "module.knowledge.retrieval-context.retrieval-service",
+          "module.trust.observability.otel-collector"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "independentAssurance"
+        ],
+        "claimDomains": [
+          "retrievalQuality"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "Traces and retrieval citations give technical explanation; stakeholder-tailored transparency (customer, staff, supervisor views) has no named contract.",
+        "carryingItems": [
+          "PRODUCT-SHELL-001"
+        ],
+        "itemState": "READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP09",
+      "source": "FSB-SP-2026",
+      "locator": "SP9, pdfPage 47",
+      "practice": "Evaluate AI performance in proportion to materiality and risk: performance assessment, testing and ongoing monitoring.",
+      "carriedBy": {
+        "harness": [
+          "H16",
+          "H15"
+        ],
+        "modules": [
+          "module.trust.assurance.assurance-worker",
+          "module.trust.assurance.evidence-service",
+          "module.trust.observability.otel-collector"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "independentAssurance",
+          "qualificationBundle"
+        ],
+        "claimDomains": [
+          "retrievalQuality",
+          "effectSemantics"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Every part of the practice has a named carrier; MAPPED waits for R00's field-level confirmation (F-RA-1)."
+      },
+      "carrierCheck": "NOT_CHECKED",
+      "candidateState": "MAPPED"
+    },
+    {
+      "id": "FSB-SP10",
+      "source": "FSB-SP-2026",
+      "locator": "SP10, pdfPage 53",
+      "practice": "Human oversight fitted to each use case's materiality, risk, autonomy, complexity and explainability.",
+      "carriedBy": {
+        "harness": [
+          "H10",
+          "H14",
+          "H4"
+        ],
+        "modules": [
+          "module.execution.orchestration.orchestration-worker",
+          "module.trust.governance.governance-service",
+          "module.runtime.experience.experience-gateway"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "executionMode"
+        ],
+        "claimDomains": [
+          "applicationAuthorization"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Approval steps in orchestration are the likely carrier; not checked whether the oversight mode is set per use case by risk tier."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-SP11",
+      "source": "FSB-SP-2026",
+      "locator": "SP11, pdfPage 59",
+      "practice": "Manage AI-related cyber and ICT risks, including AI scenarios in tests and exercises.",
+      "carriedBy": {
+        "harness": [
+          "H13",
+          "H1"
+        ],
+        "modules": [
+          "module.trust.security.guardrail-service",
+          "module.trust.security.policy-decision",
+          "module.runtime.infrastructure.operator",
+          "module.runtime.infrastructure.namespace-baseline",
+          "module.runtime.infrastructure.bundle-verifier"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "deploymentProfile",
+          "runtimeCampaign"
+        ],
+        "claimDomains": [
+          "containment"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Every part of the practice has a named carrier; MAPPED waits for R00's field-level confirmation (F-RA-1)."
+      },
+      "carrierCheck": "NOT_CHECKED",
+      "candidateState": "MAPPED"
+    },
+    {
+      "id": "FSB-SP12",
+      "source": "FSB-SP-2026",
+      "locator": "SP12, pdfPage 64",
+      "practice": "Manage third-party AI dependency risk: performance, transparency, data quality, supply chain, concentration and business continuity.",
+      "carriedBy": {
+        "harness": [
+          "H2",
+          "H1"
+        ],
+        "modules": [
+          "provider.planeon.llamacpp",
+          "module.runtime.infrastructure.bundle-verifier"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "deploymentProfile"
+        ],
+        "claimDomains": [
+          "deploymentRecovery"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "Pinned digests and a signed catalog cover supply chain; concentration and exit planning are the tenant's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG01",
+      "source": "FSB-SP-2026",
+      "locator": "SP3 inventory discussion, pdfPage 31",
+      "practice": "For agents, inventory attributes beyond models: agent identifiers, accessible tools, components, guardrails; where mature, certified status and permitted scope per agent.",
+      "carriedBy": {
+        "harness": [
+          "H14"
+        ],
+        "modules": [
+          "module.trust.governance.registry-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "qualificationBundle"
+        ],
+        "claimDomains": [
+          "applicationAuthorization"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Not checked: whether the registry contract has tool-access, guardrail, certified-status and permitted-scope fields. DESIGN-UX-001's agent inventory view reads the same attributes; the two drafts should cite each other."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG02",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 agentic list, pdfPage 56",
+      "practice": "Break an agent's goal into steps with a control at each step that, if not met, blocks the next step.",
+      "carriedBy": {
+        "harness": [
+          "H10",
+          "H13"
+        ],
+        "modules": [
+          "module.execution.orchestration.orchestration-worker",
+          "module.trust.security.policy-decision"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign"
+        ],
+        "claimDomains": [
+          "effectSemantics",
+          "applicationAuthorization"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Every part of the practice has a named carrier; MAPPED waits for R00's field-level confirmation (F-RA-1)."
+      },
+      "carrierCheck": "NOT_CHECKED",
+      "candidateState": "MAPPED"
+    },
+    {
+      "id": "FSB-AG03",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 agentic list, pdfPage 57",
+      "practice": "Set a risk-based frequency and operating model for oversight, with triggers to move between oversight forms on performance metrics or user request.",
+      "carriedBy": {
+        "harness": [
+          "H14",
+          "H15"
+        ],
+        "modules": [
+          "module.trust.governance.governance-service",
+          "module.trust.observability.otel-collector"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign"
+        ],
+        "claimDomains": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "No named contract turns a metric threshold into an oversight-mode change.",
+        "carryingItems": [
+          "DRIFT-OWNERSHIP-001",
+          "SLO-MODEL-001"
+        ],
+        "itemState": "READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG04",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 agentic list, pdfPage 57",
+      "practice": "Monitor agents continuously (AI may monitor AI, with its own evaluation) and record anomalies that may show misuse or scope creep, such as data access beyond the goal.",
+      "carriedBy": {
+        "harness": [
+          "H15",
+          "H13"
+        ],
+        "modules": [
+          "module.trust.observability.otel-collector",
+          "module.trust.observability.usage-ledger",
+          "module.trust.security.policy-decision"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "independentAssurance"
+        ],
+        "claimDomains": [
+          "containment"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "Telemetry and policy decisions exist as carriers; a scope-creep detector (access beyond the certified scope) is not named.",
+        "carryingItems": [
+          "AGENT-IDENTITY-001",
+          "DRIFT-OWNERSHIP-001"
+        ],
+        "itemState": "BLOCKED; READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG05",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 agentic list, pdfPage 57",
+      "practice": "Agents produce summaries of their actions and reasoning, cross-checked against other sources where appropriate.",
+      "carriedBy": {
+        "harness": [
+          "H15",
+          "H16"
+        ],
+        "modules": [
+          "module.trust.observability.otel-collector",
+          "module.trust.assurance.evidence-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "independentAssurance"
+        ],
+        "claimDomains": [
+          "effectSemantics"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Decision-point logging is the likely carrier; not checked whether an action summary is a contract output and whether it is reconciled with the trace."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG06",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 agentic list, pdfPage 57",
+      "practice": "Red-team agents on recognising problems, avoiding repeated errors, escalating, stopping safely, handing over and returning to a safe state.",
+      "carriedBy": {
+        "harness": [
+          "H16",
+          "H13"
+        ],
+        "modules": [
+          "module.trust.assurance.assurance-worker"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "independentAssurance",
+          "runtimeCampaign"
+        ],
+        "claimDomains": [
+          "containment"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "No agent red-team campaign (including agent-to-agent) is named among the evidence producers at 19b176be.",
+        "carryingItems": [
+          "GR-REDTEAM-FIXTURES-001",
+          "TRUST-EVAL-ADOPT-001"
+        ],
+        "itemState": "READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG07",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 oversight forms pdfPage 55; agentic list pdfPage 57",
+      "practice": "Risk-based, tested kill switch: pause, limit, override or remove an agent's access to systems, tools, data or decisions, from full stop to graduated degradation towards human operation.",
+      "carriedBy": {
+        "harness": [
+          "H13",
+          "H10",
+          "H1"
+        ],
+        "modules": [
+          "module.trust.security.policy-decision",
+          "module.execution.orchestration.orchestration-api",
+          "module.runtime.infrastructure.operator"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "executionMode"
+        ],
+        "claimDomains": [
+          "containment",
+          "deploymentRecovery"
+        ]
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "Policy deny and operator scale-down could carry a full stop; no contract is named for per-agent pause or graduated degradation, nor a test of it.",
+        "carryingItems": [],
+        "noCarryingItem": "no carrying item (weekly lock decides)",
+        "relatedItems": [
+          "AGENT-IDENTITY-001",
+          "PLATFORM-OPS-AGENTS-001"
+        ],
+        "itemState": "BLOCKED; no item owns a tested per-agent pause with graduated degradation (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FSB-AG08",
+      "source": "FSB-SP-2026",
+      "locator": "SP10 agentic list, pdfPage 57",
+      "practice": "Resilience planning and testing for agents covers fallback processes, recovery expectations and escalation routes.",
+      "carriedBy": {
+        "harness": [
+          "H1",
+          "H10"
+        ],
+        "modules": [
+          "module.runtime.infrastructure.operator",
+          "module.execution.orchestration.orchestration-worker"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "deploymentProfile"
+        ],
+        "claimDomains": [
+          "deploymentRecovery"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "Product recovery is in the deploymentRecovery domain; business fallback processes are the tenant's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-2-A",
+      "source": "FCA-GP-2026",
+      "locator": "2 key findings; 2.1",
+      "practice": "Define consumer need and target market before designing and deploying AI-supported products.",
+      "carriedBy": {
+        "harness": [],
+        "modules": []
+      },
+      "evidence": {
+        "columns": [],
+        "claimDomains": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "A product-governance duty of the firm."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-2-B",
+      "source": "FCA-GP-2026",
+      "locator": "2 key findings; 2.1",
+      "practice": "Test consumer outcomes across consumer characteristics and scenarios.",
+      "carriedBy": {
+        "harness": [
+          "H16"
+        ],
+        "modules": [
+          "module.trust.assurance.assurance-worker"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "independentAssurance",
+          "tenantAcceptance"
+        ],
+        "claimDomains": [
+          "customerAcceptance"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "CONF-BANK-001's cohorts are the planned carrier; not yet published."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-2-C",
+      "source": "FCA-GP-2026",
+      "locator": "2 key findings",
+      "practice": "Proportionate controls for bias and accuracy, and decisions that can be explained.",
+      "carriedBy": {
+        "harness": [
+          "H16",
+          "H15"
+        ],
+        "modules": [
+          "module.trust.assurance.assurance-worker",
+          "module.trust.observability.otel-collector"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "independentAssurance",
+          "runtimeCampaign"
+        ],
+        "claimDomains": [
+          "retrievalQuality"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "No bias evaluation is named among the evidence producers.",
+        "carryingItems": [
+          "GRADER-CALIBRATION-001",
+          "TRUST-EVAL-ADOPT-001"
+        ],
+        "itemState": "READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-2-D",
+      "source": "FCA-GP-2026",
+      "locator": "2 key findings; 2.2",
+      "practice": "Tell consumers how AI is used and its limits, and test their understanding where appropriate.",
+      "carriedBy": {
+        "harness": [
+          "H4"
+        ],
+        "modules": [
+          "module.runtime.experience.experience-gateway",
+          "provider.planeon.experience-web"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "tenantAcceptance"
+        ],
+        "claimDomains": [
+          "customerAcceptance"
+        ]
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "The disclosure journeys are DESIGN-UX-001's last open step; nothing carries them yet. Same carrier as EU-AIA-ART50-1-5.",
+        "carryingItems": [
+          "DESIGN-UX-001"
+        ],
+        "itemState": "last step, in work (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-2-E",
+      "source": "FCA-GP-2026",
+      "locator": "2 key findings",
+      "practice": "Monitor live outcomes to spot and deal with issues quickly.",
+      "carriedBy": {
+        "harness": [
+          "H15",
+          "H16"
+        ],
+        "modules": [
+          "module.trust.observability.otel-collector",
+          "module.trust.assurance.evidence-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign"
+        ],
+        "claimDomains": [
+          "customerAcceptance"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "Technical telemetry is carried; consumer-outcome metrics are not named (FCA 3.2 lists metric-only monitoring as an area for improvement).",
+        "carryingItems": [],
+        "noCarryingItem": "no carrying item (weekly lock decides)",
+        "itemState": "no item; the value table's metrics are the nearest (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-3-A",
+      "source": "FCA-GP-2026",
+      "locator": "3 key findings; 3.1",
+      "practice": "Proportionate, risk-based AI governance throughout the lifecycle.",
+      "carriedBy": {
+        "harness": [
+          "H14"
+        ],
+        "modules": [
+          "module.trust.governance.governance-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "qualificationBundle",
+          "tenantAcceptance"
+        ],
+        "claimDomains": []
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "H14 carries lifecycle records; proportionality decisions are the firm's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-3-B",
+      "source": "FCA-GP-2026",
+      "locator": "3 key findings; 3.4",
+      "practice": "Clearly designed human oversight and escalation triggers, including thresholds for low confidence or uncertainty.",
+      "carriedBy": {
+        "harness": [
+          "H10",
+          "H14"
+        ],
+        "modules": [
+          "module.execution.orchestration.orchestration-worker",
+          "module.trust.governance.governance-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "executionMode"
+        ],
+        "claimDomains": [
+          "applicationAuthorization"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Not checked whether an escalation threshold is a contract field."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-3-C",
+      "source": "FCA-GP-2026",
+      "locator": "3 key findings; 3.2",
+      "practice": "Multidisciplinary governance backed by continuous monitoring: thresholds, dashboards, drift checks, logging and audit trails of AI interactions.",
+      "carriedBy": {
+        "harness": [
+          "H15",
+          "H16"
+        ],
+        "modules": [
+          "module.trust.observability.otel-collector",
+          "module.trust.observability.usage-ledger",
+          "module.trust.assurance.evidence-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "independentAssurance"
+        ],
+        "claimDomains": [
+          "effectSemantics"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Every part of the practice has a named carrier; MAPPED waits for R00's field-level confirmation (F-RA-1)."
+      },
+      "carrierCheck": "NOT_CHECKED",
+      "candidateState": "MAPPED"
+    },
+    {
+      "id": "FCA-3-D",
+      "source": "FCA-GP-2026",
+      "locator": "3 key findings; 3.3",
+      "practice": "Senior managers accountable for AI systems and for reasonable steps to mitigate risk.",
+      "carriedBy": {
+        "harness": [],
+        "modules": []
+      },
+      "evidence": {
+        "columns": [
+          "tenantAcceptance"
+        ],
+        "claimDomains": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "An SMF duty of the firm."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-3-E",
+      "source": "FCA-GP-2026",
+      "locator": "3.5",
+      "practice": "Register agents in a central inventory: which are live, who owns them, what systems and data they reach, which controls apply.",
+      "carriedBy": {
+        "harness": [
+          "H14"
+        ],
+        "modules": [
+          "module.trust.governance.registry-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "qualificationBundle"
+        ],
+        "claimDomains": [
+          "applicationAuthorization"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Same carrier and check as FSB-AG01."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-3-F",
+      "source": "FCA-GP-2026",
+      "locator": "3.5",
+      "practice": "Turn risk appetite into thresholds (for example red, amber, green) with predefined actions and escalation.",
+      "carriedBy": {
+        "harness": [
+          "H14",
+          "H15"
+        ],
+        "modules": [
+          "module.trust.governance.governance-service",
+          "module.trust.observability.otel-collector"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "runtimeCampaign",
+          "tenantAcceptance"
+        ],
+        "claimDomains": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "Same gap as FSB-AG03: no contract binds a threshold to a predefined action.",
+        "carryingItems": [
+          "DRIFT-OWNERSHIP-001",
+          "SLO-MODEL-001"
+        ],
+        "itemState": "READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-4-A",
+      "source": "FCA-GP-2026",
+      "locator": "4 key findings; 4.1",
+      "practice": "AI systems and architecture that match the sensitivity and security needs of the use case.",
+      "carriedBy": {
+        "harness": [
+          "H1",
+          "H13"
+        ],
+        "modules": [
+          "module.runtime.infrastructure.operator",
+          "module.runtime.infrastructure.namespace-baseline",
+          "module.trust.security.policy-decision"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "deploymentProfile",
+          "executionMode"
+        ],
+        "claimDomains": [
+          "containment"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Every part of the practice has a named carrier; MAPPED waits for R00's field-level confirmation (F-RA-1)."
+      },
+      "carrierCheck": "NOT_CHECKED",
+      "candidateState": "MAPPED"
+    },
+    {
+      "id": "FCA-4-B",
+      "source": "FCA-GP-2026",
+      "locator": "4 key findings; 4.1",
+      "practice": "AI model dependencies, including third-party ones, are part of operational resilience planning.",
+      "carriedBy": {
+        "harness": [
+          "H1",
+          "H2"
+        ],
+        "modules": [
+          "module.runtime.infrastructure.operator",
+          "provider.planeon.llamacpp"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "deploymentProfile"
+        ],
+        "claimDomains": [
+          "deploymentRecovery"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "The release profile lists the model provider and tenant facts; resilience mapping of business services is the firm's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-4-C",
+      "source": "FCA-GP-2026",
+      "locator": "4 key findings; 4.1; 4.2",
+      "practice": "Mitigate cyber threats and over-dependence on one AI model or provider, with a way to switch.",
+      "carriedBy": {
+        "harness": [
+          "H2",
+          "H3",
+          "H13"
+        ],
+        "modules": [
+          "module.runtime.ai-gateway.ai-gateway",
+          "provider.planeon.llamacpp",
+          "module.trust.security.guardrail-service"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "deploymentProfile",
+          "runtimeCampaign"
+        ],
+        "claimDomains": [
+          "deploymentRecovery",
+          "containment"
+        ]
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "The release set has one model provider; a tested provider switch is not evidenced.",
+        "carryingItems": [
+          "BYO-PROVIDER-001"
+        ],
+        "itemState": "READY (roadmap, 2026-11-22)"
+      },
+      "carrierCheck": "NOT_CHECKED"
+    },
+    {
+      "id": "FCA-4-D",
+      "source": "FCA-GP-2026",
+      "locator": "4 key findings; 4.2",
+      "practice": "Manage third parties proactively: visibility of model changes, contingency and exit plans, tested vendor assurances.",
+      "carriedBy": {
+        "harness": [
+          "H1"
+        ],
+        "modules": [
+          "module.runtime.infrastructure.bundle-verifier"
+        ]
+      },
+      "evidence": {
+        "columns": [
+          "artifactDigest",
+          "sourceCommit"
+        ],
+        "claimDomains": []
+      },
+      "state": "PARTIAL",
+      "gap": {
+        "kind": "TENANT_OBLIGATION",
+        "note": "Digest pins make model changes visible; contracts, exit plans and vendor testing are the firm's."
+      },
+      "carrierCheck": "NOT_CHECKED"
+    }
+  ],
+  "euDates": [
+    {
+      "id": "EU-AIA-ART50-1-5",
+      "obligation": "Article 50(1) with 50(5): people interacting directly with an AI system are told so, at the latest at the first interaction, in a clear and distinguishable manner that meets applicable accessibility requirements",
+      "addressee": "PROVIDER",
+      "obligationLocator": "Art 50(1) pdfPage 82; 50(5) pdfPage 83",
+      "source": "EU-AIA-2024-1689",
+      "dateAsEnacted": {
+        "date": "2026-08-02",
+        "source": "EU-AIA-2024-1689",
+        "confirmation": "HELD_SOURCE",
+        "locator": "Art 113 (general date; exceptions (a)-(c)), pdfPage 123; Article 50 is in no exception"
+      },
+      "dateAsAmended": {
+        "date": "2026-08-02",
+        "source": "BENCH-EU-DATES",
+        "confirmation": "UNCONFIRMED",
+        "note": "The bench gives the same date; the amendment is not held."
+      },
+      "dateAlreadyPassed": true,
+      "carriedBy": {
+        "harness": [
+          "H4"
+        ],
+        "modules": [
+          "module.runtime.experience.experience-gateway",
+          "provider.planeon.experience-web"
+        ]
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "No disclosure journey is carried yet. The notice must not rely on colour alone and must be announced to a screen reader (50(5) accessibility). Showing it again after a reconnect, and to bank staff, are design choices beyond the text. Release condition (the visionary's read, a note on the release path at lock 78): no release to a tenant in the European Union without the disclosure journey. The product is deployed nowhere today. A planning reading, not legal advice.",
+        "carryingItems": [
+          "DESIGN-UX-001"
+        ],
+        "itemState": "last step, in work (roadmap, 2026-11-22)"
+      }
+    },
+    {
+      "id": "EU-AIA-ART50-2",
+      "obligation": "Article 50(2): outputs of systems generating synthetic text (among other content) are marked in a machine-readable format and detectable as artificially generated; assistive editing that does not substantially alter the input is excepted",
+      "addressee": "PROVIDER",
+      "obligationLocator": "Art 50(2), pdfPage 82",
+      "source": "EU-AIA-2024-1689",
+      "dateAsEnacted": {
+        "date": "2026-08-02",
+        "source": "EU-AIA-2024-1689",
+        "confirmation": "HELD_SOURCE",
+        "locator": "Art 113 (general date; exceptions (a)-(c)), pdfPage 123; Article 50 is in no exception"
+      },
+      "dateAsAmended": {
+        "date": "2026-08-02",
+        "source": "BENCH-EU-DATES",
+        "confirmation": "UNCONFIRMED",
+        "note": "The bench gives the same date; the amendment is not held."
+      },
+      "dateAlreadyPassed": true,
+      "carriedBy": {
+        "harness": [
+          "H4",
+          "H3"
+        ],
+        "modules": [
+          "module.runtime.experience.experience-gateway",
+          "module.runtime.ai-gateway.ai-gateway"
+        ]
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "PRODUCT_GAP",
+        "note": "The typed origin of a line (Design-UX finding F-DUX-A50-1) is the candidate carrier. The read asks that the mark be part of the payload a client receives (an experience-contract amendment), not only drawn by the reference client; no roadmap item names that amendment yet.",
+        "carryingItems": [
+          "DESIGN-UX-001",
+          "PRODUCT-SHELL-001"
+        ],
+        "itemState": "READY; READY (roadmap, 2026-11-22)"
+      }
+    },
+    {
+      "id": "EU-AIA-HR-STANDALONE",
+      "obligation": "High-risk obligations for systems listed in Annex III (Article 6(2))",
+      "addressee": "NOT_RECORDED",
+      "obligationLocator": "Art 6(2) pdfPage 53; Annex III point 5(b) pdfPage 127",
+      "source": "EU-AIA-2024-1689",
+      "dateAsEnacted": {
+        "date": "2026-08-02",
+        "source": "EU-AIA-2024-1689",
+        "confirmation": "HELD_SOURCE",
+        "locator": "Art 113 (general date; exceptions (a)-(c)), pdfPage 123; Annex III systems fall under the general date"
+      },
+      "dateAsAmended": {
+        "date": "2027-12-02",
+        "source": "BENCH-EU-DATES",
+        "confirmation": "UNCONFIRMED",
+        "note": "Provisional; known only from the secondary note. If the amendment is not in force, the enacted date has passed."
+      },
+      "dateAlreadyPassed": true,
+      "carriedBy": {
+        "harness": [],
+        "modules": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Annex III point 5(b) lists systems that evaluate creditworthiness or set a credit score, and excepts systems used to detect financial fraud. Whether a tenant's banking use case is high-risk is the tenant's classification, not the record's. The enacted date (2 Aug 2026) has passed; the later date rests on an amendment that is not held."
+      }
+    },
+    {
+      "id": "EU-AIA-HR-EMBEDDED",
+      "obligation": "High-risk obligations for safety components of products under Annex I legislation (Article 6(1))",
+      "addressee": "NOT_RECORDED",
+      "obligationLocator": "Art 6(1) pdfPage 53; Art 113(c) pdfPage 123",
+      "source": "EU-AIA-2024-1689",
+      "dateAsEnacted": {
+        "date": "2027-08-02",
+        "source": "EU-AIA-2024-1689",
+        "confirmation": "HELD_SOURCE",
+        "locator": "Art 113(c), pdfPage 123"
+      },
+      "dateAsAmended": {
+        "date": "2028-08-02",
+        "source": "BENCH-EU-DATES",
+        "confirmation": "UNCONFIRMED",
+        "note": "Provisional; known only from the secondary note."
+      },
+      "dateAlreadyPassed": false,
+      "carriedBy": {
+        "harness": [],
+        "modules": []
+      },
+      "state": "GAP",
+      "gap": {
+        "kind": "CARRIER_UNCONFIRMED",
+        "note": "Not expected to bind the banking pack; recorded for completeness of Article 113."
+      }
+    }
+  ],
+  "rules": [
+    "state MAPPED requires carrierCheck CONFIRMED or CORRECTED.",
+    "a row with candidateState MAPPED has state PARTIAL, gap kind CARRIER_UNCONFIRMED and carrierCheck NOT_CHECKED.",
+    "every non-MAPPED row carries a gap with a kind from the enum and a note.",
+    "every PRODUCT_GAP gap names carryingItems (roadmap ids) or, when the list is empty, noCarryingItem with the enum's one value.",
+    "every EU row carries dateAsEnacted and dateAsAmended; each date object cites a source and a confirmation.",
+    "a date object whose source has a held digest carries confirmation HELD_SOURCE and a locator; one whose source has none carries UNCONFIRMED.",
+    "dateAlreadyPassed is computed from dateAsEnacted against draftDate.",
+    "an obligationLocator naming two places gives a pdfPage for each place."
+  ],
+  "gapKindMeaning": {
+    "PRODUCT_GAP": "nothing in the product carries the practice yet",
+    "TENANT_OBLIGATION": "the tenant implements it in its own channel or organisation; this says nothing about who bears a legal duty",
+    "CARRIER_UNCONFIRMED": "a carrier is named but not confirmed at field level"
+  }
+}

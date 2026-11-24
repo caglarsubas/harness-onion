@@ -1,0 +1,2647 @@
+{
+  "schemaVersion": "harness.planeon.ai/decision-record-vectors/v1",
+  "cases": [
+    {
+      "id": "GR-P1",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0001",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "DENY",
+          "effectiveDecision": "DENY",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_DENY",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "DENY",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P2",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0002",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "TRANSFORM",
+          "effectiveDecision": "TRANSFORM",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_TRANSFORM",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "TRANSFORM",
+            "score": null
+          }
+        ],
+        "transform": {
+          "valueBeforeDigest": "sha256:490dde6fecaade68e4d8b7869d8402ee30a328bff75e32bb41a3b2726b1232fb",
+          "valueAfterDigest": "sha256:22e4a1091421e40a2185fb2d92c46e168d3cb73cf49eb71f49918ae9740c6bee"
+        },
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P3",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0003",
+        "kind": "ADMISSION_SCAN",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "ALLOW",
+          "effectiveDecision": "ALLOW",
+          "error": null
+        },
+        "reasonCode": "ADMISSION_SCAN_ALLOW",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "ARTIFACT",
+            "contentDigest": "sha256:ca344d4f02de302e4bd50aadb2bd71053a3190fae546b955647ca379321806a6",
+            "locations": null,
+            "matchFingerprint": "fp:90ba698ed30d164e31d4af9685e06ffb"
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "ALLOW",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P4",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0004",
+        "kind": "GRADE",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "PASS",
+          "effectiveDecision": "PASS",
+          "error": null
+        },
+        "reasonCode": "GRADE_PASS",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "PASS",
+            "score": null
+          },
+          {
+            "source": "MODEL",
+            "ruleId": "rule/judge-0001",
+            "ruleVersion": "3",
+            "decision": "PASS",
+            "score": 910000,
+            "model": {
+              "modelId": "judge-model-1",
+              "configurationDigest": "sha256:84dd1bc4d7394861f0b3dcf192922ada8193d7413be63ca9f42ddeb385dbe7a1",
+              "promptDigest": "sha256:c25ccfe9707d612f607422add89ef95b9c75ccb5f5d6b61306337d99a9af5b8e",
+              "tokensIn": 812,
+              "tokensOut": 64
+            }
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P5",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-apr-0001",
+        "kind": "APPROVAL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "APPROVED",
+          "effectiveDecision": "APPROVED",
+          "error": null
+        },
+        "reasonCode": "APPROVAL_APPROVED",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 600,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decidePort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decisionRef": "dec-0001",
+          "decidedBy": {
+            "id": "rev-1",
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": "APPROVED_BY_REVIEWER",
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P6",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-esc-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "ESCALATE",
+            "effectiveDecision": "ESCALATE",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_ESCALATE",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "ESCALATE",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0001",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 3,
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 600,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "ACT"
+      }
+    },
+    {
+      "id": "GR-P7",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0007",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "ERROR",
+          "decision": null,
+          "effectiveDecision": "DENY",
+          "error": {
+            "code": "ERR_EVALUATOR_UNAVAILABLE",
+            "detail": "evaluator did not answer in its deadline"
+          }
+        },
+        "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P8a",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0008",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "TRANSFORM",
+          "effectiveDecision": "TRANSFORM",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_TRANSFORM",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "TRANSFORM",
+            "score": null
+          }
+        ],
+        "transform": {
+          "valueBeforeDigest": "sha256:490dde6fecaade68e4d8b7869d8402ee30a328bff75e32bb41a3b2726b1232fb",
+          "valueAfterDigest": "sha256:22e4a1091421e40a2185fb2d92c46e168d3cb73cf49eb71f49918ae9740c6bee"
+        },
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-P8b",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-0009",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "TRANSFORM",
+          "effectiveDecision": "TRANSFORM",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_TRANSFORM",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "TRANSFORM",
+            "score": null
+          }
+        ],
+        "transform": {
+          "valueBeforeDigest": "sha256:22e4a1091421e40a2185fb2d92c46e168d3cb73cf49eb71f49918ae9740c6bee",
+          "valueAfterDigest": "sha256:84f56df64bbeb201610d3bbf3c442afea246ff4972ddabbf572390cfd83206da"
+        },
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": "sha256:73489318f3437ca548abff139c4396c806ed96e85280f9b058095f72a2674848"
+      },
+      "expect": {
+        "result": "ACCEPTED"
+      }
+    },
+    {
+      "id": "GR-N1",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n01",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "ERROR",
+          "decision": null,
+          "effectiveDecision": "ALLOW",
+          "error": {
+            "code": "ERR_TIMEOUT",
+            "detail": "evaluator did not answer in its deadline"
+          }
+        },
+        "reasonCode": "ERR_TIMEOUT",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "EFFECTIVE_MISMATCH"
+      }
+    },
+    {
+      "id": "GR-N2",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n02",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "DENY",
+          "effectiveDecision": "DENY",
+          "error": null
+        },
+        "reasonCode": "ERR_INTERNAL",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "DENY",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "ERROR_AS_DECISION"
+      }
+    },
+    {
+      "id": "GR-N3",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n03",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "DENY",
+          "effectiveDecision": "DENY",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_DENY",
+        "rule": null,
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "DENY",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "RULE_VERSION_MISSING"
+      }
+    },
+    {
+      "id": "GR-N4",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n04",
+        "kind": "GRADE",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "PASS",
+          "effectiveDecision": "PASS",
+          "error": null
+        },
+        "reasonCode": "GRADE_PASS",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "FAIL",
+            "score": null
+          },
+          {
+            "source": "MODEL",
+            "ruleId": "rule/judge-0001",
+            "ruleVersion": "3",
+            "decision": "PASS",
+            "score": 970000,
+            "model": {
+              "modelId": "judge-model-1",
+              "configurationDigest": "sha256:84dd1bc4d7394861f0b3dcf192922ada8193d7413be63ca9f42ddeb385dbe7a1",
+              "promptDigest": "sha256:c25ccfe9707d612f607422add89ef95b9c75ccb5f5d6b61306337d99a9af5b8e",
+              "tokensIn": 812,
+              "tokensOut": 64
+            }
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "MODEL_LOWERED"
+      }
+    },
+    {
+      "id": "GR-N5",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n05",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "DENY",
+          "effectiveDecision": "DENY",
+          "error": {
+            "code": "ERR_INTERNAL",
+            "detail": "a stray error"
+          }
+        },
+        "reasonCode": "ERR_INTERNAL",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "DENY",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "ENVELOPE_MIXED"
+      }
+    },
+    {
+      "id": "GR-N6",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n06",
+        "kind": "APPROVAL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "ERROR",
+          "decision": null,
+          "effectiveDecision": "APPROVED",
+          "error": {
+            "code": "ERR_EVALUATOR_UNAVAILABLE",
+            "detail": "evaluator did not answer in its deadline"
+          }
+        },
+        "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "UNAVAILABLE",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 600,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decidePort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decisionRef": "dec-0001",
+          "decidedBy": null,
+          "reasonCode": "DECIDED",
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "EFFECTIVE_MISMATCH"
+      }
+    },
+    {
+      "id": "GR-N7a",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-esc-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "ESCALATE",
+            "effectiveDecision": "ESCALATE",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_ESCALATE",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "ESCALATE",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0001",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:c3c8d8277ff995935cf0a88b146923a1485e3d22bba3242b97268f483392e86b",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 3,
+            "subjectDigest": "sha256:c3c8d8277ff995935cf0a88b146923a1485e3d22bba3242b97268f483392e86b",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 600,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "LIFT_REFUSED"
+      }
+    },
+    {
+      "id": "GR-N7b",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-esc-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "ESCALATE",
+            "effectiveDecision": "ESCALATE",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_ESCALATE",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "ESCALATE",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0001",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 4
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 4,
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 600,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "LIFT_REFUSED"
+      }
+    },
+    {
+      "id": "GR-N7c",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-esc-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "ESCALATE",
+            "effectiveDecision": "ESCALATE",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_ESCALATE",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "ESCALATE",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0001",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 3,
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 200,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "LIFT_REFUSED"
+      }
+    },
+    {
+      "id": "GR-N7d",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-esc-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "ESCALATE",
+            "effectiveDecision": "ESCALATE",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_ESCALATE",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "ESCALATE",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0001",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:77f2733cdd89ae223fd3ff4a1a7747a30fa4c09563179e3f36261c863effec1d",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 3,
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 600,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "LIFT_REFUSED"
+      }
+    },
+    {
+      "id": "GR-N7e",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-deny-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "DENY",
+            "effectiveDecision": "DENY",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_DENY",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "DENY",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0001",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:0ff19a3b32c8c0a882a5dd8e01b6e9021162be6f27fa37c16ae14e99d9268f90",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 3,
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 600,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "LIFT_REFUSED"
+      }
+    },
+    {
+      "id": "GR-N7f",
+      "kind": "LIFT",
+      "input": {
+        "escalation": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-esc-0001",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "ESCALATE",
+            "effectiveDecision": "ESCALATE",
+            "error": null
+          },
+          "reasonCode": "GUARDRAIL_ESCALATE",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [
+            {
+              "source": "DETERMINISTIC",
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "model": null,
+              "decision": "ESCALATE",
+              "score": null
+            }
+          ],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "approval": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-apr-0002",
+          "kind": "APPROVAL",
+          "subject": {
+            "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "revision": 3
+          },
+          "envelope": {
+            "status": "DECIDED",
+            "decision": "APPROVED",
+            "effectiveDecision": "APPROVED",
+            "error": null
+          },
+          "reasonCode": "APPROVAL_APPROVED",
+          "rule": {
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "policyVersion": "policy-7",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+              "locations": [
+                {
+                  "path": "src/agent/tools.py",
+                  "start": 120,
+                  "end": 134
+                }
+              ],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775",
+          "approval": {
+            "requestId": "apr-0001",
+            "kind": "demand",
+            "state": "APPROVED",
+            "subjectId": "dem-0001",
+            "revision": 3,
+            "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+            "policyRef": "policy/org-0001",
+            "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+            "ruleVersion": "2026-11-23.1",
+            "mandate": "mandate/payments-ops",
+            "expiresAt": 600,
+            "asker": {
+              "type": "HUMAN",
+              "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+            },
+            "askPort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decidePort": {
+              "answer": "ELIGIBLE",
+              "eligible": [
+                "rev-1"
+              ]
+            },
+            "decisionRef": "dec-0001",
+            "decidedBy": {
+              "id": "rev-1",
+              "type": "HUMAN",
+              "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+            },
+            "reasonCode": "APPROVED_BY_REVIEWER",
+            "decidingStatement": {
+              "id": "org-07",
+              "version": "3"
+            }
+          },
+          "decidedAt": "2026-11-23T10:00:00Z",
+          "supersedes": null
+        },
+        "lifted": [
+          "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775"
+        ],
+        "effect": {
+          "at": 300,
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        }
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "LIFT_REFUSED"
+      }
+    },
+    {
+      "id": "GR-N8",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n08",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "PERMIT",
+          "effectiveDecision": "PERMIT",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_ALLOW",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "ALLOW",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "READ_FAIL_CLOSED",
+        "effectiveDecision": "DENY"
+      }
+    },
+    {
+      "id": "GR-N9",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n09",
+        "kind": "GRADE",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "ERROR",
+          "decision": null,
+          "effectiveDecision": "UNGRADED",
+          "error": {
+            "code": "ERR_EVALUATOR_UNAVAILABLE",
+            "detail": "evaluator did not answer in its deadline"
+          }
+        },
+        "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "UNGRADED",
+        "replayScore": {
+          "status": "BLOCKED",
+          "blockerCode": "EVALUATOR_ERROR",
+          "evidenceDigest": "sha256:847aff3bd57b5039d657b390d91dbc50d3450da53ac9c8362ea1bd7911ff96ed"
+        }
+      }
+    },
+    {
+      "id": "GR-N10",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n10",
+        "kind": "APPROVAL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "GRANTED",
+          "effectiveDecision": "GRANTED",
+          "error": null
+        },
+        "reasonCode": "APPROVAL_APPROVED",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 600,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decidePort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decisionRef": "dec-0001",
+          "decidedBy": {
+            "id": "rev-1",
+            "type": "HUMAN",
+            "idDigest": "sha256:604e55574dad91921aa2ee450ee3e264a83350307c34a3b28b453327af38722c"
+          },
+          "reasonCode": "APPROVED_BY_REVIEWER",
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "READ_FAIL_CLOSED",
+        "effectiveDecision": "UNAVAILABLE"
+      }
+    },
+    {
+      "id": "GR-N11a",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n11a",
+        "kind": "APPROVAL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "APPROVED",
+          "effectiveDecision": "APPROVED",
+          "error": null
+        },
+        "reasonCode": "APPROVAL_APPROVED",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "MODEL",
+            "ruleId": "rule/judge-0001",
+            "ruleVersion": "3",
+            "decision": "APPROVED",
+            "score": 990000,
+            "model": {
+              "modelId": "judge-model-1",
+              "configurationDigest": "sha256:84dd1bc4d7394861f0b3dcf192922ada8193d7413be63ca9f42ddeb385dbe7a1",
+              "promptDigest": "sha256:c25ccfe9707d612f607422add89ef95b9c75ccb5f5d6b61306337d99a9af5b8e",
+              "tokensIn": 812,
+              "tokensOut": 64
+            }
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 600,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decidePort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decisionRef": "dec-0001",
+          "decidedBy": null,
+          "reasonCode": "APPROVED_BY_REVIEWER",
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "MODEL_APPROVAL"
+      }
+    },
+    {
+      "id": "GR-N11b",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n11b",
+        "kind": "APPROVAL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "APPROVED",
+          "effectiveDecision": "APPROVED",
+          "error": null
+        },
+        "reasonCode": "APPROVAL_APPROVED",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": "sha256:bf5b38b0e297e84b857cbaacd4b0692faa173ea4f1e886c6cac91d93091b8775",
+        "approval": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "APPROVED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 600,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decidePort": {
+            "answer": "ELIGIBLE",
+            "eligible": [
+              "rev-1"
+            ]
+          },
+          "decisionRef": "dec-0001",
+          "decidedBy": {
+            "id": "wl-1",
+            "type": "WORKLOAD",
+            "idDigest": "sha256:1ad1b7e04649f53c2e0c7967a7995901cf04984045d320a9b8604a375c85836e"
+          },
+          "reasonCode": "APPROVED_BY_REVIEWER",
+          "decidingStatement": {
+            "id": "org-07",
+            "version": "3"
+          }
+        },
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "MODEL_APPROVAL"
+      }
+    },
+    {
+      "id": "GR-N12",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n12",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "TRANSFORM",
+          "effectiveDecision": "TRANSFORM",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_TRANSFORM",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "TRANSFORM",
+            "score": null
+          },
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/redact-0002",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "TRANSFORM",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "TRANSFORM_CONFLICT"
+      }
+    },
+    {
+      "id": "GR-N13a",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n13a",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "DENY",
+          "effectiveDecision": "DENY",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_DENY",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "DENY",
+            "score": null
+          }
+        ],
+        "transform": {
+          "valueBeforeDigest": "sha256:490dde6fecaade68e4d8b7869d8402ee30a328bff75e32bb41a3b2726b1232fb",
+          "valueAfterDigest": "sha256:22e4a1091421e40a2185fb2d92c46e168d3cb73cf49eb71f49918ae9740c6bee"
+        },
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "TRANSFORM_MISMATCH"
+      }
+    },
+    {
+      "id": "GR-N13b",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n13b",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "DECIDED",
+          "decision": "TRANSFORM",
+          "effectiveDecision": "TRANSFORM",
+          "error": null
+        },
+        "reasonCode": "GUARDRAIL_TRANSFORM",
+        "rule": {
+          "ruleId": "rule/egress-0001",
+          "ruleVersion": "2026-11-23.1",
+          "policyVersion": "policy-7",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+        },
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [
+          {
+            "source": "DETERMINISTIC",
+            "ruleId": "rule/egress-0001",
+            "ruleVersion": "2026-11-23.1",
+            "model": null,
+            "decision": "TRANSFORM",
+            "score": null
+          }
+        ],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "TRANSFORM_MISMATCH"
+      }
+    },
+    {
+      "id": "GR-N14",
+      "kind": "RECORD",
+      "input": {
+        "schemaVersion": "planeon.internal.decision-record/v1",
+        "decisionId": "dr-n14",
+        "kind": "GUARDRAIL",
+        "subject": {
+          "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+          "subjectKind": "TOOL_CALL",
+          "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+          "revision": 3
+        },
+        "envelope": {
+          "status": "ERROR",
+          "decision": null,
+          "effectiveDecision": "DENY",
+          "error": {
+            "code": "ERR_TIMEOUT",
+            "detail": "evaluator did not answer in its deadline"
+          }
+        },
+        "reasonCode": "ERR_TIMEOUT",
+        "rule": null,
+        "evidence": [
+          {
+            "kind": "POLICY_RESULT",
+            "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+            "locations": [
+              {
+                "path": "src/agent/tools.py",
+                "start": 120,
+                "end": 134
+              }
+            ],
+            "matchFingerprint": null
+          }
+        ],
+        "contributions": [],
+        "transform": null,
+        "escalationRef": null,
+        "approval": null,
+        "decidedAt": "2026-11-23T10:00:00Z",
+        "supersedes": null
+      },
+      "expect": {
+        "result": "REFUSED",
+        "code": "RULE_VERSION_MISSING"
+      }
+    }
+  ]
+}

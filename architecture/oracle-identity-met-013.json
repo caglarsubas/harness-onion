@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_013_oracle.py",
-  "sha256": "e02b73d747b0c0515e3d48a59b457a9d629ade61afcf4731f42631788519d6f2"
+  "sha256": "7c2eef88a727d76eeb18d9f6b5e1051ed3897a38ca889d657049d150bd5ba9ae"
  },
  "oracle": {
   "agentId": "a04e0ce8f63e499ab",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "ORC-295-C3-KEEP",
-  "date": "2026-11-23"
+  "ref": "ORC-296-E6-KEEP",
+  "date": "2026-11-24"
  },
  "disclosures": [
   "bound inputs: exactly the oracle e02b73d747b0c0515e3d48a59b457a9d629ade61afcf4731f42631788519d6f2 and the table 140594f192b8c617c09dacbe6d081354b73465c17a311f04bd08f0ba5d55e8b4; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
@@ -53,6 +53,11 @@
   "author run 2 (the relay's revision under facts A, D, E and erratum D1, kit r3 (ORC-295-AUTHOR-R3-GRANT)): 2026-11-23T13:07:38+08:00 to 2026-11-23T13:11:33+08:00, 22 tool calls; its file after the run e02b73d7",
   "the oracle's runs, by the operator on the hub's words, node counts only: candidate run 1 on the c3 candidate with the first file: 100 passed, 7 failed of 107 (summary ad34a96f; C16 STOP, triaged by a non-author: no candidate defect); candidate run 2 on the c3 candidate with this file: 107 passed of 107 (summary 4c374533); the c3 sweep on the chain tree with this file: 107 passed of 107, then the head test's pre-check: 230 passed of 230 (summary 7cd858db)",
   "the table is main's with both rows measured at c3 from the c3 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 22.5 and this oracle 9.7 (219 entries)",
-  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-295-C3-KEEP)"
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-295-C3-KEEP)",
+  "slot 296 O1 round R1 (CONTRACT_294 erratum E6; 296's ERR-5): one node edited, test_historical_catalog, the file's only historical_catalog node, which holds its two refusal cases; it failed at 296's head because it passed a formula of the authority's 318 plus MET-013 and fixed the catalog's size (E6 withdraws both; at 296 the current catalog grows by MET-014, and ERR-5's cascade appends each new packet every step)",
+  "slot 296 R1: the edited node now passes the current catalog into the head (names from the file's own current_catalog_names helper over the head module's ROOT, each packet's bytes through reviewed_bytes; E6, C18 amended 2), asserts on the chain's own peel and the authority's era catalog (CONTRACT_295 sections 1 and 4a; E6), keeps the base-pin check (CONTRACT_295 section 1), and builds each refusal (a mapping that lacks or adds an id, CONTRACT_295 section 4a) from the current catalog changed in that one way, matched on the strict heads' message (E6), never on which head refuses (N1)",
+  "slot 296 R1: the rest of the file is unchanged: two module-level lines were added for that node alone (the helper and the module-level name it reads, which the node binds to the head module); every other node, the shared fixtures, the imports, the other helpers and the order keep their bytes; its file e02b73d7 -> 7c2eef88",
+  "slot 296 R1 author: a fresh blind agent, slot 296 R1, ORC-296-E6-GO-R00N; it ran only the kit's in-memory syntax check and the static live-read scan 1e33cdec on its own file (live 0, names 1, era 19, other 0, git 0: PASS), no test run and no py_compile; its context carried an auto-injected memory index, unused",
+  "slot 296 R1: the pass at 296's head is checked by the operator, by totals only (passed equal to collected, failed 0), and N1 by a non-author reader"
  ]
 }

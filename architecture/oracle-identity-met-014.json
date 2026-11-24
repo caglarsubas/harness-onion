@@ -1,0 +1,57 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_014_oracle.py",
+  "sha256": "87ba0360b1e48ea58376efcbebfc43d8bff132d25b341eafbf6509a5ef143101"
+ },
+ "oracle": {
+  "agentId": "aa0bacc9b17ad3e94",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "172e94dc-c17e-424d-926b-9d897553a42c",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "172e94dc-c17e-424d-926b-9d897553a42c"
+  ]
+ },
+ "briefSha256": "c119ffb39c9fbf1bf788ce9b224a89768c0e0bded58c41b86251277979573dc4",
+ "candidateCommit": "11672a675cecb4596541af397d0e8f0805833837",
+ "launched": "2026-11-24T08:12:56+08:00",
+ "finished": "2026-11-24T08:53:10+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "ORC-296-C3-KEEP",
+  "date": "2026-11-24"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 87ba0360b1e48ea58376efcbebfc43d8bff132d25b341eafbf6509a5ef143101 and the table dbbab3de7f92a5712221f606264416c33589a9d37e8950b2da3d23c2b001f994; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "D5a (CONTRACT_296 r2 section 7 c3): this file's author is one fresh non-author agent (C26 category 1), launched once with the filled launch c29368ce on the kit (ORC-296-Q-C3-1) and resumed once with the hub's approved relay r1 fec8efe2 on the same kit (ORC-296-Q-C3-3: the triage's slip verdict line and ERR-5 and ERR-6 verbatim, nothing more); a fresh non-author triage 8d831c3d classed candidate run 1's three failures (ORC-296-Q-C3-2); its first file 6b904db6 is kept by bytes outside the tree",
+  "the kit: brief c119ffb3 (filled), CN six files: CONTRACT_296 r2 (ce4aae00), R12's draft r2 (a97854e5) and erratum E1 (ff187830), R03's draft r4 (83eb7c9a), R10's draft r2 (93d66cb7; the two .md drafts with their closed folder names masked) and the packet YAML at c2 with closed-path strings masked (95c2a3e2); the brief carries the operator-stated facts in contract terms (line anchors read from c2's head 625d7ed3)",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 96a7b89b on its own file, no test run and no py_compile; its file 6b904db6 -> 87ba0360; its report: 45 tests, 90 parametrized cases, 0 asserts without a cite (the author's own count); its scan: test_met_014_oracle.py: live 0, era 24, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads",
+  "author disclosure 1: run 1: its context carried an auto-injected memory index and account context; it used neither",
+  "author disclosure 2: run 1: slip: one message carried three Edit calls on its own file, against the one-call-per-message rule",
+  "author disclosure 3: run 1: one extra light command on its own file (a sha256 and a line count) to fill its report",
+  "author disclosure 4: run 1: one helper in its write area parsed R03's draft r4 from CN by exact path and printed counts and values (no file written); one grep counted that CN file's non-ASCII lines (0)",
+  "author disclosure 5: run 1: nine construction precondition asserts check a shape, not a value, and carry loose cites",
+  "author disclosure 6: run 1: the V1 and E2 mutation cases are not isolated: the brief's read list leaves out most packet and base files, which it gave empty bytes; each check's live validate_* passes",
+  "author disclosure 7: run 1: EDGE-V13's E1 follows the operator-stated refusal-only signature over CONTRACT_296 4a item 4's replay wording, and the file checks the v2 model's acceptance of the three positives itself (settled by ERR-6 in run 2)",
+  "author disclosure 8: run 1: indirect readings named and cited in the file: N1's and N9's stated results, which entries r4's rules 3 to 5 cover (rows and euDates), and E7 on an unknown value of a GRADE record",
+  "author disclosure 9: run 2: the memory index was injected again; it used none of it",
+  "author disclosure 10: run 2: one extra sha256 of its own file; one sed read of the two CN lines the triage cited; one tool call per message",
+  "author disclosure 11: run 2: five tests changed: one by the triage's slip, three by ERR-5 (one of them new), one by ERR-6; every new assert cites ERR-5 or ERR-6",
+  "author disclosure 12: both runs: expected values found only in a fixture: none",
+  "operator note 1: the operator checked each file by bytes and counts only (never decoded or printed): not a link; the catalog-bytes rule's six strings 0; local path shapes 0; closed forms 0; privacy and handle checks 0",
+  "operator note 2: candidate run 1 failed 3 of 121; a fresh non-author triage (C16; ORC-296-Q-C3-2) classed two as candidate defects and one as a construction slip; the hub ruled (ORC-296-Q-C3-3): one defect fixed as ERR-7 (fix 2 on c2), the other the brief's omission of ERR-5 (no candidate change), and a relay to the same author carrying the slip's verdict line and ERR-5 and ERR-6 verbatim, nothing more",
+  "operator note 3: the first file is kept by bytes outside the tree; the measured rows were placed after the sweep and the authority re-derived by the classed step, with a census after",
+  "author run 1 (the first file, from the filled launch on the kit (ORC-296-Q-C3-1)): 2026-11-24T08:12:56+08:00 to 2026-11-24T08:34:06+08:00, 30 tool calls; its file after the run 6b904db6",
+  "author run 2 (the relay's revision under the triage's slip and ERR-5 and ERR-6, on the same kit (ORC-296-Q-C3-3)): 2026-11-24T08:51:17+08:00 to 2026-11-24T08:53:10+08:00, 10 tool calls; its file after the run 87ba0360",
+  "the oracle's runs, by the operator on the hub's words, node counts only: candidate run 1 on the c3 candidate at c2 with the first file: 118 passed, 3 failed of 121 (summary f34e84db; C16 STOP, triaged by a non-author); candidate run 2 on the c3 candidate at fix 2 (ERR-7; real 11672a67, DRY bc41af7f, tree 7b38d7d8) with this file: 122 passed of 122 (summary 898ffd70); the c3 sweep on the chain tree with this file: 122 passed of 122, then the head test's pre-check: 223 passed of 223 (summary e18bc0aa)",
+  "the table is main's with both rows measured at c3 from the c3 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 22.9 and this oracle 6.9 (221 entries)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-296-C3-KEEP)"
+ ]
+}

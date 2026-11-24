@@ -883,12 +883,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "ledger rewrite validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 319
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET},
-            "closed 319-packet catalog retaining the 314-packet checkpoint")
+    require(len(paths) == 320
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET},
+            "closed 320-packet catalog retaining the 314-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -929,4 +929,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Ledger rewrite valid: 319 current specifications at slot 293; 314-packet checkpoint and exact 313-packet predecessor; contract reviewed.")
+    print("Ledger rewrite valid: 320 current specifications at slot 293; 314-packet checkpoint and exact 313-packet predecessor; contract reviewed.")
