@@ -1,0 +1,58 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_015_oracle.py",
+  "sha256": "8c2c40f9eeadf8f46b8696827780cfbff93a2b2fdebae0507c1253e1d9ca44f3"
+ },
+ "oracle": {
+  "agentId": "aeaf27ef722598a02",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "172e94dc-c17e-424d-926b-9d897553a42c",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "172e94dc-c17e-424d-926b-9d897553a42c"
+  ]
+ },
+ "briefSha256": "e2213e6d7ee9edce94b615c12acbb906e8c6b915b14d3863b5ed0a899415601d",
+ "candidateCommit": "d0db0140d9e4c8898906c55cb926330633871c17",
+ "launched": "2026-11-24T20:53:07+08:00",
+ "finished": "2026-11-25T06:55:08+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "ORC-297-AB-RULED",
+  "date": "2026-11-25"
+ },
+ "disclosures": [
+  "bound inputs: exactly the oracle 8c2c40f9eeadf8f46b8696827780cfbff93a2b2fdebae0507c1253e1d9ca44f3 and the table e42042589e45cb97f77d35fdebcb5296db7a7ff8c6ab7e926b80ea40daf5c2bf; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "D5a (CONTRACT_297 r8 c3): this file's author is one fresh non-author agent (C26 category 1), launched once with the filled launch 9c8b6282 on kit r2 (ORC-297-C3-ORACLE-GO), resumed once on kit r3 with the resume message fcaec53b carrying brief r3 and the hub's relay 1 r1 16c7e3b7 (ORC-297-C3-AUTHOR-R2-GRANT, after the hub's ruling 3308879e on a fresh non-author triage 42d08d7c), and resumed once more on kit r3 with the resume message 4ef3fee1 carrying the hub's relay 2 c84ce6e4 (ORC-297-C3-AUTHOR-R3-GRANT, after the hub's ruling bbc9b58b); each relay was passed by path and digest, never opened by the operator; its earlier files are kept by bytes outside the tree",
+  "the kits: brief r2 8a892399 on kit r2 and brief r3 e2213e6d on kit r3 (the fixed paths and hard rules of r2, with the operator facts B1 and B2 and CONTRACT_297's R1 to R4 copied verbatim from r8); CN on kit r2 six files, kit r3 the same six and r8: CONTRACT_297 r5 (939571c2), the product YAML r8 (75de8596), R12's draft r3 (99314217), the packet YAML at c2 with closed-path strings masked (9c43032a), R06's class r2 (c737c133) and step 4 r2 (9218f385), CONTRACT_297 r8 (f03a256c); line anchors read from c2's head d002b0fd",
+  "the author is a fresh agent that authored nothing in c1..c2 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 1e33cdec on its own file, no test run and no py_compile; its file 8cd63956 -> dfe8e9f6 -> 8c2c40f9; its report: 40 tests, 63 parametrized cases, 0 asserts without a cite (the author's own count); its scan: test_met_015_oracle.py: live 0, names 1, era 20, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads",
+  "author disclosure 1: run 1: its context carried an auto-injected memory index and account context; it used neither and read no memory file",
+  "author disclosure 2: run 1: an expected value found only in a fixture: the one refusal code that R12's draft r3 does not name is taken at run time from the member record's refusalOrder",
+  "author disclosure 3: run 1: inferences named in its report: the MODEL-WEIGHTS refusal codes of rules C-3 to C-7 built from R06 step 4 r2's rule names, and its reading of the pack manifest's jcs digest as bare hex",
+  "author disclosure 4: run 1: construction limits named in its report: the fixtures' JSON shapes are not in CN, so the mutations find their targets by the drafts' field names; the V1 and E2 cases are not isolated from the missing-file refusal, as the brief's read list leaves out 5 of the 14 packet files and most base files",
+  "author disclosure 5: run 2: the memory index and account context were injected again; it used none",
+  "author disclosure 6: run 2: slips: two Edit calls in one message (the one-call rule) and one sha256 of its own file beyond SYN and SCAN (the no-run rule)",
+  "author disclosure 7: run 2: it changed 7 tests and 28 parametrized cases and added 2 tests, removed none; each change answers brief r3's B1, B2 or R1 to R4, or an item of relay 1",
+  "author disclosure 8: run 3: the memory index and account context were injected again; it used none",
+  "author disclosure 9: run 3: it changed 10 parametrized cases (the two weights negatives the hub ruled oracle construction and the null-restriction check's 8 cases), added and removed none; each answers relay 2's A8, A9 or A10",
+  "author disclosure 10: run 3: it read relay 2 in full and worked from its round-2 full reads of brief r3 and relay 1, both byte-identical, against the resume message's read rule; the hub ruled it a note, not a defect (ORC-297-C3-WORD1D)",
+  "author disclosure 11: all runs: asserts without a cite 0 by its own line-by-line count; the fixture-only refusal code unchanged",
+  "operator note 1: the operator checked each file by bytes and counts only (never decoded or printed): not a link; the catalog-bytes rule's strings 0; local path shapes 0; closed forms 0; privacy and handle checks 0",
+  "operator note 2: candidate run 1 was refused by the heavy lock before any test; run 1b with the first file failed 37 of 93; a fresh non-author triage (C16; ORC-297-C3-TRIAGE-ROUTE) classed them; the hub ruled (ORC-297-C3-RULING-1): F1 and F2 fixed on c2 as fix 2, brief r3 with B1, B2 and R1 to R4, and relay 1 to the author",
+  "operator note 3: run 1c with the second file failed 2 of 95; the hub ruled both oracle construction (ORC-297-C3-RULING-2): no candidate change, and relay 2 to the author",
+  "operator note 4: each earlier file is kept by bytes outside the tree; the measured rows were placed after the sweep and the authority re-derived by the classed step",
+  "author run 1 (the first file, from the filled launch r2 on kit r2 (ORC-297-C3-ORACLE-GO)): 2026-11-24T20:53:07+08:00 to 2026-11-24T21:10:58+08:00, 24 tool calls; its file after the run 8cd63956",
+  "author run 2 (the second file, resumed on kit r3 with brief r3 and the hub's relay 1 r1 (ORC-297-C3-AUTHOR-R2-GRANT)): 2026-11-25T02:38:01+08:00 to 2026-11-25T02:46:40+08:00, 31 tool calls; its file after the run dfe8e9f6",
+  "author run 3 (this file, resumed on kit r3 with the hub's relay 2 (ORC-297-C3-AUTHOR-R3-GRANT)): 2026-11-25T06:53:02+08:00 to 2026-11-25T06:55:08+08:00, 7 tool calls; its file after the run 8c2c40f9",
+  "the oracle's runs, by the operator on the hub's words, node counts only: candidate run 1 refused by the heavy lock before any test (summary 47a1c9fb); candidate run 1b on the c3 candidate at c2 with the first file: 56 passed, 37 failed of 93 (summary f5ed5656; C16 STOP, triaged by a non-author); candidate run 1c on the c3 candidate at fix 2 (real d0db0140, DRY 71f74af8, tree 7ac06721) with the second file: 93 passed, 2 failed of 95 (summary 9871b3b3; ruled oracle construction); candidate run 1d at fix 2 with this file: 95 passed of 95 (summary ae231a4f); the c3 sweep on the chain tree with this file: 95 passed of 95, then the head test's pre-check: 221 passed of 221 (summary e4376ef8)",
+  "the table is main's with both rows measured at c3 from the c3 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 24.6 and this oracle 11.7 (223 entries)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-297-AB-RULED)"
+ ]
+}

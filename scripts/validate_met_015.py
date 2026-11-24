@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/execml-grrt-weights-authority.json"
-AUTHORITY_SHA256 = "4feb4156768eeebfbe0960e1e539b1096e35b9dc22926431070b18814a5f1402"
+AUTHORITY_SHA256 = "195fc515925b95065a25f7d661cfaf9f496f2a13d114df6f1102be2b4a9e994b"
 VALIDATOR_PATH = "scripts/validate_met_015.py"
 BASE_COMMIT = "12ecc897dece54c7332eaad18e4c4b92243a0f08"
 NEW_PACKET = "MET-015"
