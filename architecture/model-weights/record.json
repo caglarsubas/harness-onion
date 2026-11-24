@@ -1,0 +1,1353 @@
+{
+  "schemaVersion": "planeon.internal.model-weights/v1",
+  "recordVersion": 1,
+  "policyRef": {
+    "basePolicy": {
+      "path": "legal/third-party-license-policy.yaml",
+      "policyVersion": "0.3.0"
+    },
+    "amendment": {
+      "path": "legal/license-policy-amendment-v3/amendment.json",
+      "key": "weightsLicenseClasses"
+    }
+  },
+  "consumers": [],
+  "releases": [
+    {
+      "id": "qwen3-8b",
+      "family": "Qwen",
+      "release": {
+        "repository": "Qwen/Qwen3-8B",
+        "commit": "b968826d9c46dd6066d109eabc6255188de91218"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "DEFAULT_ALLOWED",
+        "rule": "W-2a",
+        "text": {
+          "source": "FILE",
+          "path": "LICENSE",
+          "sha256": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "give recipients a copy of the licence",
+              "modified files carry change notices",
+              "retain copyright, patent, trademark and attribution notices",
+              "carry a NOTICE file's attribution notices if one exists"
+            ]
+          },
+          "useRestrictions": {
+            "list": [],
+            "flowDown": false
+          },
+          "attribution": {
+            "noticeDuty": "retain notices; NOTICE contents if present",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "redistribution"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "modified files carry change notices"
+          },
+          "licensorPowers": {
+            "termination": "patent licence ends on patent litigation by the licensee",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": false,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "NOT_STATED"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "0f36caaff9c2516411a7738db384606263ba653c1e63e61d72f511606164d5a6"
+      },
+      "trainingDataStatement": {
+        "state": "NOT_STATED",
+        "summary": "The card names the training stages (pretraining and post-training) only.",
+        "sourceSha256": "0f36caaff9c2516411a7738db384606263ba653c1e63e61d72f511606164d5a6"
+      },
+      "languages": null,
+      "contextTokens": 32768,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "qwen2.5-72b-instruct",
+      "family": "Qwen",
+      "release": {
+        "repository": "Qwen/Qwen2.5-72B-Instruct",
+        "commit": "495f39366efef23836d0cfae4fbe635880d2be31"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "rule": "W-1",
+        "text": {
+          "source": "FILE",
+          "path": "LICENSE",
+          "sha256": "8aff84e2629edb092f195c1d91bc368d8bb40eeb5fcedce2df19e405ee2cc876"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "give recipients a copy of the agreement",
+              "modified files carry change notices",
+              "retain a fixed attribution line in a Notice file"
+            ]
+          },
+          "useRestrictions": {
+            "list": [
+              "comply with applicable laws, including export controls"
+            ],
+            "flowDown": false
+          },
+          "attribution": {
+            "noticeDuty": "a fixed line in a Notice file",
+            "displayOrNamingDuty": "display 'Built with Qwen' or 'Improved using Qwen' in product documentation",
+            "trigger": "a distributed AI model created, trained or improved with the materials or their outputs"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "the 'Built with Qwen' or 'Improved using Qwen' display; change notices on modified files"
+          },
+          "licensorPowers": {
+            "termination": "on breach (then delete and cease use); all licences end if the licensee sues over the materials",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "over 100 million monthly active users, commercial use",
+            "revenue": "NONE",
+            "duty": "request a licence; no rights without express authorization"
+          },
+          "acceptance": {
+            "byUse": true,
+            "byClick": true,
+            "byRegistration": false
+          },
+          "governingLaw": "PRC law; Hangzhou courts"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "62d6f2176c0925b7c7e5ec6c5ee06cad83868bb21a8e25d58283e3d7707d3f79"
+      },
+      "trainingDataStatement": {
+        "state": "NOT_STATED",
+        "summary": "The card names the training stages (pretraining and post-training) only.",
+        "sourceSha256": "62d6f2176c0925b7c7e5ec6c5ee06cad83868bb21a8e25d58283e3d7707d3f79"
+      },
+      "languages": [
+        "en"
+      ],
+      "contextTokens": 32768,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "gemma-3-4b-it",
+      "family": "Gemma",
+      "release": {
+        "repository": "google/gemma-3-4b-it",
+        "commit": "093f9f388b31de276ce2de164bdc2081324b9767"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "rule": "W-1",
+        "text": {
+          "source": "PAGE",
+          "page": "fetch-list b5e88f11 G-W1 (terms of use)",
+          "sha256": "98a26148d017ca1d6a058c46d5b0bcdc89fc8ef1ca486d09b7316933c00a14f2",
+          "readAt": "2026-11-21T18:07:38Z"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "include the use restrictions as an enforceable term in any downstream agreement, and notify recipients",
+              "give recipients a copy of the agreement",
+              "modified files carry change notices",
+              "a Notice file with a fixed line (not for hosted-service distribution)"
+            ]
+          },
+          "useRestrictions": {
+            "list": [
+              "the prohibited-use policy (fetch-list G-W2, 841279c7), incorporated by reference",
+              "no illegal or unlicensed practice of a profession; financial practice named",
+              "no automated decisions in domains affecting material or individual rights; finance named",
+              "no use in violation of applicable laws"
+            ],
+            "flowDown": true
+          },
+          "attribution": {
+            "noticeDuty": "a fixed line in a Notice file",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "distribution other than through a hosted service"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "Model Derivatives include models trained on its patterns or outputs; they carry the same use restrictions and change notices"
+          },
+          "licensorPowers": {
+            "termination": "on breach (then delete all copies and derivatives)",
+            "revocation": "NONE",
+            "update": "the licensor may update the model and the prohibited-use policy",
+            "remoteRestriction": "the licensor may restrict use remotely or otherwise"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": true,
+            "byClick": true,
+            "byRegistration": false
+          },
+          "governingLaw": "State of California law; Santa Clara County courts"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": null
+      },
+      "trainingDataStatement": null,
+      "languages": null,
+      "contextTokens": null,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "nvidia-nemotron-nano-9b-v2",
+      "family": "Nemotron",
+      "release": {
+        "repository": "nvidia/NVIDIA-Nemotron-Nano-9B-v2",
+        "commit": "6533e8de2c68e4536bf7c411d7a3ce5734111476"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "rule": "W-1",
+        "text": {
+          "source": "PAGE",
+          "page": "fetch-list b5e88f11 N-W (open model licence)",
+          "sha256": "a972104afae98f1fa26d254a131fc70e5283f4bf134b9c2785fc46c7e5f21804",
+          "readAt": "2026-11-21T17:42:11Z"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "give recipients a copy of the agreement",
+              "a fixed attribution line in a Notice file"
+            ]
+          },
+          "useRestrictions": null,
+          "attribution": {
+            "noticeDuty": "a fixed line in a Notice file",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "distribution of the model"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "NONE"
+          },
+          "licensorPowers": {
+            "termination": "rights end automatically if a guardrail is bypassed without a similar one; licences end on copyright or patent litigation by the licensee",
+            "revocation": "revocable as the agreement states",
+            "update": "the licensor may update the agreement at any time; comply or cease use",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": true,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "United States and State of Delaware law; Santa Clara County courts"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "626593b2bdc0f473e2870d0f5e478d63348e53137c4e22f3fca3557234541042"
+      },
+      "trainingDataStatement": {
+        "state": "STATED",
+        "summary": "The card names its pretraining and post-training datasets, over 10 trillion tokens, a September 2024 cutoff, and hybrid collection.",
+        "sourceSha256": "626593b2bdc0f473e2870d0f5e478d63348e53137c4e22f3fca3557234541042"
+      },
+      "languages": [
+        "en",
+        "es",
+        "fr",
+        "de",
+        "it",
+        "ja"
+      ],
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "mistral-small-3.2-24b-instruct-2506",
+      "family": "Mistral",
+      "release": {
+        "repository": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+        "commit": "95a6d26c4bfb886c58daf9d3f7332c857cb27b43"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "UNKNOWN",
+        "rule": "W-3",
+        "declaration": {
+          "metadataTag": "apache-2.0",
+          "cardStatesWeights": false
+        },
+        "text": {
+          "source": "DECLARATION",
+          "path": "README.md",
+          "sha256": "48d492d5ded3dfb80ab53033391c7ada71f42037e442758d9eb29fdb08929edb"
+        },
+        "restrictions": {
+          "redistribution": null,
+          "useRestrictions": null,
+          "attribution": null,
+          "derivatives": null,
+          "licensorPowers": null,
+          "thresholds": null,
+          "acceptance": null,
+          "governingLaw": null
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "48d492d5ded3dfb80ab53033391c7ada71f42037e442758d9eb29fdb08929edb"
+      },
+      "trainingDataStatement": {
+        "state": "NOT_STATED",
+        "summary": "The card states nothing on training data.",
+        "sourceSha256": "48d492d5ded3dfb80ab53033391c7ada71f42037e442758d9eb29fdb08929edb"
+      },
+      "languages": [
+        "en",
+        "fr",
+        "de",
+        "es",
+        "pt",
+        "it",
+        "ja",
+        "ko",
+        "ru",
+        "zh",
+        "ar",
+        "fa",
+        "id",
+        "ms",
+        "ne",
+        "pl",
+        "ro",
+        "sr",
+        "sv",
+        "tr",
+        "uk",
+        "vi",
+        "hi",
+        "bn"
+      ],
+      "contextTokens": null,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "mistral-large-instruct-2411",
+      "family": "Mistral",
+      "release": {
+        "repository": "mistralai/Mistral-Large-Instruct-2411",
+        "commit": "ba78820945ae22361b0274cf0ae6d696c967c1a4"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "DENIED",
+        "rule": "W-1",
+        "text": {
+          "source": "FILE",
+          "path": "README.md",
+          "sha256": "a8057b9ee06fb3aa4056c6249fb7d82184785cd541563b39777147fb35efe5e7"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "give recipients a copy of the agreement; their rights come from the licensor directly",
+              "a fixed attribution line in a Notice file",
+              "research purposes only"
+            ]
+          },
+          "useRestrictions": {
+            "list": [
+              "research purposes only: personal, scientific or academic, non-profit and non-commercial",
+              "excludes company daily tasks and revenue-directed tests",
+              "no misrepresentation as an official or endorsed product"
+            ],
+            "flowDown": true
+          },
+          "attribution": {
+            "noticeDuty": "a fixed line in a Notice file",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "distribution"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "prominent notice of modification; derivatives stay under the research-only limit"
+          },
+          "licensorPowers": {
+            "termination": "at any time on breach (then delete all copies); licences end on IP litigation by the licensee",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": true,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "French law; Paris courts"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "a8057b9ee06fb3aa4056c6249fb7d82184785cd541563b39777147fb35efe5e7"
+      },
+      "trainingDataStatement": {
+        "state": "PARTIAL",
+        "summary": "The card states coding-language domains trained on, and no data sources.",
+        "sourceSha256": "a8057b9ee06fb3aa4056c6249fb7d82184785cd541563b39777147fb35efe5e7"
+      },
+      "languages": [
+        "en",
+        "fr",
+        "de",
+        "es",
+        "it",
+        "pt",
+        "zh",
+        "ja",
+        "ru",
+        "ko"
+      ],
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "deepseek-r1",
+      "family": "DeepSeek",
+      "release": {
+        "repository": "deepseek-ai/DeepSeek-R1",
+        "commit": "56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "DEFAULT_ALLOWED",
+        "rule": "W-2a",
+        "text": {
+          "source": "FILE",
+          "path": "LICENSE",
+          "sha256": "1c8f573e830ca9b3ebfeb7ace1823146e22b66f99ee223840e7637c9e745e1c7"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "include the copyright and permission notice"
+            ]
+          },
+          "useRestrictions": {
+            "list": [],
+            "flowDown": false
+          },
+          "attribution": {
+            "noticeDuty": "copyright and permission notice in all copies",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "copies or substantial portions"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "NONE"
+          },
+          "licensorPowers": {
+            "termination": "NONE",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": false,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "NOT_STATED"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "d26d26ddb518fee60c6c6bf7a708bd751b1619d93a4944f188143693d956c77f"
+      },
+      "trainingDataStatement": {
+        "state": "PARTIAL",
+        "summary": "The card describes reinforcement-learning and fine-tuning stages on a named base model, with cold-start data; no sources.",
+        "sourceSha256": "d26d26ddb518fee60c6c6bf7a708bd751b1619d93a4944f188143693d956c77f"
+      },
+      "languages": null,
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "deepseek-v3",
+      "family": "DeepSeek",
+      "release": {
+        "repository": "deepseek-ai/DeepSeek-V3",
+        "commit": "e815299b0bcbac849fa540c768ef21845365c9eb"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "rule": "W-2",
+        "text": {
+          "source": "FILE",
+          "path": "LICENSE-MODEL",
+          "sha256": "ccfee4895df06bcab524151c278e8dde88bbe76165a24ecbcbcf9fafd71fd2b3"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "include the use restrictions as an enforceable term in any downstream agreement, and notify recipients",
+              "give recipients a copy of the licence",
+              "modified files carry change notices",
+              "retain copyright, patent, trademark and attribution notices",
+              "hosted-service access counts as distribution"
+            ]
+          },
+          "useRestrictions": {
+            "list": [
+              "Attachment A: eleven use-based restrictions",
+              "no fully automated decision making that adversely impacts an individual's legal rights or creates or modifies a binding obligation",
+              "no discrimination based on predicted personal or personality characteristics",
+              "no military use",
+              "lawful use only; require users to comply"
+            ],
+            "flowDown": true
+          },
+          "attribution": {
+            "noticeDuty": "retain copyright, patent, trademark and attribution notices",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "distribution"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "derivatives include distillation; they keep at minimum the same use restrictions; change notices"
+          },
+          "licensorPowers": {
+            "termination": "patent licence ends on patent litigation by the licensee",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "the licensor may restrict use in violation remotely or otherwise"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": false,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "PRC law; courts of the licensor's Hangzhou domicile"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "3739763a851074c810f1565f9823956f3a095231f8c591dd3c254581bdd3cf08"
+      },
+      "trainingDataStatement": {
+        "state": "PARTIAL",
+        "summary": "The card states pretraining on 14.8 trillion tokens; no sources.",
+        "sourceSha256": "3739763a851074c810f1565f9823956f3a095231f8c591dd3c254581bdd3cf08"
+      },
+      "languages": null,
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "glm-4.5",
+      "family": "GLM",
+      "release": {
+        "repository": "zai-org/GLM-4.5",
+        "commit": "cbb2c7cfb52fa128a9660cb1a7a78e017899e115"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "DEFAULT_ALLOWED",
+        "rule": "W-3",
+        "declaration": {
+          "metadataTag": "mit",
+          "cardStatesWeights": true
+        },
+        "text": {
+          "source": "DECLARATION",
+          "path": "README.md",
+          "sha256": "b88456f5d679312860924870b8c557e578d18c7e3612b4f9d1ea22be38ea95c3"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "include the copyright and permission notice (canonical MIT text shipped; the README blob cited as the grant)"
+            ]
+          },
+          "useRestrictions": {
+            "list": [],
+            "flowDown": false
+          },
+          "attribution": {
+            "noticeDuty": "copyright and permission notice in all copies",
+            "displayOrNamingDuty": "NONE",
+            "trigger": "copies or substantial portions"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "NONE"
+          },
+          "licensorPowers": {
+            "termination": "NONE",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "NONE"
+          },
+          "acceptance": {
+            "byUse": false,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "NOT_STATED"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "b88456f5d679312860924870b8c557e578d18c7e3612b4f9d1ea22be38ea95c3"
+      },
+      "trainingDataStatement": {
+        "state": "NOT_STATED",
+        "summary": "The card states nothing on training data; its fine-tuning table is for users.",
+        "sourceSha256": "b88456f5d679312860924870b8c557e578d18c7e3612b4f9d1ea22be38ea95c3"
+      },
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "glm-4-9b-chat",
+      "family": "GLM",
+      "release": {
+        "repository": "zai-org/glm-4-9b-chat",
+        "commit": "bd8234fe5e0c09c48637a92abb0c797cb5fa0e73"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "rule": "W-1",
+        "text": {
+          "source": "FILE",
+          "path": "LICENSE",
+          "sha256": "d13f50f252706283b7495f659545d907d8b2e40cec5ae9c0e428450ee57c1868"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "give recipients a copy of the agreement",
+              "include the copyright and licence notice",
+              "display 'Built with glm-4'"
+            ]
+          },
+          "useRestrictions": {
+            "list": [
+              "no military or illegal use",
+              "no use endangering national security or unity, or public interest and order",
+              "no infringement of others' rights",
+              "comply with the law, policy and ethics of the place of use"
+            ],
+            "flowDown": false
+          },
+          "attribution": {
+            "noticeDuty": "copyright and licence notice in all copies",
+            "displayOrNamingDuty": "display 'Built with glm-4'; prefix 'glm-4' to derived model names",
+            "trigger": "distributing the materials, or a product or service using them"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "a model created, trained or improved with the materials starts its name with 'glm-4'"
+          },
+          "licensorPowers": {
+            "termination": "NOT_STATED",
+            "revocation": "the licence is revocable",
+            "update": "the licence may be updated to a fuller version",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "NONE",
+            "revenue": "NONE",
+            "duty": "any commercial use needs registration first"
+          },
+          "acceptance": {
+            "byUse": false,
+            "byClick": false,
+            "byRegistration": true
+          },
+          "governingLaw": "PRC law; a Beijing district court"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "015d2a493396b4d241cc6dc553486c35dd608841478b658003b99f41d3cdd4ac"
+      },
+      "trainingDataStatement": {
+        "state": "NOT_STATED",
+        "summary": "The card states evaluation datasets only, nothing on training data.",
+        "sourceSha256": "015d2a493396b4d241cc6dc553486c35dd608841478b658003b99f41d3cdd4ac"
+      },
+      "languages": [
+        "zh",
+        "en"
+      ],
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "kimi-k2-instruct",
+      "family": "Kimi",
+      "release": {
+        "repository": "moonshotai/Kimi-K2-Instruct",
+        "commit": "fd1984e2b7a3350dbf7305fe73a4ede25c14de50"
+      },
+      "tier": null,
+      "weights": {
+        "format": null,
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": null,
+      "quantization": null,
+      "licence": {
+        "outcome": "ALLOWED_EXCEPTION",
+        "rule": "W-2a",
+        "text": {
+          "source": "FILE",
+          "path": "LICENSE",
+          "sha256": "b280da6f496d75e0c5beb79b03520d190fce67dfe12f75cf3aadad8670839d93"
+        },
+        "restrictions": {
+          "redistribution": {
+            "allowed": true,
+            "conditions": [
+              "include the copyright and permission notice"
+            ]
+          },
+          "useRestrictions": {
+            "list": [],
+            "flowDown": false
+          },
+          "attribution": {
+            "noticeDuty": "copyright and permission notice in all copies",
+            "displayOrNamingDuty": "display 'Kimi K2' on the product's user interface",
+            "trigger": "commercial products or services above a threshold"
+          },
+          "derivatives": {
+            "allowed": true,
+            "namingOrNoticeDuty": "the display duty also applies to derivative works"
+          },
+          "licensorPowers": {
+            "termination": "NONE",
+            "revocation": "NONE",
+            "update": "NONE",
+            "remoteRestriction": "NONE"
+          },
+          "thresholds": {
+            "users": "over 100 million monthly active users",
+            "revenue": "over 20 million USD (or equivalent) monthly revenue",
+            "duty": "the 'Kimi K2' display"
+          },
+          "acceptance": {
+            "byUse": false,
+            "byClick": false,
+            "byRegistration": false
+          },
+          "governingLaw": "NOT_STATED"
+        },
+        "decisionRef": null
+      },
+      "modelCard": {
+        "path": "README.md",
+        "sha256": "72e2785dbd9ada9355ea3a812d2a9da606f1ae07feea7a0f7e18b8111deb8837"
+      },
+      "trainingDataStatement": {
+        "state": "PARTIAL",
+        "summary": "The card states pretraining on 15.5 trillion tokens; no sources.",
+        "sourceSha256": "72e2785dbd9ada9355ea3a812d2a9da606f1ae07feea7a0f7e18b8111deb8837"
+      },
+      "languages": null,
+      "contextTokens": 131072,
+      "backends": [],
+      "distributionMode": "NONE",
+      "derivedFrom": null
+    },
+    {
+      "id": "qwen3-8b-gguf-cpu",
+      "family": "Qwen",
+      "release": {
+        "repository": null,
+        "commit": null
+      },
+      "tier": "CPU",
+      "weights": {
+        "format": "GGUF",
+        "files": [],
+        "digestStatus": "MISSING_PLANNED"
+      },
+      "tokenizer": {
+        "path": null,
+        "sha256": null,
+        "embeddedInWeights": true
+      },
+      "quantization": {
+        "method": null,
+        "baseRow": "qwen3-8b",
+        "tool": null,
+        "inputDigest": null,
+        "outputDigest": null
+      },
+      "licence": {
+        "outcome": "UNKNOWN",
+        "rule": "W-4",
+        "text": null,
+        "restrictions": {
+          "redistribution": null,
+          "useRestrictions": null,
+          "attribution": null,
+          "derivatives": null,
+          "licensorPowers": null,
+          "thresholds": null,
+          "acceptance": null,
+          "governingLaw": null
+        },
+        "decisionRef": null
+      },
+      "modelCard": null,
+      "trainingDataStatement": null,
+      "languages": null,
+      "contextTokens": null,
+      "backends": [
+        "provider.planeon.llamacpp"
+      ],
+      "distributionMode": "NONE",
+      "derivedFrom": "qwen3-8b"
+    }
+  ],
+  "nullValues": [
+    {
+      "row": "qwen3-8b",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "qwen3-8b",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b",
+      "field": "languages",
+      "kind": "READ_NOT_STATED"
+    },
+    {
+      "row": "qwen2.5-72b-instruct",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "qwen2.5-72b-instruct",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen2.5-72b-instruct",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "modelCard.sha256",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "trainingDataStatement",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "languages",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "gemma-3-4b-it",
+      "field": "contextTokens",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "nvidia-nemotron-nano-9b-v2",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "nvidia-nemotron-nano-9b-v2",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "nvidia-nemotron-nano-9b-v2",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "nvidia-nemotron-nano-9b-v2",
+      "field": "licence.restrictions.useRestrictions",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.redistribution",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.useRestrictions",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.attribution",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.derivatives",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.licensorPowers",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.thresholds",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.acceptance",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "licence.restrictions.governingLaw",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-small-3.2-24b-instruct-2506",
+      "field": "contextTokens",
+      "kind": "READ_NOT_STATED"
+    },
+    {
+      "row": "mistral-large-instruct-2411",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "mistral-large-instruct-2411",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "mistral-large-instruct-2411",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "deepseek-r1",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "deepseek-r1",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "deepseek-r1",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "deepseek-r1",
+      "field": "languages",
+      "kind": "READ_NOT_STATED"
+    },
+    {
+      "row": "deepseek-v3",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "deepseek-v3",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "deepseek-v3",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "deepseek-v3",
+      "field": "languages",
+      "kind": "READ_NOT_STATED"
+    },
+    {
+      "row": "glm-4.5",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "glm-4.5",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "glm-4.5",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "glm-4-9b-chat",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "glm-4-9b-chat",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "glm-4-9b-chat",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "kimi-k2-instruct",
+      "field": "tier",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "kimi-k2-instruct",
+      "field": "weights.format",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "kimi-k2-instruct",
+      "field": "tokenizer",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "kimi-k2-instruct",
+      "field": "languages",
+      "kind": "READ_NOT_STATED"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "release.repository",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "release.commit",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "tokenizer.path",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "tokenizer.sha256",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "quantization.method",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "quantization.tool",
+      "kind": "NOT_A_READ"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "quantization.inputDigest",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "quantization.outputDigest",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.text",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.redistribution",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.useRestrictions",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.attribution",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.derivatives",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.licensorPowers",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.thresholds",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.acceptance",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "licence.restrictions.governingLaw",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "modelCard",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "trainingDataStatement",
+      "kind": "UNREAD"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "languages",
+      "kind": "READ_NOT_STATED"
+    },
+    {
+      "row": "qwen3-8b-gguf-cpu",
+      "field": "contextTokens",
+      "kind": "UNREAD"
+    }
+  ]
+}

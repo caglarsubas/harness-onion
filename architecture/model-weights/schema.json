@@ -1,0 +1,1001 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "planeon.internal.model-weights/v1",
+  "title": "Model weights record v1 (MODEL-WEIGHTS-POLICY-001)",
+  "$comment": "The closed shape only. Each commit's 40 hex, each sha256's 64 hex (by full match), the class rules, the restriction rule, distribution, derivation, the served set and approval are the checker's (scripts/validate_model_weights.py, C-2 to C-8). licence.declaration is present on a W-3 row only.",
+  "candidateNullRule": {
+    "rule": "A candidate row is a row no consumer serves. In it, a value no pinned read gives is null, in the fields listed here only, and the record's nullValues lists each such null by row, field and kind: UNREAD (the source was never read), READ_NOT_STATED (the source was read and states no value) or NOT_A_READ (a placement value no read can give). The schema nulls carry their schema meaning and are not listed: quantization null (not a quantized row), derivedFrom null (no base row), licence.decisionRef null (no approved review decision). A null restriction field never yields an allowing release outcome, and a served row holds no null (fail closed).",
+    "fields": [
+      "release.repository",
+      "release.commit",
+      "tier",
+      "weights.format",
+      "tokenizer",
+      "tokenizer.path",
+      "tokenizer.sha256",
+      "quantization.method",
+      "quantization.tool",
+      "quantization.inputDigest",
+      "quantization.outputDigest",
+      "licence.text",
+      "licence.restrictions.redistribution",
+      "licence.restrictions.useRestrictions",
+      "licence.restrictions.attribution",
+      "licence.restrictions.derivatives",
+      "licence.restrictions.licensorPowers",
+      "licence.restrictions.thresholds",
+      "licence.restrictions.acceptance",
+      "licence.restrictions.governingLaw",
+      "modelCard",
+      "modelCard.sha256",
+      "trainingDataStatement",
+      "languages",
+      "contextTokens"
+    ],
+    "schemaNulls": [
+      "quantization",
+      "derivedFrom",
+      "licence.decisionRef"
+    ],
+    "kinds": [
+      "UNREAD",
+      "READ_NOT_STATED",
+      "NOT_A_READ"
+    ]
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "planeon.internal.model-weights/v1"
+    },
+    "recordVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "policyRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "basePolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "const": "legal/third-party-license-policy.yaml"
+            },
+            "policyVersion": {
+              "const": "0.3.0"
+            }
+          },
+          "required": [
+            "path",
+            "policyVersion"
+          ]
+        },
+        "amendment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "const": "legal/license-policy-amendment-v3/amendment.json"
+            },
+            "key": {
+              "const": "weightsLicenseClasses"
+            }
+          },
+          "required": [
+            "path",
+            "key"
+          ]
+        }
+      },
+      "required": [
+        "basePolicy",
+        "amendment"
+      ]
+    },
+    "consumers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "kind": {
+            "enum": [
+              "ROUTE_BUNDLE",
+              "SEMANTIC_CONSUMER",
+              "GRADER"
+            ]
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "path",
+          "kind",
+          "field"
+        ]
+      }
+    },
+    "releases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/row"
+      }
+    },
+    "nullValues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "row": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "field": {
+            "enum": [
+              "release.repository",
+              "release.commit",
+              "tier",
+              "weights.format",
+              "tokenizer",
+              "tokenizer.path",
+              "tokenizer.sha256",
+              "quantization.method",
+              "quantization.tool",
+              "quantization.inputDigest",
+              "quantization.outputDigest",
+              "licence.text",
+              "licence.restrictions.redistribution",
+              "licence.restrictions.useRestrictions",
+              "licence.restrictions.attribution",
+              "licence.restrictions.derivatives",
+              "licence.restrictions.licensorPowers",
+              "licence.restrictions.thresholds",
+              "licence.restrictions.acceptance",
+              "licence.restrictions.governingLaw",
+              "modelCard",
+              "modelCard.sha256",
+              "trainingDataStatement",
+              "languages",
+              "contextTokens"
+            ]
+          },
+          "kind": {
+            "enum": [
+              "UNREAD",
+              "READ_NOT_STATED",
+              "NOT_A_READ"
+            ]
+          }
+        },
+        "required": [
+          "row",
+          "field",
+          "kind"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recordVersion",
+    "policyRef",
+    "consumers",
+    "releases",
+    "nullValues"
+  ],
+  "$defs": {
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "family": {
+          "enum": [
+            "Qwen",
+            "Gemma",
+            "Nemotron",
+            "Mistral",
+            "DeepSeek",
+            "GLM",
+            "Kimi"
+          ]
+        },
+        "release": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repository": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "commit": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "repository",
+            "commit"
+          ]
+        },
+        "tier": {
+          "enum": [
+            "CPU",
+            "GPU",
+            null
+          ]
+        },
+        "weights": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "format": {
+              "enum": [
+                "SAFETENSORS",
+                "GGUF",
+                null
+              ]
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2048
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256",
+                  "bytes"
+                ]
+              }
+            },
+            "digestStatus": {
+              "enum": [
+                "PINNED",
+                "MISSING_PLANNED"
+              ]
+            }
+          },
+          "required": [
+            "format",
+            "files",
+            "digestStatus"
+          ]
+        },
+        "tokenizer": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sha256": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "embeddedInWeights": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "embeddedInWeights"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantization": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "method": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "baseRow": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "tool": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 2048
+                        },
+                        "release": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 2048
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "release"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "inputDigest": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "outputDigest": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "method",
+                "baseRow",
+                "tool",
+                "inputDigest",
+                "outputDigest"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "licence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "outcome": {
+              "enum": [
+                "DENIED",
+                "UNKNOWN",
+                "OPTIONAL_EXPLICIT_REVIEW",
+                "ALLOWED_EXCEPTION",
+                "DEFAULT_ALLOWED"
+              ]
+            },
+            "rule": {
+              "enum": [
+                "W-1",
+                "W-2",
+                "W-2a",
+                "W-3",
+                "W-4"
+              ]
+            },
+            "declaration": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "metadataTag": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "cardStatesWeights": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "metadataTag",
+                "cardStatesWeights"
+              ]
+            },
+            "text": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/licenceText"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "restrictions": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "redistribution": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_redistribution"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "useRestrictions": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_useRestrictions"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "attribution": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_attribution"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "derivatives": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_derivatives"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "licensorPowers": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_licensorPowers"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "thresholds": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_thresholds"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "acceptance": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_acceptance"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "governingLaw": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/$defs/restriction_governingLaw"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "redistribution",
+                "useRestrictions",
+                "attribution",
+                "derivatives",
+                "licensorPowers",
+                "thresholds",
+                "acceptance",
+                "governingLaw"
+              ]
+            },
+            "decisionRef": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "approvingAuthority": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    "decisionDigest": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    }
+                  },
+                  "required": [
+                    "approvingAuthority",
+                    "decisionDigest"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "outcome",
+            "rule",
+            "text",
+            "restrictions",
+            "decisionRef"
+          ]
+        },
+        "modelCard": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "sha256": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trainingDataStatement": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "state": {
+                  "enum": [
+                    "STATED",
+                    "PARTIAL",
+                    "NOT_STATED"
+                  ]
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "sourceSha256": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              },
+              "required": [
+                "state",
+                "summary",
+                "sourceSha256"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contextTokens": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "backends": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "distributionMode": {
+          "enum": [
+            "BUNDLE",
+            "TENANT_FETCHED",
+            "NONE"
+          ]
+        },
+        "derivedFrom": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "family",
+        "release",
+        "tier",
+        "weights",
+        "tokenizer",
+        "quantization",
+        "licence",
+        "modelCard",
+        "trainingDataStatement",
+        "languages",
+        "contextTokens",
+        "backends",
+        "distributionMode",
+        "derivedFrom"
+      ]
+    },
+    "licenceText": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "enum": [
+                "FILE",
+                "DECLARATION"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "sha256": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "source",
+            "path",
+            "sha256"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "const": "PAGE"
+            },
+            "page": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "sha256": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "readAt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "source",
+            "page",
+            "sha256",
+            "readAt"
+          ]
+        }
+      ]
+    },
+    "restriction_redistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        }
+      },
+      "required": [
+        "allowed",
+        "conditions"
+      ]
+    },
+    "restriction_useRestrictions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "flowDown": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "list",
+        "flowDown"
+      ]
+    },
+    "restriction_attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "noticeDuty": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "displayOrNamingDuty": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "trigger": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "noticeDuty",
+        "displayOrNamingDuty",
+        "trigger"
+      ]
+    },
+    "restriction_derivatives": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "namingOrNoticeDuty": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "allowed",
+        "namingOrNoticeDuty"
+      ]
+    },
+    "restriction_licensorPowers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "termination": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "revocation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "update": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "remoteRestriction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "termination",
+        "revocation",
+        "update",
+        "remoteRestriction"
+      ]
+    },
+    "restriction_thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "users": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "revenue": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "duty": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "users",
+        "revenue",
+        "duty"
+      ]
+    },
+    "restriction_acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "byUse": {
+          "type": "boolean"
+        },
+        "byClick": {
+          "type": "boolean"
+        },
+        "byRegistration": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "byUse",
+        "byClick",
+        "byRegistration"
+      ]
+    },
+    "restriction_governingLaw": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    }
+  }
+}

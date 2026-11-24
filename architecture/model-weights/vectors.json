@@ -1,0 +1,3044 @@
+{
+  "schemaVersion": "planeon.internal.model-weights-vectors/v1",
+  "cases": [
+    {
+      "id": "MW-P1",
+      "title": "a candidate record in the committed record's form: no consumer; a pinned row and an exception row marked BUNDLE, a W-3 row with its declaration, a review row with a null restriction, and a CPU GGUF row derived from the first with every unread value null and listed",
+      "polarity": "positive",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [],
+        "releases": [
+          {
+            "id": "pa-8b",
+            "family": "Qwen",
+            "release": {
+              "repository": "vendor/pa-8b",
+              "commit": "fc0509bbadab6c28e7d76a63247d509c124f6897"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "0703077a4bb99326c71c16f3a946e1e4ede57c08aaf53adf33faba1dee0c842c",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "d34bca8ec27779fcaaf6c268c219df2a58beae868c75266b2046c0e754cd4f51",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-2a",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "2389e2cff6e458a91e2ba140de5f60821a628a33ab94976dda40fcc8c2d216d8"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "9c7e7d2baff3381f5f4e752a7457f3d0e5e0dece78ec75b6faca56ea4a6671c4"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "9c7e7d2baff3381f5f4e752a7457f3d0e5e0dece78ec75b6faca56ea4a6671c4"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "BUNDLE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pe-32b",
+            "family": "Kimi",
+            "release": {
+              "repository": "vendor/pe-32b",
+              "commit": "6232490a665c8c8adfd6992867b6ba8c6457149d"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "582f182772f88ab9a49373741727c4ce86c5b87dbee9979cfc38275d888e4c38",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "1925c4c6fe8939496daa404c0a537ba29bc4b5088ae21d25697fe6d51d28cc3d",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "ALLOWED_EXCEPTION",
+              "rule": "W-2a",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "c9301829b569ca15bad71688ab555a7902f83e9b8d20b16893ea003966c01292"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text kept",
+                  "displayOrNamingDuty": "display the model name",
+                  "trigger": "a user or revenue threshold"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "a monthly user count",
+                  "revenue": "a monthly revenue",
+                  "duty": "display"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "36a6d3f0a9f18943b12988e266033880ab931d2c125698e424508aeccabe76b5"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "36a6d3f0a9f18943b12988e266033880ab931d2c125698e424508aeccabe76b5"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "BUNDLE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pw-12b",
+            "family": "GLM",
+            "release": {
+              "repository": "vendor/pw-12b",
+              "commit": "42f4d9794e041d5f72d06cda2de6f87a0e233852"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "85116a0aabfcdc918dfbd51a617ad90b37fc2226e24a02f51a2b71934d89fd68",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-3",
+              "declaration": {
+                "metadataTag": "mit",
+                "cardStatesWeights": true
+              },
+              "text": {
+                "source": "DECLARATION",
+                "path": "README.md",
+                "sha256": "1b4e5c09ad6697b2836647670fe12c760ca78ec8f39eee5e3a1b51c76d12ed01"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "1b4e5c09ad6697b2836647670fe12c760ca78ec8f39eee5e3a1b51c76d12ed01"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "1b4e5c09ad6697b2836647670fe12c760ca78ec8f39eee5e3a1b51c76d12ed01"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pr-9b",
+            "family": "Nemotron",
+            "release": {
+              "repository": "vendor/pr-9b",
+              "commit": "39694a50a600c918bab3c3e67055878c512e3f55"
+            },
+            "tier": null,
+            "weights": {
+              "format": null,
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": null,
+            "quantization": null,
+            "licence": {
+              "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+              "rule": "W-1",
+              "text": {
+                "source": "PAGE",
+                "page": "page-pr-9b",
+                "sha256": "b35e336dc85f572f80a84e4c1f9fd0d0c3079bc7600fc6cdb8ba66c53dae408c",
+                "readAt": "2026-11-22T10:00:00Z"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": null,
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "the licensor may update the use policy",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": true,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "a named foreign jurisdiction"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "2f78ff706ec713a4e36581418b62366907f0677e8114033c9aefc548f5526520"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "2f78ff706ec713a4e36581418b62366907f0677e8114033c9aefc548f5526520"
+            },
+            "languages": null,
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pa-8b-gguf-cpu",
+            "family": "Qwen",
+            "release": {
+              "repository": null,
+              "commit": null
+            },
+            "tier": "CPU",
+            "weights": {
+              "format": "GGUF",
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": {
+              "path": null,
+              "sha256": null,
+              "embeddedInWeights": true
+            },
+            "quantization": {
+              "method": null,
+              "baseRow": "pa-8b",
+              "tool": null,
+              "inputDigest": null,
+              "outputDigest": null
+            },
+            "licence": {
+              "outcome": "UNKNOWN",
+              "rule": "W-4",
+              "text": null,
+              "restrictions": {
+                "redistribution": null,
+                "useRestrictions": null,
+                "attribution": null,
+                "derivatives": null,
+                "licensorPowers": null,
+                "thresholds": null,
+                "acceptance": null,
+                "governingLaw": null
+              },
+              "decisionRef": null
+            },
+            "modelCard": null,
+            "trainingDataStatement": null,
+            "languages": null,
+            "contextTokens": null,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": "pa-8b"
+          }
+        ],
+        "nullValues": [
+          {
+            "row": "pr-9b",
+            "field": "tier",
+            "kind": "NOT_A_READ"
+          },
+          {
+            "row": "pr-9b",
+            "field": "weights.format",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pr-9b",
+            "field": "tokenizer",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pr-9b",
+            "field": "licence.restrictions.useRestrictions",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pr-9b",
+            "field": "languages",
+            "kind": "READ_NOT_STATED"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "release.repository",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "release.commit",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "tokenizer.path",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "tokenizer.sha256",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.method",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.tool",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.inputDigest",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.outputDigest",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.text",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.redistribution",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.useRestrictions",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.attribution",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.derivatives",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.licensorPowers",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.thresholds",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.acceptance",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.governingLaw",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "modelCard",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "trainingDataStatement",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "languages",
+            "kind": "READ_NOT_STATED"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "contextTokens",
+            "kind": "READ_NOT_STATED"
+          }
+        ]
+      },
+      "sources": {},
+      "expect": {
+        "refusals": []
+      }
+    },
+    {
+      "id": "MW-P2",
+      "title": "one served, pinned DEFAULT_ALLOWED row",
+      "polarity": "positive",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": []
+      }
+    },
+    {
+      "id": "MW-P3",
+      "title": "one served review row with an approved decisionRef, tenant-fetched",
+      "polarity": "positive",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "graders/grader.json",
+            "kind": "GRADER",
+            "field": "model"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sr-27b",
+            "family": "Gemma",
+            "release": {
+              "repository": "vendor/sr-27b",
+              "commit": "f3005a288cefd55d13ba8f573253117d8ac9c718"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "ed891e91c628703afda9122b38b25689031749a6d109e8e30f2e01f8391e3f7f",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "f89cdadda626b0083a6ec51b25bcccc206d0bc82e8780d1f6f073f6706b18440",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+              "rule": "W-1",
+              "text": {
+                "source": "PAGE",
+                "page": "page-sr-27b",
+                "sha256": "90b932bf481b8670094eacfdaa64c78446c45e993559b18b2bd18f88fb3f93b3",
+                "readAt": "2026-11-22T10:00:00Z"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [
+                    "an acceptable-use policy"
+                  ],
+                  "flowDown": true
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "the licensor may update the use policy",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": true,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "a named foreign jurisdiction"
+              },
+              "decisionRef": {
+                "approvingAuthority": "the packet authority's review",
+                "decisionDigest": "47227751844bef35f11021d0cf1caad57fb5d8010796e27b7c3c9aecf9bf143d"
+              }
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "TENANT_FETCHED",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "graders/grader.json": {
+          "model": "sr-27b"
+        }
+      },
+      "expect": {
+        "refusals": []
+      }
+    },
+    {
+      "id": "MW-N01",
+      "title": "a route names a model with no row (C-7)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sz-1b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_SERVED"
+        ]
+      }
+    },
+    {
+      "id": "MW-N02",
+      "title": "a served row with outcome DENIED (C-7)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DENIED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_SERVED"
+        ]
+      }
+    },
+    {
+      "id": "MW-N03",
+      "title": "a served row with MISSING_PLANNED weights (C-7)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_SERVED"
+        ]
+      }
+    },
+    {
+      "id": "MW-N04",
+      "title": "a served row with outcome UNKNOWN (C-8)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "UNKNOWN",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_APPROVAL"
+        ]
+      }
+    },
+    {
+      "id": "MW-N05",
+      "title": "a served review row with no decision (C-7)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "graders/grader.json",
+            "kind": "GRADER",
+            "field": "model"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sr-27b",
+            "family": "Gemma",
+            "release": {
+              "repository": "vendor/sr-27b",
+              "commit": "f3005a288cefd55d13ba8f573253117d8ac9c718"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "ed891e91c628703afda9122b38b25689031749a6d109e8e30f2e01f8391e3f7f",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "f89cdadda626b0083a6ec51b25bcccc206d0bc82e8780d1f6f073f6706b18440",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+              "rule": "W-1",
+              "text": {
+                "source": "PAGE",
+                "page": "page-sr-27b",
+                "sha256": "90b932bf481b8670094eacfdaa64c78446c45e993559b18b2bd18f88fb3f93b3",
+                "readAt": "2026-11-22T10:00:00Z"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [
+                    "an acceptable-use policy"
+                  ],
+                  "flowDown": true
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "the licensor may update the use policy",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": true,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "a named foreign jurisdiction"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "graders/grader.json": {
+          "model": "sr-27b"
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_SERVED"
+        ]
+      }
+    },
+    {
+      "id": "MW-N06",
+      "title": "a review row marked BUNDLE (C-5)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "graders/grader.json",
+            "kind": "GRADER",
+            "field": "model"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sr-27b",
+            "family": "Gemma",
+            "release": {
+              "repository": "vendor/sr-27b",
+              "commit": "f3005a288cefd55d13ba8f573253117d8ac9c718"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "ed891e91c628703afda9122b38b25689031749a6d109e8e30f2e01f8391e3f7f",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "f89cdadda626b0083a6ec51b25bcccc206d0bc82e8780d1f6f073f6706b18440",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+              "rule": "W-1",
+              "text": {
+                "source": "PAGE",
+                "page": "page-sr-27b",
+                "sha256": "90b932bf481b8670094eacfdaa64c78446c45e993559b18b2bd18f88fb3f93b3",
+                "readAt": "2026-11-22T10:00:00Z"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [
+                    "an acceptable-use policy"
+                  ],
+                  "flowDown": true
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "the licensor may update the use policy",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": true,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "a named foreign jurisdiction"
+              },
+              "decisionRef": {
+                "approvingAuthority": "the packet authority's review",
+                "decisionDigest": "47227751844bef35f11021d0cf1caad57fb5d8010796e27b7c3c9aecf9bf143d"
+              }
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "BUNDLE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "graders/grader.json": {
+          "model": "sr-27b"
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_DISTRIBUTION"
+        ]
+      }
+    },
+    {
+      "id": "MW-N07",
+      "title": "a W-3 row with the metadata tag only (C-3, Q-W1 option 1)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-3",
+              "declaration": {
+                "metadataTag": "apache-2.0",
+                "cardStatesWeights": false
+              },
+              "text": {
+                "source": "DECLARATION",
+                "path": "README.md",
+                "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_CLASS"
+        ]
+      }
+    },
+    {
+      "id": "MW-N08",
+      "title": "a derived row more permissive than its base (C-6)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [],
+        "releases": [
+          {
+            "id": "pa-8b",
+            "family": "Qwen",
+            "release": {
+              "repository": "vendor/pa-8b",
+              "commit": "fc0509bbadab6c28e7d76a63247d509c124f6897"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "0703077a4bb99326c71c16f3a946e1e4ede57c08aaf53adf33faba1dee0c842c",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "d34bca8ec27779fcaaf6c268c219df2a58beae868c75266b2046c0e754cd4f51",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-2a",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "2389e2cff6e458a91e2ba140de5f60821a628a33ab94976dda40fcc8c2d216d8"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "9c7e7d2baff3381f5f4e752a7457f3d0e5e0dece78ec75b6faca56ea4a6671c4"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "9c7e7d2baff3381f5f4e752a7457f3d0e5e0dece78ec75b6faca56ea4a6671c4"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "BUNDLE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pe-32b",
+            "family": "Kimi",
+            "release": {
+              "repository": "vendor/pe-32b",
+              "commit": "6232490a665c8c8adfd6992867b6ba8c6457149d"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "582f182772f88ab9a49373741727c4ce86c5b87dbee9979cfc38275d888e4c38",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "1925c4c6fe8939496daa404c0a537ba29bc4b5088ae21d25697fe6d51d28cc3d",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "ALLOWED_EXCEPTION",
+              "rule": "W-2a",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "c9301829b569ca15bad71688ab555a7902f83e9b8d20b16893ea003966c01292"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text kept",
+                  "displayOrNamingDuty": "display the model name",
+                  "trigger": "a user or revenue threshold"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "a monthly user count",
+                  "revenue": "a monthly revenue",
+                  "duty": "display"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "36a6d3f0a9f18943b12988e266033880ab931d2c125698e424508aeccabe76b5"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "36a6d3f0a9f18943b12988e266033880ab931d2c125698e424508aeccabe76b5"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "BUNDLE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pw-12b",
+            "family": "GLM",
+            "release": {
+              "repository": "vendor/pw-12b",
+              "commit": "42f4d9794e041d5f72d06cda2de6f87a0e233852"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "85116a0aabfcdc918dfbd51a617ad90b37fc2226e24a02f51a2b71934d89fd68",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-3",
+              "declaration": {
+                "metadataTag": "mit",
+                "cardStatesWeights": true
+              },
+              "text": {
+                "source": "DECLARATION",
+                "path": "README.md",
+                "sha256": "1b4e5c09ad6697b2836647670fe12c760ca78ec8f39eee5e3a1b51c76d12ed01"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "1b4e5c09ad6697b2836647670fe12c760ca78ec8f39eee5e3a1b51c76d12ed01"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "1b4e5c09ad6697b2836647670fe12c760ca78ec8f39eee5e3a1b51c76d12ed01"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pr-9b",
+            "family": "Nemotron",
+            "release": {
+              "repository": "vendor/pr-9b",
+              "commit": "39694a50a600c918bab3c3e67055878c512e3f55"
+            },
+            "tier": null,
+            "weights": {
+              "format": null,
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": null,
+            "quantization": null,
+            "licence": {
+              "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+              "rule": "W-1",
+              "text": {
+                "source": "PAGE",
+                "page": "page-pr-9b",
+                "sha256": "b35e336dc85f572f80a84e4c1f9fd0d0c3079bc7600fc6cdb8ba66c53dae408c",
+                "readAt": "2026-11-22T10:00:00Z"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": null,
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "the licensor may update the use policy",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": true,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "a named foreign jurisdiction"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "2f78ff706ec713a4e36581418b62366907f0677e8114033c9aefc548f5526520"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "2f78ff706ec713a4e36581418b62366907f0677e8114033c9aefc548f5526520"
+            },
+            "languages": null,
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          },
+          {
+            "id": "pa-8b-gguf-cpu",
+            "family": "Qwen",
+            "release": {
+              "repository": null,
+              "commit": null
+            },
+            "tier": "CPU",
+            "weights": {
+              "format": "GGUF",
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": {
+              "path": null,
+              "sha256": null,
+              "embeddedInWeights": true
+            },
+            "quantization": {
+              "method": null,
+              "baseRow": "pa-8b",
+              "tool": null,
+              "inputDigest": null,
+              "outputDigest": null
+            },
+            "licence": {
+              "outcome": "UNKNOWN",
+              "rule": "W-4",
+              "text": null,
+              "restrictions": {
+                "redistribution": null,
+                "useRestrictions": null,
+                "attribution": null,
+                "derivatives": null,
+                "licensorPowers": null,
+                "thresholds": null,
+                "acceptance": null,
+                "governingLaw": null
+              },
+              "decisionRef": null
+            },
+            "modelCard": null,
+            "trainingDataStatement": null,
+            "languages": null,
+            "contextTokens": null,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": "pa-8b"
+          },
+          {
+            "id": "pd-9b-int8",
+            "family": "Nemotron",
+            "release": {
+              "repository": "vendor/pd-9b-int8",
+              "commit": "e98bbd514a0b4b51e23b09d6b7f448eb53c96c3b"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [],
+              "digestStatus": "MISSING_PLANNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "53e0da32f74429d22dbe9d974858f9ce3fce015e151ad6e769e2d81542ef7467",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-4",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "e3ef0b6fd9d799896c6c8569e852b7384bf897c539376076250252c841fa71c6"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "10a9b60843f268c8c820d1fb893fb92a6c816585a30c7196d97217a76cfe39de"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "10a9b60843f268c8c820d1fb893fb92a6c816585a30c7196d97217a76cfe39de"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": "pr-9b"
+          }
+        ],
+        "nullValues": [
+          {
+            "row": "pr-9b",
+            "field": "tier",
+            "kind": "NOT_A_READ"
+          },
+          {
+            "row": "pr-9b",
+            "field": "weights.format",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pr-9b",
+            "field": "tokenizer",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pr-9b",
+            "field": "licence.restrictions.useRestrictions",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pr-9b",
+            "field": "languages",
+            "kind": "READ_NOT_STATED"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "release.repository",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "release.commit",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "tokenizer.path",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "tokenizer.sha256",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.method",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.tool",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.inputDigest",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "quantization.outputDigest",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.text",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.redistribution",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.useRestrictions",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.attribution",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.derivatives",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.licensorPowers",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.thresholds",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.acceptance",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "licence.restrictions.governingLaw",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "modelCard",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "trainingDataStatement",
+            "kind": "UNREAD"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "languages",
+            "kind": "READ_NOT_STATED"
+          },
+          {
+            "row": "pa-8b-gguf-cpu",
+            "field": "contextTokens",
+            "kind": "READ_NOT_STATED"
+          }
+        ]
+      },
+      "sources": {},
+      "expect": {
+        "refusals": [
+          "MW_DERIVED"
+        ]
+      }
+    },
+    {
+      "id": "MW-N09",
+      "title": "a weights digest with a trailing newline (C-2; the test adds the 63-hex digest)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10\n",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_IDENTITY"
+        ]
+      }
+    },
+    {
+      "id": "MW-N10",
+      "title": "a duplicate row id (C-2; the test adds the duplicate JSON key)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          },
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [],
+                  "flowDown": false
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": []
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_IDENTITY"
+        ]
+      }
+    },
+    {
+      "id": "MW-N11",
+      "title": "a review row with a decision and a missing (null) restriction field (C-4)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [],
+        "releases": [
+          {
+            "id": "sr-27b",
+            "family": "Gemma",
+            "release": {
+              "repository": "vendor/sr-27b",
+              "commit": "f3005a288cefd55d13ba8f573253117d8ac9c718"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "ed891e91c628703afda9122b38b25689031749a6d109e8e30f2e01f8391e3f7f",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "f89cdadda626b0083a6ec51b25bcccc206d0bc82e8780d1f6f073f6706b18440",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+              "rule": "W-1",
+              "text": {
+                "source": "PAGE",
+                "page": "page-sr-27b",
+                "sha256": "90b932bf481b8670094eacfdaa64c78446c45e993559b18b2bd18f88fb3f93b3",
+                "readAt": "2026-11-22T10:00:00Z"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": {
+                  "list": [
+                    "an acceptable-use policy"
+                  ],
+                  "flowDown": true
+                },
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "the licensor may update the use policy",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": null,
+                "acceptance": {
+                  "byUse": true,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "a named foreign jurisdiction"
+              },
+              "decisionRef": {
+                "approvingAuthority": "the packet authority's review",
+                "decisionDigest": "47227751844bef35f11021d0cf1caad57fb5d8010796e27b7c3c9aecf9bf143d"
+              }
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7732ac097717ccd265d034ddcd5f00da78567585278760489de972324cf19b4c"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "NONE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": [
+          {
+            "row": "sr-27b",
+            "field": "licence.restrictions.thresholds",
+            "kind": "UNREAD"
+          }
+        ]
+      },
+      "sources": {
+        "graders/grader.json": {
+          "model": "sr-27b"
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_RESTRICTIONS"
+        ]
+      }
+    },
+    {
+      "id": "MW-N12",
+      "title": "fail closed: a null restriction field never yields ALLOW; a served DEFAULT_ALLOWED row marked BUNDLE with a null useRestrictions is refused three times (C-4, C-5, C-7)",
+      "polarity": "negative",
+      "record": {
+        "schemaVersion": "planeon.internal.model-weights/v1",
+        "recordVersion": 1,
+        "policyRef": {
+          "basePolicy": {
+            "path": "legal/third-party-license-policy.yaml",
+            "policyVersion": "0.3.0"
+          },
+          "amendment": {
+            "path": "legal/license-policy-amendment-v3/amendment.json",
+            "key": "weightsLicenseClasses"
+          }
+        },
+        "consumers": [
+          {
+            "path": "routes/bundle.json",
+            "kind": "ROUTE_BUNDLE",
+            "field": "modelId"
+          }
+        ],
+        "releases": [
+          {
+            "id": "sa-7b",
+            "family": "DeepSeek",
+            "release": {
+              "repository": "vendor/sa-7b",
+              "commit": "786394d7bef421018d88508cac3b88b2b4ca888a"
+            },
+            "tier": "GPU",
+            "weights": {
+              "format": "SAFETENSORS",
+              "files": [
+                {
+                  "path": "model-00001.safetensors",
+                  "sha256": "63eb73c4696107b8a398e9620c0bd7235b2c2f5dd0b852229d26ea5ef56a8e10",
+                  "bytes": 4096
+                }
+              ],
+              "digestStatus": "PINNED"
+            },
+            "tokenizer": {
+              "path": "tokenizer.json",
+              "sha256": "79f5f3dd4ab84d0e904c8afa628e9648784e5efcd4f4489c5cefeb7e20dca50f",
+              "embeddedInWeights": false
+            },
+            "quantization": null,
+            "licence": {
+              "outcome": "DEFAULT_ALLOWED",
+              "rule": "W-1",
+              "text": {
+                "source": "FILE",
+                "path": "LICENSE",
+                "sha256": "3677104a7d96a43ef3615a26f7f7dfd1c15fd77f4719be0424f8531c7df30f94"
+              },
+              "restrictions": {
+                "redistribution": {
+                  "allowed": true,
+                  "conditions": [
+                    "keep the licence text",
+                    "keep the notice file"
+                  ]
+                },
+                "useRestrictions": null,
+                "attribution": {
+                  "noticeDuty": "licence text and notice kept",
+                  "displayOrNamingDuty": "NONE",
+                  "trigger": "any redistribution"
+                },
+                "derivatives": {
+                  "allowed": true,
+                  "namingOrNoticeDuty": "NONE"
+                },
+                "licensorPowers": {
+                  "termination": "on breach of the terms",
+                  "revocation": "NONE",
+                  "update": "NONE",
+                  "remoteRestriction": "NONE"
+                },
+                "thresholds": {
+                  "users": "NONE",
+                  "revenue": "NONE",
+                  "duty": "NONE"
+                },
+                "acceptance": {
+                  "byUse": false,
+                  "byClick": false,
+                  "byRegistration": false
+                },
+                "governingLaw": "NOT_STATED"
+              },
+              "decisionRef": null
+            },
+            "modelCard": {
+              "path": "README.md",
+              "sha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "trainingDataStatement": {
+              "state": "PARTIAL",
+              "summary": "aggregate token count and stages only",
+              "sourceSha256": "7247dbd0bb734ffa14be28d0c41ade7412c968d734f6289419799ea3e8966639"
+            },
+            "languages": [
+              "en"
+            ],
+            "contextTokens": 32768,
+            "backends": [],
+            "distributionMode": "BUNDLE",
+            "derivedFrom": null
+          }
+        ],
+        "nullValues": [
+          {
+            "row": "sa-7b",
+            "field": "licence.restrictions.useRestrictions",
+            "kind": "UNREAD"
+          }
+        ]
+      },
+      "sources": {
+        "routes/bundle.json": {
+          "routes": [
+            {
+              "routeId": "route-a",
+              "modelId": "sa-7b"
+            }
+          ]
+        }
+      },
+      "expect": {
+        "refusals": [
+          "MW_RESTRICTIONS",
+          "MW_DISTRIBUTION",
+          "MW_SERVED"
+        ]
+      }
+    }
+  ]
+}
