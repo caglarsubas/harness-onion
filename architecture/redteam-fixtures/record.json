@@ -10,7 +10,7 @@
   },
   "vectors": {
     "path": "architecture/redteam-fixtures/vectors.json",
-    "sha256": "e3d2ca27d900f4bcdefe4eb7674aff70b13f6e6106d0b332849513dcf0d0ef18"
+    "sha256": "3927dbf02217cb2be6661218213ba79ed41311683e19aae4eb404129a0c9ba51"
   },
   "model": {
     "path": "scripts/redteam_fixtures.py",
@@ -174,6 +174,7 @@
         "SELECTION_COUNT"
       ],
       "vectors": [
+        "RT-P4",
         "RT-N11",
         "RT-N12"
       ]
@@ -377,7 +378,7 @@
     },
     {
       "id": "N1-06",
-      "text": "N1-06 is run level, not a decision record: its vector is RT-N12 (SELECTION_COUNT)."
+      "text": "N1-06 is run level, not a decision record: its positive is RT-P4 (a run whose selected count equals the manifest's) and its negative RT-N12 (SELECTION_COUNT)."
     },
     {
       "id": "Q-C297-4",

@@ -161,6 +161,12 @@ def test_policy_pins_are_checked():
     outcomes = reordered["weightsLicenseClasses"]["outcomes"]
     outcomes[0], outcomes[1] = outcomes[1], outcomes[0]
     assert _codes({mw.AMENDMENT_PATH: _bytes(reordered)}) == ["MW_POLICY"]
+    unordered = copy.deepcopy(amendment)
+    unordered["weightsLicenseClasses"]["precedence"].reverse()
+    assert _codes({mw.AMENDMENT_PATH: _bytes(unordered)}) == ["MW_POLICY"]
+    dropped = copy.deepcopy(amendment)
+    del dropped["weightsLicenseClasses"]["precedence"]
+    assert _codes({mw.AMENDMENT_PATH: _bytes(dropped)}) == ["MW_POLICY"]
     script = amendment["predecessors"][0]["scripts"][0]["path"]
     assert _codes({script: DISK(script) + b"\n"}) == ["MW_POLICY"]
 

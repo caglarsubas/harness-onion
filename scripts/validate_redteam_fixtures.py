@@ -15,8 +15,10 @@ paths only, no listing) and returns its refusals as (code, message) pairs, in th
   record has the fail-closed values the model reads.
 - GRRT_CODES: one negative vector per refusal code, each refusing with its code; every vector in one family.
 - GRRT_VECTOR: the pins (schema, vectors, model) are the files' digests; the model imports the standard library and its
-  two base models only; the vectors are RT-P1 to RT-P3, RT-E01 to RT-E09 but RT-E06 (N1-06 is RT-N12) and RT-N0 to
-  RT-N16; every vector replays through the model (scripts/redteam_fixtures.py) to its expectation; each N1 case's
+  two base models only; the vectors are RT-P1 to RT-P4, RT-E01 to RT-E09 but RT-E06 and RT-N0 to RT-N16; the nine
+  N1 cases are nine positive entries, one titled per case (N1-06 is run level: its positive RT-P4, a PACK run whose
+  selected count equals the manifest's, and its negative RT-N12); every vector replays through the model
+  (scripts/redteam_fixtures.py) to its expectation; each N1 case's
   contentSha256 is its table row's.
 Standard library plus the reference model. main() reads through the checker's own disk_reader. Data checks only; it
 enforces nothing.
@@ -61,7 +63,8 @@ CASE = ("id", "family", "check", "expect", "input", "polarity", "title")
 N1_ROW = ("caseId", "tool", "residue", "recordKind", "expected")
 DEFS = ("manifestRow", "case", "runBinding")
 N1_IDS = tuple("N1-%02d" % n for n in range(1, 10))
-POSITIVES = ("RT-P1", "RT-P2", "RT-P3") + tuple("RT-E%02d" % n for n in range(1, 10) if n != 6)
+N1_EXPECTED = tuple("RT-E%02d" % n for n in range(1, 10) if n != 6)   # N1-06 is run level: RT-P4 and RT-N12
+POSITIVES = ("RT-P1", "RT-P2", "RT-P3", "RT-P4") + N1_EXPECTED
 NEGATIVES = tuple("RT-N%d" % n for n in range(17))
 MODEL_IMPORTS = {"__future__", "hashlib", "re", "decision_record", "replay_fixtures", "scripts"}
 DIGEST = re.compile(r"[0-9a-f]{64}\Z")
@@ -237,14 +240,18 @@ def check(read):
         found = {(a or b).decode("ascii").split(".")[0] for a, b in IMPORT_LINE.findall(read(MODEL_PATH))}
         need(found == MODEL_IMPORTS, "the model imports %s only" % ", ".join(sorted(MODEL_IMPORTS)))
         need(len(cases) == len(vectors["cases"]), "a vector id twice")
-        need(sorted(cases) == sorted(POSITIVES + NEGATIVES), "the vectors are RT-P1-P3, RT-E01-E09 but E06, RT-N0-N16")
+        need(sorted(cases) == sorted(POSITIVES + NEGATIVES), "the vectors are RT-P1-P4, RT-E01-E09 but E06, RT-N0-N16")
         need(all(cases[v]["polarity"] == "positive" for v in POSITIVES), "the positives")
         for case in vectors["cases"]:
             ok, got = model.replay(case)
             need(ok, "vector %s replays to %r" % (case["id"], got))
         need(cases["RT-P1"]["expect"]["result"].get("classes") == list(model.CLASSES), "RT-P1 covers every class")
         rows = {row["caseId"]: row for row in record["n1Cases"]}
-        for vid in POSITIVES[3:]:
+        titled = sorted(cases[v]["title"].split(" ")[0] for v in POSITIVES if cases[v]["title"].startswith("N1-"))
+        need(titled == list(N1_IDS), "the nine N1 cases are nine positive entries, one titled per case")
+        need(cases["RT-P4"]["family"] == "SELECTION" and cases["RT-P4"]["check"] == "PACK"
+             and cases["RT-P4"]["title"].startswith("N1-06 "), "RT-P4 is N1-06's run-level positive")
+        for vid in N1_EXPECTED:
             case = cases[vid]["input"]["case"]
             need(case["caseId"] == "N1-" + vid[4:] and case["setId"] == model.AUTHORED_SET, "%s is its N1 case" % vid)
             row = rows[case["caseId"]]

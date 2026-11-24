@@ -7,7 +7,8 @@ and returns its refusals as (code, message) pairs in the codes' order. The rules
 - MW_POLICY: the amendment pins the base policy (legal/third-party-license-policy.yaml, 0.3.0), A1 and A2 and their
   two amendment scripts by digest, and A1's and A2's validators by source segment (line 1 to the line before their
   one `def validate() -> None:`, the part each slot's cascade leaves alone); its five class outcomes keep the base's
-  precedence order; the base still requires model licence approval.
+  precedence order, and its `precedence` list is the order of its outcomes (step 3's fragment, class r2);
+  the base still requires model licence approval.
 - MW_SCHEMA (C-1): the record closed to its exact members, enums and types; duplicate JSON keys refused. The one
   candidate-row null rule (the schema's candidateNullRule): a value no pinned read gives is null, only in
   CANDIDATE_NULL_FIELDS, and the record's nullValues lists each such null by row, field and kind; the three
@@ -460,6 +461,7 @@ def policy_facts(read) -> dict:
     cls = amendment["weightsLicenseClasses"]
     pairs = [(o["outcome"], o["baseOutcome"]) for o in cls["outcomes"]]
     need([o for o, _ in pairs] == list(OUTCOMES), "the five class outcomes, most restrictive first")
+    need(cls.get("precedence") == [o for o, _ in pairs], "the class's precedence is the order of its outcomes")
     positions = [base["precedence"].index(b) if b in base["precedence"] else -1 for _, b in pairs]
     need(-1 not in positions and positions == sorted(positions), "the class keeps the base's precedence order")
     need(cls["restrictionFields"] == list(RESTRICTIONS) and cls["rules"] == list(RULES), "fields and rules")

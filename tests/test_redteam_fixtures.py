@@ -64,7 +64,7 @@ def test_positive_vectors_validate_against_the_closed_schema():
     defs = SCHEMA["$defs"]
     validator = jsonschema.Draft202012Validator
     validator.check_schema(SCHEMA)
-    for vid in ("RT-P1", "RT-P2", "RT-P3"):
+    for vid in ("RT-P1", "RT-P2", "RT-P3", "RT-P4"):
         data = CASES[vid]["input"]
         for row in data["manifest"]:
             validator(dict(defs["manifestRow"], **{"$defs": defs})).validate(row)

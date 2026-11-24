@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/execml-grrt-weights-authority.json"
-AUTHORITY_SHA256 = "5128eca4216ec9f5692a332c526da9ebdf4698e264a9135e1a7c68e03d02eee1"
+AUTHORITY_SHA256 = "4feb4156768eeebfbe0960e1e539b1096e35b9dc22926431070b18814a5f1402"
 VALIDATOR_PATH = "scripts/validate_met_015.py"
 BASE_COMMIT = "12ecc897dece54c7332eaad18e4c4b92243a0f08"
 NEW_PACKET = "MET-015"
@@ -657,9 +657,9 @@ ERA_SHA256 = MappingProxyType({
     "architecture/model-weights/record.json": "0e2f083f97089a0099064ccafd1778c4af22773d206494eed716b811f1266ce3",
     "architecture/model-weights/schema.json": "de04c8d21c105a7f953ae07d703b9568dad4f21115b08a49c4ed0de5b14e3295",
     "architecture/model-weights/vectors.json": "86ccfff1d25b5f6326b1b568334bb0b983e3733386ac833e0d8a30ea2bedcdd6",
-    "architecture/redteam-fixtures/record.json": "d33164f4e9444bbf201a5ffc5d47062efae739fc5d38654d9dd461e1a75720c5",
+    "architecture/redteam-fixtures/record.json": "22cba7f750a9859757dcf98ca4c8f34c0292397a2b2869406e3148f41371d508",
     "architecture/redteam-fixtures/schema.json": "c8efa99c951236f10840776c87a1947ecb966996fa37fc6a84f4efdb695e330d",
-    "architecture/redteam-fixtures/vectors.json": "e3d2ca27d900f4bcdefe4eb7674aff70b13f6e6106d0b332849513dcf0d0ef18",
+    "architecture/redteam-fixtures/vectors.json": "3927dbf02217cb2be6661218213ba79ed41311683e19aae4eb404129a0c9ba51",
     "architecture/regulatory-alignment-README.md": "5fce1c75110b0222f603ea0fed3a2af705ec4e0dc06f3c68b9ec8c24f69de733",
     "architecture/regulatory-alignment.json": "98532820261fa1a51a67998fff1126586329a5b5ef7fe09e0e026501b24e95e1",
     "architecture/replay-fixtures/blobs/1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005": "1bc09642184d86e64d54ef2a4953b1f7c31e9895c9b61f1eb5388a89709d1005",
@@ -744,7 +744,7 @@ ERA_SHA256 = MappingProxyType({
     "legal/license-policy-amendment-v2/status.json": "2b760f53dca5fcd627b7684549bb5402ab8f357a237881ba4cdba72c824821cf",
     "legal/license-policy-amendment-v2/vectors.json": "aaab430c9f011e164915e83677997cfbe6b62b29e3ca923a5c23b7a680ebd6b9",
     "legal/license-policy-amendment-v3/README.md": "ca6e12ff8fa36abf701a5452c77ce8e1524021d367d04e04ed435b9745043773",
-    "legal/license-policy-amendment-v3/amendment.json": "f67f610737b240834b57be7bba3d82ee0f845bf0d2fee63c606638610d993c47",
+    "legal/license-policy-amendment-v3/amendment.json": "bd945219dff8005353765c3d59992a853bd96cc9b1a4a3e059d64359707bc1fc",
     "legal/license-policy-amendment/README.md": "ba204cc0bd86444028355725546d2b0971dfe5d6bef8b06f9f7156dd93380646",
     "legal/license-policy-amendment/REVIEW_BRIEF.md": "6c70d5672446ae5a0739fff0be8cfcd9fe1683f1dc37194653b295ad39fe4251",
     "legal/license-policy-amendment/amendment.json": "f6a8c0796857cf40906df3e6bc483122988b91271cc77b3aaed4d4e213d864c2",
@@ -780,16 +780,16 @@ ERA_SHA256 = MappingProxyType({
     "scripts/validate_edge_record_v13.py": "f3d3eb218e709d81b6ca110e1d3e1df268097c48888acbbf9e7b8f799690d2e4",
     "scripts/validate_license_amendment.py": "ff7b81ba0ed906f7c4dc69397d20f5adc4926cd43ea466f73b53808a74b52164",
     "scripts/validate_license_amendment_v2.py": "526e252cb82feb457a2ccdff7b4821ad91d67f90931f94e0615b169a70cf5656",
-    "scripts/validate_model_weights.py": "be384afff181b6ed2fafc237f4a98fcb3a91c28d29e0e5748267a7204d17f85c",
-    "scripts/validate_redteam_fixtures.py": "3c985520b479a4c28706b6255778b5da3dc5736024bb86f879a310fa0384e5f2",
+    "scripts/validate_model_weights.py": "27fd70749930d104e74c3a173be79bc25945a44352d7e609937089e09716f969",
+    "scripts/validate_redteam_fixtures.py": "fdeda77d86774c2fd1dc89343e215c099b38bca25c3f203a42c5f380f139d7ee",
     "scripts/validate_regulatory_alignment.py": "4814b82e3ffafe976f80e3adb755dca531a4fc76b5df43fc15f8627936ad926b",
     "scripts/validate_replay_fixtures.py": "fa02798902d24cbe22e95ae6e4c9773c89b2d7da33ac00ec94ba92e92da18bc5",
     "task-packets/EXEC-ML-ADOPT-PINS-001.yaml": "05b84bf42325995eb928c310623fa109aba2e99fc0765701e23569565d89734f",
     "task-packets/EXEC-TEMPORAL-PINS-001.yaml": "3015206b52c26128331794bf96796ec7fcbfc283455c58b1510f6ce0232fcba7",
     "tests/test_decision_record.py": "1b3f7163ec1022927e6b71aa8db1f40205410b8bb2edc21196404ca1d4a5b452",
     "tests/test_edge_record_v13.py": "e5593e6fc2ce2127e937ec40b5956b60843cdb22d1a82ee32b60572ac8bb1eb9",
-    "tests/test_model_weights.py": "b18d176a84bd7973280101609c990bb3d57d43654bba3747dccd98a86e83ce3f",
-    "tests/test_redteam_fixtures.py": "b16bffdaec9637136275c42127b0f730c7d3d81e5aabb0837589ae420a1cc60e",
+    "tests/test_model_weights.py": "529af8b0516aaeef7a01d060edfefb6531fcc883236f653bb3500ea9262ebaaf",
+    "tests/test_redteam_fixtures.py": "fd53c6a5175ec3c4225b19e894b82b85c9d414a8b9d853167e2f8ca750e5a093",
     "tests/test_regulatory_alignment.py": "fd54dc2ef2a28881717f605af9da58a26b0087cdc1658e2ad10f249868323913",
 })
 ERRATA_LINES = MappingProxyType({

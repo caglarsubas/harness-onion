@@ -1230,6 +1230,229 @@
       "title": "a pack-backed run binding: datasetDigest by I1, fixtureDigest by main's rule over the empty tree (D1)"
     },
     {
+      "id": "RT-P4",
+      "family": "SELECTION",
+      "check": "PACK",
+      "expect": {
+        "result": {
+          "result": "ACCEPTED",
+          "datasetDigest": "sha256:7a38af276db47bf2234dca11ea923c18681ba09431276b34257a6d9e43005e36"
+        }
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S05",
+            "title": "NeMo Guardrails banking topical evaluation set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "cf7c544eb600b0d53b2539cfa52fbec1eae067d6",
+              "paths": [
+                "synthetic/S05/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S05/LICENSE",
+              "governingFileSha256": "0e7f51e3ee34b41e3b1830d155e38c2e1176fe42a816887090414936c55e16f9"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 138,
+              "sha256": "00fbc1d50661af581ce1ecdba1a9f6a76941f629a4d656b7d82236c94b52c565"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "c18b66d9a2d485c0987bd2f3b5ec76c102ef2a4bafddd8ca928a56fe1eb79fea"
+            },
+            "servesItems": [
+              "BANK-PACK",
+              "UAT-CAMPAIGN-001",
+              "GRADER-CALIBRATION-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {},
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s05-0001",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s05-0002",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          }
+        ],
+        "split": {
+          "schemaVersion": "planeon.internal.split-declaration/v1",
+          "splitId": "rt-dev",
+          "suiteDigest": "sha256:7478f45a44137faa6370f1bb1dd52b289870f89343d071cba8d2bcb16a2d727c",
+          "declaredAt": "2026-11-24T08:00:00Z",
+          "partitions": {
+            "DEVELOPMENT": [
+              {
+                "taskId": "s01-0001",
+                "taskDigest": "sha256:fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822"
+              },
+              {
+                "taskId": "s01-0002",
+                "taskDigest": "sha256:83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55"
+              },
+              {
+                "taskId": "s05-0001",
+                "taskDigest": "sha256:e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6"
+              },
+              {
+                "taskId": "s05-0002",
+                "taskDigest": "sha256:7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e"
+              }
+            ],
+            "HELD_OUT": [
+              {
+                "taskId": "rt-held-0001",
+                "taskDigest": "sha256:ed59f8997dbb8d7703d732fba656b299fead6a34e04be9f121ef25f588067dd8"
+              }
+            ]
+          }
+        },
+        "binding": {
+          "runId": "rt-run-0001",
+          "splitId": "rt-dev",
+          "selections": [
+            {
+              "setId": "S01",
+              "caseIds": [
+                "s01-0001",
+                "s01-0002"
+              ]
+            },
+            {
+              "setId": "S05",
+              "caseIds": [
+                "s05-0001",
+                "s05-0002"
+              ]
+            }
+          ],
+          "workspaceBefore": {
+            "entries": []
+          },
+          "datasetDigest": "sha256:7a38af276db47bf2234dca11ea923c18681ba09431276b34257a6d9e43005e36",
+          "fixtureDigest": "sha256:7af8f11d854cf5c4fa78939c0bdc8e886518296c9308d6de8a936a40e9d59e99"
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-06 (promptfoo): a run whose selected count equals the manifest's, ACCEPTED (the suite never shrinks silently)"
+    },
+    {
       "id": "RT-E01",
       "family": "EXPECTED",
       "check": "EXPECTED",
