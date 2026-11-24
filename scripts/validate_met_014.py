@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/grdec-regalign-edgev13-authority.json"
-AUTHORITY_SHA256 = "cb233e146666db6bb7a4b080569b510a0759b0441fbcf7d1921408876ce5a682"
+AUTHORITY_SHA256 = "863b4717335de8767d24f63af1e3162dca2a5d66b4b50d5ba0f226c409233c35"
 VALIDATOR_PATH = "scripts/validate_met_014.py"
 BASE_COMMIT = "4b1386e0bf22e5d33c052ed27befc014614ac820"
 NEW_PACKET = "MET-014"
