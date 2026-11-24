@@ -9,7 +9,9 @@ under the base policy's SPDX rules and the A1 and A2 overlays.
 The base policy is an immutable input. Its full sha256 is pinned in many files across the tree, most of them under
 `architecture/` (MET-015's c1 claims count them at the base). An in-place edit would break every validator that reads the base as an immutable input. This is the
 same reason A1 (`legal/license-policy-amendment/`) gives. So the base, A1 and A2 stay byte-identical, and this
-amendment pins each of them by digest.
+amendment pins each of them by digest, with A1's and A2's two amendment scripts. Their two validators are pinned by
+source segment, line 1 to the line before `def validate() -> None:`: each slot's catalog step moves the catalog
+count inside `validate()` and nothing above it, so every rule the validators state stays pinned.
 
 ## What the class says
 

@@ -5,8 +5,9 @@ check(read) validates the weights record, its schema, its vectors and the v3 lic
 (legal/license-policy-amendment-v3/, LIC-WEIGHTS-A3) through an injected byte reader (exact paths only, no listing)
 and returns its refusals as (code, message) pairs in the codes' order. The rules are R06's step 4 r2 C-1 to C-8:
 - MW_POLICY: the amendment pins the base policy (legal/third-party-license-policy.yaml, 0.3.0), A1 and A2 and their
-  four scripts by digest; its five class outcomes keep the base's precedence order; the base still requires model
-  licence approval.
+  two amendment scripts by digest, and A1's and A2's validators by source segment (line 1 to the line before their
+  one `def validate() -> None:`, the part each slot's cascade leaves alone); its five class outcomes keep the base's
+  precedence order; the base still requires model licence approval.
 - MW_SCHEMA (C-1): the record closed to its exact members, enums and types; duplicate JSON keys refused. The one
   candidate-row null rule (the schema's candidateNullRule): a value no pinned read gives is null, only in
   CANDIDATE_NULL_FIELDS, and the record's nullValues lists each such null by row, field and kind; the three
@@ -50,6 +51,8 @@ PREDECESSORS = (("LIC-HOST-A1", "legal/license-policy-amendment/amendment.json",
                  ("scripts/license_amendment.py", "scripts/validate_license_amendment.py")),
                 ("LIC-HOST-A2", "legal/license-policy-amendment-v2/amendment.json",
                  ("scripts/license_amendment_v2.py", "scripts/validate_license_amendment_v2.py")))
+SEGMENT_PINNED = ("scripts/validate_license_amendment.py", "scripts/validate_license_amendment_v2.py")
+SEGMENT_ANCHOR = "def validate() -> None:"
 RECORD_VERSION = "planeon.internal.model-weights/v1"
 VECTORS_VERSION = "planeon.internal.model-weights-vectors/v1"
 CODES = ("MW_POLICY", "MW_SCHEMA", "MW_IDENTITY", "MW_CLASS", "MW_RESTRICTIONS", "MW_DISTRIBUTION", "MW_DERIVED",
@@ -424,6 +427,18 @@ def check_record(record, read_source, policy) -> list:
 
 # ---------------------------------------------------------------- policy, vectors, check
 
+def segment_pin(segment, raw: bytes, path: str) -> None:
+    """MW_POLICY for a validator of A1 or A2: its source segment, line 1 to the line before its one
+    `def validate() -> None:`, pinned by digest. Each slot's cascade moves the catalog count inside validate() and
+    the main block only, so the segment holds across slots while every rule above validate() stays pinned."""
+    closed(segment, ("firstLine", "lastLine", "endsBefore", "sha256"), "the segment of " + path)
+    lines = raw.splitlines(keepends=True)
+    anchors = [i for i, line in enumerate(lines) if line == (SEGMENT_ANCHOR + "\n").encode("utf-8")]
+    need(segment["endsBefore"] == SEGMENT_ANCHOR and segment["firstLine"] == 1 and type(segment["lastLine"]) is int
+         and anchors == [segment["lastLine"]], "%s: the segment ends before its one anchor line" % path)
+    need(segment["sha256"] == digest(b"".join(lines[:segment["lastLine"]])), "%s's segment is pinned by digest" % path)
+
+
 def policy_facts(read) -> dict:
     """MW_POLICY: the amendment against the base policy, A1 and A2; returns the class facts the record checks use."""
     amendment = parse_json(read(AMENDMENT_PATH))
@@ -433,9 +448,14 @@ def policy_facts(read) -> dict:
     pins = [(p["amendmentId"], p["path"], tuple(s["path"] for s in p["scripts"])) for p in amendment["predecessors"]]
     need(pins == list(PREDECESSORS), "the amendment names A1 and A2 and their four scripts")
     for p in amendment["predecessors"]:
-        need(p["sha256"] == digest(read(p["path"]))
-             and all(s["sha256"] == digest(read(s["path"])) for s in p["scripts"]),
-             "%s and its scripts are pinned by digest" % p["amendmentId"])
+        need(p["sha256"] == digest(read(p["path"])), "%s is pinned by digest" % p["amendmentId"])
+        for s in p["scripts"]:
+            if s["path"] in SEGMENT_PINNED:
+                closed(s, ("path", "segment"), "the segment pin of " + s["path"])
+                segment_pin(s["segment"], read(s["path"]), s["path"])
+            else:
+                closed(s, ("path", "sha256"), "the pin of " + s["path"])
+                need(s["sha256"] == digest(read(s["path"])), "%s is pinned by digest" % s["path"])
     base = base_facts(base_raw)
     cls = amendment["weightsLicenseClasses"]
     pairs = [(o["outcome"], o["baseOutcome"]) for o in cls["outcomes"]]

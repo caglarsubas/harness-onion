@@ -165,6 +165,29 @@ def test_policy_pins_are_checked():
     assert _codes({script: DISK(script) + b"\n"}) == ["MW_POLICY"]
 
 
+def test_validator_segment_pins():
+    amendment = json.loads(DISK(mw.AMENDMENT_PATH))
+    pins = [(i, j, s) for i, p in enumerate(amendment["predecessors"]) for j, s in enumerate(p["scripts"])
+            if "segment" in s]
+    assert sorted(s["path"] for _, _, s in pins) == sorted(mw.SEGMENT_PINNED)
+    anchor = (mw.SEGMENT_ANCHOR + "\n").encode("utf-8")
+    for i, j, pin in pins:
+        path, last = pin["path"], pin["segment"]["lastLine"]
+        lines = DISK(path).splitlines(keepends=True)
+        assert lines[last] == anchor and lines.count(anchor) == 1
+        later = lines[:last + 1] + [b"    # a later count move\n"] + lines[last + 1:]
+        assert _codes({path: b"".join(later)}) == []
+        inside = list(lines)
+        inside[0] = b"#" + inside[0]
+        assert _codes({path: b"".join(inside)}) == ["MW_POLICY"]
+        renamed = b"".join(lines).replace(anchor, b"def validate_all() -> None:\n")
+        assert _codes({path: renamed}) == ["MW_POLICY"]
+        short = copy.deepcopy(amendment)
+        short["predecessors"][i]["scripts"][j]["segment"].update(
+            {"lastLine": last - 1, "sha256": mw.digest(b"".join(lines[:last - 1]))})
+        assert _codes({mw.AMENDMENT_PATH: _bytes(short)}) == ["MW_POLICY"]
+
+
 def test_schema_null_rule_is_checked():
     schema = copy.deepcopy(SCHEMA)
     schema["candidateNullRule"]["fields"] = schema["candidateNullRule"]["fields"][1:]
