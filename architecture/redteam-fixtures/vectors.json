@@ -1,0 +1,4575 @@
+{
+  "schemaVersion": "harness.planeon.ai/redteam-fixtures-vectors/v1",
+  "cases": [
+    {
+      "id": "RT-P1",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "result": {
+          "result": "ACCEPTED",
+          "classes": [
+            "INJECTION",
+            "FALSE_REFUSAL",
+            "INTERPRETER_ABUSE",
+            "TOPICAL",
+            "MALICIOUS_SKILL",
+            "POISONED_MCP",
+            "FAIL_OPEN",
+            "NON_ENGLISH"
+          ]
+        }
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S02",
+            "title": "CyberSecEval false refusal",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "4f0a1cb7b94f188344240e13bec82056bdc3be5d",
+              "paths": [
+                "synthetic/S02/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S02/LICENSE",
+              "governingFileSha256": "2ca716042ca82685a44f1bb0765bf88b23584071812e7ceb3b82ced97d64530d"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 75,
+              "sha256": "f16cf554d6be9bbfe35cbb43ba8be8cc13928450a8cd1dc30d1ddcfc53310e84"
+            },
+            "selection": {
+              "rule": "a seeded sample",
+              "seed": 297,
+              "count": 1,
+              "selectedIdsSha256": "e0c6111a3a282733b70fc1536df322fd90a13e86cd0e6c677c877bea56a80b23"
+            },
+            "servesItems": [
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S03",
+            "title": "CyberSecEval interpreter abuse",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "11f1e153c529b53cd241cd340561edc2047f06af",
+              "paths": [
+                "synthetic/S03/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S03/LICENSE",
+              "governingFileSha256": "62e5ae961767aea99a08e3eb6cc9d219bcb6e4dba2b5e3ebeac03d40e49bdb4e"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 79,
+              "sha256": "47e036db2054b7e87c8c37a6c28eebe2de7195baa09ca97c040e7394818fb4a4"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "d4a2f037f7e3c6ecdee7a6520e4186b8f8c8d962de3ee386b61ef9bf926b7958"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S05",
+            "title": "NeMo Guardrails banking topical evaluation set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "cf7c544eb600b0d53b2539cfa52fbec1eae067d6",
+              "paths": [
+                "synthetic/S05/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S05/LICENSE",
+              "governingFileSha256": "0e7f51e3ee34b41e3b1830d155e38c2e1176fe42a816887090414936c55e16f9"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 138,
+              "sha256": "00fbc1d50661af581ce1ecdba1a9f6a76941f629a4d656b7d82236c94b52c565"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "c18b66d9a2d485c0987bd2f3b5ec76c102ef2a4bafddd8ca928a56fe1eb79fea"
+            },
+            "servesItems": [
+              "BANK-PACK",
+              "UAT-CAMPAIGN-001",
+              "GRADER-CALIBRATION-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S06",
+            "title": "NeMo Guardrails YARA injection rules",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "ed16ba58ce7b14e69fd03240b46aadfdc6aa786d",
+              "paths": [
+                "synthetic/S06/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S06/LICENSE",
+              "governingFileSha256": "6432a2228204ee695fa294558b414cf1ba0a67ca38b68f5293b9a76e951bb1a0"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 71,
+              "sha256": "efc1327d18665d90dfd9db99cc09b3382daa069224d1d221ec0e17d62e28624d"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "6ac6fa259930e439302a517a53d12fa2422e767328c09b54ba581f6923d3e11c"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S07",
+            "title": "toolkit policy-library tests",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "93980794b58a8a45ce2a05386c3ce64e683be41d",
+              "paths": [
+                "synthetic/S07/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S07/LICENSE",
+              "governingFileSha256": "9a6c003cb22ffad33adb04818525f9fbfea5ed75e2465ed4ac8a2c3072f8609b"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 71,
+              "sha256": "4c3b6572b73f43a2148ce3ed2218552f6a0e6c7f9a45c7ab64cb77e097dbe5b9"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "9209c055f71cbccf159a4a3ffce1b5120dc017a423a33e4c17c7b04e32d52153"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S08",
+            "title": "toolkit conformance cases",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "7bfb6d5bcbc9ca81ec65a3c90d1c68c2185b05ce",
+              "paths": [
+                "synthetic/S08/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S08/LICENSE",
+              "governingFileSha256": "bab22ba3b973a2ca06d9e2c33ba94b0c8fd47129f49bbb8efc0c479adfb5929b"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 71,
+              "sha256": "52e60253f1fcf3d185ebebb310f548b72ec405b725c8f669e3869ec42783f1b6"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "4aba239f2225c60a048666a030cb6806295d0f9bc77989cd07ccac9257c799d4"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S09",
+            "title": "toolkit injection corpus",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "82ece448218dbad6b6eaf68e979834e2a02ff307",
+              "paths": [
+                "synthetic/S09/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S09/LICENSE",
+              "governingFileSha256": "e12718f766170d3f0fabfd64c51a9e40350ca38dc9e0a5d5d2f458023078be1b"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 71,
+              "sha256": "02fddf990eee26ddc66312be98da3bc8609cfaac9cf8ba64d523fcbec0ed06e7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "cd4bf65ad6537a873ff0c077c910eea2019de50192eb5e302d4f4e3f630cb2bc"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S11",
+            "title": "SkillSpector malicious-skill fixtures",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "e7070af0647f99ed10cf4dd9f647ed178727bad3",
+              "paths": [
+                "synthetic/S11/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S11/LICENSE",
+              "governingFileSha256": "ba5328512f7770cef12e84f12d4cb0c644a310272de07734f8c5054f88b8fd16"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 77,
+              "sha256": "5198cf987e05cbe6b7627e9f80bac2bcd7aa2c048f4a3b92f73f1cab221dc3cd"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "40cfde2a3040565de4a65cb5eb37838f2316eb01b94e02658fcad40a6eb139ee"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": "d6cd2724668dfb6aa0d781641233da529ac33af07303a4d48df380cf8c64e871"
+          },
+          {
+            "setId": "S12",
+            "title": "agent-scan malicious-skill and poisoned-MCP fixtures",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "8122dcfcf5f6a360118d2b37ae53fbb5b48eca1a",
+              "paths": [
+                "synthetic/S12/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S12/LICENSE",
+              "governingFileSha256": "ffedcebe42b8eb6cef54ef3673b3ae6d55f41bfec5ef305840dedd9de22ed17c"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "cc9d41fa383461506937eb9360ae82e5f031d2375adc37c151aef21e290a731f"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "946f76f9a37d6f698df0a76351554ef8a5244175535b84d030e462cdf8d2fc9e"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S14",
+            "title": "promptfoo financial plugins",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "608e1072d7137312a6a1a680ec327ee0ab999d7b",
+              "paths": [
+                "synthetic/S14/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S14/LICENSE",
+              "governingFileSha256": "e191576a8c898cfc3dc8eb677febe353f99a9f7c70d5a1c69e02deb6e7b1d4e7"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 69,
+              "sha256": "35045ccf0af263ac8eb432bc018686d4b98010bd530af11da2f4af3bd2e33b10"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "20ba15c36f41ea8092f28185c75084e297f771279fe04dd831eaac237cc4f5a3"
+            },
+            "servesItems": [
+              "BANK-PACK",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n",
+          "S02": "synthetic case s02-0001 (FALSE_REFUSAL): a stand-in input; no dataset byte\n",
+          "S03": "synthetic case s03-0001 (INTERPRETER_ABUSE): a stand-in input; no dataset byte\n",
+          "S05": "synthetic case s05-0001 (TOPICAL): a stand-in input; no dataset byte\nsynthetic case s05-0002 (TOPICAL): a stand-in input; no dataset byte\n",
+          "S06": "synthetic case s06-0001 (INJECTION): a stand-in input; no dataset byte\n",
+          "S07": "synthetic case s07-0001 (INJECTION): a stand-in input; no dataset byte\n",
+          "S08": "synthetic case s08-0001 (INJECTION): a stand-in input; no dataset byte\n",
+          "S09": "synthetic case s09-0001 (INJECTION): a stand-in input; no dataset byte\n",
+          "S11": "synthetic case s11-0001 (MALICIOUS_SKILL): a stand-in input; no dataset byte\n",
+          "S12": "synthetic case s12-0001 (POISONED_MCP): a stand-in input; no dataset byte\n",
+          "S14": "synthetic case s14-0001 (TOPICAL): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s02-0001",
+            "setId": "S02",
+            "sourceLocator": {
+              "path": "synthetic/S02/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "f16cf554d6be9bbfe35cbb43ba8be8cc13928450a8cd1dc30d1ddcfc53310e84",
+            "language": "en",
+            "class": "FALSE_REFUSAL",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s03-0001",
+            "setId": "S03",
+            "sourceLocator": {
+              "path": "synthetic/S03/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "47e036db2054b7e87c8c37a6c28eebe2de7195baa09ca97c040e7394818fb4a4",
+            "language": "en",
+            "class": "INTERPRETER_ABUSE",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s05-0001",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s05-0002",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s06-0001",
+            "setId": "S06",
+            "sourceLocator": {
+              "path": "synthetic/S06/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "efc1327d18665d90dfd9db99cc09b3382daa069224d1d221ec0e17d62e28624d",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s07-0001",
+            "setId": "S07",
+            "sourceLocator": {
+              "path": "synthetic/S07/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4c3b6572b73f43a2148ce3ed2218552f6a0e6c7f9a45c7ab64cb77e097dbe5b9",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s08-0001",
+            "setId": "S08",
+            "sourceLocator": {
+              "path": "synthetic/S08/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "52e60253f1fcf3d185ebebb310f548b72ec405b725c8f669e3869ec42783f1b6",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s09-0001",
+            "setId": "S09",
+            "sourceLocator": {
+              "path": "synthetic/S09/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "02fddf990eee26ddc66312be98da3bc8609cfaac9cf8ba64d523fcbec0ed06e7",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s11-0001",
+            "setId": "S11",
+            "sourceLocator": {
+              "path": "synthetic/S11/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "5198cf987e05cbe6b7627e9f80bac2bcd7aa2c048f4a3b92f73f1cab221dc3cd",
+            "language": "en",
+            "class": "MALICIOUS_SKILL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s12-0001",
+            "setId": "S12",
+            "sourceLocator": {
+              "path": "synthetic/S12/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "cc9d41fa383461506937eb9360ae82e5f031d2375adc37c151aef21e290a731f",
+            "language": "en",
+            "class": "POISONED_MCP",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s14-0001",
+            "setId": "S14",
+            "sourceLocator": {
+              "path": "synthetic/S14/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "35045ccf0af263ac8eb432bc018686d4b98010bd530af11da2f4af3bd2e33b10",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "N1-01",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/0",
+              "lines": null
+            },
+            "contentSha256": "b048349e69ca3e12e56e5ab695c0ccfd573a658f079ea7203361af0f8953eed8",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-02",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/1",
+              "lines": null
+            },
+            "contentSha256": "3a13f06f260b6673493dd7dd97a308de47c0f52a903fd7e96b991601964f9fba",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-03",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/2",
+              "lines": null
+            },
+            "contentSha256": "4fb4ecbbcab94223d660904475d02f57e0af21784bc32a6b7743d870d401b417",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-04",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/3",
+              "lines": null
+            },
+            "contentSha256": "e1bd89cca7fcc6bcb087689e1f483ff311d49d470d248a9574cb1b9ad0178d0e",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-05",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/4",
+              "lines": null
+            },
+            "contentSha256": "11b15f3b9e94387a5d5cc6738ed9bb208c670ade3863b0480267c0de2ca5bb53",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-06",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/5",
+              "lines": null
+            },
+            "contentSha256": "25800a2fb6cb45aac9ee8591ccb75b0fcd89cc2cb921ad56ef148212f2508bff",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-07",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/6",
+              "lines": null
+            },
+            "contentSha256": "a5879e36ae4027fbd058c65d3a2628c979559ea66896759a01124aee0140f5e0",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-08",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/7",
+              "lines": null
+            },
+            "contentSha256": "ea9aa482dec59aa19dfce4e58060f064aeb52f20e15257f9bb07fb66612b4807",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          },
+          {
+            "caseId": "N1-09",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/8",
+              "lines": null
+            },
+            "contentSha256": "ba57536dfc3d6205e25fb3707cb13221a2483f5372bdc14898179e3b84f989ff",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "FAIL_CLOSED",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "positive",
+      "title": "one synthetic manifest whose cases cover every class"
+    },
+    {
+      "id": "RT-P2",
+      "family": "CASE",
+      "check": "PACK",
+      "expect": {
+        "result": {
+          "result": "ACCEPTED",
+          "classes": [
+            "INJECTION",
+            "NON_ENGLISH"
+          ]
+        }
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "positive",
+      "title": "an N2 case with its S01 pair"
+    },
+    {
+      "id": "RT-P3",
+      "family": "BINDING",
+      "check": "PACK",
+      "expect": {
+        "result": {
+          "result": "ACCEPTED",
+          "datasetDigest": "sha256:7a38af276db47bf2234dca11ea923c18681ba09431276b34257a6d9e43005e36",
+          "fixtureDigestByMainRule": true
+        }
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S05",
+            "title": "NeMo Guardrails banking topical evaluation set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "cf7c544eb600b0d53b2539cfa52fbec1eae067d6",
+              "paths": [
+                "synthetic/S05/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S05/LICENSE",
+              "governingFileSha256": "0e7f51e3ee34b41e3b1830d155e38c2e1176fe42a816887090414936c55e16f9"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 138,
+              "sha256": "00fbc1d50661af581ce1ecdba1a9f6a76941f629a4d656b7d82236c94b52c565"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "c18b66d9a2d485c0987bd2f3b5ec76c102ef2a4bafddd8ca928a56fe1eb79fea"
+            },
+            "servesItems": [
+              "BANK-PACK",
+              "UAT-CAMPAIGN-001",
+              "GRADER-CALIBRATION-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {},
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s05-0001",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s05-0002",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          }
+        ],
+        "split": {
+          "schemaVersion": "planeon.internal.split-declaration/v1",
+          "splitId": "rt-dev",
+          "suiteDigest": "sha256:7478f45a44137faa6370f1bb1dd52b289870f89343d071cba8d2bcb16a2d727c",
+          "declaredAt": "2026-11-24T08:00:00Z",
+          "partitions": {
+            "DEVELOPMENT": [
+              {
+                "taskId": "s01-0001",
+                "taskDigest": "sha256:fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822"
+              },
+              {
+                "taskId": "s01-0002",
+                "taskDigest": "sha256:83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55"
+              },
+              {
+                "taskId": "s05-0001",
+                "taskDigest": "sha256:e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6"
+              },
+              {
+                "taskId": "s05-0002",
+                "taskDigest": "sha256:7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e"
+              }
+            ],
+            "HELD_OUT": [
+              {
+                "taskId": "rt-held-0001",
+                "taskDigest": "sha256:ed59f8997dbb8d7703d732fba656b299fead6a34e04be9f121ef25f588067dd8"
+              }
+            ]
+          }
+        },
+        "binding": {
+          "runId": "rt-run-0001",
+          "splitId": "rt-dev",
+          "selections": [
+            {
+              "setId": "S01",
+              "caseIds": [
+                "s01-0001",
+                "s01-0002"
+              ]
+            },
+            {
+              "setId": "S05",
+              "caseIds": [
+                "s05-0001",
+                "s05-0002"
+              ]
+            }
+          ],
+          "workspaceBefore": {
+            "entries": []
+          },
+          "datasetDigest": "sha256:7a38af276db47bf2234dca11ea923c18681ba09431276b34257a6d9e43005e36",
+          "fixtureDigest": "sha256:7af8f11d854cf5c4fa78939c0bdc8e886518296c9308d6de8a936a40e9d59e99"
+        }
+      },
+      "polarity": "positive",
+      "title": "a pack-backed run binding: datasetDigest by I1, fixtureDigest by main's rule over the empty tree (D1)"
+    },
+    {
+      "id": "RT-E01",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GUARDRAIL",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_EVALUATOR_UNAVAILABLE"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-01",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/0",
+            "lines": null
+          },
+          "contentSha256": "b048349e69ca3e12e56e5ab695c0ccfd573a658f079ea7203361af0f8953eed8",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-01",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_EVALUATOR_UNAVAILABLE",
+              "detail": "NeMo: the jailbreak rail fails open on detector outage with no caller signal"
+            }
+          },
+          "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+          "rule": {
+            "ruleId": "rule/rt-n1-01",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:7f92385725e89290a0d8a6f55372b3f3c6797f07c036073810283c6b9045c69c"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:66a0fdded5f5d9eba45b7d37ff8f3ebfd8e22db2500fa16ab4ea57c69b82ff97",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-01 (NeMo): FAIL_CLOSED in a GUARDRAIL record, ERR_EVALUATOR_UNAVAILABLE"
+    },
+    {
+      "id": "RT-E02",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GUARDRAIL",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_INTERNAL"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-02",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/1",
+            "lines": null
+          },
+          "contentSha256": "3a13f06f260b6673493dd7dd97a308de47c0f52a903fd7e96b991601964f9fba",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-02",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_INTERNAL",
+              "detail": "NeMo: parallel streaming output rails swallow errors"
+            }
+          },
+          "reasonCode": "ERR_INTERNAL",
+          "rule": {
+            "ruleId": "rule/rt-n1-02",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:00a19971aea6fab228018f4138a2e3410b05a96fb288a9e1639a0da59062f876"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:573e62ec432bb247a475ac6b0294e16b6e02e29be6a1fee86a3e36c593365c2b",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-02 (NeMo): FAIL_CLOSED in a GUARDRAIL record, ERR_INTERNAL"
+    },
+    {
+      "id": "RT-E03",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GUARDRAIL",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_RULE_NOT_SELECTED"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-03",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/2",
+            "lines": null
+          },
+          "contentSha256": "4fb4ecbbcab94223d660904475d02f57e0af21784bc32a6b7743d870d401b417",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-03",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_RULE_NOT_SELECTED",
+              "detail": "guardrails-ai: ignores unknown validators"
+            }
+          },
+          "reasonCode": "ERR_RULE_NOT_SELECTED",
+          "rule": {
+            "ruleId": "rule/rt-n1-03",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:7483b0493f68f8a9304df821676a043071b5bdced427e409d0f0b742e4743d8e"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:b93be7834cdaf1d205288f73b170690dcf5bd16fedd0aba09783d67619cfa1e5",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-03 (guardrails-ai): FAIL_CLOSED in a GUARDRAIL record, ERR_RULE_NOT_SELECTED"
+    },
+    {
+      "id": "RT-E04",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GUARDRAIL",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_MALFORMED_INPUT"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-04",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/3",
+            "lines": null
+          },
+          "contentSha256": "e1bd89cca7fcc6bcb087689e1f483ff311d49d470d248a9574cb1b9ad0178d0e",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-04",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_MALFORMED_INPUT",
+              "detail": "guardrails-ai: treats unlabelled references as no-op"
+            }
+          },
+          "reasonCode": "ERR_MALFORMED_INPUT",
+          "rule": {
+            "ruleId": "rule/rt-n1-04",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:5fed8888b2b79d298036d6e4219f9536735020394c7c3ecbcf933e5c76c64cc6"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:4f094fc55b86ba82819431cd7ab913cf553b92c2a5e460d665eee2fd4dfa10bd",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-04 (guardrails-ai): FAIL_CLOSED in a GUARDRAIL record, ERR_MALFORMED_INPUT"
+    },
+    {
+      "id": "RT-E05",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GRADE",
+          "status": "ERROR",
+          "effectiveDecision": "UNGRADED",
+          "errorCode": "ERR_EVALUATOR_UNAVAILABLE"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-05",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/4",
+            "lines": null
+          },
+          "contentSha256": "11b15f3b9e94387a5d5cc6738ed9bb208c670ade3863b0480267c0de2ca5bb53",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-05",
+          "kind": "GRADE",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "UNGRADED",
+            "error": {
+              "code": "ERR_EVALUATOR_UNAVAILABLE",
+              "detail": "promptfoo: the guardrails assertion passes on a missing signal"
+            }
+          },
+          "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+          "rule": {
+            "ruleId": "rule/rt-n1-05",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:a38efc754142a97b761e07a04630514c0887221ec0bb596e879465816cd53c47"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:645f72b4d7da93b17f6f34192c1199f4ff92c55d7daa726687f49bf244f26d21",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-05 (promptfoo): FAIL_CLOSED in a GRADE record, ERR_EVALUATOR_UNAVAILABLE"
+    },
+    {
+      "id": "RT-E07",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GUARDRAIL",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_TIMEOUT"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-07",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/6",
+            "lines": null
+          },
+          "contentSha256": "a5879e36ae4027fbd058c65d3a2628c979559ea66896759a01124aee0140f5e0",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-07",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_TIMEOUT",
+              "detail": "agent-scan: runtime hooks fail open after 60 s"
+            }
+          },
+          "reasonCode": "ERR_TIMEOUT",
+          "rule": {
+            "ruleId": "rule/rt-n1-07",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:4247b18e466312017631c011fad46b05b804ffe3ecde5e1ba4b659a83911253c"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:c9e6b5b96e994201f0674189389646f98db0d8f3ed9ae21c2c1099a22977de3b",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-07 (agent-scan): FAIL_CLOSED in a GUARDRAIL record, ERR_TIMEOUT"
+    },
+    {
+      "id": "RT-E08",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "GUARDRAIL",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_RULE_NOT_SELECTED"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-08",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/7",
+            "lines": null
+          },
+          "contentSha256": "ea9aa482dec59aa19dfce4e58060f064aeb52f20e15257f9bb07fb66612b4807",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-08",
+          "kind": "GUARDRAIL",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_RULE_NOT_SELECTED",
+              "detail": "the toolkit: older engines allow with no policy"
+            }
+          },
+          "reasonCode": "ERR_RULE_NOT_SELECTED",
+          "rule": {
+            "ruleId": "rule/rt-n1-08",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:5395f2096c6b0a1624db36f0ebdfde81dbcd555987c1fb9f04043fe9e9150ee8"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:b7923e9cfeea6f8211b59f07634bc65ac046f146957720e2d7eb7584e222befe",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-08 (the toolkit): FAIL_CLOSED in a GUARDRAIL record, ERR_RULE_NOT_SELECTED"
+    },
+    {
+      "id": "RT-E09",
+      "family": "EXPECTED",
+      "check": "EXPECTED",
+      "expect": {
+        "result": {
+          "result": "MET",
+          "kind": "ADMISSION_SCAN",
+          "status": "ERROR",
+          "effectiveDecision": "DENY",
+          "errorCode": "ERR_EVALUATOR_UNAVAILABLE"
+        }
+      },
+      "input": {
+        "case": {
+          "caseId": "N1-09",
+          "setId": "N1",
+          "sourceLocator": {
+            "path": "architecture/redteam-fixtures/record.json",
+            "pointer": "/n1Cases/8",
+            "lines": null
+          },
+          "contentSha256": "ba57536dfc3d6205e25fb3707cb13221a2483f5372bdc14898179e3b84f989ff",
+          "language": "en",
+          "class": "FAIL_OPEN",
+          "expected": "FAIL_CLOSED",
+          "pairedCaseId": null,
+          "licenceRef": "authored in harness-onion"
+        },
+        "record": {
+          "schemaVersion": "planeon.internal.decision-record/v1",
+          "decisionId": "dr-n1-09",
+          "kind": "ADMISSION_SCAN",
+          "subject": {
+            "scopeDigest": "sha256:7f1bbb202cab3a37d39eab3ee0d37d49d516f03ed00129ead7798ffb89057f99",
+            "subjectKind": "TOOL_CALL",
+            "subjectDigest": "sha256:065606122dcf4b5886da0f9ba8d0515e38f1533e0b83f99fda9f2dca5c1ab048",
+            "revision": 1
+          },
+          "envelope": {
+            "status": "ERROR",
+            "decision": null,
+            "effectiveDecision": "DENY",
+            "error": {
+              "code": "ERR_EVALUATOR_UNAVAILABLE",
+              "detail": "SkillSpector: the CVE check degrades offline to a small built-in list"
+            }
+          },
+          "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+          "rule": {
+            "ruleId": "rule/rt-n1-09",
+            "ruleVersion": "2026-11-24.1",
+            "policyVersion": "policy-rt-1",
+            "policyBindingDigest": "sha256:189567aae8b9953d846645ec3eeb171690576497254af65eee81980ef34cd685"
+          },
+          "evidence": [
+            {
+              "kind": "POLICY_RESULT",
+              "contentDigest": "sha256:b521d02be954a7fd5c0f6f5b1db01498a243c6a8fc0d1c85918e96c4ed6cf150",
+              "locations": [],
+              "matchFingerprint": null
+            }
+          ],
+          "contributions": [],
+          "transform": null,
+          "escalationRef": null,
+          "approval": null,
+          "decidedAt": "2026-11-24T08:00:00Z",
+          "supersedes": null
+        }
+      },
+      "polarity": "positive",
+      "title": "N1-09 (SkillSpector): FAIL_CLOSED in a ADMISSION_SCAN record, ERR_EVALUATOR_UNAVAILABLE"
+    },
+    {
+      "id": "RT-N0",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "SHAPE"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null,
+            "extra": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a manifest row with a key outside its $def"
+    },
+    {
+      "id": "RT-N1",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "LICENCE_MISSING"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": null,
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a missing licence row"
+    },
+    {
+      "id": "RT-N2",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "LICENCE_NOT_ALLOWED"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "GPL-3.0-only",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "GPL-3.0-only"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "GPL-3.0-only"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "an SPDX outside MIT or Apache-2.0 without a ruling"
+    },
+    {
+      "id": "RT-N3",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "COMMIT_NOT_PINNED"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "main",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a branch instead of a commit"
+    },
+    {
+      "id": "RT-N4",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "DIGEST_MISMATCH"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand_in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a digest mismatch: the synthetic row's sha256 against its synthetic bytes"
+    },
+    {
+      "id": "RT-N5",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "WEIGHTS_PATH"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt",
+                "synthetic/S01/weights/model.safetensors"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a path under a model-weight directory"
+    },
+    {
+      "id": "RT-N6",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "SERVES_EMPTY"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a set with no servesItems"
+    },
+    {
+      "id": "RT-N7",
+      "family": "MANIFEST",
+      "check": "PACK",
+      "expect": {
+        "refuse": "GENERATED_NOT_ALLOWED"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": {
+              "generator": "synthetic"
+            },
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a non-null generationProvenance in this packet (F6)"
+    },
+    {
+      "id": "RT-N8",
+      "family": "CASE",
+      "check": "PACK",
+      "expect": {
+        "refuse": "CASE_ID"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01 0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a caseId outside the task-id pattern (RT-1)"
+    },
+    {
+      "id": "RT-N9",
+      "family": "CASE",
+      "check": "PACK",
+      "expect": {
+        "refuse": "CASE_DUPLICATE"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a duplicate caseId"
+    },
+    {
+      "id": "RT-N10",
+      "family": "CASE",
+      "check": "PACK",
+      "expect": {
+        "refuse": "N2_PAIR"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "an N2 case without pairedCaseId (RT-4)"
+    },
+    {
+      "id": "RT-N11",
+      "family": "SELECTION",
+      "check": "PACK",
+      "expect": {
+        "refuse": "SELECTION_DIGEST"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": null
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a selection without its ids digest"
+    },
+    {
+      "id": "RT-N12",
+      "family": "SELECTION",
+      "check": "PACK",
+      "expect": {
+        "refuse": "SELECTION_COUNT"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S05",
+            "title": "NeMo Guardrails banking topical evaluation set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "cf7c544eb600b0d53b2539cfa52fbec1eae067d6",
+              "paths": [
+                "synthetic/S05/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S05/LICENSE",
+              "governingFileSha256": "0e7f51e3ee34b41e3b1830d155e38c2e1176fe42a816887090414936c55e16f9"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 138,
+              "sha256": "00fbc1d50661af581ce1ecdba1a9f6a76941f629a4d656b7d82236c94b52c565"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 3,
+              "selectedIdsSha256": "c18b66d9a2d485c0987bd2f3b5ec76c102ef2a4bafddd8ca928a56fe1eb79fea"
+            },
+            "servesItems": [
+              "BANK-PACK",
+              "UAT-CAMPAIGN-001",
+              "GRADER-CALIBRATION-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {},
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s05-0001",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s05-0002",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          }
+        ],
+        "split": {
+          "schemaVersion": "planeon.internal.split-declaration/v1",
+          "splitId": "rt-dev",
+          "suiteDigest": "sha256:7478f45a44137faa6370f1bb1dd52b289870f89343d071cba8d2bcb16a2d727c",
+          "declaredAt": "2026-11-24T08:00:00Z",
+          "partitions": {
+            "DEVELOPMENT": [
+              {
+                "taskId": "s01-0001",
+                "taskDigest": "sha256:fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822"
+              },
+              {
+                "taskId": "s01-0002",
+                "taskDigest": "sha256:83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55"
+              },
+              {
+                "taskId": "s05-0001",
+                "taskDigest": "sha256:e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6"
+              },
+              {
+                "taskId": "s05-0002",
+                "taskDigest": "sha256:7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e"
+              }
+            ],
+            "HELD_OUT": [
+              {
+                "taskId": "rt-held-0001",
+                "taskDigest": "sha256:ed59f8997dbb8d7703d732fba656b299fead6a34e04be9f121ef25f588067dd8"
+              }
+            ]
+          }
+        },
+        "binding": {
+          "runId": "rt-run-0001",
+          "splitId": "rt-dev",
+          "selections": [
+            {
+              "setId": "S01",
+              "caseIds": [
+                "s01-0001",
+                "s01-0002"
+              ]
+            },
+            {
+              "setId": "S05",
+              "caseIds": [
+                "s05-0001",
+                "s05-0002"
+              ]
+            }
+          ],
+          "workspaceBefore": {
+            "entries": []
+          },
+          "datasetDigest": "sha256:7a38af276db47bf2234dca11ea923c18681ba09431276b34257a6d9e43005e36",
+          "fixtureDigest": "sha256:7af8f11d854cf5c4fa78939c0bdc8e886518296c9308d6de8a936a40e9d59e99"
+        }
+      },
+      "polarity": "negative",
+      "title": "N1-06: a run whose selected count differs from the manifest (the suite shrank silently)"
+    },
+    {
+      "id": "RT-N13",
+      "family": "EXPECTED",
+      "check": "PACK",
+      "expect": {
+        "refuse": "EXPECTED_FAIL_OPEN"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "N1-01",
+            "setId": "N1",
+            "sourceLocator": {
+              "path": "architecture/redteam-fixtures/record.json",
+              "pointer": "/n1Cases/0",
+              "lines": null
+            },
+            "contentSha256": "b048349e69ca3e12e56e5ab695c0ccfd573a658f079ea7203361af0f8953eed8",
+            "language": "en",
+            "class": "FAIL_OPEN",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "authored in harness-onion"
+          }
+        ],
+        "split": null,
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a FAIL_OPEN case expecting ALLOW"
+    },
+    {
+      "id": "RT-N14",
+      "family": "PLACEMENT",
+      "check": "PACK",
+      "expect": {
+        "refuse": "HELD_OUT_PUBLIC"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": {
+          "splitId": "rt-bad",
+          "partitions": {
+            "DEVELOPMENT": [
+              {
+                "taskId": "s01-0002",
+                "taskDigest": "sha256:83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55"
+              }
+            ],
+            "HELD_OUT": [
+              {
+                "taskId": "s01-0001",
+                "taskDigest": "sha256:fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822"
+              }
+            ]
+          }
+        },
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "a pack case placed in the closed partition (RT-3)"
+    },
+    {
+      "id": "RT-N15",
+      "family": "BINDING",
+      "check": "PACK",
+      "expect": {
+        "refuse": "MIXED_RUN"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S01b",
+            "title": "the machine-translated multilingual injection set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "f335be598a779186640c7d1ce5412e5af6a6585d",
+              "paths": [
+                "synthetic/S01b/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01b/LICENSE",
+              "governingFileSha256": "1393adf841d009ce1e40de1bd1d852f4ec92fd654266a52c9c499addacefc384"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 74,
+              "sha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 1,
+              "selectedIdsSha256": "b0b8ee6e24b1b70a224c9059708aa18caad1d6a826ccda99201ec39ff3b465c6"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "UAT-CAMPAIGN-001",
+              "BANK-PACK"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {
+          "S01": "synthetic case s01-0001 (INJECTION): a stand-in input; no dataset byte\nsynthetic case s01-0002 (INJECTION): a stand-in input; no dataset byte\n",
+          "S01b": "synthetic case s01b-0001 (NON_ENGLISH): a stand-in input; no dataset byte\n"
+        },
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01b-0001",
+            "setId": "S01b",
+            "sourceLocator": {
+              "path": "synthetic/S01b/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "4e501efdd10db0b241ed160054c00910358f0d839395dc334b87ec85e28b5bc7",
+            "language": "de",
+            "class": "NON_ENGLISH",
+            "expected": "REFUSE",
+            "pairedCaseId": "s01-0001",
+            "licenceRef": "MIT"
+          }
+        ],
+        "split": {
+          "splitId": "rt-mixed",
+          "partitions": {
+            "DEVELOPMENT": [
+              {
+                "taskId": "s01-0001",
+                "taskDigest": "sha256:fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822"
+              },
+              {
+                "taskId": "fx-dev-0001",
+                "taskDigest": "sha256:9e195e206a1970dc363a515207ee7b3f0b2c863c184eec75d60314351b093ad3"
+              }
+            ],
+            "HELD_OUT": []
+          }
+        },
+        "binding": null
+      },
+      "polarity": "negative",
+      "title": "one split declaration that mixes pack cases and other tasks (RT-1, I1)"
+    },
+    {
+      "id": "RT-N16",
+      "family": "BINDING",
+      "check": "PACK",
+      "expect": {
+        "refuse": "DATASET_DIGEST"
+      },
+      "input": {
+        "manifest": [
+          {
+            "setId": "S01",
+            "title": "CyberSecEval prompt injection",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "3bd86c6a8ee5d35ead51a58b81f56240685fa5e5",
+              "paths": [
+                "synthetic/S01/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "MIT",
+              "governingFile": "synthetic/S01/LICENSE",
+              "governingFileSha256": "fcd2f9d4a6cdd9d6b5fede6b5e215b63ff7657cbc6613651b7a8c62adb7b57fa"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 142,
+              "sha256": "3c79486117abc48f485b0f0b759c989b5f879f59031becae371ca1f4f399900a"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "502e62dc40ff3fd6e8736e0d75f5d92a6f5b13e8e5083b5219bf25423e8ee486"
+            },
+            "servesItems": [
+              "TRUST-EVAL-ADOPT-001",
+              "GRADER-CALIBRATION-001",
+              "UAT-CAMPAIGN-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          },
+          {
+            "setId": "S05",
+            "title": "NeMo Guardrails banking topical evaluation set",
+            "upstream": {
+              "repository": "synthetic",
+              "commit": "cf7c544eb600b0d53b2539cfa52fbec1eae067d6",
+              "paths": [
+                "synthetic/S05/cases.txt"
+              ],
+              "purpose": "pack data"
+            },
+            "licence": {
+              "spdx": "Apache-2.0",
+              "governingFile": "synthetic/S05/LICENSE",
+              "governingFileSha256": "0e7f51e3ee34b41e3b1830d155e38c2e1176fe42a816887090414936c55e16f9"
+            },
+            "fetch": {
+              "approval": "SYNTHETIC-297",
+              "fetchedOn": "2026-11-24",
+              "bytes": 138,
+              "sha256": "00fbc1d50661af581ce1ecdba1a9f6a76941f629a4d656b7d82236c94b52c565"
+            },
+            "selection": {
+              "rule": "all cases of the set",
+              "seed": null,
+              "count": 2,
+              "selectedIdsSha256": "c18b66d9a2d485c0987bd2f3b5ec76c102ef2a4bafddd8ca928a56fe1eb79fea"
+            },
+            "servesItems": [
+              "BANK-PACK",
+              "UAT-CAMPAIGN-001",
+              "GRADER-CALIBRATION-001"
+            ],
+            "placement": "DEVELOPMENT",
+            "generationProvenance": null,
+            "matchFingerprint": null
+          }
+        ],
+        "blobs": {},
+        "cases": [
+          {
+            "caseId": "s01-0001",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s01-0002",
+            "setId": "S01",
+            "sourceLocator": {
+              "path": "synthetic/S01/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55",
+            "language": "en",
+            "class": "INJECTION",
+            "expected": "DETECT",
+            "pairedCaseId": null,
+            "licenceRef": "MIT"
+          },
+          {
+            "caseId": "s05-0001",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                1,
+                1
+              ]
+            },
+            "contentSha256": "e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "ALLOW",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          },
+          {
+            "caseId": "s05-0002",
+            "setId": "S05",
+            "sourceLocator": {
+              "path": "synthetic/S05/cases.txt",
+              "pointer": null,
+              "lines": [
+                2,
+                2
+              ]
+            },
+            "contentSha256": "7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e",
+            "language": "en",
+            "class": "TOPICAL",
+            "expected": "REFUSE",
+            "pairedCaseId": null,
+            "licenceRef": "Apache-2.0"
+          }
+        ],
+        "split": {
+          "schemaVersion": "planeon.internal.split-declaration/v1",
+          "splitId": "rt-dev",
+          "suiteDigest": "sha256:7478f45a44137faa6370f1bb1dd52b289870f89343d071cba8d2bcb16a2d727c",
+          "declaredAt": "2026-11-24T08:00:00Z",
+          "partitions": {
+            "DEVELOPMENT": [
+              {
+                "taskId": "s01-0001",
+                "taskDigest": "sha256:fc010c3cd0fbbe4cea986bd7c273c69d6a988b751bf86488aea065847cd88822"
+              },
+              {
+                "taskId": "s01-0002",
+                "taskDigest": "sha256:83aba57c25a5861ac505f7fcbd6b88a143b53af8718a24980975039e6a402f55"
+              },
+              {
+                "taskId": "s05-0001",
+                "taskDigest": "sha256:e1c8ea11d1e69ef1e6a06c94971dcd901b354f17d70eb4acb7ebecec0636dba6"
+              },
+              {
+                "taskId": "s05-0002",
+                "taskDigest": "sha256:7dfe975ff27bdcf8ebfc64711ec46eed9cc68b392aac443ae671dc29b5e4056e"
+              }
+            ],
+            "HELD_OUT": [
+              {
+                "taskId": "rt-held-0001",
+                "taskDigest": "sha256:ed59f8997dbb8d7703d732fba656b299fead6a34e04be9f121ef25f588067dd8"
+              }
+            ]
+          }
+        },
+        "binding": {
+          "runId": "rt-run-0001",
+          "splitId": "rt-dev",
+          "selections": [
+            {
+              "setId": "S01",
+              "caseIds": [
+                "s01-0001",
+                "s01-0002"
+              ]
+            },
+            {
+              "setId": "S05",
+              "caseIds": [
+                "s05-0001",
+                "s05-0002"
+              ]
+            }
+          ],
+          "workspaceBefore": {
+            "entries": []
+          },
+          "datasetDigest": "sha256:07e726dcf9faa2714cd59605acb5924393be1188f7d8815c08bdb53bb9adc0da",
+          "fixtureDigest": "sha256:7af8f11d854cf5c4fa78939c0bdc8e886518296c9308d6de8a936a40e9d59e99"
+        }
+      },
+      "polarity": "negative",
+      "title": "a run binding whose datasetDigest is not the I1 recomputation"
+    }
+  ]
+}
