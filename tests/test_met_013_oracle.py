@@ -1571,25 +1571,55 @@ def test_authority_k0_form(authority):
     assert "productComparators" not in authority  # CONTRACT_295 section 4; operator-stated
 
 
-def test_historical_catalog(head, authority, catalog, packets):
-    """CONTRACT_295 section 1 (318 -> 319 at K 0): the whole catalog less MET-013 is exactly the 318 base ids,
-    each base YAML equal to the bytes the authority pins; a mapping that lacks or adds an id is refused."""
+# CONTRACT_294 erratum E6 (C18 amended 2; VIS-294-Q1): this file's own copy of the one named helper for the current
+# catalog's names. Only test_historical_catalog uses it; that node binds _catalog_head to the head module first.
+_catalog_head = None
+
+
+def current_catalog_names():
+    """The sorted stems of the *.yaml names in task-packets/ under the head module's ROOT (names only, no bytes)."""
+    return sorted(path.stem for path in (_catalog_head.ROOT / "task-packets").glob("*.yaml"))
+
+
+def test_historical_catalog(head, authority):
+    """CONTRACT_295 section 1 (318 -> 319 at K 0) and section 4a (historical_catalog): the catalog less MET-013 is
+    exactly the 318 base ids, each base YAML equal to the bytes the authority pins; a mapping that lacks or adds an
+    id is refused.
+    CONTRACT_294 erratum E6 (in force at 296): the input is the current catalog, its names from the one named
+    helper and each packet's bytes through the head's era reader, never a formula or a fixed size; the assertions
+    are on the chain's own peel and the authority's era catalog, never on the current catalog's size or members,
+    which grow with every slot (296's ERR-5: the chain cascade appends each new packet's name and the count every
+    step). Each refusal case is the current catalog changed in its one stated way, and is matched on the strict
+    heads' message, never on which head refuses it."""
+    global _catalog_head
+    _catalog_head = head
+    current = {
+        name: head.safe_load(head.reviewed_bytes("task-packets/" + name + ".yaml")) for name in current_catalog_names()
+    }
     base = set(authority["baselinePackets"])
     assert len(base) == BASE_PACKETS  # CONTRACT_295 section 1 (318 packets)
     assert head.NEW_PACKET not in base and "MET-012" in base  # CONTRACT_295 sections 1 and 5
-    assert len(packets) == CATALOG_PACKETS  # CONTRACT_295 section 1 (318 + 1 + K, K 0)
-    result = head.historical_catalog(dict(packets))
-    assert set(result) == base and len(result) == BASE_PACKETS  # operator-stated; CONTRACT_295 section 1
+    result = head.historical_catalog(dict(current))
+    # operator-stated (the chain's own peel into 295's head); CONTRACT_295 section 1; CONTRACT_294 erratum E6
+    assert set(result) == base and len(result) == BASE_PACKETS
     for name, pin in authority["baselinePackets"].items():
         # operator-stated (baselinePackets: the sha256 of each YAML's bytes); CONTRACT_295 section 1 (no YAML edit)
-        assert _sha(catalog[name]) == pin.split(":")[-1], name
-    lacking = dict(packets)
+        assert _sha(head.reviewed_bytes("task-packets/" + name + ".yaml")) == pin.split(":")[-1], name
+    lacking = dict(current)
     lacking.pop(sorted(base)[0])
-    with pytest.raises(ValueError):  # operator-stated (refuses a mapping that lacks an id)
+    assert len(lacking) == len(current) - 1  # CONTRACT_294 erratum E6 (the current catalog, one id less)
+    # operator-stated (refuses a mapping that lacks an id); CONTRACT_294 erratum E6 (the strict heads' message)
+    with pytest.raises(ValueError, match="unexpected packet addition or loss"):
         head.historical_catalog(lacking)
-    adding = dict(packets)
-    adding[head.NEW_PACKET + "-EXTRA"] = copy.deepcopy(packets[head.NEW_PACKET])
-    with pytest.raises(ValueError):  # operator-stated (refuses a mapping that adds an id)
+    # The one added id carries a copy of MET-013's YAML with its own id, so the addition is its only change.
+    extra = head.NEW_PACKET + "-EXTRA"
+    added = copy.deepcopy(current[head.NEW_PACKET])
+    added["id"] = extra
+    adding = dict(current)
+    adding[extra] = added
+    assert len(adding) == len(current) + 1  # CONTRACT_294 erratum E6 (the current catalog, one id more)
+    # operator-stated (refuses a mapping that adds an id); CONTRACT_294 erratum E6 (the strict heads' message)
+    with pytest.raises(ValueError, match="unexpected packet addition or loss"):
         head.historical_catalog(adding)
 
 

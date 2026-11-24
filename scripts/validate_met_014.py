@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/grdec-regalign-edgev13-authority.json"
-AUTHORITY_SHA256 = "863b4717335de8767d24f63af1e3162dca2a5d66b4b50d5ba0f226c409233c35"
+AUTHORITY_SHA256 = "bb59ffa714cb708283cd8b26302e4d30af925a86b7029a1e891fcd66fc5f9ff2"
 VALIDATOR_PATH = "scripts/validate_met_014.py"
 BASE_COMMIT = "4b1386e0bf22e5d33c052ed27befc014614ac820"
 NEW_PACKET = "MET-014"
@@ -512,8 +512,10 @@ ERA_SHA256 = MappingProxyType({
     "tests/test_regulatory_alignment.py": "fd54dc2ef2a28881717f605af9da58a26b0087cdc1658e2ad10f249868323913",
 })
 ERRATA_LINES = MappingProxyType({
+    "architecture/oracle-identity-met-013.json": ((5, 5), (28, 29), (56, 56)),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_013_oracle.py": ((1574, 1576), (1580, 1582), (1585, 1586), (1588, 1588), (1590, 1592)),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"
