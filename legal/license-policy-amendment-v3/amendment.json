@@ -1,0 +1,193 @@
+{
+  "schemaVersion": "planeon.internal.license-policy-amendment/v3",
+  "amendmentId": "LIC-WEIGHTS-A3",
+  "status": "CANDIDATE",
+  "item": "MODEL-WEIGHTS-POLICY-001",
+  "packet": "MET-015",
+  "base": {
+    "path": "legal/third-party-license-policy.yaml",
+    "sha256": "fa3a4398acafc3960eaaae9f5396d4e96d91e6ff252b83f6c53e1f5f0d8a40d0",
+    "policyVersion": "0.3.0"
+  },
+  "predecessors": [
+    {
+      "amendmentId": "LIC-HOST-A1",
+      "path": "legal/license-policy-amendment/amendment.json",
+      "sha256": "f6a8c0796857cf40906df3e6bc483122988b91271cc77b3aaed4d4e213d864c2",
+      "scripts": [
+        {
+          "path": "scripts/license_amendment.py",
+          "sha256": "58758a4a7bb6bbcf49daf1880cc423566da306cfd90dceadfa1b4b7c53ec28cd"
+        },
+        {
+          "path": "scripts/validate_license_amendment.py",
+          "segment": {
+            "firstLine": 1,
+            "lastLine": 561,
+            "endsBefore": "def validate() -> None:",
+            "sha256": "734a8ba17add6f6191507208afb569aca2bcfb6daa2eb4b50327aaa374935c72"
+          }
+        }
+      ]
+    },
+    {
+      "amendmentId": "LIC-HOST-A2",
+      "path": "legal/license-policy-amendment-v2/amendment.json",
+      "sha256": "05984db7339c60cf0d4b9acc1179bd0b5fbb16c6f2f4dd554889388133e8f3a7",
+      "scripts": [
+        {
+          "path": "scripts/license_amendment_v2.py",
+          "sha256": "0f87f029d3227960a103174d86d3c37c6c8b83e0d0ae766a089288bf85294e14"
+        },
+        {
+          "path": "scripts/validate_license_amendment_v2.py",
+          "segment": {
+            "firstLine": 1,
+            "lastLine": 686,
+            "endsBefore": "def validate() -> None:",
+            "sha256": "505829af8f31353d06b8985430aeb2baa89e5a03b9d3166225d15b641334bc9c"
+          }
+        }
+      ]
+    }
+  ],
+  "rulings": [
+    {
+      "id": "Q-W1",
+      "selected": "option 1",
+      "text": "W-3 as written: a repository with no licence file takes DEFAULT_ALLOWED only when its README declares a defaultAllowed SPDX id in its metadata and the card's own text states that the licence covers the weights; a metadata tag alone gives UNKNOWN."
+    },
+    {
+      "id": "Q-W3",
+      "selected": "option 1",
+      "text": "The CPU row's GGUF is the licensor's own release, if the pinned read shows one whose licence file equals the base's; the fetch itself is the owner's, and none is made in this packet."
+    },
+    {
+      "id": "Q-W4",
+      "selected": "option 1",
+      "text": "A row without pinned digests fails when it is served (C-7); candidate rows may stand MISSING_PLANNED."
+    }
+  ],
+  "rulingsBy": "Build-R00-HarnessOnion at 297's contract round (Q-C297-5 (a)), accepted by Lane-Orchestration (ORC-297-CONTRACT-RULED)",
+  "weightsLicenseClasses": {
+    "scope": "MODEL_WEIGHTS",
+    "matching": "PINNED_LICENSE_TEXT",
+    "outcomes": [
+      {
+        "outcome": "DENIED",
+        "baseOutcome": "DENIED"
+      },
+      {
+        "outcome": "UNKNOWN",
+        "baseOutcome": "UNKNOWN"
+      },
+      {
+        "outcome": "OPTIONAL_EXPLICIT_REVIEW",
+        "baseOutcome": "OPTIONAL_EXPLICIT_REVIEW"
+      },
+      {
+        "outcome": "ALLOWED_EXCEPTION",
+        "baseOutcome": "ALLOWED_EXCEPTION_EXPRESSION"
+      },
+      {
+        "outcome": "DEFAULT_ALLOWED",
+        "baseOutcome": "DEFAULT_ALLOWED"
+      }
+    ],
+    "precedence": [
+      "DENIED",
+      "UNKNOWN",
+      "OPTIONAL_EXPLICIT_REVIEW",
+      "ALLOWED_EXCEPTION",
+      "DEFAULT_ALLOWED"
+    ],
+    "rules": [
+      "W-1",
+      "W-2",
+      "W-2a",
+      "W-3",
+      "W-4"
+    ],
+    "defaultAllowed": {
+      "texts": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "rules": [
+        "W-1",
+        "W-2a",
+        "W-3"
+      ],
+      "w3RequiresCardStatement": true,
+      "releaseOutcome": "ALLOW_ONLY_WITH_PINNED_TEXT_NOTICE_AND_WEIGHT_DIGESTS"
+    },
+    "allowedException": [
+      {
+        "id": "MIT-WITH-DISPLAY-DUTY",
+        "condition": "attribution or display duty only; no use restriction, revocation or registration",
+        "releaseOutcome": "ALLOW_WITH_DUTY_RECORDED_IN_NOTICE"
+      }
+    ],
+    "optionalExplicitReview": {
+      "triggers": [
+        "flowDownUseRestrictions",
+        "licensorTermination",
+        "licensorRevocation",
+        "licensorUpdate",
+        "remoteRestriction",
+        "registration",
+        "thresholdLicenceRequest",
+        "acceptanceByUse",
+        "foreignGoverningLaw",
+        "indemnity"
+      ],
+      "releaseOutcomeWithoutApprovedDecision": "DENY_RELEASE",
+      "requiredDecisionFields": [
+        "redistribution",
+        "useRestrictions",
+        "attribution",
+        "derivatives",
+        "licensorPowers",
+        "thresholds",
+        "acceptance",
+        "governingLaw",
+        "distributionMode",
+        "approvingAuthority",
+        "decisionDigest"
+      ]
+    },
+    "denied": {
+      "triggers": [
+        "researchOnly",
+        "nonCommercial",
+        "noProduction"
+      ],
+      "overrideAllowed": false
+    },
+    "unknown": {
+      "catalogOutcome": "ACCEPT_PLANNED_PLACEHOLDER_ONLY",
+      "releaseOutcome": "DENY_RELEASE"
+    },
+    "restrictionFields": [
+      "redistribution",
+      "useRestrictions",
+      "attribution",
+      "derivatives",
+      "licensorPowers",
+      "thresholds",
+      "acceptance",
+      "governingLaw"
+    ],
+    "nullRestrictionRule": "A restriction field that no pinned read gives is null. A row with any null restriction field is DENIED, UNKNOWN or a review row with no decision: its release outcome is DENY_RELEASE, its distributionMode is NONE, and it is never served (fail closed).",
+    "distributionMode": {
+      "bundle": [
+        "DEFAULT_ALLOWED",
+        "ALLOWED_EXCEPTION"
+      ],
+      "tenantFetched": [
+        "OPTIONAL_EXPLICIT_REVIEW_APPROVED"
+      ],
+      "otherwise": "NONE"
+    }
+  }
+}

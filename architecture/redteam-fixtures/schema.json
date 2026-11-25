@@ -1,0 +1,410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "planeon.internal.redteam-pack/v1",
+  "title": "Red-team and safety fixture pack v1 (GR-REDTEAM-FIXTURES-001)",
+  "$comment": "The closed shape only (a key outside its $def is SHAPE). The commit's 40 hex, the caseId's task-id pattern, the licences, the weights paths, the selection and every later rule are the reference model's (scripts/redteam_fixtures.py) coded refusals, in record.json's refusalOrder.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "planeon.internal.redteam-pack/v1"
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/manifestRow"
+      }
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "rows",
+    "cases"
+  ],
+  "$defs": {
+    "manifestRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "setId": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9]{1,15}(?![\\s\\S])"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "upstream": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "commit": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "paths": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024
+              }
+            },
+            "purpose": {
+              "const": "pack data"
+            }
+          },
+          "required": [
+            "repository",
+            "commit",
+            "paths",
+            "purpose"
+          ]
+        },
+        "licence": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "spdx": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024
+                },
+                "governingFile": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024
+                },
+                "governingFileSha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+                }
+              },
+              "required": [
+                "spdx",
+                "governingFile",
+                "governingFileSha256"
+              ]
+            }
+          ]
+        },
+        "fetch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "approval": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "fetchedOn": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(?![\\s\\S])"
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+            }
+          },
+          "required": [
+            "approval",
+            "fetchedOn",
+            "bytes",
+            "sha256"
+          ]
+        },
+        "selection": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "rule": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "seed": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              ]
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "selectedIdsSha256": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+                }
+              ]
+            }
+          },
+          "required": [
+            "rule",
+            "seed",
+            "count",
+            "selectedIdsSha256"
+          ]
+        },
+        "servesItems": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "placement": {
+          "const": "DEVELOPMENT"
+        },
+        "generationProvenance": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "matchFingerprint": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          ]
+        }
+      },
+      "required": [
+        "setId",
+        "title",
+        "upstream",
+        "licence",
+        "fetch",
+        "selection",
+        "servesItems",
+        "placement",
+        "generationProvenance",
+        "matchFingerprint"
+      ]
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "caseId": {
+          "type": "string"
+        },
+        "setId": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Za-z0-9]{1,15}(?![\\s\\S])"
+        },
+        "sourceLocator": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "pointer": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^/"
+                }
+              ]
+            },
+            "lines": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "path",
+            "pointer",
+            "lines"
+          ]
+        },
+        "contentSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*(?![\\s\\S])"
+        },
+        "class": {
+          "enum": [
+            "INJECTION",
+            "FALSE_REFUSAL",
+            "INTERPRETER_ABUSE",
+            "TOPICAL",
+            "MALICIOUS_SKILL",
+            "POISONED_MCP",
+            "FAIL_OPEN",
+            "NON_ENGLISH"
+          ]
+        },
+        "expected": {
+          "enum": [
+            "REFUSE",
+            "DETECT",
+            "ALLOW",
+            "FAIL_CLOSED"
+          ]
+        },
+        "pairedCaseId": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "licenceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "caseId",
+        "setId",
+        "sourceLocator",
+        "contentSha256",
+        "language",
+        "class",
+        "expected",
+        "pairedCaseId",
+        "licenceRef"
+      ]
+    },
+    "runBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runId": {
+          "type": "string"
+        },
+        "splitId": {
+          "type": "string"
+        },
+        "selections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "setId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1024
+              },
+              "caseIds": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "setId",
+              "caseIds"
+            ]
+          }
+        },
+        "workspaceBefore": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "entries": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "required": [
+            "entries"
+          ]
+        },
+        "datasetDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+        },
+        "fixtureDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}(?![\\s\\S])"
+        }
+      },
+      "required": [
+        "runId",
+        "splitId",
+        "selections",
+        "workspaceBefore",
+        "datasetDigest",
+        "fixtureDigest"
+      ]
+    }
+  }
+}

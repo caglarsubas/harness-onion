@@ -704,12 +704,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "first rider pair validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 320
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET} | set(PRODUCT_PACKETS),
-            "closed 320-packet catalog retaining the 313-packet checkpoint")
+    require(len(paths) == 322
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
+            "closed 322-packet catalog retaining the 313-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, *successor.successor.PRODUCT_PACKETS, successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.NEW_PACKET, successor.successor.successor.successor.successor.NEW_PACKET, *successor.successor.successor.successor.successor.PRODUCT_PACKETS):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -750,4 +750,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("First rider pair valid: 320 current specifications at slot 292; 313-packet checkpoint and exact 310-packet predecessor; contract reviewed.")
+    print("First rider pair valid: 322 current specifications at slot 292; 313-packet checkpoint and exact 310-packet predecessor; contract reviewed.")

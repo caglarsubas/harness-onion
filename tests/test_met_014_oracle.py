@@ -1761,24 +1761,43 @@ def test_packet_yaml(head):
     assert named == 3 + len(PACKET_FILES_C1)
 
 
-def test_historical_catalog(head, catalog):
-    """CONTRACT_296 section 1 with operator-stated facts: historical_catalog returns exactly the 319 base ids."""
+# CONTRACT_294 erratum E6 (C18 amended 2, VIS-294-Q1): the head module whose ROOT the names helper below lists
+CATALOG_HEAD = _load_head()
+
+
+def current_catalog_names():
+    """CONTRACT_294 erratum E6 (C18 amended 2, VIS-294-Q1): the current catalog's names, this file's own copy."""
+    return sorted(path.stem for path in (CATALOG_HEAD.ROOT / "task-packets").glob("*.yaml"))
+
+
+def test_historical_catalog(head):
+    """CONTRACT_296 section 1 and the oracle brief item 5, read under CONTRACT_294 erratum E6 one slot later (297).
+
+    The current catalog (its names from current_catalog_names, each packet's bytes through head.reviewed_bytes and
+    parsed by head.safe_load) goes into historical_catalog; the assertions are on the chain's own peel, which is the
+    authority's era catalog (baselinePackets, 319 base ids), never on the current catalog's size or members. The
+    refusals are the current catalog changed in one way only (one id less, one unknown id more), matched on E6's
+    message, never on which head refuses. 296's ERR-5 and 297's fix 1 move cascade lines of era scripts only: no
+    input of this node.
+    """
     base = list(head.authority()["baselinePackets"])
-    result = head.historical_catalog(dict(catalog))
+    names = current_catalog_names()
+    current = {name: head.safe_load(head.reviewed_bytes("task-packets/" + name + ".yaml")) for name in names}
+    result = head.historical_catalog(dict(current))
     same = set(result) == set(base) and head.NEW_PACKET not in result
-    # CONTRACT_296 section 1: base ids 319, MET-014 not among them
+    # CONTRACT_296 section 1, oracle brief item 5, E6 (the peel on the authority's era catalog): no MET-014
     assert same is True
-    # CONTRACT_296 section 1: 319
+    # CONTRACT_296 section 1: base ids 319 (the era catalog's size, E6: never the current catalog's)
     assert len(result) == BASE_IDS
-    lacking = dict(catalog)
-    lacking.pop(base[0])
-    # operator-stated: it refuses a mapping that lacks an id
-    with pytest.raises(ValueError):
+    lacking = dict(current)
+    lacking.pop(names[0])
+    # oracle brief (operator-stated: refuses a mapping that lacks an id) and E6's message: current less one id
+    with pytest.raises(ValueError, match="unexpected packet addition or loss"):
         head.historical_catalog(lacking)
-    adding = dict(catalog)
-    adding["MET-999"] = {}
-    # operator-stated: it refuses a mapping that adds an id
-    with pytest.raises(ValueError):
+    adding = dict(current)
+    adding[names[-1] + "-0"] = {}
+    # oracle brief (operator-stated: refuses a mapping that adds an id) and E6's message: current plus one unknown id
+    with pytest.raises(ValueError, match="unexpected packet addition or loss"):
         head.historical_catalog(adding)
 
 

@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-014
+## Current source preparation — MET-015
+
+MET-015 (slot 297): the ML adoption pins, the red-team fixture pack and the model weights record, a K = 1 step (322 packets at slot 297): EXEC-ML-ADOPT-PINS-001 (mas-harness-execution-plane), the scikit-learn and ONNX Runtime provider dossiers after PLANE-BOOTSTRAP-R08 and EXEC-TEMPORAL-PINS-001; GR-REDTEAM-FIXTURES-001, the red-team and safety fixture pack contract with synthetic rows (drafted by R00, intake by R12); and MODEL-WEIGHTS-POLICY-001, the model weights record with the v3 licence amendment LIC-WEIGHTS-A3 (R06); R08's plan gains the product's item; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracles).
+Alpha2 OPEN; 320 accepted (the catalog at slot 296) plus MET-015 and its one product only.
+
+## Historical decision record, regulatory alignment and edge record v13 source preparation — MET-014
 
 MET-014 (slot 296): the decision record, the regulatory alignment record and edge record v13, a K = 0 step (320 packets at slot 296): GR-DECISION-RECORD-001, the decision record and its fail-closed envelope (R12's draft with its E1); REG-ALIGN-001, the regulatory alignment record, published (R03's draft r4); and EDGE-V13, operator edge record v13, the no-receipt TERMINAL amendment of the broker handoff inputs (R10's draft), each in 295's member form: a record, a checker scripts/validate_<name>.py whose check(reader) returns its refusals and a test, with a vectors file and a reference model where the member has vectors; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracle).
 Alpha2 OPEN; 319 accepted (the catalog at slot 295) plus MET-014 only.
@@ -1868,3 +1873,5 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 318 | `EXEC-TEMPORAL-PINS-001` | `mas-harness-execution-plane` | The Temporal provider dossier (provider record, CycloneDX SBOM, licence and notice review; no runtime code), after PLANE-BOOTSTRAP-R08 (product, published by MET-012) |
 | 319 | `MET-013` | `Harness-Engineering` | The three HR contracts (K = 0, 319 packets at slot 295): HR-COMPACTION-GOV-001, HR-REPLAY-FIXTURES-001 and HR-APPROVAL-OUTCOME-001, in-repo records with their schemas, vectors, models, checkers and tests; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
 | 320 | `MET-014` | `Harness-Engineering` | The decision record, the regulatory alignment record and edge record v13 (K = 0, 320 packets at slot 296): GR-DECISION-RECORD-001, REG-ALIGN-001 and EDGE-V13, in-repo records with their checkers and tests, and vectors and models where a member has them; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
+| 321 | `MET-015` | `Harness-Engineering` | The ML adoption pins, the red-team fixture pack and the model weights record (K = 1, 322 packets at slot 297): publishes EXEC-ML-ADOPT-PINS-001 and adds GR-REDTEAM-FIXTURES-001 and MODEL-WEIGHTS-POLICY-001, in-repo records with their checkers and tests; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracles) |
+| 322 | `EXEC-ML-ADOPT-PINS-001` | `mas-harness-execution-plane` | The scikit-learn and ONNX Runtime provider dossiers (provider records, CycloneDX SBOMs, licence and notice reviews, the safe artifact-format record; no runtime code), after PLANE-BOOTSTRAP-R08 and EXEC-TEMPORAL-PINS-001 (product, published by MET-015) |
