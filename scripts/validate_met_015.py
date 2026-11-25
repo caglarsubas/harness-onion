@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/execml-grrt-weights-authority.json"
-AUTHORITY_SHA256 = "195fc515925b95065a25f7d661cfaf9f496f2a13d114df6f1102be2b4a9e994b"
+AUTHORITY_SHA256 = "761b8eda945f72b7b6df423b685bee3638911e4d5e13c3b87a6afad55bfec259"
 VALIDATOR_PATH = "scripts/validate_met_015.py"
 BASE_COMMIT = "12ecc897dece54c7332eaad18e4c4b92243a0f08"
 NEW_PACKET = "MET-015"
@@ -793,10 +793,14 @@ ERA_SHA256 = MappingProxyType({
     "tests/test_regulatory_alignment.py": "fd54dc2ef2a28881717f605af9da58a26b0087cdc1658e2ad10f249868323913",
 })
 ERRATA_LINES = MappingProxyType({
+    "architecture/oracle-identity-met-014.json": ((5, 5), (28, 29), (55, 55)),
     "docs/repositories/08-mas-harness-execution-plane.md": ((174, 174),),
     "task-packets/README.md": ((1871, 1871),),
     "tests/test_ci_performance.py": ((169, 169),),
     "tests/test_credential_lifecycle.py": ((362, 362),),
+    "tests/test_met_014_oracle.py": (
+        (1764, 1765), (1767, 1767), (1769, 1769), (1771, 1771), (1773, 1776), (1778, 1781),
+    ),
 })
 REGISTRY_PATH = "architecture/review-record/briefs.json"
 PACKET_BRIEF = "architecture/review-briefs/REVIEW_BRIEF_PACKET.md"

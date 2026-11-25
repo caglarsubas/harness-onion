@@ -2,7 +2,7 @@
  "schemaVersion": "planeon.oracle-identity/v1",
  "file": {
   "path": "tests/test_met_014_oracle.py",
-  "sha256": "87ba0360b1e48ea58376efcbebfc43d8bff132d25b341eafbf6509a5ef143101"
+  "sha256": "c236b791c2e2265cc06a82fd008c63494d03ebe412c4ffc9a18919ccefa82eff"
  },
  "oracle": {
   "agentId": "aa0bacc9b17ad3e94",
@@ -25,8 +25,8 @@
  "ruling": {
   "decision": "KEEP",
   "by": "LANE_MONITOR",
-  "ref": "ORC-296-C3-KEEP",
-  "date": "2026-11-24"
+  "ref": "ORC-297-E6-KEEP",
+  "date": "2026-11-25"
  },
  "disclosures": [
   "bound inputs: exactly the oracle 87ba0360b1e48ea58376efcbebfc43d8bff132d25b341eafbf6509a5ef143101 and the table dbbab3de7f92a5712221f606264416c33589a9d37e8950b2da3d23c2b001f994; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
@@ -52,6 +52,10 @@
   "author run 2 (the relay's revision under the triage's slip and ERR-5 and ERR-6, on the same kit (ORC-296-Q-C3-3)): 2026-11-24T08:51:17+08:00 to 2026-11-24T08:53:10+08:00, 10 tool calls; its file after the run 87ba0360",
   "the oracle's runs, by the operator on the hub's words, node counts only: candidate run 1 on the c3 candidate at c2 with the first file: 118 passed, 3 failed of 121 (summary f34e84db; C16 STOP, triaged by a non-author); candidate run 2 on the c3 candidate at fix 2 (ERR-7; real 11672a67, DRY bc41af7f, tree 7b38d7d8) with this file: 122 passed of 122 (summary 898ffd70); the c3 sweep on the chain tree with this file: 122 passed of 122, then the head test's pre-check: 223 passed of 223 (summary e18bc0aa)",
   "the table is main's with both rows measured at c3 from the c3 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 22.9 and this oracle 6.9 (221 entries)",
-  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-296-C3-KEEP)"
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-296-C3-KEEP)",
+  "slot 297 R1 (O1 round for 296's oracle, ORC-297-E6-KIT-GO), the node edited and why: one node, test_historical_catalog (its two refusal checks are inside it; no other node's name contains historical_catalog). It now passes the current catalog into the head (names from the file's own current_catalog_names helper in VIS-294-Q1's shape, each packet's bytes through head.reviewed_bytes, parsed by head.safe_load), asserts on the chain's own peel against the authority's era catalog (baselinePackets, 319 base ids, MET-014 not among them: CONTRACT_296 section 1 and the oracle brief item 5), and builds each refusal from the current catalog changed in one way only (one id less, one unknown id more), matched on E6's message and never on which head refuses. Why: CONTRACT_294 erratum E6 (the strict heads and the catalog input, C18 amended 2, A-292-12) now applies to this oracle one slot later: 296's head is bridged at 297 and the newest head refuses any set but the current catalog, so the old input (the authority's baseline plus MET-014) was refused. 296's ERR-5 and 297's fix 1 move cascade lines of era scripts only and touch no input of this node",
+  "slot 297 R1, the rest of the file: unchanged. One changed line range: the node's body and docstring, plus two module-level additions that this node alone uses (a head-module binding whose ROOT the names helper lists, and the helper). The shared catalog fixture is unchanged and this node no longer requests it. The node set is unchanged: no node added, removed or skipped",
+  "slot 297 R1, the author: a fresh blind agent, slot 297 R1, ORC-297-E6-KIT-GO. It ran only the kit's syntax check (syntax OK: 1831 lines), C18's live-read scan 1e33cdec (live 0, names 1, era 25, other 0, git 0: PASS) and shasum on its own file, with no test run and no py_compile; file 87ba0360 -> c236b791. Its context carried an auto-injected memory index; it used none. Slip: one message carried two Edit calls on this record, against the one-call-per-message rule",
+  "slot 297 R1, the checks: the pass at 297's head is checked by the operator, by totals only, and N1 by a non-author reader; the ruling is PENDING for the hub (the KEEP ruling ORC-296-C3-KEEP bound 87ba0360)"
  ]
 }
