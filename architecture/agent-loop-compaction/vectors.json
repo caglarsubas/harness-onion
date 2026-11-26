@@ -100,6 +100,53 @@
       }
     },
     {
+      "id": "CG-C1-P3",
+      "family": "C1",
+      "polarity": "POSITIVE",
+      "title": "a MODEL summary and its FALLBACK after a gate FAIL: two owned COMPACT steps in one bracket",
+      "input": {
+        "events": [
+          {
+            "op": "open"
+          },
+          {
+            "op": "lock"
+          },
+          {
+            "op": "step",
+            "kind": "HOOK",
+            "own": true
+          },
+          {
+            "op": "step",
+            "kind": "COMPACT",
+            "own": true
+          },
+          {
+            "op": "step",
+            "kind": "GATE",
+            "own": true
+          },
+          {
+            "op": "step",
+            "kind": "COMPACT",
+            "own": true
+          },
+          {
+            "op": "unlock"
+          }
+        ]
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "locksClosed": 1,
+          "orphanEvents": 0,
+          "restores": 0
+        }
+      }
+    },
+    {
       "id": "CG-C1-N1",
       "family": "C1",
       "polarity": "NEGATIVE",
@@ -162,6 +209,75 @@
             "op": "step",
             "kind": "HANDOFF",
             "own": true
+          }
+        ]
+      },
+      "expect": {
+        "refuse": "CG_LOCK"
+      }
+    },
+    {
+      "id": "CG-C1-N4",
+      "family": "C1",
+      "polarity": "NEGATIVE",
+      "title": "a bracket unlocked with no COMPACT step",
+      "input": {
+        "events": [
+          {
+            "op": "open"
+          },
+          {
+            "op": "lock"
+          },
+          {
+            "op": "step",
+            "kind": "HOOK",
+            "own": true
+          },
+          {
+            "op": "step",
+            "kind": "GATE",
+            "own": true
+          },
+          {
+            "op": "unlock"
+          }
+        ]
+      },
+      "expect": {
+        "refuse": "CG_LOCK"
+      }
+    },
+    {
+      "id": "CG-C1-N5",
+      "family": "C1",
+      "polarity": "NEGATIVE",
+      "title": "three owned COMPACT steps in one bracket",
+      "input": {
+        "events": [
+          {
+            "op": "open"
+          },
+          {
+            "op": "lock"
+          },
+          {
+            "op": "step",
+            "kind": "COMPACT",
+            "own": true
+          },
+          {
+            "op": "step",
+            "kind": "COMPACT",
+            "own": true
+          },
+          {
+            "op": "step",
+            "kind": "COMPACT",
+            "own": true
+          },
+          {
+            "op": "unlock"
           }
         ]
       },

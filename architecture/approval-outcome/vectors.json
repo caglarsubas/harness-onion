@@ -1337,6 +1337,112 @@
       }
     },
     {
+      "id": "AO-O-H9",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "an overdue open history under a sweep interval of 3,601 s, above the 3,600 s bound",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 3000,
+        "sweepInterval": 3601
+      },
+      "expect": {
+        "refuse": "AO_SHAPE"
+      }
+    },
+    {
+      "id": "AO-O-H10",
+      "family": "O",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "an overdue open history under a sweep interval of 5,000 s, above the 3,600 s bound",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "REQUESTED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": null,
+          "decidedBy": null,
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 3000,
+        "sweepInterval": 5000
+      },
+      "expect": {
+        "refuse": "AO_SHAPE"
+      }
+    },
+    {
       "id": "AO-O-R1",
       "family": "O",
       "check": "READ",
@@ -2258,6 +2364,143 @@
           }
         ],
         "now": 20,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "refuse": "AO_AUDIT"
+      }
+    },
+    {
+      "id": "AO-A-H9",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "POSITIVE",
+      "title": "a boundary write: EXPIRED recorded at expiresAt plus the sweep interval closes the pair at that instant",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "EXPIRED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 100
+          },
+          "decidedBy": {
+            "type": "SYSTEM"
+          },
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 100,
+            "recordedAt": 400,
+            "sameTransaction": true,
+            "outcome": "EXPIRED"
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 400,
+        "sweepInterval": 300
+      },
+      "expect": {
+        "accept": true,
+        "result": {
+          "state": "EXPIRED"
+        }
+      }
+    },
+    {
+      "id": "AO-A-H10",
+      "family": "A",
+      "check": "HISTORY",
+      "polarity": "NEGATIVE",
+      "title": "a late write: EXPIRED recorded after expiresAt plus one sweep interval",
+      "refs": [
+        "A5"
+      ],
+      "input": {
+        "row": {
+          "requestId": "apr-0001",
+          "kind": "demand",
+          "state": "EXPIRED",
+          "subjectId": "dem-0001",
+          "revision": 3,
+          "subjectDigest": "sha256:f3bf866847f725d4cf988ae97aa85618971de0e329888337b39a71fa94566bc3",
+          "policyRef": "policy/org-0001",
+          "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa",
+          "ruleVersion": "2026-11-23.1",
+          "mandate": "mandate/payments-ops",
+          "expiresAt": 100,
+          "asker": {
+            "type": "HUMAN",
+            "requesterDigest": "sha256:41e4ea5cbec6b0ee02794278dfae390960a7d75bb65adf7e43aa6c85060f9d8a"
+          },
+          "askPort": "ELIGIBLE",
+          "decidePort": "NOT_ASKED",
+          "decisionRef": {
+            "id": "apr-0001.decision",
+            "at": 100
+          },
+          "decidedBy": {
+            "type": "SYSTEM"
+          },
+          "reasonCode": null,
+          "decidingStatement": null
+        },
+        "audit": [
+          {
+            "event": "approval.requested.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 0,
+            "recordedAt": 0,
+            "sameTransaction": true
+          },
+          {
+            "event": "approval.decision-recorded.v1",
+            "kind": "demand",
+            "requestId": "apr-0001",
+            "occurredAt": 100,
+            "recordedAt": 401,
+            "sameTransaction": true,
+            "outcome": "EXPIRED"
+          }
+        ],
+        "decisions": [],
+        "gates": [],
+        "effects": [],
+        "now": 401,
         "sweepInterval": 300
       },
       "expect": {

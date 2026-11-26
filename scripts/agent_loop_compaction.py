@@ -59,8 +59,11 @@ def _need(ok: bool, family: str, detail: str) -> None:
 
 def lock_bracket(data: dict) -> dict:
     """One lock per run; inside it only the compaction's own HOOK, COMPACT and GATE steps; never a HANDOFF; an orphan
-    lock found on open is discarded, the context restored from the archive and one orphan event recorded."""
+    lock found on open is discarded, the context restored from the archive and one orphan event recorded. At unlock the
+    bracket holds one or two owned COMPACT steps (a MODEL summary, and its FALLBACK after a gate FAIL); none or more
+    than two is refused (#254, MET-016 F1)."""
     held, orphan, result = False, False, {"orphanEvents": 0, "restores": 0, "locksClosed": 0}
+    compacts = 0
     for event in data["events"]:
         op = event["op"]
         if op == "open":
@@ -70,14 +73,16 @@ def lock_bracket(data: dict) -> dict:
                 orphan = False
         elif op == "lock":
             _need(not held and not orphan, "C1", "a second lock in the same run")
-            held = True
+            held, compacts = True, 0
         elif op == "step":
             if held:
                 _need(event["kind"] != "HANDOFF", "C1", "a HANDOFF inside the bracket")
                 _need(event["kind"] in BRACKET_KINDS and event.get("own") is True, "C1",
                       "a step that is not the compaction's own inside the bracket")
+                compacts += event["kind"] == "COMPACT"
         elif op == "unlock":
             _need(held, "C1", "an unlock without a lock")
+            _need(1 <= compacts <= 2, "C1", "a bracket with no COMPACT step or more than two")
             held = False
             result["locksClosed"] += 1
         elif op == "crash":

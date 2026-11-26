@@ -16,8 +16,10 @@ order the codes run:
   file's); the recording run's fixture lock follows the record's rule; the vectors' stores hold the stored documents.
 - RF_VECTOR: every vector is listed by exactly one family, its own; each family's refusals are its codes, and it has a
   positive and a negative vector; every vector replays through the model to its expectation; every record refusal code and every verdict is reached by a vector.
-Standard library plus the reference model (scripts/replay_fixtures.py) and MAS-RA-002's model (scripts/run_manifest.py).
-main() reads through the checker's own disk_reader. Data checks only; it enforces nothing.
+Standard library plus the reference model (scripts/replay_fixtures.py), MAS-RA-002's model (scripts/run_manifest.py)
+and GR-DECISION-RECORD-001's model (scripts/decision_record.py), the last two injected into the reference model's
+checks (the EVALUATOR_ERROR evidence takes `dr`; MET-016 F5). main() reads through the checker's own disk_reader. Data
+checks only; it enforces nothing.
 """
 from __future__ import annotations
 
@@ -31,9 +33,11 @@ from pathlib import Path
 try:
     import replay_fixtures as model
     import run_manifest as rm
+    import decision_record as dr
 except ImportError:
     from scripts import replay_fixtures as model
     from scripts import run_manifest as rm
+    from scripts import decision_record as dr
 
 ROOT = Path(__file__).resolve().parents[1]
 DIR = "architecture/replay-fixtures/"
@@ -255,7 +259,7 @@ def check(read):
                  family["id"] + " has a positive and a negative vector")
             reached |= refused
         for case in vectors["cases"]:
-            ok, got = model.replay_case(case, vectors["stores"], rm)
+            ok, got = model.replay_case(case, vectors["stores"], rm, dr)
             need(ok, "vector %s replays to %r" % (case["id"], got))
             if case["check"] == "REPLAY" and type(got) is dict:
                 verdicts.add(got["verdict"])

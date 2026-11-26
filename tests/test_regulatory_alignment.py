@@ -6,6 +6,7 @@ section 3b, Q-C296-2 (a)); then in-memory failing cases: at least one per checke
 eight. The member has no vectors file and no model (CONTRACT_296 section 3's member table): these mutation cases are its
 negatives. Every case mutates a copy of the live bytes behind an injected reader; no file is written."""
 import copy
+import datetime
 import importlib.util
 import json
 from pathlib import Path
@@ -135,3 +136,54 @@ def test_ra_rules_refuses_each_rule_broken(name, mutate):
 
 def test_rules_are_the_records_eight():
     assert RECORD["rules"] == list(RA.RULES) and len(RA.RULES) == 8
+
+
+# ---- DEC-ALIGN-296-FIX-001 (slot 298): D3 rule 1 on both row lists, D4 a source's sha256, D5 the dates as days
+
+
+def test_d3_rule_1_refuses_a_mapped_eu_row_beside_the_ordinary_row_case():
+    record = copy.deepcopy(RECORD)
+    row = record["euDates"][0]
+    row["state"] = "MAPPED"
+    refusals = RA.check(_reader(record=record))
+    assert any(code == "RA_RULES" and "rule 1: row %s" % row["id"] in message for code, message in refusals)
+
+
+def test_d4_a_source_digest_is_null_or_64_lowercase_hex():
+    held = _first(RECORD, "sources", lambda s: s["sha256"] is not None)
+    assert RA.HEX64.match(held["sha256"]) and RA.check(READ) == []  # the published digest
+    unheld = _first(RECORD, "sources", lambda s: s["sha256"] is None)  # a null source, its dates UNCONFIRMED
+    dates = [row[k] for row in RECORD["euDates"] for k in ("dateAsEnacted", "dateAsAmended")]
+    assert [d["confirmation"] for d in dates if d["source"] == unheld["id"]] and all(
+        d["confirmation"] == "UNCONFIRMED" for d in dates if d["source"] == unheld["id"])
+    for bad in ("sha256:" + held["sha256"], held["sha256"].upper(), held["sha256"][:63], held["sha256"] + "\n", ""):
+        record = copy.deepcopy(RECORD)
+        _first(record, "sources", lambda s: s["id"] == held["id"])["sha256"] = bad
+        assert _codes(record=record) == ["RA_SHAPE"], bad
+
+
+@pytest.mark.parametrize("key,value", [("dateAsEnacted", "2026-02-30"), ("dateAsAmended", "2026-8-2"),
+                                       ("dateAsAmended", "２０２６-08-02")],
+                         ids=["impossible-day", "malformed-amended", "non-ascii-digits"])
+def test_d5_an_eu_date_is_an_ascii_calendar_day(key, value):
+    record = copy.deepcopy(RECORD)
+    record["euDates"][0][key]["date"] = value
+    assert _codes(record=record) == ["RA_SHAPE"]
+
+
+def test_d5_an_invalid_draft_day_is_refused():
+    draft = '"draftDate": "%s"' % RA.provenance(READ)["draftDate"]
+    assert README.count(draft) == 1
+    assert _codes(readme=README.replace(draft, '"draftDate": "2026-13-01"')) == ["RA_SHAPE"]
+
+
+@pytest.mark.parametrize("offset,passed", [(-1, True), (0, False), (1, False)], ids=["before", "on", "after"])
+def test_d5_rule_7_compares_the_parsed_days_strictly_before(offset, passed):
+    draft = datetime.date.fromisoformat(RA.provenance(READ)["draftDate"])
+    record = copy.deepcopy(RECORD)
+    row = record["euDates"][0]
+    row["dateAsEnacted"]["date"] = (draft + datetime.timedelta(days=offset)).isoformat()
+    row["dateAlreadyPassed"] = passed
+    assert _codes(record=record) == []
+    row["dateAlreadyPassed"] = not passed
+    assert "RA_RULES" in _codes(record=record)

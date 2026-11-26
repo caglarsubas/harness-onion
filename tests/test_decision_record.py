@@ -244,3 +244,85 @@ def test_dr_vector_refuses_a_wrong_expectation():
 def test_dr_vector_refuses_a_model_import():
     raw = READ(DR.MODEL_PATH) + b"\nimport os\n"
     assert "DR_VECTOR" in _codes(files={DR.MODEL_PATH: raw})
+
+
+# ---- DEC-ALIGN-296-FIX-001 (slot 298). D1, one goal: the model accepts no record the schema rejects, except E7's reads
+# of an unknown kind or decision; one paired case per point, the published positives staying ACCEPTED. D2: a DECIDED
+# record's reason is its kind's code for its decision, an ERROR record's its own error code (REASON_MISMATCH, after E4).
+
+
+VALIDATOR = jsonschema.Draft202012Validator(SCHEMA)
+
+
+def _with(vid, change):
+    record = copy.deepcopy(CASES[vid]["input"])
+    change(record)
+    return record
+
+
+def _contribution(key, value):
+    return _with("GR-P1", lambda r: r["contributions"][0].__setitem__(key, value))
+
+
+def _approval_row(extra=None, drop=None):
+    def change(record):
+        record["approval"].update(extra or {})
+        record["approval"].pop(drop, None)
+    return _with("GR-P5", change)
+
+
+def _fingerprint(value):
+    return _with("GR-P1", lambda r: r["evidence"][0].__setitem__("matchFingerprint", value))
+
+
+def _approval_contribution(decision):
+    row = {"source": "DETERMINISTIC", "ruleId": "rule/approval-0001", "ruleVersion": "1", "model": None,
+           "decision": decision, "score": None}
+    return _with("GR-P5", lambda r: r.__setitem__("contributions", [row]))
+
+
+D1_PAIRS = [
+    ("contribution-ruleId", _contribution("ruleId", ""), "MALFORMED", _contribution("ruleId", "rule/egress-0002")),
+    ("contribution-ruleVersion", _contribution("ruleVersion", ""), "MALFORMED",
+     _contribution("ruleVersion", "2026-11-26.1")),
+    ("approval-unknown-key", _approval_row(extra={"note": "x"}), "MALFORMED", _approval_row(extra={"limits": {}})),
+    ("approval-missing-key", _approval_row(drop="decidingStatement"), "MALFORMED", _approval_row()),
+    ("evidence-empty-fingerprint", _fingerprint(""), "MALFORMED", _fingerprint("fp-0001")),
+    ("approval-contribution-unknown-decision", _approval_contribution("GRANTED"), "READ_FAIL_CLOSED",
+     _approval_contribution("APPROVED")),
+]
+
+
+@pytest.mark.parametrize("name,bad,result,good", D1_PAIRS, ids=[p[0] for p in D1_PAIRS])
+def test_d1_the_model_accepts_no_record_the_schema_rejects(name, bad, result, good):
+    assert MODEL.evaluate(good) == ("ACCEPTED", None) and not list(VALIDATOR.iter_errors(good)), name
+    assert MODEL.evaluate(bad)[0] == result and list(VALIDATOR.iter_errors(bad)), name
+    if result == "READ_FAIL_CLOSED":
+        assert MODEL.evaluate(bad) == ("READ_FAIL_CLOSED", MODEL.FAIL_CLOSED["APPROVAL"])
+
+
+def test_d1_the_approval_row_keys_are_the_schemas():
+    row = SCHEMA["$defs"]["approval"]
+    assert list(MODEL.APPROVAL_REQUIRED) == row["required"] == RECORD["approvalFields"]["required"]
+    assert list(MODEL.APPROVAL_OPTIONAL) == RECORD["approvalFields"]["optional"]
+    assert list(MODEL.APPROVAL_REQUIRED + MODEL.APPROVAL_OPTIONAL) == row["propertyNames"]["enum"]
+
+
+@pytest.mark.parametrize("vid", RECORD["vectorPerCode"]["REASON_MISMATCH"])
+def test_d2_each_reason_mismatch_has_its_valid_control(vid):
+    record = copy.deepcopy(CASES[vid]["input"])
+    assert MODEL.evaluate(record) == ("REFUSED", "REASON_MISMATCH")
+    env = record["envelope"]
+    record["reasonCode"] = ("%s_%s" % (record["kind"], env["decision"]) if env["status"] == "DECIDED"
+                            else env["error"]["code"])
+    assert MODEL.evaluate(record) == ("ACCEPTED", None)
+
+
+def test_d2_the_new_code_runs_after_e4_in_every_pinned_list():
+    order = list(MODEL.CHECK_ORDER)
+    assert order.index("REASON_MISMATCH") == order.index("ERROR_AS_DECISION") + 1
+    assert RECORD["checkOrder"] == order == RECORD["ruleFamilies"][0]["codes"]
+    assert list(RECORD["vectorPerCode"])[:len(order)] == order
+    assert sorted(RECORD["vectorPerCode"]["REASON_MISMATCH"]) == ["GR-N15a", "GR-N15b", "GR-N15c"]
+    settlement = [s["text"] for s in RECORD["settlements"] if s["id"] == "CHECK-ORDER"]
+    assert len(order) == 9 and len(settlement) == 1 and "the nine single-record codes" in settlement[0]

@@ -5,7 +5,9 @@ The record is architecture/replay-fixtures/record.json; the worked fixtures, the
 the blobs are under architecture/replay-fixtures/; the vectors are architecture/replay-fixtures/vectors.json. The contract
 sits on MAS-RA-002's run manifest, which changes in no byte: every check that touches a manifest, a split declaration or
 an evaluation record takes MAS-RA-002's own model (scripts/run_manifest.py) as its `rm` argument and calls it, so its
-refusal codes (SHAPE, UNKNOWN_REFERENCE, TASK_SET, ...) come first. This model imports the standard library only.
+refusal codes (SHAPE, UNKNOWN_REFERENCE, TASK_SET, ...) come first. The EVALUATOR_ERROR evidence check takes
+GR-DECISION-RECORD-001's model (scripts/decision_record.py) the same way, as its `dr` argument (MET-016 F5), so no model
+of this record imports a later one. This model imports the standard library only.
 
 Five shapes: replay-fixture/v1, replay-trajectory/v1, replay-score/v1, replay-verdict/v1 and arm-pair/v1. Record
 refusals, first met first: MAS-RA-002's codes; TREE_PATH; TREE_ORDER; HELD_OUT_PUBLIC; FIXTURE_BINDING;
@@ -311,24 +313,37 @@ def _outcome(r, fixture, trajectory, after) -> None:
             need(outcome == "FAILED" and 0 <= score < MAX_SCORE, "OUTCOME_MISMATCH")
     elif status in ("ERRORED", "BUDGET_EXCEEDED"):
         need(outcome == "ERRORED" and score == 0, "OUTCOME_MISMATCH")
-    else:
-        need(outcome == "BLOCKED" and score == 0 and code != "EVALUATOR_ERROR", "OUTCOME_MISMATCH")
+    else:   # BLOCKED by the environment: the blocker is the trajectory's own exit code (#256, MET-016 F3)
+        need(outcome == "BLOCKED" and score == 0 and code != "EVALUATOR_ERROR" and code == trajectory["exit"]["code"],
+             "OUTCOME_MISMATCH")
 
 
-def _evidence(r, ctx) -> None:
+def _evidence(r, ctx, dr=None) -> None:
+    """A BLOCKED result's evidence. EVALUATOR_ERROR (#259, MET-016 F5): the supplied GRADE record whose computed digest
+    equals evidenceDigest (never a store-key lookup), of kind GRADE, in envelope status ERROR, and ACCEPTED by
+    GR-DECISION-RECORD-001's model `dr`, taken by injection as `rm` is; without `dr` the evidence is unchecked and
+    refused. Any other blocker: its evidence digest is recorded."""
     if r["outcome"] != "BLOCKED":
         return
     need(r["blockerCode"] is not None and r["evidenceDigest"] is not None, "BLOCKER_UNEVIDENCED")
     if r["blockerCode"] == "EVALUATOR_ERROR":
-        need(ctx.get("gradeRecords", {}).get(r["evidenceDigest"], {}).get("envelope") == "ERROR", "BLOCKER_UNEVIDENCED")
+        supplied = ctx.get("gradeRecords", [])
+        need(dr is not None and type(supplied) is list, "BLOCKER_UNEVIDENCED")
+        bound = [g for g in supplied if digest(g) == r["evidenceDigest"]]
+        need(len(bound) == 1, "BLOCKER_UNEVIDENCED")
+        record = bound[0]
+        need(type(record) is dict and record.get("kind") == "GRADE" and type(record.get("envelope")) is dict
+             and record["envelope"].get("status") == "ERROR" and dr.evaluate(record)[0] == "ACCEPTED",
+             "BLOCKER_UNEVIDENCED")
     else:
         need(r["evidenceDigest"] in ctx.get("environmentEvidence", []), "BLOCKER_UNEVIDENCED")
 
 
-def check_score(doc, ctx, rm) -> dict:
+def check_score(doc, ctx, rm, dr=None) -> dict:
     """One scoring record per run. ctx: manifests, splits, fixtures, trajectories (each by digest), blobs, fixtureSet
-    (F), afterTrees (by task id), environmentEvidence, gradeRecords. Returns whether the run may enter a MAS-RA-002
-    evaluation record (3.5: never with a BLOCKED result)."""
+    (F), afterTrees (by task id), environmentEvidence, gradeRecords (the supplied GRADE records, a list). `dr` is
+    GR-DECISION-RECORD-001's model (scripts/decision_record.py), by injection. Returns whether the run may enter a
+    MAS-RA-002 evaluation record (3.5: never with a BLOCKED result)."""
     def run():
         results = doc["results"] if type(doc) is dict else None
         need(_closed(doc, SCORE_KEYS) and doc["schemaVersion"] == SCORE_SCHEMA and _ident(doc["scoreId"])
@@ -367,7 +382,7 @@ def check_score(doc, ctx, rm) -> dict:
             _outcome(r, ctx["fixtures"][r["fixtureDigest"]], ctx["trajectories"][r["trajectoryDigest"]],
                      ctx.get("afterTrees", {}).get(r["taskId"]))
         for r in results:
-            _evidence(r, ctx)
+            _evidence(r, ctx, dr)
         return {"digest": digest(doc), "enters": all(r["outcome"] != "BLOCKED" for r in results),
                 "scores": {r["taskId"]: r["score"] for r in results}}
     return _guarded(run)
@@ -377,8 +392,10 @@ def check_score(doc, ctx, rm) -> dict:
 
 def replay(fixture, trajectory, blobs, sent, after) -> dict:
     """U1 against a recorded list of sent MODEL requests and the after-tree (no harness runs here). The fixture's trees
-    pass the path grammar before anything is materialised. DIGEST: the first MODEL step whose sent request differs is
-    REPLAY_DIVERGED and the replay stops; INDEX: answered by index alone. TOOL steps are never compared."""
+    pass the path grammar before anything is materialised. DIGEST compares count and order: the first MODEL step whose
+    sent request differs or is missing is REPLAY_DIVERGED at that step, and a first extra sent request is
+    REPLAY_DIVERGED at len(trajectory.steps) + 1 (steps are numbered 1..n over both actors, so no recorded step has
+    it; #255, MET-016 F2); the replay stops. INDEX: answered by index alone. TOOL steps are never compared."""
     def run():
         check_fixture(fixture, blobs)
         need(fixture["trajectoryDigest"] is not None and digest(trajectory) == fixture["trajectoryDigest"],
@@ -389,6 +406,9 @@ def replay(fixture, trajectory, blobs, sent, after) -> dict:
                 if i >= len(sent) or bytes_digest(sent[i]) != step["requestDigest"]:
                     return {"verdict": "REPLAY_DIVERGED", "divergedAtStep": step["index"], "afterTreeDigest": None,
                             "requestMatch": "DIGEST"}
+            if len(sent) > len(model_steps):
+                return {"verdict": "REPLAY_DIVERGED", "divergedAtStep": len(trajectory["steps"]) + 1,
+                        "afterTreeDigest": None, "requestMatch": "DIGEST"}
         ignored = {x["path"] for x in fixture["ignoredPaths"]}
         verdict = "REPLAY_MATCH" if trees_equal(after, fixture["expectedAfter"], ignored) else "TREE_MISMATCH"
         return {"verdict": verdict, "divergedAtStep": None, "afterTreeDigest": digest(after),
@@ -477,8 +497,9 @@ def _held_out_in_memory(doc, data):
     return doc
 
 
-def evaluate(check: str, data: dict, stores: dict, rm):
-    """(None, result) when accepted, (code, {}) when refused; `rm` is MAS-RA-002's model (scripts/run_manifest.py)."""
+def evaluate(check: str, data: dict, stores: dict, rm, dr=None):
+    """(None, result) when accepted, (code, {}) when refused; `rm` is MAS-RA-002's model (scripts/run_manifest.py) and
+    `dr` GR-DECISION-RECORD-001's (scripts/decision_record.py), both by injection."""
     blobs = _blobs(stores, data)
     splits, manifests = _store(stores, data, "splits"), _store(stores, data, "manifests")
     fixtures, trajectories = _store(stores, data, "fixtures"), _store(stores, data, "trajectories")
@@ -492,8 +513,8 @@ def evaluate(check: str, data: dict, stores: dict, rm):
             ctx = {"manifests": manifests, "splits": splits, "fixtures": fixtures, "trajectories": trajectories,
                    "blobs": blobs, "fixtureSet": data["fixtureSet"], "afterTrees": data.get("afterTrees", {}),
                    "environmentEvidence": data.get("environmentEvidence", []),
-                   "gradeRecords": data.get("gradeRecords", {})}
-            result = check_score(data["score"], ctx, rm)
+                   "gradeRecords": data.get("gradeRecords", [])}
+            result = check_score(data["score"], ctx, rm, dr)
         elif check == "REGENERATION":
             result = check_regeneration(pick("stored", fixtures), data["rebuilt"], blobs)
         elif check == "REPLAY":
@@ -514,9 +535,9 @@ def evaluate(check: str, data: dict, stores: dict, rm):
     return None, result
 
 
-def replay_case(case: dict, stores: dict, rm):
+def replay_case(case: dict, stores: dict, rm, dr=None):
     """(ok, got): whether the case's expectation holds, and what the model gave."""
-    code, result = evaluate(case["check"], case["input"], stores, rm)
+    code, result = evaluate(case["check"], case["input"], stores, rm, dr)
     expect = case["expect"]
     if "refuse" in expect:
         return code == expect["refuse"], code
@@ -524,7 +545,7 @@ def replay_case(case: dict, stores: dict, rm):
     return ok, code if code else result
 
 
-def replay_vectors(cases, stores: dict, rm) -> list:
+def replay_vectors(cases, stores: dict, rm, dr=None) -> list:
     """Each case's replay_case verdict, in order: the per-vector entry point under a name the chain identity rule
     allows a head layer to call (MET-013's head replays every vector through it; ORC-295-C2-Q2 (a))."""
-    return [replay_case(case, stores, rm)[0] for case in cases]
+    return [replay_case(case, stores, rm, dr)[0] for case in cases]
