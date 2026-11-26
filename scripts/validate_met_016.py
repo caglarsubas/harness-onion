@@ -25,7 +25,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY_PATH = "architecture/hrfix-decalign-authority.json"
-AUTHORITY_SHA256 = "8b510e81c6f232c68589a2d6c88a5be1b0e92313c70d1afaa70eb86e0a7ffe5c"
+AUTHORITY_SHA256 = "b4fddb0f71f9eb35675d5d56db4aab94e65cf6b54ff97a3f931f16da05d8a646"
 VALIDATOR_PATH = "scripts/validate_met_016.py"
 BASE_COMMIT = "9a78ed88ece963bc115deabd92c2beb3aa29b12b"
 NEW_PACKET = "MET-016"

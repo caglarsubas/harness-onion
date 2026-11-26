@@ -1,0 +1,58 @@
+{
+ "schemaVersion": "planeon.oracle-identity/v1",
+ "file": {
+  "path": "tests/test_met_016_oracle.py",
+  "sha256": "e8430ba0f9f1e78f0e6cbaedd0c851a5aa55bf9cb39d033a199a51c967387f54"
+ },
+ "oracle": {
+  "agentId": "ac8e10710812c0e10",
+  "model": "claude-opus-5-5"
+ },
+ "operator": {
+  "role": "LANE_SESSION",
+  "agentId": "c025cfbb-67f5-4d79-aa43-4e9cc90cfc44",
+  "lane": "r00"
+ },
+ "author": {
+  "agentIds": [
+   "c025cfbb-67f5-4d79-aa43-4e9cc90cfc44"
+  ]
+ },
+ "briefSha256": "de5c87f3a14738cf128bfadb2b22c4ad4050be993fa2347fe85446d4c5f2f30a",
+ "candidateCommit": "6877aa82277d1456d4ce9033499fb30f624acc8f",
+ "launched": "2026-11-26T16:51:40+08:00",
+ "finished": "2026-11-26T17:45:26+08:00",
+ "ruling": {
+  "decision": "KEEP",
+  "by": "LANE_MONITOR",
+  "ref": "ORC-R00-298-C3-KEEP",
+  "date": "2026-11-26"
+ },
+ "disclosures": [
+  "bound inputs: exactly the D5a file e8430ba0f9f1e78f0e6cbaedd0c851a5aa55bf9cb39d033a199a51c967387f54 and the table e0166a93fd7e62b420c9cc5f74058a81ba87784d329a8c83e0ff20ed1cfe2582; this record binds no other digest: not the authority, the head, the YAML or the hunk-class record, which change when it is added",
+  "D5a (CONTRACT_298 r8 c3): this file's author is one fresh non-author agent (C26 category 1), launched once with the filled launch c1dff550 on kit r1 (ORC-R00-298-C3-SLOTA) and resumed once on the same kit with the resume message 8fbda0d2 carrying the triage's author part bad5b34b and the hub's node-4 line (ORC-R00-298-C3-RESUME-SLOTA), after the hub's ruling ORC-R00-298-C3-TRIAGE-RULED on a fresh non-author triage (launch 2ae6a341; evidence part 6dd953ca); the author part was passed by path and digest, never opened by the operator; the author's changes file 012ff7aa was read by the hub; its first file is kept by bytes outside the tree",
+  "the kit: brief de5c87f3 on kit r1, one brief for the launch and the resume; CN thirteen files: CONTRACT_298 r8 (0e930ef1), SCOPE-298 r3 (9232d69c) and its erratum F4 (9aa8556a), CONTRACT_295 (8dea9264), CONTRACT_296 (ce4aae00), the compaction note r3 (0bbbbedd), the replay draft r4 (b29de4be) and its erratum D1 (303b3941), the approval note r3 (fff1a993), the decision draft r2 (a97854e5) and its erratum E1 (ff187830), the alignment draft r4 (83eb7c9a), the packet YAML with closed-path strings masked (568b819b); line anchors read from fix 1's head 98af16ed",
+  "the author is a fresh agent that authored nothing in c1..fix 1 and ran only the kit's in-memory syntax check 25edeaaf and C18's static live-read scan 1e33cdec on its own file, no test run and no py_compile; its file 61de3166 -> e8430ba0; its report: 37 tests, 27 parametrized cases, 0 asserts without a cite (the author's own count); its scan: test_met_016_oracle.py: live 0, names 1, era 16, other 0, git 0: PASS | LIVE-READ SCAN PASS: 1 file(s), 0 with live reads",
+  "author disclosure 1: run 1: its context carried an auto-injected memory index and account context; it used none of it",
+  "author disclosure 2: run 1: it reported running 5 to 10 minutes past its 40-minute budget; the operator measured about 10.5 minutes for the run",
+  "author disclosure 3: run 1: partial reading of CN, named in its report: CONTRACT_298 lines 841-1037 (the rest of section 11 and section 12) and three texts (the approval note r3, the decision erratum E1, the replay erratum D1) unread; other texts read in ranges or by keyword",
+  "author disclosure 4: run 1: its keyword helper printed numbered CN lines to its console (it wrote nothing); one helper run used a non-canonical path form that still pointed inside WORK; keyword reads went through the helper, not sed ranges",
+  "author disclosure 5: run 1: ten construction guesses about fixture shapes it could not see, and six interpretations of the texts, each named in its report",
+  "author disclosure 6: run 1: cite slips named in its report: one cite to a header form, one unconfirmed section number, some cites in non-listed forms",
+  "author disclosure 7: run 2: the memory index and account context were injected again (after a compaction); it used none",
+  "author disclosure 8: run 2: it read the three unread texts and CONTRACT_298 lines 841-1037, plus SCOPE-298 lines 201-267 and the replay draft lines 95-214 (CN) and two ranges of its own brief for cite line numbers; one read used a pipe inside zsh -c; its helper printed CN lines to its console",
+  "author disclosure 9: run 2: it changed 5 tests (5 nodes), added and removed none; slip 3 of its ten construction slips fixed, the other nine kept, each with a cite; 12 parts written before reading their owning text; every change listed old to new with its cite in its changes file, which the hub read and the operator did not",
+  "author disclosure 10: run 2: its report went beyond the asked form: it named two new expected values (each with its CN cite) and its remaining construction guesses; it said about 40 minutes, the operator measured 356 s",
+  "author disclosure 11: run 2: a new resolver reads, through reviewed_bytes, only the .json files the replay stores name and skips a named path that fails to load; it states that no expectation depends on it",
+  "author disclosure 12: all runs: asserts without a cite 0 by its own count; expected values found only in a fixture: none known",
+  "operator note 1: the operator checked each file by bytes and counts only (never decoded or printed): not a link; local path shapes 0; closed forms 0; privacy and handle checks 0",
+  "operator note 2: candidate run 1 on the c3 candidate at fix 1 with the first file failed 5 of 56; a fresh non-author triage (ORC-R00-298-C3-RUN1-ROUTE; the brief added to its read set by ORC-R00-298-C3-TRIAGE-SLOTA) classed them CONSTRUCTION 4, CN-AMBIGUOUS 1, CANDIDATE-DEFECT 0, BRIEF-FACT 0; the hub read both triage files and ruled (ORC-R00-298-C3-TRIAGE-RULED): node 4 reading B, open point 1 fix content, no candidate change; the triage's author part and the hub's node-4 line went to the author",
+  "operator note 3: the first file is kept by bytes outside the tree; this file was placed by hash on a fresh clone of fix 1 (the first clone keeps the first file as evidence); the measured rows were placed after the sweep and the authority re-derived by the classed step",
+  "operator note 4: the hub's note for the final PASS_FOR_PUSH round: three construction rules skip (refused cases, bases already diverged, a store path that fails to load); each must sit beside an assert that its selection is non-empty, and a store path that fails to load must hide no case CN names",
+  "author run 1 (the first file, from the filled launch on kit r1 (ORC-R00-298-C3-SLOTA)): 2026-11-26T16:51:40+08:00 to 2026-11-26T17:02:10+08:00, 34 tool calls; its file after the run 61de3166",
+  "author run 2 (this file, resumed once on kit r1 with the triage's author part and the hub's node-4 line (ORC-R00-298-C3-RESUME-SLOTA)): 2026-11-26T17:39:30+08:00 to 2026-11-26T17:45:26+08:00, 22 tool calls; its file after the run e8430ba0",
+  "the D5a file's runs, by the operator on the hub's words, node counts only: candidate run 1 on the c3 candidate at fix 1 (real 6877aa82, tree 7ff13488) with the first file: 51 passed, 5 failed of 56 (summary fc55f177; STOP, triaged by a non-author); the c3 sweep on a fresh clone of fix 1 with this file: 56 passed of 56, then the head test: 245 passed of 245 (summary 5abc2b57)",
+  "the table is main's with both rows measured at c3 from the c3 sweep by 292's rule (round(S, 1), overhead 0.0): the head test 24.5 and this D5a file 10.4 (225 entries)",
+  "at run time the file reads repository files only through the head's era reader reviewed_bytes (C18) and runs the head's own checks; ruled KEEP by the lane monitor (ORC-R00-298-C3-KEEP)"
+ ]
+}
