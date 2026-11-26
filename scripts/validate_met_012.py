@@ -718,12 +718,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "three ready packets validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 322
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS} | set(PRODUCT_PACKETS),
-            "closed 322-packet catalog retaining the 318-packet checkpoint")
+    require(len(paths) == 323
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET} | set(PRODUCT_PACKETS),
+            "closed 323-packet catalog retaining the 318-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS):
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET, successor.successor.successor.NEW_PACKET, *successor.successor.successor.PRODUCT_PACKETS, successor.successor.successor.successor.NEW_PACKET):
             continue
         raw = regular_bytes("task-packets/" + path.name)
         expected = (record["packetSha256"] if path.stem == NEW_PACKET
@@ -764,4 +764,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Three ready packets valid: 322 current specifications at slot 294; 318-packet checkpoint and exact 314-packet predecessor; contract reviewed.")
+    print("Three ready packets valid: 323 current specifications at slot 294; 318-packet checkpoint and exact 314-packet predecessor; contract reviewed.")
