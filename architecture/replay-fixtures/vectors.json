@@ -3424,11 +3424,60 @@
               "outcome": "BLOCKED",
               "score": 0,
               "blockerCode": "EVALUATOR_ERROR",
-              "evidenceDigest": "sha256:af978b3080ecfcf11cb027df2b48209e3d7085e9fa24e03289ff656b9b568d5f"
+              "evidenceDigest": "sha256:847aff3bd57b5039d657b390d91dbc50d3450da53ac9c8362ea1bd7911ff96ed"
             }
           ],
           "scoredFrom": "TRACE"
-        }
+        },
+        "gradeRecords": [
+          {
+            "schemaVersion": "planeon.internal.decision-record/v1",
+            "decisionId": "dr-n09",
+            "kind": "GRADE",
+            "subject": {
+              "scopeDigest": "sha256:7d0d6592ac163d2b80347887ce6f9342fb968dd1915f5e7ee5ab51e27b551c98",
+              "subjectKind": "TOOL_CALL",
+              "subjectDigest": "sha256:b97a42bab2090cdc15c374666e573d27af3f19daac43b4d4e3211c7d5b801f04",
+              "revision": 3
+            },
+            "envelope": {
+              "status": "ERROR",
+              "decision": null,
+              "effectiveDecision": "UNGRADED",
+              "error": {
+                "code": "ERR_EVALUATOR_UNAVAILABLE",
+                "detail": "evaluator did not answer in its deadline"
+              }
+            },
+            "reasonCode": "ERR_EVALUATOR_UNAVAILABLE",
+            "rule": {
+              "ruleId": "rule/egress-0001",
+              "ruleVersion": "2026-11-23.1",
+              "policyVersion": "policy-7",
+              "policyBindingDigest": "sha256:c2a1dcbda0dc809daf8a919dbdc220ae0b557c0e7e1954fc7de3e61fbe37b6fa"
+            },
+            "evidence": [
+              {
+                "kind": "POLICY_RESULT",
+                "contentDigest": "sha256:6ebcc14b4aac2ee2416f4c237051eb75f60065957051a89350a0a476ab5f99c6",
+                "locations": [
+                  {
+                    "path": "src/agent/tools.py",
+                    "start": 120,
+                    "end": 134
+                  }
+                ],
+                "matchFingerprint": null
+              }
+            ],
+            "contributions": [],
+            "transform": null,
+            "escalationRef": null,
+            "approval": null,
+            "decidedAt": "2026-11-23T10:00:00Z",
+            "supersedes": null
+          }
+        ]
       },
       "expect": {
         "refuse": "OUTCOME_MISMATCH"
