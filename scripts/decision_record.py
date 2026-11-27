@@ -39,8 +39,8 @@ ERRORS_DURING_EVALUATION = ("ERR_EVALUATOR_UNAVAILABLE", "ERR_TIMEOUT", "ERR_INT
 ERROR_CODES = ERRORS_BEFORE_SELECTION + ERRORS_DURING_EVALUATION
 SOURCES = ("DETERMINISTIC", "MODEL")
 EVIDENCE_KINDS = ("POLICY_RESULT", "TRACE", "ARTIFACT")
-CHECK_ORDER = ("ENVELOPE_MIXED", "EFFECTIVE_MISMATCH", "ERROR_AS_DECISION", "RULE_VERSION_MISSING", "MODEL_APPROVAL",
-               "MODEL_LOWERED", "TRANSFORM_CONFLICT", "TRANSFORM_MISMATCH")
+CHECK_ORDER = ("ENVELOPE_MIXED", "EFFECTIVE_MISMATCH", "ERROR_AS_DECISION", "REASON_MISMATCH", "RULE_VERSION_MISSING",
+               "MODEL_APPROVAL", "MODEL_LOWERED", "TRANSFORM_CONFLICT", "TRANSFORM_MISMATCH")
 LIFT_REFUSED = "LIFT_REFUSED"
 CODES = CHECK_ORDER + (LIFT_REFUSED,)
 RESULTS = ("ACCEPTED", "REFUSED", "READ_FAIL_CLOSED", "UNGRADED", "ACT")
@@ -57,6 +57,12 @@ CONTRIBUTION_KEYS = ("source", "ruleId", "ruleVersion", "model", "decision", "sc
 MODEL_KEYS = ("modelId", "configurationDigest", "promptDigest", "tokensIn", "tokensOut")
 TRANSFORM_KEYS = ("valueBeforeDigest", "valueAfterDigest")
 EFFECT_KEYS = ("at", "scopeDigest", "subjectDigest", "revision")
+# DEC-ALIGN-296-FIX-001 D1: the approval row is closed to the schema's required keys and its propertyNames list (the
+# required keys, then these optional ones); its members' types are HR-APPROVAL's, not checked here.
+APPROVAL_REQUIRED = ("requestId", "kind", "state", "subjectId", "revision", "subjectDigest", "policyRef",
+                     "policyBindingDigest", "ruleVersion", "mandate", "expiresAt", "asker", "askPort", "decidePort",
+                     "decisionRef", "decidedBy", "reasonCode", "decidingStatement")
+APPROVAL_OPTIONAL = ("businessIntentId", "payloadHash", "evidenceVersions", "preconditions", "compartment", "limits")
 SCORE_MAX = 1_000_000
 REPLAY_BLOCKED = {"status": "BLOCKED", "blockerCode": "EVALUATOR_ERROR"}
 
@@ -132,11 +138,14 @@ def _shape(record):
             _text(spot["path"], "location.path")
             _int(spot["start"], "location.start")
             _int(spot["end"], "location.end")
-        _need(row["matchFingerprint"] is None or type(row["matchFingerprint"]) is str, "matchFingerprint")
+        _need(row["matchFingerprint"] is None or (type(row["matchFingerprint"]) is str and row["matchFingerprint"] != ""),
+              "matchFingerprint is null or a non-empty string")                      # D1: the schema's minLength 1
     _need(type(record["contributions"]) is list, "contributions is a list")
     for row in record["contributions"]:
         _closed(row, CONTRIBUTION_KEYS, "a contribution")
         _need(row["source"] in SOURCES, "a contribution's source is DETERMINISTIC or MODEL")
+        _text(row["ruleId"], "a contribution's ruleId")                              # D1
+        _text(row["ruleVersion"], "a contribution's ruleVersion")
         _need((row["model"] is not None) == (row["source"] == "MODEL"), "model is set exactly for a MODEL source")
         if row["model"] is not None:
             _closed(row["model"], MODEL_KEYS, "a contribution's model")
@@ -156,8 +165,10 @@ def _shape(record):
     if record["escalationRef"] is not None:
         _digest_text(record["escalationRef"], "escalationRef")
     _need((record["approval"] is not None) == is_approval, "approval is set exactly on kind APPROVAL")
-    if is_approval:
-        _need(type(record["approval"]) is dict, "approval is HR-APPROVAL's row")
+    if is_approval:                                                              # D1: closed, no member types added
+        _need(type(record["approval"]) is dict
+              and set(APPROVAL_REQUIRED) <= set(record["approval"]) <= set(APPROVAL_REQUIRED + APPROVAL_OPTIONAL),
+              "approval is HR-APPROVAL's row, closed to the schema's required keys and property names")
     _text(record["decidedAt"], "decidedAt")
     if record["supersedes"] is not None:
         _digest_text(record["supersedes"], "supersedes")
@@ -184,6 +195,8 @@ def _refusal(record):
         return "EFFECTIVE_MISMATCH"                                          # E2 (and E3 through it)
     if (status == "DECIDED") == record["reasonCode"].startswith("ERR_"):
         return "ERROR_AS_DECISION"                                           # E4
+    if record["reasonCode"] != ("%s_%s" % (kind, decision) if status == "DECIDED" else error["code"]):
+        return "REASON_MISMATCH"                                             # D2: KIND_DECISION, or its own error code
     rule = record["rule"]
     named = rule is not None and rule["ruleId"] != "" and rule["ruleVersion"] != ""
     if (status == "DECIDED" or error["code"] in ERRORS_DURING_EVALUATION) and not named:
@@ -218,9 +231,8 @@ def evaluate(record):
     values = list(DECISIONS[kind]) + [FAIL_CLOSED[kind]]
     if (env["decision"] is not None and env["decision"] not in DECISIONS[kind]) or env["effectiveDecision"] not in values:
         return ("READ_FAIL_CLOSED", FAIL_CLOSED[kind])                       # E7: no default branch maps to allow
-    if kind not in UNORDERED and any(c["decision"] is not None and c["decision"] not in DECISIONS[kind]
-                                     for c in record["contributions"]):
-        return ("READ_FAIL_CLOSED", FAIL_CLOSED[kind])
+    if any(c["decision"] is not None and c["decision"] not in DECISIONS[kind] for c in record["contributions"]):
+        return ("READ_FAIL_CLOSED", FAIL_CLOSED[kind])                       # E7 over every kind's contributions (D1)
     code = _refusal(record)
     return ("REFUSED", code) if code else ("ACCEPTED", None)
 

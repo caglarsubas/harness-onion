@@ -10,7 +10,7 @@
   },
   "vectors": {
     "path": "architecture/decision-record/vectors.json",
-    "sha256": "a2183e019321f6a7b1f721d56ce76953670a584af99013c1828f1016f102cb62"
+    "sha256": "f558fabf91c2c71beaad72f8afddc48e6c087dd07ba7e75442d823a3472c40a8"
   },
   "statusRecord": {
     "path": "architecture/decision-record/status.json",
@@ -18,11 +18,11 @@
   },
   "model": {
     "path": "scripts/decision_record.py",
-    "sha256": "af6bb14bb7b779f9764b5a8c7a116012837bbeacae9e7aee25ea54f1e6d39b6f"
+    "sha256": "2a17c8a3c79c28e72b35967441858f5a8e51834c2063fb1c86494eecdc7aea1d"
   },
   "approvalOutcome": {
     "path": "architecture/approval-outcome/record.json",
-    "sha256": "88e83285ecb02b654c6cdece8f88e1712a935bdc8e287ba5929ed237edfdec1e"
+    "sha256": "e6b1b6afef526f588a254ac2c4df5d076983cafd90ec88980e30cb70349181b9"
   },
   "sources": [
     {
@@ -158,6 +158,7 @@
     "ENVELOPE_MIXED",
     "EFFECTIVE_MISMATCH",
     "ERROR_AS_DECISION",
+    "REASON_MISMATCH",
     "RULE_VERSION_MISSING",
     "MODEL_APPROVAL",
     "MODEL_LOWERED",
@@ -240,6 +241,7 @@
         "ENVELOPE_MIXED",
         "EFFECTIVE_MISMATCH",
         "ERROR_AS_DECISION",
+        "REASON_MISMATCH",
         "RULE_VERSION_MISSING",
         "MODEL_APPROVAL",
         "MODEL_LOWERED",
@@ -279,7 +281,10 @@
         "GR-N12",
         "GR-N13a",
         "GR-N13b",
-        "GR-N14"
+        "GR-N14",
+        "GR-N15a",
+        "GR-N15b",
+        "GR-N15c"
       ]
     },
     {
@@ -315,6 +320,11 @@
     ],
     "ERROR_AS_DECISION": [
       "GR-N2"
+    ],
+    "REASON_MISMATCH": [
+      "GR-N15a",
+      "GR-N15b",
+      "GR-N15c"
     ],
     "RULE_VERSION_MISSING": [
       "GR-N3",
@@ -379,7 +389,7 @@
     },
     {
       "id": "CHECK-ORDER",
-      "text": "R00 fixes the check order of the eight single-record codes and one vector per code (r2 section 6's last line); LIFT_REFUSED is the consumer rule's result over two records."
+      "text": "R00 fixes the check order of the nine single-record codes and one vector per code (r2 section 6's last line); LIFT_REFUSED is the consumer rule's result over two records."
     },
     {
       "id": "P8",

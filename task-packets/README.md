@@ -1,6 +1,11 @@
 # Sol-High Task Packet Catalog
 
-## Current source preparation — MET-015
+## Current source preparation — MET-016
+
+MET-016 (slot 298): the HR contract and decision alignment fixes, a K = 0 step (323 packets at slot 298): HR-295-FIX-001, the fixes F1-F5 to slot 295's three HR contracts (HR-COMPACTION-GOV-001, HR-REPLAY-FIXTURES-001 and HR-APPROVAL-OUTCOME-001), with the re-pins they move; and DEC-ALIGN-296-FIX-001, the fixes D1-D5 to slot 296's decision record and the regulatory alignment checker, each a fix in its record's own form: the record's checker, model and test change, and its vectors where the record has them; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and D5a rows) and the D5a file).
+Alpha2 OPEN; 322 accepted (the catalog at slot 297) plus MET-016 only.
+
+## Historical ML adoption pins, red-team fixture pack and model weights record source preparation — MET-015
 
 MET-015 (slot 297): the ML adoption pins, the red-team fixture pack and the model weights record, a K = 1 step (322 packets at slot 297): EXEC-ML-ADOPT-PINS-001 (mas-harness-execution-plane), the scikit-learn and ONNX Runtime provider dossiers after PLANE-BOOTSTRAP-R08 and EXEC-TEMPORAL-PINS-001; GR-REDTEAM-FIXTURES-001, the red-team and safety fixture pack contract with synthetic rows (drafted by R00, intake by R12); and MODEL-WEIGHTS-POLICY-001, the model weights record with the v3 licence amendment LIC-WEIGHTS-A3 (R06); R08's plan gains the product's item; gate material (the registry rider, ci/parallel_suite_weights.json (GATE_CI, the head-test and oracle rows) and the D5a oracles).
 Alpha2 OPEN; 320 accepted (the catalog at slot 296) plus MET-015 and its one product only.
@@ -1875,3 +1880,4 @@ acceptance is claimed. Alpha2 ONGOING; model-effort transition NOT_DUE.
 | 320 | `MET-014` | `Harness-Engineering` | The decision record, the regulatory alignment record and edge record v13 (K = 0, 320 packets at slot 296): GR-DECISION-RECORD-001, REG-ALIGN-001 and EDGE-V13, in-repo records with their checkers and tests, and vectors and models where a member has them; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracle) |
 | 321 | `MET-015` | `Harness-Engineering` | The ML adoption pins, the red-team fixture pack and the model weights record (K = 1, 322 packets at slot 297): publishes EXEC-ML-ADOPT-PINS-001 and adds GR-REDTEAM-FIXTURES-001 and MODEL-WEIGHTS-POLICY-001, in-repo records with their checkers and tests; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a oracles) |
 | 322 | `EXEC-ML-ADOPT-PINS-001` | `mas-harness-execution-plane` | The scikit-learn and ONNX Runtime provider dossiers (provider records, CycloneDX SBOMs, licence and notice reviews, the safe artifact-format record; no runtime code), after PLANE-BOOTSTRAP-R08 and EXEC-TEMPORAL-PINS-001 (product, published by MET-015) |
+| 323 | `MET-016` | `Harness-Engineering` | The HR contract and decision alignment fixes (K = 0, 323 packets at slot 298): HR-295-FIX-001 and DEC-ALIGN-296-FIX-001, fixes to in-repo records with their checkers and tests; gate material (the registry rider, ci/parallel_suite_weights.json and the D5a file) |

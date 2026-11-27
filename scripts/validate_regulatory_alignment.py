@@ -6,17 +6,19 @@ only, no listing) and returns its refusals as (code, message) pairs, in the orde
 - RA_SHAPE: the record's top-level keys are exactly the 11 published keys (id REG-ALIGN-001, schemaVersion 1.0.0,
   status PUBLISHED, and the eight content sections); rows, EU date rows and sources are closed to their keys; the
   README's provenance block holds exactly the five moved keys (draftedBy, draftDate, revision, revisionNotes,
-  intendedPath), and intendedPath is this record's path.
+  intendedPath), and intendedPath is this record's path; a source's sha256 is null or 64 lowercase hex (D4); the draft,
+  enacted and amended dates are ASCII YYYY-MM-DD and real calendar days (D5).
 - RA_ENUMS: every row's and EU date row's enum fields are in their enum (state, gapKind, carrierCheck, candidateState,
   confirmation, addressee, noCarryingItem); gapKindMeaning names exactly the gap kinds.
 - RA_RULES: the record's eight `rules`, each checked as stated (the draft date for dateAlreadyPassed is the
-  provenance block's draftDate).
+  provenance block's draftDate); rule 1 runs on both row lists (D3), and rule 7 compares the parsed days (D5).
 - RA_IDS: row ids, EU date row ids and source ids are each unique, and no id is both a row's and an EU date row's.
 - RA_SOURCES: every row, EU date row and date object cites a source by its id, and every source is cited.
 Standard library only. main() reads through the checker's own disk_reader. Data checks only; it claims no compliance.
 """
 from __future__ import annotations
 
+import datetime
 import json
 import re
 import stat
@@ -54,7 +56,8 @@ RULES = (
     "an obligationLocator naming two places gives a pdfPage for each place.",
 )
 PROVENANCE = re.compile(r"## Provenance\n(?:[^\n]*\n)*?```json\n(.*?)\n```\n", re.S)
-DAY = re.compile(r"\d{4}-\d{2}-\d{2}\Z")
+DAY = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}\Z")  # D5: ASCII digits only
+HEX64 = re.compile(r"[0-9a-f]{64}\Z")  # D4
 PDF_PAGE = re.compile(r"pdfPage \d+")
 MAX_BYTES = 16_777_216
 
@@ -88,6 +91,15 @@ def text(value, where):
     need(type(value) is str and value != "", "%s is a non-empty string" % where)
 
 
+def day(value, where):
+    """D5: an ASCII YYYY-MM-DD string that names a real calendar day, as that day."""
+    need(type(value) is str and DAY.match(value), where + " is a YYYY-MM-DD day")
+    try:
+        return datetime.date(int(value[:4]), int(value[5:7]), int(value[8:]))
+    except ValueError:
+        raise Refused(where + " is a real calendar day") from None
+
+
 def provenance(read):
     match = PROVENANCE.search(read(README_PATH).decode("utf-8"))
     need(match is not None, "the README has a Provenance section with one JSON block")
@@ -101,7 +113,7 @@ def check_shape(record, moved):
          "id REG-ALIGN-001, schemaVersion 1.0.0, status PUBLISHED")
     closed(moved, MOVED, (), "the README's provenance block")
     need(moved["intendedPath"] == RECORD_PATH, "the provenance's intendedPath is this record's path")
-    need(type(moved["draftDate"]) is str and DAY.match(moved["draftDate"]), "the provenance's draftDate is a day")
+    day(moved["draftDate"], "the provenance's draftDate")
     need(type(record["basis"]) is dict and record["basis"], "basis is an object")
     for key in ("nonClaims", "rules"):
         need(type(record[key]) is list and record[key] and all(type(x) is str and x for x in record[key]),
@@ -116,6 +128,9 @@ def check_shape(record, moved):
         for row in record[key]:
             closed(row, shape, optional, "a %s entry" % key)
             text(row["id"], "a %s id" % key)
+    for row in record["sources"]:
+        need(row["sha256"] is None or (type(row["sha256"]) is str and HEX64.match(row["sha256"])),
+             "source %s's sha256 is null or 64 lowercase hex" % row["id"])
     for row in record["rows"] + record["euDates"]:
         if row["gap"] is not None:
             closed(row["gap"], GAP, GAP_OPTIONAL, "row %s's gap" % row["id"])
@@ -124,6 +139,7 @@ def check_shape(record, moved):
         for key in ("dateAsEnacted", "dateAsAmended"):
             if type(row[key]) is dict:
                 closed(row[key], DATE, DATE_OPTIONAL, "EU row %s's %s" % (row["id"], key))
+                day(row[key]["date"], "EU row %s's %s" % (row["id"], key))
 
 
 def check(read):
@@ -157,9 +173,9 @@ def check(read):
 
     def rules():
         need(record["rules"] == list(RULES), "the record's rules are the eight this checker checks")
-        for row in rows + eu:
-            if row["state"] == "MAPPED" and "carrierCheck" in row:
-                need(row["carrierCheck"] in ("CONFIRMED", "CORRECTED"), "rule 1: row %s" % row["id"])
+        for row in rows + eu:  # D3: both lists; an EU row has no carrier field yet, so MAPPED is refused there
+            if row["state"] == "MAPPED":
+                need(row.get("carrierCheck") in ("CONFIRMED", "CORRECTED"), "rule 1: row %s" % row["id"])
         for row in rows:
             if row.get("candidateState") == "MAPPED":
                 need(row["state"] == "PARTIAL" and row["gap"] is not None and row["gap"]["kind"] == "CARRIER_UNCONFIRMED"
@@ -183,7 +199,8 @@ def check(read):
                 need((date["confirmation"] == "HELD_SOURCE" and type(date.get("locator")) is str and date["locator"])
                      if held else date["confirmation"] == "UNCONFIRMED", "rule 6: EU row %s's %s" % (row["id"], key))
             need(type(row["dateAlreadyPassed"]) is bool
-                 and row["dateAlreadyPassed"] == (row["dateAsEnacted"]["date"] < moved["draftDate"]),
+                 and row["dateAlreadyPassed"] == (day(row["dateAsEnacted"]["date"], "the enacted date")
+                                                  < day(moved["draftDate"], "the draft date")),
                  "rule 7: EU row %s" % row["id"])
             places = [p for p in row["obligationLocator"].split(";") if p.strip()]
             need(places and all(PDF_PAGE.search(p) for p in places), "rule 8: EU row %s" % row["id"])

@@ -284,7 +284,8 @@ def check_history(h: dict) -> dict:
         row = h["row"] if type(h) is dict else None
         need(_closed(h, HISTORY_KEYS, HISTORY_OPTIONAL) and (row is None or _row_shape(row))
              and all(type(h[k]) is list for k in ("audit", "decisions", "gates", "effects"))
-             and _int(h["now"]) and _int(h["sweepInterval"], SWEEP_MIN), "AO_SHAPE")
+             and _int(h["now"]) and _int(h["sweepInterval"], SWEEP_MIN) and h["sweepInterval"] <= SWEEP_MAX,
+             "AO_SHAPE")                                   # histories bound the interval as profiles do (MET-016 F4)
         need(row is None or row["kind"] in KINDS, "AO_SCOPE")                     # N1 scope: staff approvals only
         audit, decisions = h["audit"], h["decisions"]
         need(not h.get("httpUnavailable") or (row is not None and row["state"] == "UNAVAILABLE"), "AO_OUTCOME")  # O4
@@ -319,8 +320,9 @@ def check_history(h: dict) -> dict:
                      and decided[0]["occurredAt"] == row["decisionRef"]["at"], "AO_AUDIT")
             else:
                 need(h["now"] < row["expiresAt"] + h["sweepInterval"], "AO_AUDIT")   # A5, N-11
-            if row["state"] == "EXPIRED":                                         # A5, N-12
-                need(decided[0]["occurredAt"] == row["expiresAt"] and decided[0]["recordedAt"] >= row["expiresAt"],
+            if row["state"] == "EXPIRED":                                         # A5, N-12; #257, MET-016 F4
+                need(decided[0]["occurredAt"] == row["expiresAt"]                 # a write at E + I closes the pair
+                     and row["expiresAt"] <= decided[0]["recordedAt"] <= row["expiresAt"] + h["sweepInterval"],
                      "AO_AUDIT")
         for d in decisions:                                                       # H1a, H3, R2-N1
             need(d.get("deciderType") == "HUMAN" and d.get("source") == "REVIEWER", "AO_HEADLESS")

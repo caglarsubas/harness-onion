@@ -9,11 +9,11 @@
   },
   "vectors": {
     "path": "architecture/approval-outcome/vectors.json",
-    "sha256": "7be26fb683f82cdff1a306a1f3a4cdc13be1eb9eebb29578bc4ff6365523472a"
+    "sha256": "cba4bb16d70e7bc6eaa0177e1e93b3852228c717c5355f0a60936fc85be7cb7c"
   },
   "model": {
     "path": "scripts/approval_outcome.py",
-    "sha256": "b9b7835b578c106e2b3470e33f60f9955fcf89d5e7a03c32716c92e0bbce6b37"
+    "sha256": "fc62ba716163ddec63e6999ffd577bf621a310bcad97851641ecb516cf278404"
   },
   "sources": [
     {
@@ -172,7 +172,7 @@
     {
       "id": "A5",
       "family": "A",
-      "text": "The \"decided\" record for EXPIRED is written by the first of: (a) any mutation on the request or its subject after the expiry; (b) the owning store's expiry sweep, which writes every open request past its expiry at least once per sweep interval. The record carries occurredAt = the request's expiresAt and recordedAt = the write time. So no pair stays open longer than expiresAt plus one sweep interval. The interval has one value per store owner (R04's demand store, R04's profile store, governance's expiry worker); R00's values: each an integer from 1 to 3,600 s, profile default 300 s. Until the record is written, a consumer reading the audit log treats an asked record whose expiresAt has passed and that has no decided record as EXPIRED (O1, O2: never as open or approved)."
+      "text": "The \"decided\" record for EXPIRED is written by the first of: (a) any mutation on the request or its subject after the expiry; (b) the owning store's expiry sweep, which writes every open request past its expiry at least once per sweep interval. The record carries occurredAt = the request's expiresAt and recordedAt = the write time. So no pair stays open longer than expiresAt plus one sweep interval. A write at the instant expiresAt plus the sweep interval closes the pair at that instant, so the open check (now < expiresAt + interval) and the closed check (recordedAt <= expiresAt + interval) agree. The interval has one value per store owner (R04's demand store, R04's profile store, governance's expiry worker); R00's values: each an integer from 1 to 3,600 s, profile default 300 s. Until the record is written, a consumer reading the audit log treats an asked record whose expiresAt has passed and that has no decided record as EXPIRED (O1, O2: never as open or approved)."
     },
     {
       "id": "S1",
@@ -277,6 +277,8 @@
         "AO-O-H6",
         "AO-O-H7",
         "AO-O-H8",
+        "AO-O-H9",
+        "AO-O-H10",
         "AO-O-R1",
         "AO-O-R2",
         "AO-O-R3",
@@ -309,6 +311,8 @@
         "AO-A-H6",
         "AO-A-H7",
         "AO-A-H8",
+        "AO-A-H9",
+        "AO-A-H10",
         "AO-A-P1",
         "AO-A-P2",
         "AO-A-P3",

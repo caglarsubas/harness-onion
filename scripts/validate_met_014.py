@@ -951,12 +951,12 @@ def validate() -> None:
             == record["validatorNormalizedSha256"], "grdec regalign edgev13 validator drift")
     paths = sorted((ROOT / "task-packets").glob("*.yaml"))
     old = set(record["baselinePackets"])
-    require(len(paths) == 322
-            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS},
-            "closed 322-packet catalog retaining the 320-packet checkpoint")
+    require(len(paths) == 323
+            and {path.stem for path in paths} == old | {NEW_PACKET, successor.NEW_PACKET, *successor.PRODUCT_PACKETS, successor.successor.NEW_PACKET},
+            "closed 323-packet catalog retaining the 320-packet checkpoint")
     packets = {}
     for path in paths:
-        if path.stem == successor.NEW_PACKET:
+        if path.stem in (successor.NEW_PACKET, successor.successor.NEW_PACKET):
             continue
         if path.stem in successor.PRODUCT_PACKETS:
             continue
@@ -997,4 +997,4 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    print("Grdec regalign edgev13 valid: 322 current specifications at slot 296; 320-packet checkpoint and exact 319-packet predecessor; contract reviewed.")
+    print("Grdec regalign edgev13 valid: 323 current specifications at slot 296; 320-packet checkpoint and exact 319-packet predecessor; contract reviewed.")

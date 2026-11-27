@@ -14,7 +14,8 @@ run:
 - DR_CODES: one vector per refusal code: each code's vectors exist and refuse with that code, every code is reached;
   N1, N8, N9 and N10 keep r2's results; the C30 tests are the seven named cases.
 - DR_VECTOR: the pins (schema, vectors, status, model, HR-APPROVAL's record) are the files' digests; the model imports
-  the standard library only; the cases are P1-P8 (P8 as P8a and P8b) and N1-N14 with N7a-f, N11a-b and N13a-b; every
+  the standard library only; the cases are P1-P8 (P8 as P8a and P8b) and N1-N15 with N7a-f, N11a-b, N13a-b and N15a-c
+  (N15a-c: DEC-ALIGN-296-FIX-001 D2's REASON_MISMATCH); every
   case replays through the model (scripts/decision_record.py) to its expectation; P8b chains on P8a.
 Standard library plus the reference model. main() reads through the checker's own disk_reader. Data checks only; it
 enforces nothing.
@@ -56,7 +57,8 @@ CLAUSE_IDS = {"E": ("E1", "E2", "E3", "E4", "E5", "E6", "E7", "X3"), "L": ("L1",
 L5_SENTENCES = ("The ESCALATE record has not been lifted before", "an ESCALATE record is lifted at most once")
 POSITIVES = ("GR-P1", "GR-P2", "GR-P3", "GR-P4", "GR-P5", "GR-P6", "GR-P7", "GR-P8a", "GR-P8b")
 NEGATIVES = ("GR-N1", "GR-N2", "GR-N3", "GR-N4", "GR-N5", "GR-N6", "GR-N7a", "GR-N7b", "GR-N7c", "GR-N7d", "GR-N7e",
-             "GR-N7f", "GR-N8", "GR-N9", "GR-N10", "GR-N11a", "GR-N11b", "GR-N12", "GR-N13a", "GR-N13b", "GR-N14")
+             "GR-N7f", "GR-N8", "GR-N9", "GR-N10", "GR-N11a", "GR-N11b", "GR-N12", "GR-N13a", "GR-N13b", "GR-N14",
+             "GR-N15a", "GR-N15b", "GR-N15c")
 R2_RESULT_IDS = ("GR-N1", "GR-N8", "GR-N9", "GR-N10")
 C30_TESTS = ("case_escalate_between_check_and_act", "case_crash_before_act", "case_approval_for_superseded_escalation",
              "case_effect_repeated_delivery", "case_new_revision_after_approval", "case_approval_expires_before_effect",
@@ -214,7 +216,7 @@ def check(read):
         found = {(a or b).decode("ascii").split(".")[0] for a, b in IMPORT_LINE.findall(read(MODEL_PATH))}
         need(found == MODEL_IMPORTS, "the model imports %s only" % ", ".join(sorted(MODEL_IMPORTS)))
         need(len(cases) == len(vectors["cases"]), "a vector id twice")
-        need(sorted(cases) == sorted(POSITIVES + NEGATIVES), "the vectors are P1-P8 and N1-N14 with their sub-cases")
+        need(sorted(cases) == sorted(POSITIVES + NEGATIVES), "the vectors are P1-P8 and N1-N15 with their sub-cases")
         for case in vectors["cases"]:
             ok, got = model.replay(case)
             need(ok, "vector %s replays to %r" % (case["id"], got))

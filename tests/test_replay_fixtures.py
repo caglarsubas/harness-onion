@@ -30,6 +30,7 @@ def _load(rel, name):
 RF = _load("scripts/validate_replay_fixtures.py", "validate_replay_fixtures_under_test")
 MODEL = _load("scripts/replay_fixtures.py", "replay_fixtures_under_test")
 RM = _load("scripts/run_manifest.py", "run_manifest_for_replay_fixtures_under_test")
+DR = _load("scripts/decision_record.py", "decision_record_for_replay_fixtures_under_test")   # injected (MET-016 F5)
 READ = RF.disk_reader(ROOT)
 RECORD = json.loads(READ(RF.RECORD_PATH))
 SCHEMA = json.loads(READ(RF.SCHEMA_PATH))
@@ -102,7 +103,7 @@ def test_every_vector_replays_and_every_code_and_verdict_is_reached():
     assert len(listed) == len(set(listed)) == len(cases) > 0
     refused, verdicts = set(), set()
     for case in cases:
-        ok, got = MODEL.replay_case(case, STORES, RM)
+        ok, got = MODEL.replay_case(case, STORES, RM, DR)
         assert ok, (case["id"], got)
         if case["polarity"] == "NEGATIVE":
             refused.add(got)
@@ -116,12 +117,25 @@ def test_replay_vectors_is_replay_case_per_vector():
     """The head's per-vector entry point (ORC-295-C2-Q2 (a)): replay_case's verdict for each vector, in order; one
     changed expectation makes exactly one False."""
     cases = VECTORS["cases"]
-    got = MODEL.replay_vectors(cases, STORES, RM)
-    assert got == [MODEL.replay_case(case, STORES, RM)[0] for case in cases] and len(got) == len(cases) > 0
+    got = MODEL.replay_vectors(cases, STORES, RM, DR)
+    assert got == [MODEL.replay_case(case, STORES, RM, DR)[0] for case in cases] and len(got) == len(cases) > 0
     assert all(ok is True for ok in got)
     changed = copy.deepcopy(cases)
     next(case for case in changed if case["polarity"] == "NEGATIVE")["expect"] = {"refuse": "NOT_A_CODE"}
-    assert MODEL.replay_vectors(changed, STORES, RM).count(False) == 1
+    assert MODEL.replay_vectors(changed, STORES, RM, DR).count(False) == 1
+
+
+def test_evaluator_error_evidence_needs_the_injected_decision_model():
+    """MET-016 F5: the EVALUATOR_ERROR evidence is checked by GR-DECISION-RECORD-001's model, injected as `dr`; without
+    it the bound record cannot be checked and the result is refused, and the record is bound by computed digest."""
+    case = next(c for c in VECTORS["cases"] if c["id"] == "RF-BL-P1")
+    ok, got = MODEL.replay_case(case, STORES, RM, DR)
+    assert ok and got["enters"] is False
+    assert MODEL.evaluate(case["check"], case["input"], STORES, RM) == ("BLOCKER_UNEVIDENCED", {})
+    record = case["input"]["gradeRecords"][0]
+    keyed = copy.deepcopy(case)
+    keyed["input"]["gradeRecords"] = {MODEL.digest(record): record}   # a store keyed by digest is not a supplied list
+    assert MODEL.evaluate(keyed["check"], keyed["input"], STORES, RM, DR) == ("BLOCKER_UNEVIDENCED", {})
 
 
 def test_the_drafts_content_digests_are_the_bytes_digests():
